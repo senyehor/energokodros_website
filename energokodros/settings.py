@@ -1,12 +1,17 @@
 from pathlib import Path
 
-from energokodros.utils import __get_from_env, __get_bool_from_env
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False),
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(BASE_DIR.joinpath('.env'))
 
-SECRET_KEY = __get_from_env('SECRET_KEY')
+DEBUG = env('DEBUG')
 
-DEBUG = __get_bool_from_env('DEBUG')
+SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = []
 
@@ -57,11 +62,11 @@ WSGI_APPLICATION = 'energokodros.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': __get_from_env('DB_NAME'),
-        'USER': __get_from_env('DB_USERNAME'),
-        'PASSWORD': __get_from_env('DB_PASSWORD'),
-        'HOST': __get_from_env('DB_HOST'),
-        'PORT': __get_from_env('DB_PORT'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USERNAME'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -79,6 +84,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 LANGUAGE_CODE = 'uk'
 
