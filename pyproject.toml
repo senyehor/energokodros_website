@@ -2,7 +2,7 @@
 name = "energokodros"
 version = "0.1.0"
 description = ""
-authors = ["senyehor <e.sencha2002@gmail.com>"]
+authors = ["senyehor <senyehor@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
