@@ -31,7 +31,7 @@ class Object(models.Model):
     institution = models.ForeignKey(
         Institution,
         on_delete=models.CASCADE,
-        null=True,
+        null=False,
         related_name='related_objects'
     )
     object_name = models.CharField(max_length=1000, blank=True, null=False)
