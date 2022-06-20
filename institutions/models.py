@@ -32,7 +32,7 @@ class Object(models.Model):
         Institution,
         on_delete=models.CASCADE,
         null=True,
-        related_name='objects'
+        related_name='related_objects'
     )
     object_name = models.CharField(max_length=1000, blank=True, null=False)
     object_description = models.TextField(blank=True, null=True)
