@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}Логін{% endblock %}
+{% block content %}
+    <div class="d-flex align-items-center justify-content-center" style="height: 70vh;">
+        <div class="card w-25 p-0">
+            <div class="card-header">
+                Уведіть дані авторизації
+            </div>
+            <div class="card-body">
+                <form method="post" class="py-4 display-block">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <div class="form-group">
+                        <div class="form-check d-flex align-items-center">
+                            <input type="checkbox" name="remember_me" class="checkboxinput form-check-input"
+                                   id="id_remember_me">
+                            <label for="id_remember_me" class="form-check-label">
+                                Запам'ятати мене на два тижні
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4">Авторизуватися</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
