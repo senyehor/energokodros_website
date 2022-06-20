@@ -4,8 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 from users.utils import _full_name_validator
 
-USER_FULL_NAME_MAX_LENGTH = 150
-
 
 class UserManager(BaseUserManager):
     def create(self, full_name: str, email: str, password: str, is_admin: bool = False) -> 'User':
@@ -19,7 +17,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     full_name = models.CharField(
         _("повне ім'я"),
-        max_length=USER_FULL_NAME_MAX_LENGTH,
+        max_length=150,
         validators=[_full_name_validator],
         null=False,
         blank=False
