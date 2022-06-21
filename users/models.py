@@ -84,3 +84,6 @@ class UserRole(models.Model):
         null=False,
         blank=False
     )
+
+    class Meta:
+        db_table = 'users_roles'
