@@ -3,9 +3,12 @@ import random
 import factory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from factory import django
+
+from institutions.tests import InstitutionFactory
 
 User = get_user_model()
 
@@ -77,14 +80,13 @@ class UserTest(TestCase):
 class UserFactory(django.DjangoModelFactory):
     password = factory.Sequence(lambda n: f'generated_password{n}')
     email = factory.Sequence(lambda n: f'generated_email{n}@email.com')
-    full_name = factory.Sequence(lambda: UserFactory.full_name)
 
-    @staticmethod
-    def generate_full_name():
+    @factory.lazy_attribute
+    def full_name(self):
         first_names = [
             'Яснолик-Гузь',
             'Шарль',
-            'Златоус'
+            'Златоус',
             'Милована',
         ]
         second_names = [
