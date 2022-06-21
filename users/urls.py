@@ -6,7 +6,7 @@ overridden_account_patterns = [
     path('login', views.LoginView.as_view(template_name='registration/login.html')),
 ]
 
-urlpatterns = [
-    include('django.contrib.auth.urls'),
-
+urlpatterns = overridden_account_patterns + [
+    path('', include('django.contrib.auth.urls')),
+    path('registration', views.CreateUserRegistrationRequest.as_view(), name='register'),
 ]
