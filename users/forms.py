@@ -24,8 +24,9 @@ class UserRegistrationRequestForm(forms.ModelForm):
         queryset=Institution.objects.all(),
     )
     message = forms.CharField(
-        max_length=100,
+        max_length=200,
         label=_('Залиште опціональне повідомлення'),
+        required=False,
         widget=forms.Textarea
     )
 
