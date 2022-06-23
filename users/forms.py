@@ -8,8 +8,13 @@ from users.models import User, UserRegistrationRequest
 
 
 class LoginForm(auth_forms.AuthenticationForm):
+    remember_me = forms.BooleanField(
+        label=_("Запам'ятати мене на два тижні"),
+        required=False
+    )
+
     error_messages = {
-        'invalid_login': 'Уведіть правильну електронну пошту та пароль'
+        'invalid_login': _('Уведіть правильну електронну пошту та пароль або зареєструйтесь'),
     }
 
 
@@ -22,6 +27,7 @@ class NewUserForm(auth_forms.UserCreationForm):
 class UserRegistrationRequestForm(forms.ModelForm):
     institution = forms.ModelChoiceField(
         queryset=Institution.objects.all(),
+        label=_('Оберіть установу')
     )
     message = forms.CharField(
         max_length=200,

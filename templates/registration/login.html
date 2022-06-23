@@ -11,15 +11,6 @@
                 <form method="post" class="py-4 display-block">
                     {% csrf_token %}
                     {{ form | crispy }}
-                    <div class="form-group">
-                        <div class="form-check d-flex align-items-center">
-                            <input type="checkbox" name="remember_me" class="checkboxinput form-check-input"
-                                   id="id_remember_me">
-                            <label for="id_remember_me" class="form-check-label">
-                                Запам'ятати мене на два тижні
-                            </label>
-                        </div>
-                    </div>
                     <button type="submit" class="btn btn-primary mt-4">Авторизуватися</button>
                 </form>
             </div>
