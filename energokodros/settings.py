@@ -99,7 +99,8 @@ TIME_ZONE = 'Europe/Kiev'
 USE_I18N = True
 
 USE_TZ = True
-
+# enable using timedelta objects to set session expiration time
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, STATIC_URL)]
