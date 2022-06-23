@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
 from institutions.models import Institution, AccessLevel
 from users.utils import _full_name_validator
@@ -29,7 +29,11 @@ class User(AbstractBaseUser):
         null=False,
         blank=False
     )
-    is_admin = models.BooleanField(default=False, null=False)
+    is_admin = models.BooleanField(
+        _('чи є адміністратором'),
+        default=False,
+        null=False
+    )
 
     USERNAME_FIELD = 'email'
 
@@ -37,6 +41,9 @@ class User(AbstractBaseUser):
 
     class Meta:
         db_table = 'users'
+
+    def __str__(self):
+        return _(self.full_name)
 
 
 class UserRegistrationRequest(models.Model):
@@ -54,10 +61,17 @@ class UserRegistrationRequest(models.Model):
         blank=False,
         related_name='+'
     )
-    message = models.TextField(blank=False, null=False)
+    message = models.TextField(
+        _("повідомлення від користувача"),
+        blank=False,
+        null=False
+    )
 
     class Meta:
         db_table = 'users_registration_requests'
+
+    def __str__(self):
+        return _(f'Запит на реєстрацію від {self.user.full_name} в {str(self.institution)}')
 
 
 class UserRole(models.Model):
@@ -83,6 +97,7 @@ class UserRole(models.Model):
         related_name='+'
     )
     position = models.CharField(
+        _('посада'),
         max_length=255,
         null=False,
         blank=False
@@ -90,3 +105,6 @@ class UserRole(models.Model):
 
     class Meta:
         db_table = 'users_roles'
+
+    def __str__(self):
+        return _(f'{self.position} {self.user.full_name} в {self.institution}')
