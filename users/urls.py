@@ -25,4 +25,9 @@ urlpatterns = overridden_account_patterns + [
         views.admin_page,
         name='admin_page'
     ),
+    path(
+        'get-message-for-registration-request',
+        views.GetMessageForRegistrationRequest.as_view(),
+        name='get_message_for_registration_request_link'
+    )
 ]

@@ -1,15 +1,21 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_filters %}
 {% block title %}
     Сторінка адміністратора
 {% endblock %}
 {% block content %}
+
     <div class="container">
         <form method="post" action="{% url 'review_registration_request' %}">
             {% csrf_token %}
+            {{ pending_registration_requests_form.user }}
             {{ pending_registration_requests_form | crispy }}
             <input type="submit" name="decision" value="Схвалити" class="btn btn-primary mt-4">
             <input type="submit" name="decision" value="Відмовити" class="btn btn-primary mt-4">
         </form>
     </div>
+    <script type="text/javascript" src="{% static 'js/admin.js' %}"></script>
+    <p id="get-message-for-registration-request-link"
+       style="display: none;">{% url 'get_message_for_registration_request_link' %}</p>
 {% endblock %}
