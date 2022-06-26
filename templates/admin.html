@@ -11,8 +11,8 @@
             {% csrf_token %}
             {{ pending_registration_requests_form.user }}
             {{ pending_registration_requests_form | crispy }}
-            <input type="submit" name="decision" value="Схвалити" class="btn btn-primary mt-4">
-            <input type="submit" name="decision" value="Відмовити" class="btn btn-primary mt-4">
+            <input type="submit" name="approve" value="Схвалити" class="btn btn-primary mt-4">
+            <input type="submit" name="decline" value="Відмовити" class="btn btn-primary mt-4">
         </form>
     </div>
     <script type="text/javascript" src="{% static 'js/admin.js' %}"></script>
