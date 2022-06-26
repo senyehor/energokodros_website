@@ -1,10 +1,10 @@
 from django.urls import path
 
-from admin import views
+from administrator import views
 
 urlpatterns = [
     path(
-        'admin-page',
+        'administrator-page',
         views.admin_page,
         name='admin_page'
     ),

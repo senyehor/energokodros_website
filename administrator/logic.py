@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from admin.models import UserRegistrationRequest
+from users.models import UserRegistrationRequest
 
 
 def _get_message_for_registration_request(request_id: int):
