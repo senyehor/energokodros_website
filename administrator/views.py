@@ -11,7 +11,7 @@ from administrator.logic import _get_message_for_registration_request
 def admin_page(request: HttpRequest):
     return render(
         request,
-        'admin.html',
+        'administrator.html',
         {
             'pending_registration_requests_form': UserRegistrationRequestsDecisionForm()
         }
