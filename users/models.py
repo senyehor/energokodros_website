@@ -118,7 +118,7 @@ class UserRegistrationData(User):
 
 class UserRegistrationRequest(models.Model):
     user = models.ForeignKey(
-        User,
+        UserRegistrationData,
         on_delete=models.CASCADE,
         null=False,
         blank=False,
