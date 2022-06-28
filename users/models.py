@@ -82,6 +82,21 @@ class UserRole(models.Model):
         return _(f'{self.position} {self.user.full_name} в {self.institution}')
 
 
+class UserRegistrationDataManager(UserManager):
+
+    def create(self, full_name: str, email: str, password: str, is_admin: bool = False,
+               email_code: str = None, email_confirmed: bool = False) -> 'UserRegistrationData':
+        user = super().create(full_name, email, password, is_admin)
+        return self.model(
+            full_name=user.full_name,
+            email=user.email,
+            password=user.password,
+            is_admin=user.is_admin,
+            email_code=email_code,
+            email_confirmed=email_confirmed
+        )
+
+
 class UserRegistrationData(User):
     email_code = models.CharField(
         _('код верифікації пошти'),
@@ -93,6 +108,8 @@ class UserRegistrationData(User):
         null=False,
         default=False
     )
+
+    objects = UserRegistrationDataManager()
 
     def confirm_email(self):
         self.email_confirmed = True
