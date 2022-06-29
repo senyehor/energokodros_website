@@ -21,6 +21,8 @@ class Institution(models.Model):
 
     class Meta:
         db_table = 'institutions'
+        verbose_name = _('Заклад')
+        verbose_name_plural = _('Заклади')
 
     def __str__(self):
         return self.institution_name
@@ -42,6 +44,8 @@ class AccessLevel(models.Model):
 
     class Meta:
         db_table = 'access_levels'
+        verbose_name = _('Рівень доступу')
+        verbose_name_plural = _('Рівні доступу')
 
     def __str__(self):
         return self.level_description
@@ -83,6 +87,8 @@ class Object(models.Model):
 
     class Meta:
         db_table = 'objects'
+        verbose_name = _("Об'єкт")
+        verbose_name_plural = _("Об'єкти")
 
     def __str__(self):
         return _(f'{self.object_name} в {self.institution}')
