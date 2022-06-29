@@ -153,7 +153,7 @@ class UserRegistrationData(User):
     class Meta:
         db_table = 'users_registration_data'
         verbose_name = _('Дані реєстрації користувача')
-        verbose_name_plural = verbose_name
+        verbose_name_plural = _('Дані реєстрації користувачів')
 
 
 class UserRoleApplication(models.Model):
