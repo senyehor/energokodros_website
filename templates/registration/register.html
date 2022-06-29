@@ -8,9 +8,11 @@
                 <form method="post" class="display-block">
                     {% csrf_token %}
                     {{ form | crispy }}
-                    {{ user_registration_request_formset.non_form_errors }}
-                    {{ user_registration_request_formset.management_form }}
-                    {{ user_registration_request_formset.0 | crispy }}
+                    {{ registration_formset.non_form_errors }}
+                    {{ registration_formset.management_form }}
+                    <!-- Here we take .0, as formsets are supposed to be used for bulk creation,
+                     but here is used to "join" two forms (user registration + role application)-->
+                    {{ registration_formset.0 | crispy }}
                     <button type="submit" class="btn btn-primary mt-4">Відправити заявку на реєстрацію</button>
                 </form>
             </div>
