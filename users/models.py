@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models, transaction
 from django.utils.translation import gettext as _
@@ -91,15 +93,19 @@ class UserRole(models.Model):
 
 class UserRegistrationDataManager(UserManager):
     def create(self, full_name: str, email: str, password: str, is_admin: bool = False,
-               email_code: str = None, email_confirmed: bool = False) -> 'UserRegistrationData':
+               email_code: str = None, email_confirmed: bool = False,
+               applied_at: datetime = None) -> 'UserRegistrationData':
         user = super().create(full_name, email, password, is_admin)
+        if applied_at is None:
+            applied_at = datetime.now()
         return self.model(
             full_name=user.full_name,
             email=user.email,
             password=user.password,
             is_admin=user.is_admin,
             email_code=email_code,
-            email_confirmed=email_confirmed
+            email_confirmed=email_confirmed,
+            applied_at=applied_at
         )
 
 
@@ -115,6 +121,11 @@ class UserRegistrationData(User):
         _('чи підтвердив користувач реєстрацію'),
         null=False,
         default=False
+    )
+    applied_at = models.DateTimeField(
+        _('дата подання заяви'),
+        null=False,
+        auto_now_add=True
     )
 
     objects = UserRegistrationDataManager()
@@ -145,7 +156,7 @@ class UserRegistrationData(User):
         verbose_name_plural = verbose_name
 
 
-class UserRegistrationRequest(models.Model):
+class UserRoleApplication(models.Model):
     user = models.ForeignKey(
         UserRegistrationData,
         on_delete=models.CASCADE,
@@ -167,9 +178,9 @@ class UserRegistrationRequest(models.Model):
     )
 
     class Meta:
-        db_table = 'users_registration_requests'
-        verbose_name = _('Запит на реєстрацію користувача')
-        verbose_name_plural = _('Запити на реєстрацію користувача')
+        db_table = 'users_role_applications'
+        verbose_name = _('Запит на отримання ролі користувачем')
+        verbose_name_plural = _('Запити на отримання ролі користувачів')
 
     def __str__(self):
         return _(f'Запит на реєстрацію від {self.user.full_name} в {str(self.institution)}')
