@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.db import models, transaction
+from django.db import models
 from django.utils.translation import gettext as _
 
 from institutions.models import AccessLevel, Institution
@@ -90,66 +88,6 @@ class UserRole(models.Model):
         return _(f'{self.position} {self.user.full_name} в {self.institution}')
 
 
-class UserRegistrationDataManager(UserManager):
-    def create(self, full_name: str, email: str, password: str, is_admin: bool = False,
-               email_code: str = None, email_confirmed: bool = False,
-               applied_at: datetime = None) -> 'UserRegistrationData':
-        user = super().create(full_name, email, password, is_admin)
-        if applied_at is None:
-            applied_at = datetime.now()
-        return self.model(
-            full_name=user.full_name,
-            email=user.email,
-            password=user.password,
-            is_admin=user.is_admin,
-            email_code=email_code,
-            email_confirmed=email_confirmed,
-            applied_at=applied_at
-        )
-
-
-class UserRegistrationData(User):
-    # we do not care about storing non-confirmed user`s data in User model, as
-    # we will operate user roles (non-confirmed user can not have a role)
-    email_code = models.CharField(
-        _('код верифікації пошти'),
-        max_length=64,  # length for current code algorithm
-        null=False
-    )
-    applied_at = models.DateTimeField(
-        _('дата подання заяви'),
-        null=False,
-        auto_now_add=True
-    )
-
-    objects = UserRegistrationDataManager()
-
-    def confirm_email(self):
-        self.email_confirmed = True
-        self.save()
-
-    def review_registration(self, accepted: bool = False, is_admin: bool = False):
-        with transaction.atomic():
-            if accepted:
-                # here we provide empty password and set it explicitly later, as
-                # user registration data already has password, and it is already encrypted,
-                # so we can set it following way
-                user = User.objects.create(
-                    self.full_name,
-                    email=self.email,
-                    password='',
-                    is_admin=is_admin
-                )
-                user.password = self.password
-                user.save()
-            self.delete()
-
-    class Meta:
-        db_table = 'users_registration_data'
-        verbose_name = _('Дані реєстрації користувача')
-        verbose_name_plural = _('Дані реєстрації користувачів')
-
-
 class UserRoleApplication(models.Model):
     user = models.ForeignKey(
         User,
@@ -177,4 +115,4 @@ class UserRoleApplication(models.Model):
         verbose_name_plural = _('Запити на отримання ролі користувачів')
 
     def __str__(self):
-        return _(f'Запит на реєстрацію від {self.user.full_name} в {str(self.institution)}')
+        return _(f'Запит на реєстрацію від {self.user.full_name} в {self.institution}')
