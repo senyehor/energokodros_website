@@ -4,7 +4,7 @@ from django.forms import inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Institution
-from users.models import UserRegistrationData, UserRegistrationRequest
+from users.models import UserRegistrationData, UserRoleApplication
 
 
 class LoginForm(auth_forms.AuthenticationForm):
@@ -24,7 +24,7 @@ class NewUserForm(auth_forms.UserCreationForm):
         fields = ('full_name', 'email')
 
 
-class UserRegistrationRequestForm(forms.ModelForm):
+class UserRoleApplicationForm(forms.ModelForm):
     institution = forms.ModelChoiceField(
         queryset=Institution.objects.all().only('institution_id', 'institution_name'),
         label=_('Оберіть установу')
@@ -37,14 +37,14 @@ class UserRegistrationRequestForm(forms.ModelForm):
     )
 
     class Meta:
-        model = UserRegistrationRequest
+        model = UserRoleApplication
         fields = ('institution', 'message')
 
 
-UserRegistrationRequestFormset = inlineformset_factory(
+UserRoleApplicationAndRegistrationFormset = inlineformset_factory(
     parent_model=UserRegistrationData,
-    model=UserRegistrationRequest,
-    form=UserRegistrationRequestForm,
+    model=UserRoleApplication,
+    form=UserRoleApplicationForm,
     extra=1,
     can_delete=False,
     min_num=1,

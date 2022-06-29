@@ -7,7 +7,8 @@ from django.views.generic import CreateView
 
 from users.forms import (
     LoginForm,
-    NewUserForm, UserRegistrationRequestFormset,
+    NewUserForm,
+    UserRoleApplicationAndRegistrationFormset
 )
 from users.logic import _get_user_registration_formset, remember_user_for_two_week
 
@@ -27,36 +28,39 @@ class CreateUserRegistrationRequest(CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['user_registration_request_formset'] = UserRegistrationRequestFormset()
+        ctx['user_role_application_and_registration_formset'] = \
+            UserRoleApplicationAndRegistrationFormset()
         return ctx
 
     def post(self, request, *args, **kwargs):
         self.object = None  # noqa
         form = self.get_form(self.get_form_class())
-        user_registration_request_formset = UserRegistrationRequestFormset(
-            self.request.POST or None
-        )
-        if form.is_valid() and user_registration_request_formset.is_valid():
-            return self.form_valid(form, user_registration_request_formset)
-        return self.form_invalid(form, user_registration_request_formset)
+        user_role_application_and_registration_formset = \
+            UserRoleApplicationAndRegistrationFormset(self.request.POST or None)
+        if form.is_valid() and user_role_application_and_registration_formset.is_valid():
+            return self.form_valid(form, user_role_application_and_registration_formset)
+        return self.form_invalid(form, user_role_application_and_registration_formset)
 
     def form_valid(  # noqa pylint: disable=W0221
             self, form: NewUserForm,
-            user_registration_request_formset: UserRegistrationRequestFormset):
+            user_role_application_and_registration_formset:
+            UserRoleApplicationAndRegistrationFormset):
         self.object = form.save(commit=False)  # noqa
         self.object.save()
-        form = _get_user_registration_formset(user_registration_request_formset)
+        form = _get_user_registration_formset(user_role_application_and_registration_formset)
         form.user = self.object
         form.save()
         return redirect(reverse_lazy('successfully_created_registration_request'))
 
     def form_invalid(  # noqa pylint: pylint: disable=W0221
             self, form: NewUserForm,
-            user_registration_request_formset: UserRegistrationRequestFormset):
+            user_role_application_and_registration_formset:
+            UserRoleApplicationAndRegistrationFormset):
         return self.render_to_response(
             self.get_context_data(
                 form=form,
-                user_registration_request_formset=user_registration_request_formset,
+                user_role_application_and_registration_formset=
+                user_role_application_and_registration_formset,
             ),
             status=400
         )
