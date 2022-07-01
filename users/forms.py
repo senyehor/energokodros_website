@@ -4,7 +4,7 @@ from django.forms import inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Institution
-from users.models import UserRegistrationData, UserRoleApplication
+from users.models import User, UserRoleApplication
 
 
 class LoginForm(auth_forms.AuthenticationForm):
@@ -20,7 +20,7 @@ class LoginForm(auth_forms.AuthenticationForm):
 
 class NewUserForm(auth_forms.UserCreationForm):
     class Meta:
-        model = UserRegistrationData
+        model = User
         fields = ('full_name', 'email')
 
 
@@ -41,8 +41,8 @@ class UserRoleApplicationForm(forms.ModelForm):
         fields = ('institution', 'message')
 
 
-UserRoleApplicationAndRegistrationFormset = inlineformset_factory(
-    parent_model=UserRegistrationData,
+RegistrationFormset = inlineformset_factory(
+    parent_model=User,
     model=UserRoleApplication,
     form=UserRoleApplicationForm,
     extra=1,
