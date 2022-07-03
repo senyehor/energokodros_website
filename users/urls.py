@@ -4,7 +4,7 @@ from users import views
 
 # using /? to override some of django.contrib.auth.urls
 overridden_account_patterns = [
-    path('login/', views.LoginView.as_view(template_name='registration/login.html')),
+    path('login/', views.LoginView.as_view()),
 ]
 
 urlpatterns = overridden_account_patterns + [
