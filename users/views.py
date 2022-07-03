@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as LogView
 from django.forms import BaseInlineFormSet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -49,7 +49,9 @@ class CreateUserRegistrationRequest(CreateView):
         form = self.__get_form_from_registration_formset(registration_formset)
         form.user = self.object
         form.save()
-        return redirect(reverse_lazy('successfully_created_registration_request'))
+        if self.__send_email_confirmation_message():
+            return redirect(reverse_lazy('successfully_created_registration_request'))
+        return HttpResponse(status=500)
 
     def form_invalid(  # noqa pylint: pylint: disable=W0221
             self, form: NewUserForm,
@@ -63,6 +65,9 @@ class CreateUserRegistrationRequest(CreateView):
             ),
             status=400
         )
+
+    def __send_email_confirmation_message(self) -> bool:
+        return EmailConfirmationController.send_email_confirmation_message(self.object)
 
     @staticmethod
     def __get_form_from_registration_formset(registration_formset: BaseInlineFormSet) -> User:
