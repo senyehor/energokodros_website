@@ -12,9 +12,9 @@
     Натисніть на кнопку знизу, щоб підтвердити реєстрацію. Якщо ви не надсилали запит,
     можете сміливо видаляти цей лист.
 </p>
-<form action="{% url 'confirm_email' user_id user_email %}" method="post">
+<form action="{% url 'confirm_email' user_id user_email %}" method="get">
     {{ csrf_token }}
-    <button type="submit" class="btn btn-primary mt-4">Підтвердити реєстрацію</button>
+    <button type="submit" class="btn btn-primary mt-4">Підтвердити пошту</button>
 </form>
 </body>
 </html>
