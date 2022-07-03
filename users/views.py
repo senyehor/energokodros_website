@@ -49,7 +49,7 @@ class CreateUserRegistrationRequest(CreateView):
         form = self.__get_form_from_registration_formset(registration_formset)
         form.user = self.object
         form.save()
-        return redirect(reverse_lazy('home'))
+        return redirect(reverse_lazy('successfully_created_registration_request'))
 
     def form_invalid(  # noqa pylint: pylint: disable=W0221
             self, form: NewUserForm,
