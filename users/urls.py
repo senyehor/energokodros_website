@@ -18,6 +18,11 @@ urlpatterns = [  # noqa
         'confirm-email/<hashed_int:user_id>/<hashed_string:user_email>',
         views.confirm_email,
         name='confirm_email'
+    ),
+    path(
+        'successfully-confirmed-email',
+        views.successfully_confirmed_email,
+        name='successfully_confirmed_email'
     )
 ]
 urlpatterns.append(path('', include('django.contrib.auth.urls')))
