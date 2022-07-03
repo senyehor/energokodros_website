@@ -1,9 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as LogView
 from django.forms import BaseInlineFormSet
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView
 
 from users.forms import (
@@ -11,7 +13,7 @@ from users.forms import (
     NewUserForm,
     RegistrationFormset
 )
-from users.logic import RegistrationController, remember_user_for_two_week
+from users.logic import EmailConfirmationController, remember_user_for_two_week
 from users.models import User
 
 
@@ -27,7 +29,6 @@ class LoginView(LogView):
 class CreateUserRegistrationRequest(CreateView):
     form_class = NewUserForm
     template_name = 'registration/register.html'
-    controller = RegistrationController
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -80,3 +81,12 @@ def index_view(request: HttpRequest):
 
 def successfully_created_registration_request(request: HttpRequest):
     return render(request, 'successfully_created_registration_request.html')
+
+
+def confirm_email(request, user_id: int, email: str):
+    EmailConfirmationController.confirm_email_if_exists_or_404(user_id, email)
+    messages.success(
+        request,
+        _('Пошту успішно підтверджено')
+    )
+    return redirect('home')
