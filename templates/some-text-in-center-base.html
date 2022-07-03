@@ -1,0 +1,18 @@
+{% extends 'bare_base.html' %}
+{% block body %}
+    <div class="d-flex justify-content-center align-items-center flex-column" style="height: 100vh;">
+        <div>
+            <h1>
+                {% block header %}
+                {% endblock %}
+            </h1>
+        </div>
+        <div class="w-25 text-center pt-5">
+            <p>
+                {% block text %}
+                {% endblock %}
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
