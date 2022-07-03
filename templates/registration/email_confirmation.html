@@ -13,7 +13,6 @@
     можете сміливо видаляти цей лист.
 </p>
 <form action="{% url 'confirm_email' user_id user_email %}" method="get">
-    {{ csrf_token }}
     <button type="submit" class="btn btn-primary mt-4">Підтвердити пошту</button>
 </form>
 </body>
