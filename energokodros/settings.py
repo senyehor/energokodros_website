@@ -115,6 +115,4 @@ LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# id`s encoding constants
-KEYSPACE = env('KEYSPACE')
-CHAFF = int(env('CHAFF'))
+MIN_HASH_LENGTH = env.int('MIN_HASH_LENGTH')
