@@ -2,12 +2,8 @@ from django.urls import include, path
 
 from users import views
 
-# using /? to override some of django.contrib.auth.urls
-overridden_account_patterns = [
+urlpatterns = [  # noqa
     path('login/', views.LoginView.as_view()),
-]
-
-urlpatterns = overridden_account_patterns + [
     path(
         'registration/',
         views.CreateUserRegistrationRequest.as_view(),
@@ -23,4 +19,5 @@ urlpatterns = overridden_account_patterns + [
         views.confirm_email,
         name='confirm_email'
     )
-] + path('', include('django.contrib.auth.urls'))
+]
+urlpatterns.append(path('', include('django.contrib.auth.urls')))
