@@ -15,13 +15,13 @@ urlpatterns = [  # noqa
         name='successfully_created_registration_request'
     ),
     path(
-        'confirm-email/<hashed_int:user_id>/<hashed_string:user_email>',
-        views.confirm_email,
+        'confirm-email/<hashed_int:user_id>/<hashed_str:email>/',
+        views.ConfirmEmail.as_view(),
         name='confirm_email'
     ),
     path(
         'successfully-confirmed-email',
-        views.successfully_confirmed_email,
+        views.ConfirmEmail.as_view(),
         name='successfully_confirmed_email'
     )
 ]
