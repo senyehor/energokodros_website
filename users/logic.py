@@ -6,7 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from users.models import User
@@ -49,7 +49,8 @@ class EmailConfirmationController:
 
     @staticmethod
     def __generate_context(request: HttpRequest, user: User) -> dict[str, str]:
-        link_without_host = reverse_lazy(
+        protocol = 'https' if request.is_secure() else 'http'
+        link_without_host = reverse(
             'confirm_email',
             kwargs={
                 'user_id':    user.pk,
@@ -57,7 +58,7 @@ class EmailConfirmationController:
             }
         )
         return {
-            'link': request.get_host() + link_without_host,
+            'link': protocol + '://' + request.get_host() + link_without_host,
         }
 
 
