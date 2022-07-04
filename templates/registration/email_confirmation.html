@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Підтвердження реєстрації</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
-<body>
-<h1 class="text-center d-block">Підтвердьте вашу пошту</h1>
-<p>
-    Натисніть на кнопку знизу, щоб підтвердити реєстрацію. Якщо ви не надсилали запит,
-    можете сміливо видаляти цей лист.
-</p>
-<form action="{% url 'confirm_email' user_id user_email %}" method="get">
-    <button type="submit" class="btn btn-primary mt-4">Підтвердити пошту</button>
-</form>
-</body>
-</html>
+{% extends 'registration/__email_confirmation_rendered_base.html' %}
+{% block header %}
+    Підтвердьте реєстрацію
+{% endblock %}
+{% block text %}
+    Натисніть на кнопку знизу, щоб підтвердити реєстрацію.
+    Якщо ви не надсилали запит, можете сміливо видаляти цей лист.
+    Не натискається кнопка? Спробуйте скопіювати посилання вручну та перейти по ньому
+    {{ link }}
+{% endblock %}
+{% block link %}
+    {{ link }}
+{% endblock %}
+{% block link_text %}
+    Підтвердити
+{% endblock %}
