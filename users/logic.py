@@ -50,7 +50,7 @@ class EmailConfirmationController:
     @staticmethod
     def __generate_context(request: HttpRequest, user: User) -> dict[str, str]:
         link_without_host = reverse_lazy(
-            '',
+            'confirm_email',
             kwargs={
                 'user_id':    user.pk,
                 'user_email': user.email,
