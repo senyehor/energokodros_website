@@ -46,14 +46,18 @@ class CreateUserRegistrationRequest(CreateView):
             return self.form_valid(form, registration_formset)
         return self.form_invalid(form, registration_formset)
 
+    @method_decorator(transaction.atomic)
     def form_valid(self, form: NewUserForm, registration_formset: RegistrationFormset):  # noqa pylint: disable=W0221
         self.object = form.save(commit=False)  # noqa
+        self.object.save()
         form = self.__get_form_from_registration_formset(registration_formset)
         form.user = self.object
+        user_role_application = form.save()
         if self.__send_email_confirmation_message():
-            self.object.save()
-            form.save()
             return redirect(reverse_lazy('successfully_created_registration_request'))
+        # deleting created user and it`s application if we failed to send email confirmation message
+        self.object.delete()
+        user_role_application.delete()
         return HttpResponse(status=500)
 
     def form_invalid(  # noqa pylint: pylint: disable=W0221
@@ -70,7 +74,9 @@ class CreateUserRegistrationRequest(CreateView):
         )
 
     def __send_email_confirmation_message(self) -> bool:
-        return EmailConfirmationController.send_email_confirmation_message(self.object)
+        return EmailConfirmationController.send_email_confirmation_message(
+            self.request, self.object
+        )
 
     @staticmethod
     def __get_form_from_registration_formset(registration_formset: BaseInlineFormSet) -> User:
