@@ -107,7 +107,7 @@ def successfully_created_registration_request(request):
 
 
 class ConfirmEmail(View):
-    def post(self, request, user_id: int, user_email: str):  # noqa
+    def get(self, request, user_id: int, user_email: str):  # noqa
         EmailConfirmationController.confirm_email_if_user_exists_or_404(user_id, user_email)
         messages.success(
             request,
@@ -115,5 +115,6 @@ class ConfirmEmail(View):
         )
         return redirect('successfully_confirmed_email')
 
-    def get(self, request):  # noqa
-        return render(request, 'registration/successfully_confirmed_email.html')
+
+def successfully_confirmed_email(request: HttpRequest):
+    return render(request, 'registration/successfully_confirmed_email.html')
