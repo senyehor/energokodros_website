@@ -4,7 +4,7 @@ from hashids import Hashids
 
 from energokodros.settings import MIN_HASH_LENGTH, SECRET_KEY
 
-# here we are setting custom alphabet to exclude all unnecessary symbols (/,% etc)
+# here we are setting custom alphabet to exclude url-unsafe unnecessary symbols (/,% etc)
 # and to simplify checking by regex, as by default __HASHER._alphabet does not return
 # correct alphabet for regex (do not know why)
 __ALPHABET = string.ascii_lowercase + string.digits
