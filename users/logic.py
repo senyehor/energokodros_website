@@ -47,19 +47,27 @@ class EmailConfirmationController:
         user.is_active = True
         user.save()
 
-    @staticmethod
-    def __generate_context(request: HttpRequest, user: User) -> dict[str, str]:
+    @classmethod
+    def __generate_context(cls, request: HttpRequest, user: User) -> dict[str, str]:
+        return {
+            'link': cls.__generate_link_for_user(user, request),
+        }
+
+    @classmethod
+    def __generate_link_for_user(cls, user: User, request: HttpRequest) -> str:
         protocol = 'https' if request.is_secure() else 'http'
-        link_without_host = reverse(
+        link_without_host = cls.__generate_path_for_email_confirmation_for_user(user)
+        return protocol + '://' + request.get_host() + link_without_host
+
+    @classmethod
+    def __generate_path_for_email_confirmation_for_user(cls, user: User) -> str:
+        return reverse(
             'confirm_email',
             kwargs={
                 'user_id':    user.pk,
                 'user_email': user.email,
             }
         )
-        return {
-            'link': protocol + '://' + request.get_host() + link_without_host,
-        }
 
 
 def remember_user_for_two_week(request: HttpRequest):
