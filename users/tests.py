@@ -5,11 +5,13 @@ import factory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist, ValidationError
 from django.http import HttpResponse
-from django.test import Client, TestCase
-from django.urls import reverse_lazy
+from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse, reverse_lazy
 from factory import django
 
+from institutions.models import Institution
 from institutions.tests import InstitutionFactory
+from users.logic import EmailConfirmationController
 from users.models import UserRoleApplication
 
 User = get_user_model()
@@ -149,9 +151,7 @@ class UserRegistrationTest(TestCase):
         self.institution = InstitutionFactory()
 
     def test_with_correct_data_set(self):
-        resp = self.__send_registration_request(
-            self.__get_correct_data_set_with_values_from_set_up()
-        )
+        resp = self._send_correct_registration_data()
         self.assertEqual(
             resp.status_code,
             200,
@@ -174,7 +174,7 @@ class UserRegistrationTest(TestCase):
             assert False, 'multiple user registration requests are created'
 
     def test_user_and_role_application_is_created_correctly(self):
-        self._send_correct_data()
+        self._send_correct_registration_data()
         user = User.objects.get(
             full_name=self.user.full_name,
             email=self.user.email
@@ -192,18 +192,46 @@ class UserRegistrationTest(TestCase):
             'registration request is set for wrong institution'
         )
 
-    def _send_correct_data(self) -> HttpResponse:
-        return self.__send_registration_request(
-            self.__get_correct_data_set_with_values_from_set_up()
+    def test_email_confirmation(self):
+        self._send_correct_registration_data()
+        # here we mock request just to use it`s is_secure and get_host to generate link
+        request = RequestFactory().get('')
+        _ = EmailConfirmationController
+        # here we get just first user, as it should be created and be the only one
+        user = User.objects.all().first()
+        link_for_user = _._EmailConfirmationController__generate_link_for_user(  # noqa pylint: disable=C0301,W0212
+            user,
+            request
+        )
+        resp = self.client.get(
+            link_for_user
+        )
+        self.assertRedirects(
+            resp,
+            reverse('successfully_confirmed_email')
+        )
+        user.refresh_from_db()
+        self.assertTrue(
+            user.is_active,
+            'is_active is not set when user successfully confirmed email'
         )
 
-    def __get_correct_data_set_with_values_from_set_up(self):
+    def _send_correct_registration_data(self) -> HttpResponse:
+        return self.__send_registration_request(
+            self.__fill_data_set(
+                self.user,
+                self.institution,
+                self.raw_password
+            )
+        )
+
+    def __fill_data_set(self, user: User, institution: Institution, raw_password: str):
         data = self._get_form_data()
-        data['full_name'] = self.user.full_name
-        data['email'] = self.user.email
-        data['password1'] = self.raw_password
-        data['password2'] = self.raw_password
-        data['registration_requests-0-institution'] = str(self.institution.pk)
+        data['full_name'] = user.full_name
+        data['email'] = user.email
+        data['password1'] = raw_password
+        data['password2'] = raw_password
+        data['registration_requests-0-institution'] = str(institution.pk)
         return data
 
     @classmethod
@@ -220,7 +248,7 @@ class UserRegistrationTest(TestCase):
         sample_data['registration_requests-MAX_NUM_FORMS'] = '1'
         return sample_data.copy()
 
-    def __send_registration_request(self, data: dict[str, str]) -> HttpResponse:
+    def __send_registration_request(self, data: _user_registration_data_dict) -> HttpResponse:
         return self.client.post(
             reverse_lazy('register'),
             {
