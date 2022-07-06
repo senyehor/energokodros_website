@@ -3,14 +3,15 @@ from django.utils.translation import gettext_lazy as _
 
 from institutions.models import AccessLevel
 from users.models import UserRoleApplication
+from utils.forms import SecureModelChoiceField
 
 
 class UserRegistrationRequestsDecisionForm(forms.Form):
-    users_role_applications = forms.ModelChoiceField(
+    users_role_applications = SecureModelChoiceField(
         queryset=UserRoleApplication.objects.all(),
         label=_('Запити користувачів на реєстрацію')
     )
-    access_level = forms.ModelChoiceField(
+    access_level = SecureModelChoiceField(
         queryset=AccessLevel.objects.all(),
         label=_('Призначте рівень доступу'),
         required=False

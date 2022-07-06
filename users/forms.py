@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Institution
 from users.models import User, UserRoleApplication
+from utils.forms import SecureModelChoiceField
 
 
 class LoginForm(auth_forms.AuthenticationForm):
@@ -26,7 +27,7 @@ class NewUserForm(auth_forms.UserCreationForm):
 
 
 class UserRoleApplicationForm(forms.ModelForm):
-    institution = forms.ModelChoiceField(
+    institution = SecureModelChoiceField(
         queryset=Institution.objects.all().only('institution_id', 'institution_name'),
         label=_('Оберіть установу')
     )
