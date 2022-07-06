@@ -1,6 +1,5 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.views import View
 
 from administrator.decorators import admin_rights_required
 from administrator.forms import UserRegistrationRequestsDecisionForm
@@ -45,15 +44,10 @@ class RegistrationRequestReview(View):
         #     return HttpResponse(status=400)
 
 
-class GetMessageForRegistrationRequest(View):
-    http_method_names = ['post']
-
-    # @method_decorator(administrator) todo
-    def post(self, request: HttpRequest):  # noqa
-        if request.is_ajax():  # noqa
-            if request_id := request.POST.get('request_id'):  # noqa
-                return JsonResponse(
-                    {'message': _get_message_for_role_application(request_id)},
-                    status=200
-                )
-        return HttpResponse(status=405)
+@admin_rights_required
+def get_message_for_registration_request(request: HttpRequest):
+    if request_id := request.POST.get('request_id'):  # noqa
+        return JsonResponse(
+            {'message': _get_message_for_role_application(request_id)},
+        )
+    return HttpResponse(status=405)

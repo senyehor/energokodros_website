@@ -9,13 +9,13 @@ urlpatterns = [
         name='admin_page'
     ),
     path(
-        'review-registration-request',
-        views.RegistrationRequestReview.as_view(),
+        'review-registration-request/',
+        views.review_registration_request,
         name='review_registration_request'
     ),
     path(
-        'get-message-for-registration-request',
-        views.GetMessageForRegistrationRequest.as_view(),
+        'get-message-for-registration-request/',
+        views.get_message_for_registration_request,
         name='get_message_for_registration_request'
     )
 ]
