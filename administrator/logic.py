@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from users.models import UserRoleApplication
 
 
-def _get_message_for_role_application(request_id: int):
+def _get_message_for_role_application(request_id: int | str):
     return get_object_or_404(UserRoleApplication, id=request_id).message
 
 
