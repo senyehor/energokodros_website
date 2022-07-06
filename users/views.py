@@ -15,7 +15,7 @@ from users.forms import (
     NewUserForm,
     RegistrationFormset
 )
-from users.logic import EmailConfirmationController, remember_user_for_two_week
+from users.logic import _is_admin, EmailConfirmationController, remember_user_for_two_week
 from users.models import UserRoleApplication
 
 
@@ -96,7 +96,7 @@ class CreateUserRegistrationRequest(CreateView):
 
 @login_required
 def index_view(request: HttpRequest):
-    if request.user.is_authenticated and request.user.is_admin:  # noqa
+    if _is_admin(request):
         return redirect(reverse_lazy('admin_page'))
     return render(request, 'index.html')
 
