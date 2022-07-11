@@ -28,14 +28,14 @@ class NewUserForm(auth_forms.UserCreationForm):
 
 class UserRoleApplicationForm(forms.ModelForm):
     institution = SecureModelChoiceField(
+        label=_('Оберіть установу'),
         queryset=Institution.objects.all(),
-        label=_('Оберіть установу')
     )
     message = forms.CharField(
-        max_length=200,
         label=_('Залиште опціональне повідомлення'),
+        max_length=200,
         required=False,
-        widget=forms.Textarea
+        widget=forms.Textarea({'rows': 2})
     )
 
     class Meta:
