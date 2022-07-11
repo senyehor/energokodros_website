@@ -2,4 +2,4 @@
 ignore-paths=.*/migrations
 ignore-patterns=manage.py
 [MESSAGES CONTROL]
-disable=R0901,C0111,R0903,E0307,E1101,W0201,C0103,R0913
+disable=R0901,C0111,R0903,E0307,E1101,W0201,C0103,R0913,W0707

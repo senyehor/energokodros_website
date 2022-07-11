@@ -13,6 +13,7 @@ from institutions.models import Institution
 from institutions.tests import InstitutionFactory
 from users.logic import EmailConfirmationController
 from users.models import UserRoleApplication
+from utils.crypto import hide_int
 
 User = get_user_model()
 
@@ -231,7 +232,9 @@ class UserRegistrationTest(TestCase):
         data['email'] = user.email
         data['password1'] = raw_password
         data['password2'] = raw_password
-        data['registration_requests-0-institution'] = str(institution.pk)
+        # we are using SecureModelChoiceField to hide all the id`s,
+        # so we have to directly hide it here
+        data['registration_requests-0-institution'] = hide_int(institution.pk)
         return data
 
     @classmethod
