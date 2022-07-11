@@ -28,7 +28,7 @@ class NewUserForm(auth_forms.UserCreationForm):
 
 class UserRoleApplicationForm(forms.ModelForm):
     institution = SecureModelChoiceField(
-        queryset=Institution.objects.all().only('institution_id', 'institution_name'),
+        queryset=Institution.objects.all(),
         label=_('Оберіть установу')
     )
     message = forms.CharField(
