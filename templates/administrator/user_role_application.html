@@ -5,6 +5,13 @@
 {% endblock %}
 {% block content %}
     <div class="container">
+        {% if user_has_no_roles %}
+            <div class="card bg-warning">
+                <h3 class="card-body">
+                    Цей користувач ще не має жодної ролі, уважно перевірте пошту&#8201;&#8211;&#8201;це може бути стороння людина, що подала заявку на реєстрацію
+                </h3>
+            </div>
+        {% endif %}
         <form method="post">
             {% csrf_token %}
             {{ form| crispy }}
