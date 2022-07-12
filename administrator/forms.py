@@ -1,10 +1,10 @@
 from django import forms
+from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
-from institutions.models import AccessLevel
-from users.models import UserRole, UserRoleApplication
-from utils.common import create_queryset_from_object
-from utils.forms import SecureModelChoiceField
+from institutions.models import AccessLevel, Institution
+from users.models import User, UserRole, UserRoleApplication
+from utils.forms import create_queryset_from_object, SecureModelChoiceField
 
 
 class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
@@ -28,7 +28,8 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
 
     class Meta:
         model = UserRole
-        fields = ('user', 'institution', 'access_level', 'position')
+        # user and institution is added in custom creation method
+        fields = ('access_level', 'position')
         form_fields_order = (
             'user_with_email',
             'institution_verbose',
@@ -38,12 +39,15 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
             'message_for_user'
         )
 
-    @classmethod
+    @classonlymethod
     def create_from_application_request(cls, application_request: UserRoleApplication):
         obj = cls()
         obj.__prepopulate_fields(application_request)
-        obj.is_bound = True
+        obj.__alter_field_due_to_custom_creating()
         return obj
+
+    def __alter_field_due_to_custom_creating(self):  # pylint: disable=W0238
+        self._errors = None
 
     def __prepopulate_fields(self, application_request: UserRoleApplication):  # pylint: disable=W0238
         self.__add_hidden_fields(application_request)
@@ -53,6 +57,8 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
     def __add_hidden_fields(self, application_request: UserRoleApplication):
         # SecureModelChoiceField is used to hide id`s, information for users
         # should be added in __add_visible_fields
+        # ModelChoiceField requires to always provide a queryset,
+        # so queryset from initial object is created
         self.fields['user'] = SecureModelChoiceField(
             initial=application_request.user,
             queryset=create_queryset_from_object(application_request.user),
@@ -65,23 +71,27 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
         )
 
     def __add_visible_fields(self, application_request: UserRoleApplication):
+        # this fields will not be used in UserRole creation, so required = False
         self.fields['user_with_email'] = forms.CharField(
             label=_('Користувач та пошта'),
             max_length=255,
             initial=_(f'{application_request.user} {application_request.user.email}'),
-            widget=forms.TextInput({'readonly': 'readonly'})
+            widget=forms.TextInput({'readonly': 'readonly'}),
+            required=False
         )
         self.fields['institution_verbose'] = forms.CharField(
             label=_('Установа'),
             max_length=255,
             initial=_(str(application_request.institution)),
-            widget=forms.TextInput({'readonly': 'readonly'})
+            widget=forms.TextInput({'readonly': 'readonly'}),
+            required=False
         )
         self.fields['message_from_user'] = forms.CharField(
             label=_('Повідомлення від користувача'),
             max_length=255,
             initial=_(application_request.message),
-            widget=forms.Textarea({'rows': 2, 'readonly': 'readonly'})
+            widget=forms.Textarea({'rows': 2, 'readonly': 'readonly'}),
+            required=False
         )
 
     def __order_fields(self):
@@ -90,3 +100,11 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
         # adding fields that are not included in ordered_fields
         ordered_fields.update(unordered_fields)
         self.fields = ordered_fields
+
+    @property
+    def application_user(self) -> User:
+        return self.fields['user']
+
+    @property
+    def application_institution(self) -> Institution:
+        return self.fields['institution']
