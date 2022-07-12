@@ -20,13 +20,7 @@ class EmailConfirmationController:
             template_name='email/email_confirmation.html',
             context=ctx
         )
-        success = send_html_email(user.email, 'Підтвердження реєстрації', html)
-        if not success:
-            logger.error(
-                msg='something went wrong during sending confirmation email for '
-                    f'email {user.email}',
-            )
-        return success
+        return send_html_email(user.email, 'Підтвердження реєстрації', html)
 
     @staticmethod
     def confirm_email_if_user_exists_or_404(user_id: int, email: str):
