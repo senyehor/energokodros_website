@@ -6,3 +6,7 @@ ul {
 .asteriskField {
     display: none;
 }
+
+.active {
+    opacity: 50%;
+}

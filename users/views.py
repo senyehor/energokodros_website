@@ -8,14 +8,16 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
+from django.views import View
 from django.views.generic import CreateView
 
+from administrator.logic import _is_admin
 from users.forms import (
     LoginForm,
     NewUserForm,
     RegistrationFormset
 )
-from users.logic import _is_admin, EmailConfirmationController, remember_user_for_two_week
+from users.logic import EmailConfirmationController, remember_user_for_two_week
 from users.models import UserRoleApplication
 
 
@@ -116,3 +118,8 @@ def confirm_email(request: HttpRequest, user_id: int, user_email: str):
 
 def successfully_confirmed_email(request: HttpRequest):
     return render(request, 'registration/successfully_confirmed_email.html')
+
+
+class ProfilesView(View):
+    def get(self, request):
+        return render(request, 'index.html')
