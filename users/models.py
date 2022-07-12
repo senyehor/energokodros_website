@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from institutions.models import AccessLevel, Institution
@@ -122,3 +123,6 @@ class UserRoleApplication(models.Model):
 
     def __str__(self):
         return _(f'Запит на реєстрацію від {self.user.full_name} в {self.institution}')
+
+    def get_url_for_application_decision(self):
+        return reverse('user_role_application', args=[self.pk])
