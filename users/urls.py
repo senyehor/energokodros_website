@@ -23,6 +23,11 @@ urlpatterns = [  # noqa
         'successfully-confirmed-email',
         views.successfully_confirmed_email,
         name='successfully_confirmed_email'
+    ),
+    path(
+        'profiles/',
+        views.ProfilesView.as_view(),
+        name='profiles'
     )
 ]
 urlpatterns.append(path('', include('django.contrib.auth.urls')))
