@@ -8,13 +8,13 @@ class Institution(models.Model):
         db_column='institution_id'
     )
     institution_name = models.CharField(
-        _("назва закладу"),
+        _('назва закладу'),
         max_length=1000,
         null=False,
         blank=False
     )
     institution_description = models.TextField(
-        _("опис закiладу"),
+        _('опис закладу'),
         null=False,
         blank=False
     )
@@ -31,13 +31,13 @@ class Institution(models.Model):
 class AccessLevel(models.Model):
     access_level_id = models.AutoField(primary_key=True)
     level_def = models.IntegerField(
-        _("код рівню доступу"),
+        _('код рівню доступу'),
         unique=True,
         null=False,
         blank=False
     )
     level_description = models.TextField(
-        _("опис рівню доступу"),
+        _('опис рівню доступу'),
         blank=False,
         null=False
     )
