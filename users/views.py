@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as LogView
 from django.db import transaction
@@ -7,11 +6,10 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView
 
-from administrator.logic import _is_admin
+from administrator.logic.helper_functions import is_admin
 from users.forms import (
     LoginForm,
     NewUserForm,
@@ -98,7 +96,7 @@ class CreateUserRegistrationRequest(CreateView):
 
 @login_required
 def index_view(request: HttpRequest):
-    if _is_admin(request):
+    if is_admin(request):
         return redirect(reverse_lazy('admin_page'))
     return render(request, 'index.html')
 
@@ -109,10 +107,6 @@ def successfully_created_registration_request(request):
 
 def confirm_email(request: HttpRequest, user_id: int, user_email: str):
     EmailConfirmationController.confirm_email_if_user_exists_or_404(user_id, user_email)
-    messages.success(
-        request,
-        _('Пошту успішно підтверджено')
-    )
     return redirect('successfully_confirmed_email')
 
 
