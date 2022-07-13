@@ -5,12 +5,11 @@ from django.views.generic import FormView, ListView
 
 from administrator.decorators import admin_rights_required
 from administrator.forms import UserRoleApplicationRequestsDecisionForm
-from administrator.logic.helper_functions import (
+from administrator.logic import (
     check_user_has_no_roles,
     get_applications_from_users_who_confirmed_email_ordered,
-)
-from administrator.logic.user_role_application_review_controller import \
     UserRoleApplicationReviewController
+)
 from users.models import UserRoleApplication
 
 
