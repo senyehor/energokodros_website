@@ -1,10 +1,13 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div
 from django import forms
 from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import AccessLevel, Institution
 from users.models import User, UserRole, UserRoleApplication
-from utils.forms import create_queryset_from_object, SecureModelChoiceField
+from utils.common import generate_submit_type_button
+from utils.forms import SecureModelChoiceField
 
 
 class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
@@ -25,52 +28,47 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
         required=False,
         widget=forms.Textarea({'rows': 2})
     )
+    user = SecureModelChoiceField(
+        queryset=User.objects.all(),
+    )
+    institution = SecureModelChoiceField(
+        queryset=Institution.objects.all(),
+    )
 
     class Meta:
         model = UserRole
         # user and institution is added in custom creation method
-        fields = ('access_level', 'position')
-        form_fields_order = (
-            'user_with_email',
-            'institution_verbose',
-            'message_from_user',
-            'access_level',
-            'position',
-            'message_for_user'
-        )
+        fields_to_hide = ('user', 'institution')
+        fields = ('access_level', 'position') + fields_to_hide
+        form_fields_order = \
+            (
+                'user_with_email',
+                'institution_verbose',
+                'message_from_user',  # info readonly fields
+            ) + fields + ('message_for_user',)
 
     @classonlymethod
     def create_from_application_request(cls, application_request: UserRoleApplication):
-        obj = cls()
-        obj.__prepopulate_fields(application_request)
-        obj.__alter_field_due_to_custom_creating()
+        obj = cls(initial={
+            'user':        application_request.user,
+            'institution': application_request.institution
+        })
+        obj.__additionally_setup_form(application_request)
         return obj
 
-    def __alter_field_due_to_custom_creating(self):  # pylint: disable=W0238
+    def __additionally_setup_form(self, application_request: UserRoleApplication):  # pylint: disable=W0238
+        self.__add_readonly_prepopulated_fields(application_request)
+        self.__hide_fields()
+        self.__order_fields()
+        self.__add_decision_buttons()
         self._errors = None
 
-    def __prepopulate_fields(self, application_request: UserRoleApplication):  # pylint: disable=W0238
-        self.__add_hidden_fields(application_request)
-        self.__add_visible_fields(application_request)
-        self.__order_fields()
+    def __hide_fields(self):
+        self.helper = FormHelper(self)
+        for field in self.Meta.fields_to_hide:
+            self.helper[field].wrap(Div, css_class="d-none")
 
-    def __add_hidden_fields(self, application_request: UserRoleApplication):
-        # SecureModelChoiceField is used to hide id`s, information for users
-        # should be added in __add_visible_fields
-        # ModelChoiceField requires to always provide a queryset,
-        # so queryset from initial object is created
-        self.fields['user'] = SecureModelChoiceField(
-            initial=application_request.user,
-            queryset=create_queryset_from_object(application_request.user),
-            widget=forms.HiddenInput()
-        )
-        self.fields['institution'] = SecureModelChoiceField(
-            initial=application_request.institution,
-            queryset=create_queryset_from_object(application_request.institution),
-            widget=forms.HiddenInput()
-        )
-
-    def __add_visible_fields(self, application_request: UserRoleApplication):
+    def __add_readonly_prepopulated_fields(self, application_request: UserRoleApplication):
         # this fields will not be used in UserRole creation, so required = False
         self.fields['user_with_email'] = forms.CharField(
             label=_('Користувач та пошта'),
@@ -95,16 +93,58 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
         )
 
     def __order_fields(self):
-        unordered_fields = self.fields
-        ordered_fields = {field: unordered_fields[field] for field in self.Meta.form_fields_order}
-        # adding fields that are not included in ordered_fields
-        ordered_fields.update(unordered_fields)
-        self.fields = ordered_fields
+        unordered_fields = self.helper.layout.fields
+
+        def get_wrapped_field_name_if_div(_field: Div | str) -> str:
+            if isinstance(_field, str):
+                return _field
+            if len(_field.fields) != 1:
+                raise ValueError('only one wrapped field expected')
+            return _field.fields[0]
+
+        field_names = list(map(
+            get_wrapped_field_name_if_div, unordered_fields
+        ))
+        ordered_fields = []
+        for field in self.Meta.form_fields_order:
+            ordered_fields.append(self.helper.layout.fields[field_names.index(field)])
+        self.helper.layout.fields = ordered_fields
+
+    def __add_decision_buttons(self):
+        self.helper.layout.append(
+            generate_submit_type_button(
+                _('Підтвердити'),
+                'accept'
+            )
+        )
+        self.helper.layout.append(
+            generate_submit_type_button(
+                _('Відхилити'),
+                'decline',
+            )
+        )
 
     @property
-    def application_user(self) -> User:
-        return self.fields['user']
+    def application__user(self) -> User:  # pylint: disable=R1710
+        if user := self.cleaned_data.get('user', None):
+            # case when validation went successfully
+            return user
+        # case when validation failed, but fail was suppressed,
+        # as admin declined application, so no validation is actually needed
+        # (required field to accept user is not needed for declining)
+        if user_bound_field := self._bound_fields_cache.get('user', None):
+            # VERY WEIRD when I run debug, this case works
+            return user_bound_field.field.clean(self.data['user'])
+        for name, bound_field in self._bound_items():
+            # VERY WEIRD when I run regularly, this case works
+            if name == 'user':
+                return bound_field.field.clean(self.data['user'])
 
     @property
-    def application_institution(self) -> Institution:
-        return self.fields['institution']
+    def application__institution(self) -> Institution:
+        # we need access to institution only when accepting,
+        # so there is no need to do it similarly to application__user property
+        return self.cleaned_data['institution']
+
+    def get_message_for_user(self) -> str:
+        return self.data['message_for_user']
