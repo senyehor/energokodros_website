@@ -66,7 +66,7 @@ class UserRoleApplicationReviewController:
 
         try_send_email_add_warning_if_failed(
             self.request,
-            self.application_decision_form.application__user.email,
+            self.application.user.email,
             subject,
             message
         )
