@@ -91,6 +91,12 @@ class UserRole(models.Model):
         db_table = 'users_roles'
         verbose_name = _('Роль користувача')
         verbose_name_plural = _('Ролі користувача')
+        constraints = [
+            models.UniqueConstraint(
+                fields=('user', 'institution', 'access_level'),
+                name='user_has_unique_access_level_for_institution',
+            )
+        ]
 
     def __str__(self):
         return _(f'{self.position} {self.user.full_name} в {self.institution}')
