@@ -49,8 +49,8 @@ class UserRoleApplicationReviewController:
     def __fill_missing_user_role_data_from_form_and_save(self):
         form = self.application_decision_form
         obj: UserRole = form.save(commit=False)
-        obj.user = form.application__user
-        obj.institution = form.application__institution
+        obj.user = self.application.user
+        obj.institution = self.application.institution
         obj.save()
 
     def __notify_on_role_application_decision(self):
