@@ -124,7 +124,7 @@ class UserRoleApplication(models.Model):
     )
 
     class Meta:
-        db_table = 'users_role_applications'
+        db_table = 'users_roles_applications'
         verbose_name = _('Запит на отримання ролі користувачем')
         verbose_name_plural = _('Запити на отримання ролі користувачів')
 
