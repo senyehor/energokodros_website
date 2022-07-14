@@ -5,7 +5,7 @@ from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from administrator.forms import UserRoleApplicationRequestsDecisionForm
-from users.models import UserRole, UserRoleApplication
+from users.models import UserRoleApplication
 from utils.common import try_send_email_add_warning_if_failed
 from utils.forms import IncorrectSecureModelFieldValue
 
@@ -31,7 +31,7 @@ class UserRoleApplicationReviewController:
     def process_depending_on_decision(self):
         with transaction.atomic():
             if self.is_approved:
-                self.__fill_missing_user_role_data_from_form_and_save()
+                self.__create_user_role()
             self.__delete_user_role_application()
             self.__notify_on_role_application_decision()
             self.__add_message_for_decision()
@@ -46,12 +46,8 @@ class UserRoleApplicationReviewController:
             message = _('Запит користувача було успішно відхилено')
         messages.success(self.request, message)
 
-    def __fill_missing_user_role_data_from_form_and_save(self):
-        form = self.application_decision_form
-        obj: UserRole = form.save(commit=False)
-        obj.user = self.application.user
-        obj.institution = self.application.institution
-        obj.save()
+    def __create_user_role(self):
+        self.application_decision_form.save()
 
     def __notify_on_role_application_decision(self):
         if self.is_approved:
@@ -74,6 +70,6 @@ class UserRoleApplicationReviewController:
     @staticmethod
     def get_application_decision_form_for_application(application: UserRoleApplication) \
             -> UserRoleApplicationRequestsDecisionForm:
-        return UserRoleApplicationRequestsDecisionForm.create_from_application_request(
+        return UserRoleApplicationRequestsDecisionForm.create_from_role_application(
             application
         )
