@@ -97,7 +97,7 @@ class CreateUserRegistrationRequest(CreateView):
 @login_required
 def index_view(request: HttpRequest):
     if is_admin(request):
-        return redirect(reverse_lazy('admin_page'))
+        return redirect(reverse_lazy('admin-page'))
     return render(request, 'index.html')
 
 
