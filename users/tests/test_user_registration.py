@@ -116,15 +116,13 @@ class UserRegistrationTest(TestCase):
         )
 
     def send_correct_registration_data(self) -> HttpResponse:
-        return self.__send_registration_request(
-            self.complete_data(
-                self.user,
-                self.institution,
-                self.raw_password
-            )
+        return self.send_registration_request(
+            self.user,
+            self.institution,
+            self.raw_password
         )
 
-    def complete_data(self, user: User, institution: Institution, raw_password: str):
+    def __complete_data(self, user: User, institution: Institution, raw_password: str):
         data = self.__get_form_data()
         data['full_name'] = user.full_name
         data['email'] = user.email
@@ -151,11 +149,12 @@ class UserRegistrationTest(TestCase):
         )
         return data
 
-    def __send_registration_request(self, data: _user_registration_data_dict) -> HttpResponse:
+    def send_registration_request(
+            self, user: User, institution: Institution, raw_password: str) -> HttpResponse:
         return self.client.post(
             reverse_lazy('register'),
             {
-                **data
+                **self.__complete_data(user, institution, raw_password)
             },
             follow=True
         )
