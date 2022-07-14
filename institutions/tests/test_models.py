@@ -9,12 +9,12 @@ from institutions.tests.factories import AccessLevelFactory, InstitutionFactory
 class InstitutionTest(TestCase):
     def setUp(self):
         self.name = 'test institution name'
-        self.institution_description = 'test institution description'
+        self.description = 'test institution description'
 
     def test_creating_institution(self):
         institution = Institution(
-            institution_name=self.name,
-            institution_description=self.institution_description
+            name=self.name,
+            description=self.description
         )
         self.assertEqual(
             institution.name,
@@ -23,7 +23,7 @@ class InstitutionTest(TestCase):
         )
         self.assertEqual(
             institution.description,
-            self.institution_description,
+            self.description,
             _('institution description is set incorrectly')
         )
 
@@ -31,12 +31,12 @@ class InstitutionTest(TestCase):
 class AccessLevelTest(TestCase):
     def setUp(self):
         self.level_def = 1
-        self.level_description = 'test level description'
+        self.description = 'test level description'
 
     def test_creating_access_level(self):
         access_level = AccessLevel(
-            level_def=self.level_def,
-            level_description=self.level_description
+            code=self.level_def,
+            description=self.description
         )
         self.assertEqual(
             access_level.code,
@@ -45,7 +45,7 @@ class AccessLevelTest(TestCase):
         )
         self.assertEqual(
             access_level.description,
-            self.level_description,
+            self.description,
             _('level definition is set incorrectly')
         )
 
@@ -60,14 +60,14 @@ class ObjectTest(TestCase):
     def test_creating_object(self):
         parent = Object(
             institution=self.institution,
-            object_name='parent',
-            object_description='parent object',
+            name='parent',
+            description='parent object',
             access_level=self.access_level
         )
         obj = Object(
             institution=self.institution,
-            object_name=self.name,
-            object_description=self.description,
+            name=self.name,
+            description=self.description,
             access_level=self.access_level,
             parent=parent
         )
@@ -107,8 +107,8 @@ class ObjectTest(TestCase):
                     msg=_('object was created with no institution and access_level')
             ):
                 Object(
-                    object_name=self.name,
-                    object_description=self.description,
+                    name=self.name,
+                    description=self.description,
                 ).save()
         with transaction.atomic():
             with self.assertRaises(
@@ -117,8 +117,8 @@ class ObjectTest(TestCase):
             ):
                 Object(
                     institution=self.institution,
-                    object_name=self.name,
-                    object_description=self.description,
+                    name=self.name,
+                    description=self.description,
                 ).save()
         with transaction.atomic():
             with self.assertRaises(
@@ -126,7 +126,7 @@ class ObjectTest(TestCase):
                     msg=_('object was created with no institution')
             ):
                 Object(
-                    object_name=self.name,
-                    object_description=self.description,
+                    name=self.name,
+                    description=self.description,
                     access_level=self.access_level
                 ).save()
