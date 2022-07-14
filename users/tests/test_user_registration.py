@@ -52,7 +52,7 @@ class UserRegistrationTest(TestCase):
         self.institution = InstitutionFactory()
 
     def test_with_correct_data_set(self):
-        resp = self._send_correct_registration_data()
+        resp = self.send_correct_registration_data()
         self.assertEqual(
             resp.status_code,
             200,
@@ -73,7 +73,7 @@ class UserRegistrationTest(TestCase):
             assert False, 'user registration request is not created'
 
     def test_user_and_role_application_is_created_correctly(self):
-        self._send_correct_registration_data()
+        self.send_correct_registration_data()
         user = User.objects.get(
             full_name=self.user.full_name,
             email=self.user.email
@@ -92,7 +92,7 @@ class UserRegistrationTest(TestCase):
         )
 
     def test_email_confirmation(self):
-        self._send_correct_registration_data()
+        self.send_correct_registration_data()
         # here we mock request just to use it`s is_secure and get_host to generate link
         request = RequestFactory().get('')
         _ = EmailConfirmationController
@@ -115,16 +115,16 @@ class UserRegistrationTest(TestCase):
             'is_active is not set when user successfully confirmed email'
         )
 
-    def _send_correct_registration_data(self) -> HttpResponse:
+    def send_correct_registration_data(self) -> HttpResponse:
         return self.__send_registration_request(
-            self.__fill_data_set(
+            self.__complete_data(
                 self.user,
                 self.institution,
                 self.raw_password
             )
         )
 
-    def __fill_data_set(self, user: User, institution: Institution, raw_password: str):
+    def __complete_data(self, user: User, institution: Institution, raw_password: str):
         data = self.__get_form_data()
         data['full_name'] = user.full_name
         data['email'] = user.email
@@ -136,15 +136,19 @@ class UserRegistrationTest(TestCase):
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
-        data = _user_registration_data_dict()  # noqa
         # here we assign values that are always the same in form submission data
-        data['registration_requests-0-message'] = ''
-        data['registration_requests-0-id'] = ''
-        data['registration_requests-0-user'] = ''
-        data['registration_requests-TOTAL_FORMS'] = '1'
-        data['registration_requests-INITIAL_FORMS'] = '0'
-        data['registration_requests-MIN_NUM_FORMS'] = '1'
-        data['registration_requests-MAX_NUM_FORMS'] = '1'
+        data = {
+            'registration_requests-0-message':     '',
+            'registration_requests-0-id':          '',
+            'registration_requests-0-user':        '',
+            'registration_requests-TOTAL_FORMS':   '1',
+            'registration_requests-INITIAL_FORMS': '0',
+            'registration_requests-MIN_NUM_FORMS': '1',
+            'registration_requests-MAX_NUM_FORMS': '1'
+        }
+        data = _user_registration_data_dict(
+            **data
+        )
         return data
 
     def __send_registration_request(self, data: _user_registration_data_dict) -> HttpResponse:
