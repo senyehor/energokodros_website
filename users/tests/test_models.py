@@ -39,7 +39,8 @@ class UserTest(TestCase):
                         full_name=name,
                         email=self.valid_email,
                         password=self.some_password
-                    )
+                    ).delete()
+                    # instantly deleting to avoid email duplication exception
                 except ValidationError:
                     if not should_throw:
                         assert False, 'validating full name throws exception for a valid name'
