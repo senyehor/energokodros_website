@@ -1,11 +1,9 @@
-import factory
-from django.db import transaction
-from django.db.utils import IntegrityError
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.utils.translation import gettext_lazy as _
-from factory import django
 
-from institutions.models import Institution, AccessLevel, Object
+from institutions.models import AccessLevel, Institution, Object
+from institutions.tests.factories import AccessLevelFactory, InstitutionFactory
 
 
 class InstitutionTest(TestCase):
@@ -30,14 +28,6 @@ class InstitutionTest(TestCase):
         )
 
 
-class InstitutionFactory(django.DjangoModelFactory):
-    institution_name = factory.Sequence(lambda n: f'institution {n}')
-    institution_description = factory.Sequence(lambda n: f'institution {n} description')
-
-    class Meta:
-        model = 'institutions.Institution'
-
-
 class AccessLevelTest(TestCase):
     def setUp(self):
         self.level_def = 1
@@ -58,14 +48,6 @@ class AccessLevelTest(TestCase):
             self.level_description,
             _('level definition is set incorrectly')
         )
-
-
-class AccessLevelFactory(django.DjangoModelFactory):
-    level_def = factory.Sequence(lambda n: n)
-    level_description = factory.Sequence(lambda n: f'level {n} description')
-
-    class Meta:
-        model = 'institutions.AccessLevel'
 
 
 class ObjectTest(TestCase):
@@ -148,11 +130,3 @@ class ObjectTest(TestCase):
                     object_description=self.description,
                     access_level=self.access_level
                 ).save()
-
-
-class ObjectFactory(django.DjangoModelFactory):
-    object_name = factory.Sequence(lambda n: f'object {n}')
-    object_description = factory.Sequence(lambda n: f'object {n} description')
-
-    class Meta:
-        model = 'institutions.Object'
