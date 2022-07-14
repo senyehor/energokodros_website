@@ -3,7 +3,7 @@
 {% block title %}Запити на отримання ролі{% endblock %}
 {% block content %}
     <div class="container">
-        {% if page_obj.object_list %}
+        {% if applications %}
             <h1>Запити на отримання ролі від користувачів</h1>
             <hr>
             <div class="container px-0" id="applications">
@@ -19,10 +19,14 @@
                     </div>
                 {% endfor %}
             </div>
+            {% if is_paginated %}
+                <div class="container d-flex pt-4 px-0 justify-content-center">
+                    {% include 'common/paginator.html' with paginator=paginator page=page_obj %}
+                </div>
+            {% endif %}
         {% else %}
             <h1>Запити на отримання ролі від користувачів відсутні</h1>
         {% endif %}
     </div>
-    {% include 'common/paginator.html' with paginator=paginator is_paginated=is_paginated %}
     <script src="{% static 'js/administrator/users_roles_applications.js' %}" type="module"></script>
 {% endblock %}
