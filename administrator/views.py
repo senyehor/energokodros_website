@@ -34,7 +34,7 @@ class UserRoleApplicationsListView(ListView):
 class UserRoleApplicationDecisionView(FormView):
     template_name = 'administrator/user_role_application_decision.html'
     form_class = UserRoleApplicationRequestsDecisionForm
-    success_url = reverse_lazy('users_roles_applications')
+    success_url = reverse_lazy('users-roles-applications')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -59,7 +59,7 @@ class UserRoleApplicationDecisionView(FormView):
 
     def form_valid(self, form: UserRoleApplicationRequestsDecisionForm):
         self.controller.process_depending_on_decision()
-        return redirect(reverse('users_roles_applications'))
+        return redirect(reverse('users-roles-applications'))
 
     def __get_application_request(self):
         return get_object_or_404(UserRoleApplication, pk=self.kwargs['pk'])

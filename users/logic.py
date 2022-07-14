@@ -43,7 +43,7 @@ class EmailConfirmationController:
     @classmethod
     def __generate_path_for_email_confirmation_for_user(cls, user: User) -> str:
         return reverse(
-            'confirm_email',
+            'confirm-email',
             kwargs={
                 'user_id':    user.pk,
                 'user_email': user.email,

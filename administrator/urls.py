@@ -6,16 +6,16 @@ urlpatterns = [
     path(
         '',
         views.admin_page,
-        name='admin_page'
+        name='admin-page'
     ),
     path(
         'users-roles-applications/',
         views.UserRoleApplicationsListView.as_view(),
-        name='users_roles_applications'
+        name='users-roles-applications'
     ),
     path(
-        'users-roles-applications/<hashed_int:pk>',
+        'user-role-application-decision/<hashed_int:pk>',
         views.UserRoleApplicationDecisionView.as_view(),
-        name='user_role_application'
+        name='user-role-application-decision'
     ),
 ]
