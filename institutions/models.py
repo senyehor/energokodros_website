@@ -3,20 +3,19 @@ from django.utils.translation import gettext as _
 
 
 class Institution(models.Model):
-    institution_id = models.AutoField(
-        primary_key=True,
-        db_column='institution_id'
-    )
-    institution_name = models.CharField(
+    institution_id = models.AutoField(primary_key=True)
+    name = models.CharField(
         _('назва закладу'),
         max_length=1000,
         null=False,
-        blank=False
+        blank=False,
+        db_column='institution_name'
     )
-    institution_description = models.TextField(
+    description = models.TextField(
         _('опис закладу'),
         null=False,
-        blank=False
+        blank=False,
+        db_column='institution_description'
     )
 
     class Meta:
@@ -25,21 +24,23 @@ class Institution(models.Model):
         verbose_name_plural = _('Заклади')
 
     def __str__(self):
-        return self.institution_name
+        return self.name
 
 
 class AccessLevel(models.Model):
     access_level_id = models.AutoField(primary_key=True)
-    level_def = models.IntegerField(
+    code = models.IntegerField(
         _('код рівню доступу'),
         unique=True,
         null=False,
-        blank=False
+        blank=False,
+        db_column='level_def'
     )
-    level_description = models.TextField(
+    description = models.TextField(
         _('опис рівню доступу'),
         blank=False,
-        null=False
+        null=False,
+        db_column='level_description'
     )
 
     class Meta:
@@ -48,21 +49,23 @@ class AccessLevel(models.Model):
         verbose_name_plural = _('Рівні доступу')
 
     def __str__(self):
-        return self.level_description
+        return self.description
 
 
 class Object(models.Model):
     object_id = models.AutoField(primary_key=True)
-    object_name = models.CharField(
+    name = models.CharField(
         _("назва об'єкту"),
         max_length=1000,
         blank=True,
-        null=False
+        null=False,
+        db_column='object_name'
     )
-    object_description = models.TextField(
+    description = models.TextField(
         _("опис об'єкту"),
         blank=True,
-        null=True
+        null=True,
+        db_column='object_description'
     )
     institution = models.ForeignKey(
         Institution,
@@ -78,7 +81,7 @@ class Object(models.Model):
         related_name='children'
     )
     access_level = models.ForeignKey(
-        'AccessLevel',
+        AccessLevel,
         models.RESTRICT,
         null=False,
         blank=False,
@@ -91,4 +94,4 @@ class Object(models.Model):
         verbose_name_plural = _("Об'єкти")
 
     def __str__(self):
-        return _(f'{self.object_name} в {self.institution}')
+        return _(f'{self.name} в {self.institution}')
