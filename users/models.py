@@ -132,4 +132,4 @@ class UserRoleApplication(models.Model):
         return _(f'Запит на реєстрацію від {self.user.full_name} в {self.institution}')
 
     def get_url_for_application_decision(self):
-        return reverse('users-roles-applications', kwargs={'pk':self.pk})
+        return reverse('user-role-application-decision', kwargs={'pk':self.pk})
