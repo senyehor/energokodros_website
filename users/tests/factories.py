@@ -6,6 +6,7 @@ from factory import django
 
 User = get_user_model()
 
+
 class UserFactory(django.DjangoModelFactory):
     password = factory.Sequence(lambda n: f'generated_password{n}')
     email = factory.Sequence(lambda n: f'generated_email{n}@email.com')
