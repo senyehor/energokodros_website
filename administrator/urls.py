@@ -10,12 +10,12 @@ urlpatterns = [
     ),
     path(
         'users-roles-applications/',
-        views.UserRoleApplicationsList.as_view(),
+        views.UserRoleApplicationsListView.as_view(),
         name='users_roles_applications'
     ),
     path(
         'users-roles-applications/<hashed_int:pk>',
-        views.UserRoleApplicationDecision.as_view(),
+        views.UserRoleApplicationDecisionView.as_view(),
         name='user_role_application'
     ),
 ]
