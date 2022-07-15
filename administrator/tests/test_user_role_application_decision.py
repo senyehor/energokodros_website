@@ -9,7 +9,7 @@ from faker import Faker
 from institutions.models import AccessLevel
 from institutions.tests.factories import AccessLevelFactory
 from users.models import UserRole, UserRoleApplication
-from users.tests.factories import UserFactory, UserRoleApplicationRequestFactory
+from users.tests.factories import UserFactory, UserRoleApplicationFactory
 from utils.for_tests_only import hide_id
 
 fake = Faker()
@@ -32,7 +32,7 @@ class UserRoleApplicationDetailTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.client.force_login(UserFactory(is_admin=True))
-        self.user_role_application = UserRoleApplicationRequestFactory()
+        self.user_role_application = UserRoleApplicationFactory()
         self.access_level = AccessLevelFactory()
         self.position: str = fake.words()
 
