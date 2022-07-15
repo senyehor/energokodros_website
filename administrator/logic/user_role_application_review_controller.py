@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.exceptions import SuspiciousOperation
 from django.db import transaction
 from django.http import HttpRequest
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from administrator.forms import UserRoleApplicationRequestsDecisionForm
@@ -28,13 +29,13 @@ class UserRoleApplicationReviewController:
                 return True
             raise SuspiciousOperation from e
 
+    @method_decorator(transaction.atomic)
     def process_depending_on_decision(self):
-        with transaction.atomic():
-            if self.is_approved:
-                self.__create_user_role()
-            self.__delete_user_role_application()
-            self.__notify_on_role_application_decision()
-            self.__add_message_for_decision()
+        if self.is_approved:
+            self.__create_user_role()
+        self.__delete_user_role_application()
+        self.__notify_on_role_application_decision()
+        self.__add_message_for_decision()
 
     def __delete_user_role_application(self):
         self.application.delete()
