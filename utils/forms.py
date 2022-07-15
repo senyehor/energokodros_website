@@ -1,7 +1,6 @@
 from typing import Literal
 
 from django.db import models as db_models
-from django.db.models import Model, QuerySet
 from django.forms import models
 
 from utils.crypto import hide_int, reveal_int
@@ -26,7 +25,3 @@ class SecureModelChoiceField(models.ModelChoiceField):
             return super().to_python(reveal_int(value))
         except ValueError as e:
             raise IncorrectSecureModelFieldValue from e
-
-
-def create_queryset_from_object(obj: Model) -> QuerySet:
-    return obj.__class__.objects.all().filter(pk=obj.pk)
