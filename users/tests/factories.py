@@ -13,6 +13,7 @@ class UserFactory(django.DjangoModelFactory):
     password = factory.Sequence(lambda n: f'generated_password{n}')
     email = factory.Sequence(lambda n: f'generated_email{n}@email.com')
 
+    @factory.lazy_attribute
     def full_name(self):
         first_names = [
             'Яснолик-Гузь',
