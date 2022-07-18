@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ def try_send_email_add_warning_if_failed(
 def send_html_email(email: str, subject: str, html: str) -> bool:
     msg = EmailMultiAlternatives(
         subject=subject,
-        body=html,
+        body=mark_safe(html),
         # django requires from_email to be explicitly set to None
         # to use settings.DEFAULT_FROM_EMAIL
         from_email=None,
