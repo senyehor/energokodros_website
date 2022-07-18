@@ -6,7 +6,7 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def show_messages_if_any(context: dict) -> str:
+def show_messages(context: dict) -> str:
     messages = context.get('messages', None)
     output = ''
     if messages:

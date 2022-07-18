@@ -2,9 +2,11 @@
 {% load show_messages_if_any %}
 {% block body %}
     {% include 'common/header.html' %}
-    <div class="container">
-        {% show_messages_if_any %}
-    </div>
+    {% if messages %}
+        <div class="container">
+            {% show_messages %}
+        </div>
+    {% endif %}
     {% block content %}
     {% endblock %}
     {% include 'common/footer.html' %}
