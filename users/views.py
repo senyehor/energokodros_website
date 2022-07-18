@@ -35,7 +35,6 @@ class CreateUserRegistrationRequest(CreateView):
         ctx['role_application_form'] = UserRoleApplicationForm.create_without_user_field()
         return ctx
 
-    @method_decorator(transaction.atomic)
     def post(self, request, *args, **kwargs):
         self.object = None
         user_form = self.form_class(self.request.POST or None)
@@ -46,14 +45,15 @@ class CreateUserRegistrationRequest(CreateView):
             return self.form_valid(user_form, role_application_without_user)
         return self.form_invalid(user_form, role_application_without_user)
 
+    @method_decorator(transaction.atomic)
     def form_valid(self, user_form: NewUserForm,  # noqa pylint: disable=W0221
                    role_application_without_user_form: UserRoleApplicationForm):
         controller = UserRegistrationController(user_form, role_application_without_user_form)
         self.object = controller.save_user_along_with_registration_request_return_user()
-        if not controller.send_email_confirmation_message(self.request):
-            transaction.rollback()
-            return HttpResponse(status=500)
-        return redirect(reverse('successfully-created-registration-request'))
+        if controller.send_email_confirmation_message(self.request):
+            return redirect(reverse('successfully-created-registration-request'))
+        transaction.rollback()
+        return HttpResponse(status=500)
 
     def form_invalid(  # noqa pylint: disable=W0221
             self, user_form: NewUserForm,
