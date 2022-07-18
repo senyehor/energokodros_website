@@ -96,13 +96,16 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         self.helper.layout.fields = ordered_fields
 
     def __add_decision_buttons(self):
+        button_name = 'decision'
         self.add_button_at_the_end(
             _('Підтвердити'),
-            'accept'
+            'accept',
+            button_name
         )
         self.add_button_at_the_end(
             _('Відхилити'),
             'decline',
+            button_name
         )
 
     def get_message_for_user(self) -> str:

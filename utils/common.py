@@ -46,10 +46,10 @@ def send_html_email(email: str, subject: str, html: str) -> bool:
     return True
 
 
-def generate_submit_type_button(text: str, value: str) -> StrictButton:
+def generate_submit_type_button(text: str, value: str, name: str) -> StrictButton:
     return StrictButton(
         text,
-        name='decision',
+        name=name,
         value=value,
         css_class='btn btn-primary mt-4',
         type='submit'
