@@ -4,6 +4,7 @@ from smtplib import SMTPException
 from crispy_forms.bootstrap import StrictButton
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
+from django.db.models import Model, QuerySet
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
@@ -55,3 +56,12 @@ def generate_submit_type_button(text: str, value: str, name: str) -> StrictButto
         css_class='btn btn-primary mt-4',
         type='submit'
     )
+
+
+def all_object_pk_ordered(model) -> QuerySet:
+    """this function is to help with pagination, as it might
+    be inconsistent without ordering - docks"""
+    # : Model typehint does not work
+    if not issubclass(type(model), Model):
+        raise ValueError('model expected here')
+    return model.objects.all().order_by('-pk')
