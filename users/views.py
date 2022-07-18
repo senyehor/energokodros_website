@@ -12,7 +12,7 @@ from administrator.logic import is_admin
 from users.forms import (
     LoginForm,
     NewUserForm,
-    UserRoleApplicationForm, UserRoleApplicationFormset
+    UserRoleApplicationForm,
 )
 from users.logic import remember_user_for_two_week, UserRegistrationController
 
@@ -58,7 +58,7 @@ class CreateUserRegistrationRequest(CreateView):
     def form_invalid(  # noqa pylint: disable=W0221
             self, user_form: NewUserForm,
             role_application_formset:
-            UserRoleApplicationFormset):
+            UserRoleApplicationForm):
         return self.render_to_response(
             self.get_context_data(
                 user_form=user_form,
