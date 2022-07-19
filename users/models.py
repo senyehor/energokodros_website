@@ -118,7 +118,7 @@ class UserRoleApplication(models.Model):
         related_name='+'
     )
     message = models.TextField(
-        _("повідомлення від користувача"),
+        _('повідомлення від користувача'),
         blank=False,
         null=False
     )
@@ -131,5 +131,5 @@ class UserRoleApplication(models.Model):
     def __str__(self):
         return _(f'Запит на реєстрацію від {self.user.full_name} в {self.institution}')
 
-    def get_url_for_application_decision(self):
-        return reverse('user-role-application-decision', kwargs={'pk':self.pk})
+    def on_click_link(self):
+        return reverse('user-role-application-decision', kwargs={'pk': self.pk})
