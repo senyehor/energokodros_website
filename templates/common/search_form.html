@@ -1,0 +1,7 @@
+{% load static %}
+<form method="get" role="search" id="searchForm">
+    <input type="search" class="form-control" placeholder="Вікно пошуку ({{ filter_fields_verbose }})"
+           aria-label="Search" name="search_value">
+</form>
+<button type="button" class="btn btn-primary d-block" id="clearFilter">Очистити пошук</button>
+<script src="{% static 'js/common/search_form.js' %}"></script>
