@@ -4,7 +4,7 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <a href="{% url 'home' %}"
-                   class="d-flex align-items-center mb-2 mb-lg-0 {% active_link 'home' %} text-decoration-none text-dark">
+                   class="{% active_link 'home' %} d-flex align-items-center mb-2 mb-lg-0 text-decoration-none text-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" fill="currentColor"
                          class="bi bi-house" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -23,7 +23,7 @@
                     {% if user.is_admin %}
                         <li>
                             <a href="{% url 'users-roles-applications' %}"
-                               class="nav-link px-2 text-dark {% active_link 'users_roles_applications' %}">
+                               class="nav-link px-2 text-dark {% active_link 'users-roles-applications' %}">
                                 Запити на реєстрацію
                                 {% if users_roles_applications_count %}
                                     <span class="badge bg-success">{{ users_roles_applications_count }}</span>
