@@ -63,7 +63,7 @@ class CrispyFormsMixin:
         )
 
     @staticmethod
-    def _get_wrapped_field_name_if_div(_field: Div | str) -> str:
+    def _get_field_name(_field: Div | str) -> str:
         if isinstance(_field, str):
             return _field
         if len(_field.fields) != 1:
