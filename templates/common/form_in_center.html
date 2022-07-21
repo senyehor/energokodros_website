@@ -1,7 +1,8 @@
 {% extends 'common/base.html' %}
+{% load static %}
 {% block content %}
-    <div class="d-flex align-items-center justify-content-center pt-5" style="height: 100%;">
-        <div class="card p-0">
+    <div class="d-flex align-items-center justify-content-center" style="height: 100%;" id="form-container">
+        <div class="card p-0" id="form-card">
             <div class="card-header">
                 {% block form_header %}
                 {% endblock %}
@@ -12,4 +13,5 @@
             </div>
         </div>
     </div>
+    <script src="{% static 'js/common/form_in_center.js' %}"></script>
 {% endblock %}
