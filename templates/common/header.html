@@ -4,7 +4,7 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <a href="{% url 'home' %}"
-                   class="{% active_link 'home' %} d-flex align-items-center mb-2 mb-lg-0 text-decoration-none text-dark">
+                   class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none text-dark {% active_link 'home || admin-page' %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" fill="currentColor"
                          class="bi bi-house" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -30,6 +30,12 @@
                                 {% endif %}
                             </a>
                         </li>
+                        <li>
+                            <a href="{% url 'access-levels' %}"
+                               class="nav-link px-2 text-dark {% active_link 'access-levels' %}">
+                                Рівні доступу
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
                 <div class="text-end ml-lg-auto">
@@ -38,6 +44,4 @@
             </div>
         </div>
     </header>
-{% else %}
-
 {% endif %}
