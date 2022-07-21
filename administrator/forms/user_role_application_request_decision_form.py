@@ -53,6 +53,12 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         obj.__additionally_setup_form(application_request)
         return obj
 
+    def is_valid(self, validation_needed: bool):  # noqa pylint: disable=W0221
+        """when application is declined not validation is needed"""
+        if validation_needed:
+            return super().is_valid()
+        return True
+
     def __additionally_setup_form(self, application_request: UserRoleApplication):  # pylint: disable=W0238
         self.__add_readonly_prepopulated_fields(application_request)
         self.__order_fields()
@@ -88,7 +94,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         unordered_fields = self.helper.layout.fields
         # using map to 'reveal' field names if they are wrapped in a div
         field_names = list(map(
-            self._get_wrapped_field_name_if_div, unordered_fields
+            self._get_field_name, unordered_fields
         ))
         ordered_fields = []
         for field in self.Meta.fields_order:

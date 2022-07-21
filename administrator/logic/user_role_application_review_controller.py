@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.core.exceptions import SuspiciousOperation
 from django.db import transaction
 from django.http import HttpRequest
 from django.utils.decorators import method_decorator
@@ -8,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from administrator.forms import UserRoleApplicationRequestsDecisionForm
 from users.models import UserRoleApplication
 from utils.common import try_send_email_add_warning_if_failed
-from utils.forms import IncorrectSecureModelFieldValue
 
 
 class UserRoleApplicationReviewController:
@@ -18,16 +16,6 @@ class UserRoleApplicationReviewController:
         self.application_decision_form = application_decision_form
         self.request = request
         self.is_approved = is_approved
-
-    def validate_form(self) -> bool:
-        try:
-            return self.application_decision_form.is_valid()
-        except IncorrectSecureModelFieldValue as e:
-            if not self.is_approved:
-                # form is not actually valid, but we do not need it
-                # to be valid when declining
-                return True
-            raise SuspiciousOperation from e
 
     @method_decorator(transaction.atomic)
     def process_depending_on_decision(self):
