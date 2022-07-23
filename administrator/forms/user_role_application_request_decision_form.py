@@ -64,7 +64,6 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         self.__order_fields()
         self.__add_decision_buttons()
         self.hide_fields()
-        self._errors = None
 
     def __add_readonly_prepopulated_fields(self, application_request: UserRoleApplication):
         # this fields will not be used in UserRole creation, so required = False
