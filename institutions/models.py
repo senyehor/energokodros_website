@@ -1,4 +1,5 @@
-from typing import NamedTuple
+import functools
+from typing import Callable, NamedTuple
 
 from django.db import models
 from django.utils.translation import gettext as _
@@ -48,6 +49,25 @@ class Facility(NS_Node):
 
     def __str__(self):
         return _(f'{self.name}')
+
+    def enable_db_auto_refresh_for_add_or_move(self):
+        if hasattr(self, '__db_auto_refresh_enabled'):
+            if self.__db_auto_refresh_enabled: # pylint: disable=E0203
+                return
+
+        def refresh_from_db_wrapper(func: Callable):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                res = func(*args, **kwargs)
+                self.refresh_from_db()
+                return res
+
+            return wrapper
+
+        methods_to_wrap = (self.add_root, self.add_child, self.add_sibling, self.move)
+        for method in methods_to_wrap:
+            setattr(self, method.__name__, refresh_from_db_wrapper(method))
+        self.__db_auto_refresh_enabled = True
 
     # methods below are not implemented for nested set in django_treebeard, so
     # currently they are just 'stubbed'
