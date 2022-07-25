@@ -16,7 +16,7 @@ $(document).ready(function () {
 function add_spacing_between_form_group() {
     $('form > div.form-group').each(
         function () {
-            $(this).addClass('pt-3');
+            $(this).addClass('pb-2');
         }
     )
 }
