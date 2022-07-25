@@ -51,9 +51,8 @@ class Facility(NS_Node):
         return _(f'{self.name}')
 
     def enable_db_auto_refresh_for_add_or_move(self):
-        if hasattr(self, '__db_auto_refresh_enabled'):
-            if self.__db_auto_refresh_enabled: # pylint: disable=E0203
-                return
+        if hasattr(self, '__db_auto_refresh_enabled') and self.__db_auto_refresh_enabled:  # pylint: disable=E0203
+            return
 
         def refresh_from_db_wrapper(func: Callable):
             @functools.wraps(func)
@@ -68,6 +67,7 @@ class Facility(NS_Node):
         for method in methods_to_wrap:
             setattr(self, method.__name__, refresh_from_db_wrapper(method))
         self.__db_auto_refresh_enabled = True
+        self.refresh_from_db()
 
     # methods below are not implemented for nested set in django_treebeard, so
     # currently they are just 'stubbed'
