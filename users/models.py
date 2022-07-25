@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from institutions.models import AccessLevel, Institution
+from institutions.models import Facility
 from users.utils import _full_name_validator
 
 
@@ -66,19 +66,12 @@ class UserRole(models.Model):
         blank=False,
         related_name='roles'
     )
-    institution = models.ForeignKey(
-        Institution,
+    object_has_access_to = models.ForeignKey(
+        Facility,
         on_delete=models.CASCADE,
         null=False,
         blank=False,
         related_name='users_roles'
-    )
-    access_level = models.ForeignKey(
-        AccessLevel,
-        on_delete=models.RESTRICT,
-        null=False,
-        blank=False,
-        related_name='+'
     )
     position = models.CharField(
         _('посада'),
@@ -91,15 +84,10 @@ class UserRole(models.Model):
         db_table = 'users_roles'
         verbose_name = _('Роль користувача')
         verbose_name_plural = _('Ролі користувача')
-        constraints = [
-            models.UniqueConstraint(
-                fields=('user', 'institution', 'access_level'),
-                name='user_has_unique_access_level_for_institution',
-            )
-        ]
 
     def __str__(self):
-        return _(f'{self.position} {self.user.full_name} в {self.institution}')
+        return _(f'{self.position} {self.user.full_name} із '
+                 f'{self.object_has_access_to.get_institution()}')
 
 
 class UserRoleApplication(models.Model):
@@ -111,7 +99,7 @@ class UserRoleApplication(models.Model):
         related_name='registration_requests'
     )
     institution = models.ForeignKey(
-        Institution,
+        Facility,
         on_delete=models.CASCADE,
         null=False,
         blank=False,
@@ -119,8 +107,8 @@ class UserRoleApplication(models.Model):
     )
     message = models.TextField(
         _('повідомлення від користувача'),
-        blank=False,
-        null=False
+        blank=True,
+        null=True
     )
 
     class Meta:
