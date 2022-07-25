@@ -1,4 +1,5 @@
 import functools
+import inspect
 from types import FunctionType
 
 from django.http import HttpResponse
@@ -7,7 +8,7 @@ from django.views import View
 
 
 def admin_rights_required(obj_to_decorate: FunctionType | View):
-    if isinstance(obj_to_decorate, FunctionType):
+    if inspect.isfunction(obj_to_decorate):
         return __admin_right_required_function_decorator(obj_to_decorate)
     return __admin_right_required_class_decorator(obj_to_decorate)
 
