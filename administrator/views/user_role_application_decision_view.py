@@ -27,7 +27,7 @@ class UserRoleApplicationDecisionView(FormView):
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = self.form_class(request.POST or None)
-        if not form.is_valid(self.application_approved):
+        if not form.is_valid(validation_needed=self.application_approved):
             return self.form_invalid(form)
         self.controller = UserRoleApplicationReviewController(
             form,
