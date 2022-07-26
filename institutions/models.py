@@ -1,7 +1,3 @@
-import functools
-from enum import Enum
-from typing import Callable
-
 from django.db import models
 from django.utils.translation import gettext as _
 from treebeard.ns_tree import NS_Node, NS_NodeManager
@@ -34,15 +30,6 @@ class Facility(NS_Node):
 
     objects = FacilityManager()
 
-    class MoveOptions(Enum):
-        # library gives a lot of options, but that much is not needed
-        # by default last-sibling is used so last-child was chosen
-        CHILD = 'last-child'
-        SIBLING = 'last-sibling'
-
-    def move(self, target: 'Facility', pos: MoveOptions):  # noqa pylint: disable=W0222
-        super().move(target, pos.value)
-
     def get_institution(self) -> 'Facility':
         return self.get_root()
 
@@ -53,25 +40,6 @@ class Facility(NS_Node):
 
     def __str__(self):
         return _(f'{self.name}')
-
-    def enable_db_auto_refresh_for_add_or_move_and_refresh(self):
-        if hasattr(self, '__db_auto_refresh_enabled') and self.__db_auto_refresh_enabled:  # pylint: disable=E0203
-            return
-
-        def refresh_from_db_wrapper(func: Callable):
-            @functools.wraps(func)
-            def wrapper(*args, **kwargs):
-                res = func(*args, **kwargs)
-                self.refresh_from_db()
-                return res
-
-            return wrapper
-
-        methods_to_wrap = (self.add_root, self.add_child, self.add_sibling, self.move)
-        for method in methods_to_wrap:
-            setattr(self, method.__name__, refresh_from_db_wrapper(method))
-        self.__db_auto_refresh_enabled = True
-        self.refresh_from_db()
 
     # methods below are not implemented for nested set in django_treebeard, so
     # currently they are just 'stubbed'
