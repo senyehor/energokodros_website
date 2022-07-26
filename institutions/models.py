@@ -13,6 +13,9 @@ class FacilityManager(NS_NodeManager):
         # and institution, that are on top of hierarchy
         return self.model.get_root_nodes()
 
+    def get_all_facility_objects(self, facility: 'Facility'):
+        return self.model.get_tree(facility.get_root())
+
 
 class Facility(NS_Node):
     name = models.CharField(
