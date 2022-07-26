@@ -3,7 +3,7 @@ from django.contrib.auth import forms as auth_forms
 from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
-from institutions.models import Institution
+from institutions.models import Facility
 from users.models import User, UserRoleApplication
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 
@@ -29,7 +29,7 @@ class NewUserForm(auth_forms.UserCreationForm):
 class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
     institution = SecureModelChoiceField(
         label=_('Оберіть установу'),
-        queryset=Institution.objects.all(),
+        queryset=Facility.objects.institutions(),
         required=True
     )
     message = forms.CharField(
