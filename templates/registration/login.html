@@ -4,6 +4,12 @@
 {% block form_header %}
     Уведіть дані авторизації | <a href="{% url 'register' %}">Реєстрація</a>
 {% endblock %}
+{% block padding_top_class %}
+    pt-5
+{% endblock %}
+{% block width_class %}
+    w-25
+{% endblock %}
 {% block form %}
     <form method="post" class="py-4 display-block">
         {% csrf_token %}

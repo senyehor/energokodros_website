@@ -4,6 +4,12 @@
 {% block form_header %}
     Реєстрація
 {% endblock %}
+{% block padding_top_class %}
+    pt-1
+{% endblock %}
+{% block width_class %}
+    w-50
+{% endblock %}
 {% block form %}
     <form method="post">
         {{ form | crispy }}
