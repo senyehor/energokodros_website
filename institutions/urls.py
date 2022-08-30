@@ -1,12 +1,12 @@
 from django.urls import path
 
-from institutions.views.simple import InstitutionCreateView, InstitutionsListView
+from institutions.views.simple import FacilitiesListView, InstitutionCreateView
 
 urlpatterns = [
     path(
         'institutions/',
-        InstitutionsListView.as_view(),
-        name='institutions-list'
+        FacilitiesListView.as_view(),
+        name='facilities-list'
     ),
     path(
         'new-institution',

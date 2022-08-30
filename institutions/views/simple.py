@@ -21,7 +21,7 @@ class FacilitiesListView(ListView):
 class InstitutionCreateView(FormView):
     form_class = InstitutionForm
     template_name = 'institutions/new_institution.html'
-    success_url = reverse_lazy('institutions-list')
+    success_url = reverse_lazy('facilities-list')
 
     def form_valid(self, form):
         form.save()
