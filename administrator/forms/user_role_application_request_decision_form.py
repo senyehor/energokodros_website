@@ -49,12 +49,6 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         obj.__additionally_setup_form(application_request)
         return obj
 
-    def is_valid(self, *, validation_needed: bool):  # noqa pylint: disable=W0221
-        """when application is declined not validation is needed"""
-        if validation_needed:
-            return super().is_valid()
-        return True
-
     def __additionally_setup_form(self, application_request: UserRoleApplication):  # pylint: disable=W0238
         self.__add_object_has_access_to_field(application_request.institution)
         self.__add_readonly_prepopulated_fields(application_request)
