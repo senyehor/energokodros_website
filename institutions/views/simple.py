@@ -1,11 +1,13 @@
 from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView
 
+from administrator.decorators import admin_rights_required
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms.institution_form import InstitutionForm
 from institutions.models import Facility
 
 
+@admin_rights_required
 class InstitutionsListView(ListView):
     queryset = Facility.objects.get_institutions()
     filter_fields = ('name', 'description')
@@ -13,7 +15,8 @@ class InstitutionsListView(ListView):
     template_name = 'institutions/institutions_list.html'
 
 
+@admin_rights_required
 class InstitutionCreateView(FormView):
     form_class = InstitutionForm
     template_name = 'institutions/new_institution.html'
-    success_url = reverse_lazy('institutions_list')
+    success_url = reverse_lazy('institutions-list')
