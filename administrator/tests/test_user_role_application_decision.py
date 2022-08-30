@@ -13,8 +13,6 @@ from users.models import UserRole, UserRoleApplication
 from users.tests.factories import UserRoleApplicationFactory
 from utils.for_tests_only import hide_pk
 
-fake = Faker()
-
 
 class UserRoleApplicationDetailTest(TestCase):
     class _DECISIONS(Enum):
@@ -37,6 +35,7 @@ class UserRoleApplicationDetailTest(TestCase):
         self.admin_client = create_admin_client()
         self.user_role_application = UserRoleApplicationFactory()
         self.object_has_access_to = self.user_role_application.institution
+        fake = Faker()
         self.position_to_grant_user: str = fake.text(max_nb_chars=20)
 
     def test_accepting_application(self):
