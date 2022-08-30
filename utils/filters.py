@@ -6,8 +6,8 @@ from django.views.generic import ListView
 
 
 class QuerySetFieldsIcontainsFilterPkOrderedMixin:
-    filter_fields = None
     """this mixin is supposed to be used with ListViews"""
+    filter_fields = None
 
     def get_queryset(self) -> QuerySet:
         self.__check_used_properly()
