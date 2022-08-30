@@ -3,13 +3,14 @@ from typing import TypedDict
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-from django.test import Client, TestCase
+from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from faker import Faker
 
+from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
-from users.tests.factories import UserFactory, UserRoleApplicationFactory
+from users.tests.factories import UserRoleApplicationFactory
 from utils.for_tests_only import hide_pk
 
 fake = Faker()
@@ -33,8 +34,7 @@ class UserRoleApplicationDetailTest(TestCase):
     )
 
     def setUp(self):
-        self.admin_client = Client()
-        self.admin_client.force_login(UserFactory(is_admin=True))
+        self.admin_client = create_admin_client()
         self.user_role_application = UserRoleApplicationFactory()
         self.object_has_access_to = self.user_role_application.institution
         self.position_to_grant_user: str = fake.text(max_nb_chars=20)
