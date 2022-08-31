@@ -1,32 +1,15 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView as LogView
 from django.db import transaction
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.generic import CreateView
 
-from administrator.logic import is_admin
-from users.forms import (
-    LoginForm,
-    NewUserForm,
-    UserRoleApplicationForm,
-)
-from users.logic import remember_user_for_two_week, UserRegistrationController
+from users.forms import NewUserForm, UserRoleApplicationForm
+from users.logic import UserRegistrationController
 
 
-class LoginView(LogView):
-    authentication_form = LoginForm
-
-    def form_valid(self, form):
-        if form.data.get('remember_me'):
-            remember_user_for_two_week(self.request)
-        return super().form_valid(form)
-
-
-class CreateUserRegistrationRequest(CreateView):
+class CreateUserRegistrationRequestView(CreateView):
     form_class = NewUserForm
     template_name = 'registration/register.html'
 
@@ -67,30 +50,3 @@ class CreateUserRegistrationRequest(CreateView):
             ),
             status=400
         )
-
-
-@login_required
-def index_view(request: HttpRequest):
-    if is_admin(request):
-        return redirect(reverse('admin-page'))
-    return render(request, 'index.html')
-
-
-def successfully_created_registration_request(request):
-    return render(request, 'registration/successfully_created_registration_request.html')
-
-
-def confirm_email(request: HttpRequest, user_id: int, user_email: str):
-    UserRegistrationController.confirm_email_if_user_exists(user_id, user_email)
-    return redirect('successfully-confirmed-email')
-
-
-def successfully_confirmed_email(request: HttpRequest):
-    return render(request, 'registration/successfully_confirmed_email.html')
-
-
-class ProfilesView(View):
-    """currently it is just a stub"""
-
-    def get(self, request):
-        return render(request, 'index.html')
