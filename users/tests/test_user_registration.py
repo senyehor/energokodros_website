@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.test import Client, RequestFactory, TestCase
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 
 from institutions.models import Facility
 from institutions.tests.factories import FacilityFactory
@@ -90,9 +90,10 @@ class UserRegistrationTest(TestCase):
         resp = self.client.get(
             link_for_user
         )
-        self.assertRedirects(
+        self.assertTemplateUsed(
             resp,
-            reverse('successfully-confirmed-email')
+            'registration/successfully_confirmed_email.html',
+            'needed template is not used'
         )
         user.refresh_from_db()
         self.assertTrue(
@@ -129,7 +130,7 @@ class UserRegistrationTest(TestCase):
     def send_registration_request(
             self, user: User, institution: Facility, raw_password: str) -> HttpResponse:
         return self.client.post(
-            reverse_lazy('register'),
+            reverse('register'),
             {
                 **self.__complete_data(user, institution, raw_password)
             },
