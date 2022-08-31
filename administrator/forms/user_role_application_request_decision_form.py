@@ -59,7 +59,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
     def __add_object_has_access_to_field(self, institution: Facility):
         self.fields['object_has_access_to'] = SecureModelChoiceField(
             label=_("Оберіть об'єкт"),
-            queryset=Facility.objects.get_all_facility_objects(institution),
+            queryset=Facility.objects.get_all_institution_objects(institution),
             required=True
         )
 
@@ -91,7 +91,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         unordered_fields = self.helper.layout.fields
         # using map to 'reveal' field names if they are wrapped in a div
         field_names = list(map(
-            self._get_field_name, unordered_fields
+            self.__get_field_name, unordered_fields
         ))
         ordered_fields = []
         for field in self.Meta.fields_order:
