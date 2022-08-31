@@ -9,7 +9,7 @@ urlpatterns = [
         name='facilities-list'
     ),
     path(
-        'new-institution',
+        'new-institution/',
         InstitutionCreateView.as_view(),
         name='new-institution'
     )
