@@ -12,5 +12,5 @@ urlpatterns = [
         'new-institution/',
         InstitutionCreateView.as_view(),
         name='new-institution'
-    )
+    ),
 ]
