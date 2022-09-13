@@ -11,7 +11,7 @@ from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
 from users.tests.factories import UserRoleApplicationFactory
-from utils.for_tests_only import hide_pk
+from utils.forms import SecureModelChoiceField
 
 
 class UserRoleApplicationDetailTest(TestCase):
@@ -104,15 +104,21 @@ class UserRoleApplicationDetailTest(TestCase):
         # when declining application neither position nor object_has_access_to
         # have to be filled in form, so they are just ''
         complete_data['position'] = position if position else ''
-        _ = hide_pk(object_has_access_to.pk) if object_has_access_to else ''
-        complete_data['object_has_access_to'] = _
+        hashed_id_or_empty_string = (
+            SecureModelChoiceField._hide_id(object_has_access_to.pk)  # pylint: disable=W0212
+            if object_has_access_to
+            else ''
+        )
+        complete_data['object_has_access_to'] = hashed_id_or_empty_string
         return complete_data
 
     def __get_form_data(self) -> _user_role_application_decision_data_dict:
         # here we have to set data as if it was pre-populated by form
+        user_id_hashed = SecureModelChoiceField._hide_id(self.user_role_application.user.pk)  # pylint: disable=W0212
         data = {
             'message_for_user': '',
-            'user':             hide_pk(self.user_role_application.user.pk),
+            'user':             user_id_hashed
+            # noqa pylint: disable=W0212
         }
         data = self._user_role_application_decision_data_dict(**data)
         return data
