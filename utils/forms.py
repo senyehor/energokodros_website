@@ -29,6 +29,22 @@ class SecureModelChoiceField(models.ModelChoiceField):
         except ValueError as e:
             raise IncorrectSecureModelFieldValue from e
 
+    @staticmethod
+    def _reveal_id(hashed_id: str) -> int:
+        """
+        think twice before using this method, a form almost always
+        should handle this by itself
+        """
+        return reveal_int(hashed_id)
+
+    @staticmethod
+    def _hide_id(_id: int) -> str:
+        """
+        think twice before using this method, a form almost always
+        should handle this by itself
+        """
+        return hide_int(_id)
+
 
 class CrispyFormsMixin:
     """
