@@ -20,7 +20,7 @@ class FacilitiesListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
 
 
 @admin_rights_required
-class InstitutionCreateView(FormView):
+class CreateInstitutionView(FormView):
     form_class = InstitutionForm
     template_name = 'institutions/new_institution.html'
     success_url = reverse_lazy('facilities-list')
