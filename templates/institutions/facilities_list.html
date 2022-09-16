@@ -6,7 +6,8 @@
     <div>
         <h2>Заклади та об'єкти</h2>
     </div>
-    <a class="btn btn-primary d-block ms-3" href="{% url 'new-institution' %}">Додати установу</a>
+    <a class="btn btn-primary d-block ms-3" href="{% url 'new-institution' %}">Додати заклад</a>
+    <a class="btn btn-primary d-block ms-3" href="{% url 'new-facility' %}">Додати об'єкт закладу</a>
     <div class="ms-auto ms-3">
         {% include 'common/search_form.html' with filter_fields_verbose='назва чи опис' %}
     </div>
