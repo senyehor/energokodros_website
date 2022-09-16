@@ -1,6 +1,9 @@
 from django.urls import path
 
-from institutions.views.simple import CreateInstitutionView, FacilitiesListView
+from institutions.views import (
+    CreateFacilityView, CreateInstitutionView, FacilitiesListView,
+    get_institution_facilities_choices,
+)
 
 urlpatterns = [
     path(
