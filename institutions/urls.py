@@ -16,4 +16,14 @@ urlpatterns = [
         CreateInstitutionView.as_view(),
         name='new-institution'
     ),
+    path(
+        'new-facility/',
+        CreateFacilityView.as_view(),
+        name='new-facility'
+    ),
+    path(
+        'get-institution-facilities/',
+        get_institution_facilities_choices,
+        name='get-institution-facilities'
+    )
 ]
