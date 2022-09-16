@@ -1,2 +1,2 @@
-from .simple import admin_page, UserRoleApplicationsListView
+from .simple import AdminPageView, UserRoleApplicationsListView
 from .user_role_application_decision import UserRoleApplicationDecisionView
