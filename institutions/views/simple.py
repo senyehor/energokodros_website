@@ -5,7 +5,7 @@ from django.views.generic import FormView, ListView
 
 from administrator.decorators import admin_rights_required
 from energokodros.settings import DEFAULT_PAGINATE_BY
-from institutions.forms.institution_form import InstitutionForm
+from institutions.forms import InstitutionForm
 from institutions.models import Facility
 from utils.filters import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
