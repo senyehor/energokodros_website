@@ -1,6 +1,4 @@
-from django.http import HttpRequest
-from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 
 from administrator.decorators import admin_rights_required
 from administrator.logic import get_applications_from_users_who_confirmed_email
@@ -9,11 +7,8 @@ from utils.filters import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
 @admin_rights_required
-def admin_page(request: HttpRequest):
-    return render(
-        request,
-        'administrator/administrator.html',
-    )
+class AdminPageView(TemplateView):
+    template_name = 'administrator/administrator.html'
 
 
 @admin_rights_required
