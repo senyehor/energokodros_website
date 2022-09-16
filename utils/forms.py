@@ -16,14 +16,13 @@ class IncorrectSecureModelFieldValue(Exception):
 class SecureModelChoiceField(models.ModelChoiceField):
 
     def prepare_value(self, value: db_models.Model | None | Literal['']) -> str:
+        if isinstance(value, db_models.Model):
+            return hide_int(value.pk)
+        return super().prepare_value(value)
+
+    def to_python(self, value: str | None) -> db_models.Model | None:
         if not value:
             return super().to_python(value)
-        try:
-            return hide_int(value.pk)
-        except ValueError as e:
-            raise IncorrectSecureModelFieldValue from e
-
-    def to_python(self, value: str) -> db_models.Model | None:
         try:
             return super().to_python(reveal_int(value))
         except ValueError as e:
