@@ -78,7 +78,7 @@ class CrispyFormsMixin:
         )
 
     @staticmethod
-    def __get_field_name(_field: Div | str) -> str:  # pylint: disable=W0238
+    def get_field_name(_field: Div | str) -> str:  # pylint: disable=W0238
         if isinstance(_field, str):
             return _field
         if len(_field.fields) != 1:

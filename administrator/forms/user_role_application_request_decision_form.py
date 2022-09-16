@@ -49,7 +49,8 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         obj.__additionally_setup_form(application_request)
         return obj
 
-    def __additionally_setup_form(self, application_request: UserRoleApplication):  # pylint: disable=W0238
+    def __additionally_setup_form(self,  # pylint bug so have to be disabled pylint: disable=W0238
+                                  application_request: UserRoleApplication):
         self.__add_object_has_access_to_field(application_request.institution)
         self.__add_readonly_prepopulated_fields(application_request)
         self.__order_fields()
@@ -91,7 +92,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         unordered_fields = self.helper.layout.fields
         # using map to 'reveal' field names if they are wrapped in a div
         field_names = list(map(
-            self.__get_field_name, unordered_fields
+            self.get_field_name, unordered_fields
         ))
         ordered_fields = []
         for field in self.Meta.fields_order:
