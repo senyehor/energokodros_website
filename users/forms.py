@@ -27,7 +27,7 @@ class NewUserForm(auth_forms.UserCreationForm):
 
 class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
     institution = SecureModelChoiceField(
-        label=_('Оберіть установу'),
+        label=_('Оберіть заклад'),
         queryset=Facility.objects.get_institutions(),
         required=True
     )
