@@ -11,7 +11,7 @@ from institutions.tests.factories import FacilityFactory
 from users.logic.user_registration_controller import _EmailConfirmationController  # noqa
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
-from utils.forms import SecureModelChoiceField
+from utils.forms import _hide_id  # noqa
 
 User = get_user_model()
 
@@ -80,10 +80,11 @@ class UserRegistrationTest(TestCase):
         self.send_correct_registration_data()
         # here we mock request just to use it`s is_secure and get_host methods to generate link
         request = RequestFactory().get('')
-        _ = _EmailConfirmationController
         # here we get just first user, as it should be created and be the only one
         user = User.objects.all().first()
-        link_for_user = _._EmailConfirmationController__generate_link_for_user(  # noqa pylint: disable=C0301,W0212
+        _ = _EmailConfirmationController
+        # pylint: disable-next=W0212
+        link_for_user = _._EmailConfirmationController__generate_link_for_user(  # noqa
             user,
             request
         )
@@ -114,7 +115,7 @@ class UserRegistrationTest(TestCase):
         data['email'] = user.email
         data['password1'] = raw_password
         data['password2'] = raw_password
-        data['institution'] = SecureModelChoiceField._hide_id(institution.pk) # pylint: disable=W0212
+        data['institution'] = _hide_id(institution.pk)
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
