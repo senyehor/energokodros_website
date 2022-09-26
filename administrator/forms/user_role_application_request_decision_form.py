@@ -36,7 +36,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
 
     class Meta:
         model = UserRole
-        # user and institution is added in custom creation method
+        # user is added in custom creation method
         fields_to_hide = ('user',)
         fields = ('position', 'object_has_access_to') + fields_to_hide
         info_readonly_fields = (
@@ -56,11 +56,11 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         obj.__additionally_setup_form(application_request)
         return obj
 
-    def __additionally_setup_form(self,  # pylint bug so have to be disabled pylint: disable=W0238
-                                  application_request: UserRoleApplication):
+    # pylint bug so have to be disabled pylint: disable-next=W0238
+    def __additionally_setup_form(self, application_request: UserRoleApplication):
         self.__add_object_has_access_to_field(application_request.institution)
         self.__add_readonly_prepopulated_fields(application_request)
-        self.__order_fields()
+        self.order_fields(self.Meta.fields_order)
         self.__add_decision_buttons()
         self.hide_fields()
 
@@ -91,19 +91,6 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
             widget=forms.Textarea({'rows': 2, 'readonly': 'readonly'}),
             required=False
         )
-
-    def __order_fields(self):
-        unordered_fields = self.helper.layout.fields
-        # using map to 'reveal' field names if they are wrapped in a div
-        field_names = list(
-            map(
-                self.get_field_name, unordered_fields
-            )
-        )
-        ordered_fields = []
-        for field in self.Meta.fields_order:
-            ordered_fields.append(self.helper.layout.fields[field_names.index(field)])
-        self.helper.layout.fields = ordered_fields
 
     def __add_decision_buttons(self):
         button_name = 'decision'
