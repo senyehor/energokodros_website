@@ -11,7 +11,7 @@ from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
 from users.tests.factories import UserRoleApplicationFactory
-from utils.forms import _hide_id  # noqa pylint: disable=W0212
+from utils.forms import _hide_id  # noqa
 
 
 class UserRoleApplicationDetailTest(TestCase):

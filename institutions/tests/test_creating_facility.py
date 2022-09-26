@@ -4,7 +4,7 @@ from faker import Faker
 
 from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
-from utils.forms import _hide_id  # noqa pylint disable=W0212
+from utils.forms import _hide_id  # noqa
 
 
 class FacilityCreationTest(TestCase):
