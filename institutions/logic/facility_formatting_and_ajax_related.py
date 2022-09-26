@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.utils.safestring import mark_safe
 
 from institutions.models import Facility
 from utils.forms import _reveal_id, SecureModelChoiceField  # noqa
@@ -26,4 +27,4 @@ class SecureModelChoiceFieldWithVerboseFacilityLabeling(SecureModelChoiceField):
         if not isinstance(obj, Facility):
             raise ValueError('provided object is not a facility')
         # &nbsp; is one space equivalent that is correctly rendered in html form
-        return '&nbsp;&nbsp;' * (obj.depth - 1) + str(obj)
+        return mark_safe('&nbsp;&nbsp;' * (obj.depth - 1) + obj.name)
