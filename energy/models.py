@@ -25,7 +25,7 @@ class BoxSensorsSet(models.Model):
     boxes_set_id = models.AutoField(primary_key=True)
     box = models.ForeignKey(Box, models.CASCADE, null=False)
     sensor = models.OneToOneField(Sensor, models.RESTRICT, null=False)
-    facility = models.OneToOneField(Facility, models.CASCADE, blank=True, null=True)
+    facility = models.ForeignKey(Facility, models.CASCADE, blank=True, null=True)
     line_name = models.CharField(max_length=1000, blank=False, null=False)
     date_set_in = models.DateTimeField(blank=True, null=True)
     sensor_number = models.IntegerField()
