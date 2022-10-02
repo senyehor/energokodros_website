@@ -11,9 +11,9 @@ from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 
 class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin):
     """This form must be created from a user role application"""
-    # object_has_access_to and user are prepopulated in create_from_role_application method but
+    # facility_has_access_to and user are prepopulated in create_from_role_application method but
     # set here to corresponding fields to be correctly converted to python object on submission
-    object_has_access_to = SecureModelChoiceFieldWithVerboseFacilityLabeling(
+    facility_has_access_to = SecureModelChoiceFieldWithVerboseFacilityLabeling(
         label=_("Оберіть об'єкт до якого користувач матиме доступ"),
         queryset=Facility.objects.all(),
         required=True,
