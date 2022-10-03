@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, ListView
 
-from administrator.decorators import admin_rights_required
+from administrator.logic import admin_rights_required
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import InstitutionForm
 from institutions.models import Facility
