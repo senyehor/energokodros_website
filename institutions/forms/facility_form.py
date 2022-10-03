@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm, Select, Textarea
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
@@ -19,6 +19,8 @@ class NewFacilityForm(ModelForm, CrispyFormsMixin):
         queryset=Facility.objects.all(),
         required=True,
         label=_("Оберіть батьківський об'єкт"),
+        # todo deal with width
+        widget=Select(attrs={'size': 7})
     )
 
     class Meta:
