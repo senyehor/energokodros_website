@@ -24,7 +24,7 @@ class UserRoleApplicationDetailTest(TestCase):
         {
             'decision':               _DECISIONS,  # noqa
             'message_for_user':       str,
-            'position':               str,
+            'position_name':          str,
             'user':                   str,
             'institution':            str,
             'facility_has_access_to': str
@@ -42,7 +42,7 @@ class UserRoleApplicationDetailTest(TestCase):
         resp = self.send_decision(
             decision=self._DECISIONS.ACCEPT,
             facility_has_access_to=self.user_role_application.institution,
-            position=self.position_to_grant_user,
+            position_name=self.position_to_grant_user,
         )
         self.assertEqual(
             200,
@@ -57,7 +57,7 @@ class UserRoleApplicationDetailTest(TestCase):
             UserRole.objects.get(
                 user=self.user_role_application.user,
                 facility_has_access_to=self.user_role_application.institution,
-                position=self.position_to_grant_user
+                position_name=self.position_to_grant_user
             )
         except ObjectDoesNotExist:
             assert False, 'user role is not created even though response status code is 200'
@@ -80,7 +80,7 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def send_decision(
             self, decision: _DECISIONS,
-            facility_has_access_to: Facility = None, position: str = None) -> HttpResponse:
+            facility_has_access_to: Facility = None, position_name: str = None) -> HttpResponse:
         return self.admin_client.post(
             reverse(
                 'user-role-application-decision',
@@ -89,7 +89,7 @@ class UserRoleApplicationDetailTest(TestCase):
             {
                 **self.__complete_data(
                     decision.value,
-                    position,
+                    position_name,
                     facility_has_access_to
                 )
             },
@@ -98,12 +98,12 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def __complete_data(
             self, decision: str,
-            position: str | None, facility_has_access_to: Facility | None):
+            position_name: str | None, facility_has_access_to: Facility | None):
         complete_data = self.__get_form_data()
         complete_data['decision'] = decision
         # when declining application neither position nor facility_has_access_to
         # have to be filled in form, so they are just ''
-        complete_data['position'] = position if position else ''
+        complete_data['position_name'] = position_name if position_name else ''
         hashed_id_or_empty_string = (
             _hide_id(facility_has_access_to.pk)
             if facility_has_access_to

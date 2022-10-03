@@ -73,7 +73,7 @@ class UserRole(models.Model):
         blank=False,
         related_name='users_roles'
     )
-    position = models.CharField(
+    position_name = models.CharField(
         _('посада'),
         max_length=255,
         null=False,
@@ -87,7 +87,7 @@ class UserRole(models.Model):
 
     def __str__(self):
         return _(
-            f'{self.position} {self.user.full_name} із '
+            f'{self.position_name} {self.user.full_name} із '
             f'{self.facility_has_access_to.get_institution()}'
             )
 
