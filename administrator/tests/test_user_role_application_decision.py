@@ -11,7 +11,7 @@ from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
 from users.tests.factories import UserRoleApplicationFactory
-from utils.forms import _hide_id  # noqa
+from utils.forms import hash_id
 
 
 class UserRoleApplicationDetailTest(TestCase):
@@ -105,7 +105,7 @@ class UserRoleApplicationDetailTest(TestCase):
         # have to be filled in form, so they are just ''
         complete_data['position_name'] = position_name if position_name else ''
         hashed_id_or_empty_string = (
-            _hide_id(facility_has_access_to.pk)
+            hash_id(facility_has_access_to.pk)
             if facility_has_access_to
             else ''
         )
@@ -114,7 +114,7 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def __get_form_data(self) -> _user_role_application_decision_data_dict:
         # here we set data as if it was pre-populated by form
-        user_id_hashed = _hide_id(self.user_role_application.user.pk)
+        user_id_hashed = hash_id(self.user_role_application.user.pk)
         data = {
             'message_for_user': '',
             'user':             user_id_hashed

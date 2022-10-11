@@ -11,7 +11,7 @@ from institutions.tests.factories import InstitutionFactory
 from users.logic.user_registration_controller import _EmailConfirmationController  # noqa
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
-from utils.forms import hash_id  # noqa
+from utils.forms import hash_id
 
 User = get_user_model()
 
@@ -115,7 +115,7 @@ class UserRegistrationTest(TestCase):
         data['email'] = user.email
         data['password1'] = raw_password
         data['password2'] = raw_password
-        data['institution'] = _hide_id(institution.pk)
+        data['institution'] = hash_id(institution.pk)
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
