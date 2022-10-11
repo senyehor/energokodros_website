@@ -1,7 +1,6 @@
 import logging
 from smtplib import SMTPException
 
-from crispy_forms.bootstrap import StrictButton
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpRequest
@@ -13,7 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 def try_send_email_add_warning_if_failed(
-        request: HttpRequest, email: str, subject: str, message: str):
+        request: HttpRequest, email: str, subject: str, message: str
+):
     html = render_to_string(
         'email/regular_email.html',
         context={
@@ -45,13 +45,3 @@ def send_html_email(email: str, subject: str, html: str) -> bool:
         )
         return False
     return True
-
-
-def generate_submit_type_button(text: str, value: str, name: str) -> StrictButton:
-    return StrictButton(
-        text,
-        name=name,
-        value=value,
-        css_class='btn btn-primary mt-4',
-        type='submit'
-    )

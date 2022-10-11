@@ -1,11 +1,11 @@
 from typing import Literal
 
+from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div
 from django.db import models as db_models
 from django.forms import models
 
-from utils.common import generate_submit_type_button
 from utils.crypto import hide_int, reveal_int
 
 
@@ -67,21 +67,18 @@ class CrispyFormsMixin:
 
     def add_submit_button_at_the_end(self, text: str, value: str = 'submit', name: str = 'submit'):
         self.helper.layout.append(
-            generate_submit_type_button(
+            self.__generate_submit_type_button(
                 text,
                 value,
                 name
             )
         )
 
-    @staticmethod
-    def get_field_name(_field: Div | str) -> str:  # pylint: disable=W0238
-        if isinstance(_field, str):
-            return _field
-        if len(_field.fields) != 1:
-            raise ValueError('only one wrapped field expected')
-        return _field.fields[0]
-
-
-class IncorrectSecureModelFieldValue(Exception):
-    pass
+    def __generate_submit_type_button(self, text: str, value: str, name: str) -> StrictButton:
+        return StrictButton(
+            text,
+            name=name,
+            value=value,
+            css_class='btn btn-primary mt-4',
+            type='submit'
+        )
