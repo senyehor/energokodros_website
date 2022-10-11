@@ -13,5 +13,9 @@
     </div>
 {% endblock %}
 {% block no_items_heading %}
-    <h2>Заклади поки що відсутні</h2>
+    <div>
+        <h2>Заклади поки що відсутні</h2>
+    </div>
+    <a class="btn btn-primary d-block ms-3" href="{% url 'new-institution' %}">Додати заклад</a>
+    <a class="btn btn-primary d-block ms-3" href="{% url 'new-facility' %}">Додати об'єкт закладу</a>
 {% endblock %}
