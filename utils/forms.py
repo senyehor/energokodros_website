@@ -21,10 +21,7 @@ class SecureModelChoiceField(models.ModelChoiceField):
     def to_python(self, value: str | None) -> db_models.Model | None:
         if not value:
             return super().to_python(value)
-        try:
-            return super().to_python(self.__int_revealer(value))
-        except ValueError as e:
-            raise IncorrectSecureModelFieldValue from e
+        return super().to_python(self.__int_revealer(value))
 
 
 def _reveal_id(hashed_id: str) -> int:
