@@ -29,13 +29,8 @@ class SecureModelChoiceField(models.ModelChoiceField):
         return super().to_python(value)
 
 
-def _reveal_id(hashed_id: str) -> int:
-    """
-    think twice before using, this function is supposed to be used when
-    SecureModelChoiceField can not be used
-    """
-    _ = SecureModelChoiceField
-    return _._SecureModelChoiceField__int_revealer(hashed_id)  # noqa pylint: disable=W0212
+def get_object_by_hashed_id_or_404(klass: ModelBase | Manager | QuerySet, hashed_id: str) -> Model:
+    return get_object_or_404(klass, pk=INT_REVEALER(hashed_id))
 
 
 def hash_id(model_object: Model) -> str:
