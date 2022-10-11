@@ -7,11 +7,11 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 
 from institutions.models import Facility
-from institutions.tests.factories import FacilityFactory
+from institutions.tests.factories import InstitutionFactory
 from users.logic.user_registration_controller import _EmailConfirmationController  # noqa
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
-from utils.forms import _hide_id  # noqa
+from utils.forms import hash_id  # noqa
 
 User = get_user_model()
 
@@ -34,7 +34,7 @@ class UserRegistrationTest(TestCase):
         self.raw_password = '%tv{,,E)36'
         self.message = 'some message'
         self.user: User = UserFactory.build(password=self.raw_password)
-        self.institution = FacilityFactory()
+        self.institution = InstitutionFactory()
 
     def test_with_correct_data_set(self):
         resp = self.send_correct_registration_data()
