@@ -4,7 +4,7 @@ from faker import Faker
 
 from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
-from utils.forms import hash_id
+from utils.common import hash_id
 
 
 class FacilityCreationTest(TestCase):
