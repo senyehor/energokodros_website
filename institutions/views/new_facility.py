@@ -8,15 +8,17 @@ from administrator.logic import admin_rights_required
 from institutions.forms import NewFacilityForm
 from institutions.logic import (
     compose_formatted_institution_facilities_choices,
-    get_institution_by_hashed_id,
 )
 from institutions.models import Facility
+from utils.forms import get_object_by_hashed_id_or_404
 
 
 @admin_rights_required
 def get_institution_facilities_choices(request) -> JsonResponse:
-    hashed_institution_id = request.POST.get('institution_id')
-    institution = get_institution_by_hashed_id(hashed_institution_id)
+    institution: Facility = get_object_by_hashed_id_or_404(  # noqa
+        Facility,
+        request.POST.get('institution_id')
+    )
     formatted_choices_ordered = compose_formatted_institution_facilities_choices(institution)
     return JsonResponse(formatted_choices_ordered, safe=False)
 
