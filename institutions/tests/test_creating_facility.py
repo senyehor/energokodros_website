@@ -20,7 +20,7 @@ class FacilityCreationTest(TestCase):
 
     def test_creating_facility(self):
         parent_facility_id = hash_id(
-            self.parent_facility.pk
+            self.parent_facility
         )
         response = self.client.post(
             self.creation_url,

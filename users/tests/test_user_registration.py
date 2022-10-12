@@ -115,7 +115,7 @@ class UserRegistrationTest(TestCase):
         data['email'] = user.email
         data['password1'] = raw_password
         data['password2'] = raw_password
-        data['institution'] = hash_id(institution.pk)
+        data['institution'] = hash_id(institution)
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
