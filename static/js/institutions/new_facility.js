@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    set_width_for_all_selects();
     update_parent_facility_select();
     __get_institution_select().change(update_parent_facility_select);
 })
@@ -33,6 +34,11 @@ function update_parent_facility_select() {
                 'зверніться до адміністратора')
         }
     });
+}
+
+function set_width_for_all_selects() {
+    __get_parent_facility_select().addClass('w-100');
+    __get_institution_select().addClass('w-100');
 }
 
 function __get_url_to_get_facilities_options_data_for_institution() {
