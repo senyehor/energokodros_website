@@ -1,0 +1,36 @@
+{% extends 'common/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container p-0" style="height: 80vh;">
+        <div class="container d-inline-block" id="control_form">
+            {{ form | crispy }}
+            <div id="div_id_period_start" class="form-group">
+                <label for="period_start">Початок інтервалу</label>
+                <div>
+                    <input type="date" name="period_start" id="period_start">
+                </div>
+            </div>
+            <div id="div_id_period_end" class="form-group">
+                <label for="period_end">Кінець інтервалу</label>
+                <div>
+                    <input type="date" name="period_end" id="period_end">
+                </div>
+            </div>
+            <a class="btn btn btn-primary mt-3" id="get_data_button">Отримати дані</a>
+        </div>
+        <div class="container" id="energy_content">
+        </div>
+    </div>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+            integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script type="text/javascript" src="{% static "js/energy/aggregated_energy_consumption.js" %}"></script>
+{% endblock %}
+{% block display_none %}
+    <p id="get-facilities-list-for-role">{% url 'get-facilities-list-for-role' %}</p>
+    <p id="get-aggregated-consumption-for-facility">{% url 'get-aggregated-consumption-for-facility' %}</p>
+{% endblock %}
