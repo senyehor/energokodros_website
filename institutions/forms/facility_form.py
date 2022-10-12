@@ -10,7 +10,7 @@ class NewFacilityForm(ModelForm, CrispyFormsMixin):
     # to set as parent for a new facility
     institution = SecureModelChoiceField(
         queryset=Facility.objects.get_institutions(),
-        required=False,  # todo to True
+        required=False,
         label=_("Оберіть заклад, якому буде належати об'єкт"),
         empty_label=None
     )
