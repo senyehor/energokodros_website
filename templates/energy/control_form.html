@@ -1,0 +1,31 @@
+{% load crispy_forms_filters %}
+<div class="container d-inline-block p-0" id="div_control_form">
+    <form id="id_control_form">
+        {{ form | crispy }}
+        <div id="id_hours_filtering">
+            <div class="p">Фільтрація погодинно</div>
+            <div class="d-flex align-items-center">
+                <div class="d-inline">
+                    {% include 'energy/__hour_filter_select.html' with start_or_end='start' %}
+                    {% include 'energy/__hour_filter_select.html' with start_or_end='end' %}
+                </div>
+                <div class="d-inline ms-2">
+                    <a class="btn btn btn-primary" id="reset_hours_filters_btn">Скинути</a>
+                </div>
+            </div>
+        </div>
+        <div id="div_id_period_start" class="form-group">
+            <label for="period_start">Початок інтервалу</label>
+            <div>
+                <input type="date" name="period_start" id="period_start" required>
+            </div>
+        </div>
+        <div id="div_id_period_end" class="form-group">
+            <label for="period_end">Кінець інтервалу</label>
+            <div>
+                <input type="date" name="period_end" id="period_end" required>
+            </div>
+        </div>
+        <a class="btn btn btn-primary mt-3" id="get_data_button">Отримати дані</a>
+    </form>
+</div>
