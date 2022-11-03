@@ -7,9 +7,10 @@ from utils.common import get_object_by_hashed_id_or_404
 
 
 def get_facilities_choices_for_role(request: HttpRequest) -> JsonResponse:
-    role: UserRole = get_object_by_hashed_id_or_404(  # noqa
+    # noinspection PyTypeChecker
+    role: UserRole = get_object_by_hashed_id_or_404(
         UserRole,
-        request.POST['role_id']  # noqa
+        request.POST.get('role_id')
     )
     check_role_belongs_to_user(request.user, role)
     choices = get_facilities_formatted_choices_for_user_role(
