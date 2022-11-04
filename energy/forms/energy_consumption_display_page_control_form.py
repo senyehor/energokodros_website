@@ -1,36 +1,38 @@
 from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
-from energy.logic.aggregated_energy_consumption_query_builder import AggregationIntervalInSeconds
+from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from institutions.models import Facility
 from users.models import User, UserRole
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 
 AGGREGATION_INTERVAL_CHOICES = (
-    (AggregationIntervalInSeconds.ONE_HOUR.value, _('Година')),
-    (AggregationIntervalInSeconds.ONE_DAY.value, _('День')),
-    (AggregationIntervalInSeconds.ONE_WEEK.value, _('Тиждень')),
-    (AggregationIntervalInSeconds.ONE_MONTH.value, _('Місяць')),
-    (AggregationIntervalInSeconds.ONE_YEAR.value, _('Рік')),
+    (AggregationIntervalSeconds.ONE_HOUR.value, _('Година')),
+    (AggregationIntervalSeconds.ONE_DAY.value, _('День')),
+    (AggregationIntervalSeconds.ONE_WEEK.value, _('Тиждень')),
+    (AggregationIntervalSeconds.ONE_MONTH.value, _('Місяць')),
+    (AggregationIntervalSeconds.ONE_YEAR.value, _('Рік')),
 )
 
 
 class EnergyConsumptionDisplayPageControlForm(Form, CrispyFormsMixin):
-    """must be created for user using dedicated method"""
-    # correct qs is set in __init__
+    """must be created for user using corresponding method,
+    and some fields are added in the template"""
+    # correct qs for role is set in __init__
     role = SecureModelChoiceField(
+        label=_('Роль'),
         queryset=UserRole.objects.all(),
         empty_label=None,
-        label=_('Роль')
     )
     # should be populated via ajax depending on chosen role
     facility_to_get_consumption_for = SecureModelChoiceField(
+        label=_("Об'єкт"),
         queryset=Facility.objects.all(),
-        label=_("Об'єкт")
+        initial=None
     )
     aggregation_interval_seconds = ChoiceField(
+        label=_('Інтервал агрегації'),
         choices=AGGREGATION_INTERVAL_CHOICES,
-        label=_('Інтервал агрегації')
     )
 
     def __init__(self, user: User, *args, **kwargs):
