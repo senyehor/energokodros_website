@@ -1,0 +1,13 @@
+*.env
+.pylintrc
+.gitignore
+Dockerfile
+poetry.lock
+docker-compose.*
+static
+staticfiles
+
+.idea/
+.git/
+__pycache__/
+tmp.*
