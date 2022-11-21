@@ -15,10 +15,6 @@ class FacilityManager(NS_NodeManager):
         return self.model.get_tree(facility.get_root())
 
 
-class MoveOptions(Enum):
-    CHILD = 'last-child'
-
-
 class Facility(NS_Node):
     name = models.CharField(
         _("назва об'єкту"),
@@ -36,16 +32,10 @@ class Facility(NS_Node):
 
     objects = FacilityManager()
 
-    def get_institution(self) -> 'Facility':
-        return self.get_root()
-
     class Meta:
         db_table = 'facilities'
         verbose_name = _("Об'єкт")
         verbose_name_plural = _("Об'єкти")
-
-    def move(self, target: 'Facility', pos: MoveOptions):  # noqa pylint: disable=W0222
-        super().move(target, pos.value)
 
     def __str__(self):
         if self.is_root():
