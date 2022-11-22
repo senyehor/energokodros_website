@@ -3,7 +3,7 @@ from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
 from institutions.logic.facility_formatting_and_ajax_related import \
-    SecureModelChoiceFieldWithVerboseFacilityLabeling
+    common_facility_choices_format_function
 from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
@@ -13,11 +13,12 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
     """This form must be created from a user role application"""
     # facility_has_access_to and user are prepopulated in create_from_role_application method but
     # set here to corresponding fields to be correctly converted to python object on submission
-    facility_has_access_to = SecureModelChoiceFieldWithVerboseFacilityLabeling(
+    facility_has_access_to = SecureModelChoiceField(
         label=_("Оберіть об'єкт до якого користувач матиме доступ"),
         queryset=Facility.objects.all(),
         required=True,
-        empty_label=None
+        empty_label=None,
+        label_from_instance_function=common_facility_choices_format_function
     )
     user = SecureModelChoiceField(
         queryset=User.objects.all(),

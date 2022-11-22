@@ -1,9 +1,12 @@
 from django.utils.safestring import mark_safe
 
 from institutions.models import Facility
-from utils.common import compose_choices_for_queryset
+from utils.common import compose_secure_choices_for_queryset
 from utils.common.model_objects_crypto_related import Choices
-from utils.forms import SecureModelChoiceField
+
+
+def common_facility_choices_format_function(facility: Facility):
+    return mark_safe('&nbsp;&nbsp;' * (facility.depth - 1) + facility.name)
 
 
 def compose_formatted_institution_facilities_choices(institution: Facility) -> Choices:
@@ -13,15 +16,7 @@ def compose_formatted_institution_facilities_choices(institution: Facility) -> C
 
 
 def compose_formatted_facility_descendants_and_itself(facility: Facility) -> Choices:
-    return compose_choices_for_queryset(
+    return compose_secure_choices_for_queryset(
         facility.get_tree(facility),
-        SecureModelChoiceFieldWithVerboseFacilityLabeling
+        common_facility_choices_format_function
     )
-
-
-class SecureModelChoiceFieldWithVerboseFacilityLabeling(SecureModelChoiceField):
-    def label_from_instance(self, obj: Facility):
-        if not isinstance(obj, Facility):
-            raise ValueError('provided object is not a facility')
-        # &nbsp; is one space equivalent that is correctly rendered in html form
-        return mark_safe('&nbsp;&nbsp;' * (obj.depth - 1) + obj.name)
