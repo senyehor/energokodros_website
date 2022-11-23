@@ -2,9 +2,9 @@ from django import forms
 from django.contrib.auth import forms as auth_forms
 from django.utils.translation import gettext_lazy as _
 
-from institutions.models import Facility
-from users.models import User, UserRoleApplication
+from users.models import User
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
+from institutions.models import Facility
 
 
 class LoginForm(auth_forms.AuthenticationForm):
