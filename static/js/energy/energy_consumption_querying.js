@@ -32,8 +32,8 @@ function get_consumption_data_and_update() {
             draw_content(data);
         },
         error: (error) => {
-            if (error) {
-                add_error_alert(error.responseJSON);
+            if (error.message) {
+                add_error_alert(error.message);
                 return
             }
             add_error_alert('Під час оновлення даних виникла помилка. ' +
