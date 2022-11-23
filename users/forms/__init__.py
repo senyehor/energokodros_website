@@ -1,1 +1,1 @@
-from .simple import LoginForm, NewUserForm, UserRoleApplicationForm
+from .simple import EditUserForm, LoginForm, NewUserForm, UserRoleApplicationForm

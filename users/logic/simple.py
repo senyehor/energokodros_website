@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
 from users.models import User, UserRole
@@ -25,3 +26,7 @@ def remember_user_for_two_week(request: HttpRequest):
 
 def __remember_user_for_timedelta(request: HttpRequest, td: timedelta):
     request.session.set_expiry(td)
+
+
+def format_user_role(role: UserRole) -> str:
+    return _(f"{role.position_name}, об'єкт {role.facility_has_access_to.name}")

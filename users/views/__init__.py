@@ -4,4 +4,5 @@ from .simple import (
     LoginView,
     ProfilesView,
     successfully_created_registration_request,
+    EditUserView
 )

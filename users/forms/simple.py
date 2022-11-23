@@ -2,9 +2,10 @@ from django import forms
 from django.contrib.auth import forms as auth_forms
 from django.utils.translation import gettext_lazy as _
 
-from users.models import User
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 from institutions.models import Facility
+from users.logic import format_user_role
+from users.models import User, UserRole, UserRoleApplication
+from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 
 
 class LoginForm(auth_forms.AuthenticationForm):
@@ -51,3 +52,39 @@ class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
     def set_valid_user(self, user: User):
         """be careful, no user validation is run here"""
         self.instance.user = user
+
+
+class EditUserForm(forms.ModelForm, CrispyFormsMixin):
+    # info only field, qs is filled in custom method
+    roles = SecureModelChoiceField(
+        queryset=UserRole.objects.none(),
+        label=_("Ролі"),
+        empty_label=None,
+        required=False,
+        disabled=True,
+        widget=forms.Select(attrs={'size': 4}),
+        label_from_instance_function=format_user_role
+    )
+    full_name = forms.CharField(
+        label=_("Повне ім'я"),
+        required=False,
+        disabled=True,
+    )
+    email = forms.CharField(
+        label=_('Електронна пошта'),
+        required=False,
+        disabled=True,
+    )
+
+    class Meta:
+        model = User
+        fields = ('full_name', 'email', 'is_admin')
+
+    def fill_querysets(self, user: User):
+        self.fields['roles'].queryset = user.roles
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_submit_button_at_the_end(
+            _('Оновити дані')
+        )
