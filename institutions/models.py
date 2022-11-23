@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from treebeard.ns_tree import NS_Node, NS_NodeManager
 
@@ -41,6 +42,9 @@ class Facility(NS_Node):
         if self.is_root():
             return _(f'Заклад {self.name}')
         return _(f"Об'єкт {self.name} із {self.get_root().name}")
+
+    def get_absolute_url(self):
+        return reverse_lazy('edit-facility', kwargs={'pk': self.pk})
 
     # methods below are not implemented for nested set in django_treebeard, so
     # currently they are just 'stubbed'
