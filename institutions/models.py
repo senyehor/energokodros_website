@@ -1,5 +1,3 @@
-from enum import Enum
-
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
