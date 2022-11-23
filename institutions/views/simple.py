@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, ListView, UpdateView
 
 from administrator.logic import admin_rights_required
-from common import get_object_by_hashed_id_or_404
+from utils.common import get_object_by_hashed_id_or_404
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
