@@ -42,7 +42,7 @@ class NewFacilityForm(forms.ModelForm, CrispyFormsMixin):
 
 
 class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
-    # info only field
+    # info only field, qs is filled in custom method
     descendants = SecureModelChoiceField(
         queryset=Facility.objects.none(),
         label=_("Підлеглі об'єкти"),
