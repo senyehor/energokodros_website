@@ -1,2 +1,2 @@
-from .facility_form import NewFacilityForm
+from .facility_forms import NewFacilityForm, FacilityEditForm
 from .institution_form import InstitutionForm
