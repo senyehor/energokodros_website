@@ -1,11 +1,12 @@
 from django.contrib import messages
-from django.http import HttpRequest
-from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpRequest, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, ListView, UpdateView
 
 from administrator.logic import admin_rights_required
+from common import get_object_by_hashed_id_or_404
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
@@ -59,6 +60,7 @@ class UpdateFacilityView(UpdateView):
 
 @admin_rights_required
 def redirect_to_edit_facility_by_post_pk(request: HttpRequest):
-    return redirect(
-        reverse_lazy('edit-facility', kwargs={'pk': request.POST.get('pk')})
+    facility = get_object_by_hashed_id_or_404(Facility, request.POST.get('pk'))
+    return JsonResponse(
+        {'url': reverse_lazy('edit-facility', kwargs={'pk': facility.pk})}
     )
