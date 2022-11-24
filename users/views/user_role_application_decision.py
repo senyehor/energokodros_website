@@ -11,7 +11,7 @@ from utils.common import admin_rights_required
 
 @admin_rights_required
 class UserRoleApplicationDecisionView(FormView):
-    template_name = 'administrator/user_role_application_decision.html'
+    template_name = 'users/user_role_application_decision.html'
     form_class = UserRoleApplicationRequestsDecisionForm
     success_url = reverse_lazy('users-roles-applications')
 
