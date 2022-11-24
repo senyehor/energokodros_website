@@ -17,6 +17,11 @@ function update_select_with_options(select, options) {
     }
 }
 
+function remove_disable_set_width_100(elem) {
+    elem.removeAttr('disabled');
+    elem.addClass('w-100');
+}
+
 function add_success_alert(message) {
     __get_alerts_container_create_if_not_exists().append(__create_alert_div('success', message));
 }

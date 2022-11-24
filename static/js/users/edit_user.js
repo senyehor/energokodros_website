@@ -3,8 +3,7 @@ $(document).ready(function () {
 })
 
 function style_roles_select() {
-    __get_roles_select().removeAttr('disabled');
-    __get_roles_select().addClass('w-100');
+    remove_disable_set_width_100(__get_roles_select());
 }
 
 function __get_roles_select() {
