@@ -53,6 +53,7 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
         # todo fix indents
         label_from_instance_function=common_facility_choices_format_function
     )
+    # todo add roles that have this facility
 
     class Meta:
         model = Facility
