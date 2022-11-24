@@ -2,7 +2,7 @@ from django.urls import include, path
 
 from users import views
 
-urlpatterns = [  # noqa
+urlpatterns = [
     path('login/', views.LoginView.as_view()),
     path(
         'registration/',
@@ -19,10 +19,30 @@ urlpatterns = [  # noqa
         views.confirm_email,
         name='confirm-email'
     ),
-    path(
-        'profiles/',
-        views.ProfilesView.as_view(),
-        name='profiles'
-    ),
     path('', include('django.contrib.auth.urls'))
 ]
+
+admin_urls = [
+    path(
+        'users-roles-applications/',
+        views.UserRoleApplicationsListView.as_view(),
+        name='users-roles-applications'
+    ),
+    path(
+        'user-role-application-decision/<hashed_int:pk>',
+        views.UserRoleApplicationDecisionView.as_view(),
+        name='user-role-application-decision'
+    ),
+    path(
+        'users-list/',
+        views.UserListView.as_view(),
+        name='users-list'
+    ),
+    path(
+        'edit-user/<hashed_int:pk>/',
+        views.EditUserView.as_view(),
+        name='edit-user'
+    ),
+]
+
+urlpatterns += admin_urls

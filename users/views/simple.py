@@ -5,11 +5,18 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import UpdateView
+from django.views.generic import ListView, UpdateView
 
+from energokodros.settings import DEFAULT_PAGINATE_BY
 from users.forms import EditUserForm, LoginForm
 from users.logic import remember_user_for_two_week, UserRegistrationController
+from users.logic.simple import (
+    get_applications_from_users_who_confirmed_email,
+    get_users_with_confirmed_email,
+)
 from users.models import User
+from utils.common.admin_rights import admin_rights_required
+from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
 def successfully_created_registration_request(request):
@@ -52,8 +59,18 @@ class EditUserView(UpdateView):
         return super().form_valid(form)
 
 
-class ProfilesView(View):
-    """currently it is just a stub"""
 
-    def get(self, request):
-        return render(request, 'index.html')
+@admin_rights_required
+class UserRoleApplicationsListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+    queryset = get_applications_from_users_who_confirmed_email()
+    filter_fields = ('user__full_name', 'user__email', 'institution__name')
+    paginate_by = DEFAULT_PAGINATE_BY
+    template_name = 'administrator/users_roles_applications.html'
+
+
+@admin_rights_required
+class UserListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+    queryset = get_users_with_confirmed_email()
+    filter_fields = ('full_name', 'email')
+    paginate_by = DEFAULT_PAGINATE_BY
+    template_name = 'administrator/users_list.html'

@@ -3,12 +3,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
 
-from administrator.forms import UserRoleApplicationRequestsDecisionForm
-from administrator.logic import (
-    admin_rights_required, check_user_has_no_roles,
-    UserRoleApplicationReviewController,
-)
+from users.forms import UserRoleApplicationRequestsDecisionForm
+from users.logic import check_user_has_no_roles, UserRoleApplicationReviewController
 from users.models import UserRoleApplication
+from utils.common import admin_rights_required
 
 
 @admin_rights_required

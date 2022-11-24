@@ -2,8 +2,7 @@ from django import forms
 from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
-from institutions.logic.facility_formatting_and_ajax_related import \
-    common_facility_choices_format_function
+from institutions.logic import common_facility_choices_format_function
 from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField

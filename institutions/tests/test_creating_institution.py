@@ -1,15 +1,15 @@
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse_lazy
 from faker import Faker
 
-from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
+from users.tests.factories import create_admin_client
 
 
 class InstitutionCreationTest(TestCase):
     def setUp(self):
         self.client = create_admin_client()
-        self.creation_url = reverse('new-institution')
+        self.creation_url = reverse_lazy('new-institution')
         fake = Faker()
         self.institution_name = fake.name()
         self.institution_description = fake.text(max_nb_chars=200)

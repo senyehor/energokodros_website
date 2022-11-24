@@ -1,1 +1,2 @@
 from .simple import EditUserForm, LoginForm, NewUserForm, UserRoleApplicationForm
+from .user_role_application_request_decision_form import UserRoleApplicationRequestsDecisionForm

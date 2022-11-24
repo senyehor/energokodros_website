@@ -2,6 +2,7 @@ import random
 
 import factory
 from django.contrib.auth import get_user_model
+from django.test import Client
 from factory import django
 
 from institutions.tests.factories import InstitutionFactory
@@ -51,3 +52,9 @@ class UserRoleApplicationFactory(django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory, is_active=True)
     institution = factory.SubFactory(InstitutionFactory)
     message = factory.Faker('text', max_nb_chars=50)
+
+
+def create_admin_client() -> Client:
+    client = Client()
+    client.force_login(UserFactory(is_admin=True))
+    return client

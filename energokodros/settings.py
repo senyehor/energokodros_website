@@ -60,7 +60,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'administrator.context_processors.user_roles_applications_to_review_count'
+                'users.context_processors.user_roles_applications_to_review_count'
             ],
         },
     },

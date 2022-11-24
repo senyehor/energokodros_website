@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from faker import Faker
 
-from administrator.tests.factories import create_admin_client
+from users.tests.factories import create_admin_client
 from institutions.models import Facility
 from utils.common import hash_id
 

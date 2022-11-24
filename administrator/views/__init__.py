@@ -1,2 +1,0 @@
-from .simple import AdminPageView, UserRoleApplicationsListView, UserListView
-from .user_role_application_decision import UserRoleApplicationDecisionView

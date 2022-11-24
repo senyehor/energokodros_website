@@ -13,6 +13,6 @@ urlpatterns = [
         name='home'
     ),
     path('users/', include('users.urls')),
-    path('administrator/', include('administrator.urls')),
-    path('energy/', include('energy.urls'))
+    path('energy/', include('energy.urls')),
+    path('facilities/', include('institutions.urls'))
 ]

@@ -3,7 +3,7 @@ from django.contrib.auth import forms as auth_forms
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
-from users.logic import format_user_role
+from users.logic.simple import format_user_role
 from users.models import User, UserRole, UserRoleApplication
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 

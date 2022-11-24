@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
-from administrator.logic import admin_rights_required
+from utils.common.admin_rights import admin_rights_required
 from institutions.forms import NewFacilityForm
 from institutions.logic import (
     compose_formatted_institution_facilities_choices,

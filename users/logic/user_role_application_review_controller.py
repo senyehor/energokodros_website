@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
-from administrator.forms import UserRoleApplicationRequestsDecisionForm
+from users.forms import UserRoleApplicationRequestsDecisionForm
 from users.models import UserRoleApplication
 from utils.common import try_send_email_add_warning_if_failed
 
