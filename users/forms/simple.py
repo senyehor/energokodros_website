@@ -88,3 +88,30 @@ class EditUserForm(forms.ModelForm, CrispyFormsMixin):
         self.add_submit_button_at_the_end(
             _('Оновити дані')
         )
+
+
+class EditUserRole(forms.ModelForm, CrispyFormsMixin):
+    user_info = forms.CharField(
+        label=_("Користувач"),
+        required=False,
+        disabled=True,
+    )
+    facility_has_access_to_info = forms.CharField(
+        label=_("Об'єкт"),
+        required=False,
+        disabled=True,
+    )
+
+    class Meta:
+        model = UserRole
+        fields = ('position_name',)
+
+    def fill_initial_not_populated_automatically(self, role: UserRole):
+        self.fields['user_info'].initial = str(role.user)
+        self.fields['facility_has_access_to_info'].initial = str(role.facility_has_access_to)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_submit_button_at_the_end(
+            _('Оновити роль')
+        )
