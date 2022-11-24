@@ -79,7 +79,7 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
             'institution': forms.Textarea(attrs={'rows': 1})
         }
 
-    def fill_querysets(self, facility: Facility):
+    def fill_initial_not_populated_automatically(self, facility: Facility):
         self.fields['descendants'].queryset = facility.get_descendants()
         self.fields['roles_that_have_access_to_this_facility'].queryset = facility.users_roles
 

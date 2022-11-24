@@ -80,7 +80,7 @@ class EditUserForm(forms.ModelForm, CrispyFormsMixin):
         model = User
         fields = ('full_name', 'email', 'is_admin')
 
-    def fill_querysets(self, user: User):
+    def fill_initial_not_populated_automatically(self, user: User):
         self.fields['roles'].queryset = user.roles
 
     def __init__(self, *args, **kwargs):

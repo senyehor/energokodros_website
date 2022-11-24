@@ -47,7 +47,7 @@ class EditUserView(UpdateView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-        data['form'].fill_querysets(user)
+        data['form'].fill_initial_not_populated_automatically(user)
         return data
 
     def form_valid(self, form):
