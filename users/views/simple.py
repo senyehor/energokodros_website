@@ -4,7 +4,6 @@ from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views import View
 from django.views.generic import ListView, UpdateView
 
 from energokodros.settings import DEFAULT_PAGINATE_BY
@@ -59,13 +58,12 @@ class EditUserView(UpdateView):
         return super().form_valid(form)
 
 
-
 @admin_rights_required
 class UserRoleApplicationsListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     queryset = get_applications_from_users_who_confirmed_email()
     filter_fields = ('user__full_name', 'user__email', 'institution__name')
     paginate_by = DEFAULT_PAGINATE_BY
-    template_name = 'administrator/../../templates/users/users_roles_applications.html'
+    template_name = 'users/users_roles_applications.html'
 
 
 @admin_rights_required
@@ -73,4 +71,4 @@ class UserListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     queryset = get_users_with_confirmed_email()
     filter_fields = ('full_name', 'email')
     paginate_by = DEFAULT_PAGINATE_BY
-    template_name = 'administrator/../../templates/users/users_list.html'
+    template_name = 'users/users_list.html'
