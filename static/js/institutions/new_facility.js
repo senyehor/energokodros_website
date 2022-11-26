@@ -19,9 +19,7 @@ function update_parent_facility_select() {
             update_select_with_options(__get_parent_facility_select(), ids_and_labels);
         },
         error: (error) => {
-            window.alert('Під час оновлення даних виникла помилка. ' +
-                'Якщо після перезавантаження сторінки вона не зникне, ' +
-                'зверніться до адміністратора')
+            add_error_alert(DEFAULT_UNEXPECTED_ERROR_MESSAGE);
         }
     });
 }
