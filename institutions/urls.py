@@ -35,9 +35,9 @@ urlpatterns = [
 
 helper_urls = [
     path(
-        'edit-facility-link-pk-in-post-redirect/',
+        'edit-facility-pk-in-post/',
         redirect_to_edit_facility_by_post_pk,
-        name='edit-facility-link-by-pk-in-post-redirect'
+        name='edit-facility-pk-in-post'
     )
 ]
 

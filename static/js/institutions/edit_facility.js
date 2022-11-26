@@ -17,7 +17,7 @@ function style_and_setup_selects() {
 function redirect_on_descendant_click() {
     let descendant_id = get_selected_option_for_select(__get_descendants_select());
     $.ajax({
-        url: reverse_url('edit-facility-link-by-pk-in-post-redirect'),
+        url: reverse_url('edit-facility-pk-in-post'),
         type: 'POST',
         dataType:'json',
         headers: {
