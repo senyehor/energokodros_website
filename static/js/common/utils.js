@@ -23,7 +23,7 @@ function update_select_with_options(select, options) {
     select.append(options_html);
 }
 
-function remove_disable_set_width_100(elem) {
+function remove_disabled_set_width_100(elem) {
     elem.removeAttr('disabled');
     elem.addClass('w-100');
 }
