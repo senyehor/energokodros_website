@@ -4,3 +4,4 @@ from .model_objects_crypto_related import (
 )
 from .admin_rights import admin_rights_required, is_admin
 from .ajax import redirect_to_object_pk_in_post
+from .object_to_queryset import object_to_queryset
