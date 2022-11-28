@@ -49,7 +49,7 @@ class EditUserView(UpdateView):
     model = User
     form_class = EditUserForm
     success_url = reverse_lazy('users-list')
-    template_name = 'users/edit-user.html'
+    template_name = 'users/edit_user.html'
     # overriden due to 'user' taken by client user variable
     context_object_name = 'user_obj'
 
@@ -72,7 +72,7 @@ class EditUserRoleView(UpdateView):
     model = UserRole
     form_class = EditUserRole
     success_url = reverse_lazy('users-roles-list')
-    template_name = 'users/edit-user-role.html'
+    template_name = 'users/edit_user_role.html'
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
