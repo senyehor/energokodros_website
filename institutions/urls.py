@@ -1,9 +1,11 @@
 from django.urls import path
 
+from institutions.models import Facility
 from institutions.views import (
     CreateFacilityView, CreateInstitutionView, FacilitiesListView,
-    get_institution_facilities_choices, redirect_to_edit_facility_by_post_pk, UpdateFacilityView
+    get_institution_facilities_choices, UpdateFacilityView,
 )
+from utils.common import redirect_to_object_pk_in_post
 
 urlpatterns = [
     path(
@@ -36,7 +38,7 @@ urlpatterns = [
 helper_urls = [
     path(
         'edit-facility-pk-in-post/',
-        redirect_to_edit_facility_by_post_pk,
+        redirect_to_object_pk_in_post(Facility, 'edit-facility'),
         name='edit-facility-pk-in-post'
     )
 ]

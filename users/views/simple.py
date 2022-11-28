@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.views import LoginView as LogView
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -14,7 +14,6 @@ from users.logic.simple import (
     get_users_with_confirmed_email,
 )
 from users.models import User, UserRole
-from utils.common import get_object_by_hashed_id_or_404
 from utils.common.admin_rights import admin_rights_required
 from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
@@ -26,13 +25,6 @@ def successfully_created_registration_request(request):
 def confirm_email(request: HttpRequest, user_id: int, user_email: str):
     UserRegistrationController.confirm_email_if_user_exists(user_id, user_email)
     return render(request, 'registration/successfully_confirmed_email.html')
-
-
-def redirect_to_edit_role_by_post_pk(request: HttpRequest):
-    role = get_object_by_hashed_id_or_404(UserRole, request.POST.get('pk'))
-    return JsonResponse(
-        {'url': reverse_lazy('edit-user-role', kwargs={'pk': role.pk})}
-    )
 
 
 class LoginView(LogView):

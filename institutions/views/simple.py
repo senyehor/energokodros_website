@@ -55,10 +55,3 @@ class UpdateFacilityView(UpdateView):
             _('Установу успішно відредаговано')
         )
         return super().form_valid(form)
-
-
-def redirect_to_edit_facility_by_post_pk(request: HttpRequest):
-    facility = get_object_by_hashed_id_or_404(Facility, request.POST.get('pk'))
-    return JsonResponse(
-        {'url': reverse_lazy('edit-facility', kwargs={'pk': facility.pk})}
-    )
