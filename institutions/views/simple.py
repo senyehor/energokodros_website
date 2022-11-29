@@ -1,6 +1,4 @@
 from django.contrib import messages
-from django.http import HttpRequest, JsonResponse
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, ListView, UpdateView
@@ -8,7 +6,7 @@ from django.views.generic import FormView, ListView, UpdateView
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
-from utils.common import admin_rights_required, get_object_by_hashed_id_or_404
+from utils.common import admin_rights_required
 from utils.forms import EditObjectUpdateViewMixin
 from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
 

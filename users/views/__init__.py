@@ -1,7 +1,8 @@
 from .create_user_registration_request import CreateUserRegistrationRequestView
+from .edit_views import EditUserRoleView, EditUserView
+from .list_views import UserListView, UserRoleApplicationsListView, UserRoleListView
 from .simple import (
-    confirm_email, EditUserRoleView, EditUserView, LoginView,
-    successfully_created_registration_request, UserListView, UserRoleApplicationsListView,
-    UserRoleListView,
+    confirm_email, LoginView,
+    successfully_created_registration_request,
 )
 from .user_role_application_decision import UserRoleApplicationDecisionView
