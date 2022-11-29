@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from institutions.logic import common_facility_choices_format_function
 from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField
+from utils.forms import CrispyFormsMixin, SecureModelChoiceField, SelectWithFormControlClass
 
 
 class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin):
@@ -17,7 +17,8 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         queryset=Facility.objects.all(),
         required=True,
         empty_label=None,
-        label_from_instance_function=common_facility_choices_format_function
+        label_from_instance_function=common_facility_choices_format_function,
+        widget=SelectWithFormControlClass({'size': 6})
     )
     user = SecureModelChoiceField(
         queryset=User.objects.all(),

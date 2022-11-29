@@ -7,7 +7,7 @@ from institutions.logic import (
 )
 from institutions.models import Facility
 from users.models import UserRole
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField
+from utils.forms import CrispyFormsMixin, SecureModelChoiceField, SelectWithFormControlClass
 
 
 class NewFacilityForm(forms.ModelForm, CrispyFormsMixin):
@@ -17,14 +17,16 @@ class NewFacilityForm(forms.ModelForm, CrispyFormsMixin):
         queryset=Facility.objects.get_institutions(),
         required=False,
         label=_("Оберіть заклад, якому буде належати об'єкт"),
-        empty_label=None
+        empty_label=None,
+        widget=SelectWithFormControlClass(),
     )
     # this field should be populated based on institution choice by js
     parent_facility = SecureModelChoiceField(
         queryset=Facility.objects.all(),
         required=True,
         label=_("Оберіть батьківський об'єкт"),
-        widget=forms.Select(attrs={'size': 7})
+        widget=SelectWithFormControlClass(attrs={'size': 7}),
+        empty_label=None
     )
 
     class Meta:
@@ -53,7 +55,7 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
         empty_label=None,
         required=False,
         disabled=True,
-        widget=forms.Select(attrs={'size': 7}),
+        widget=SelectWithFormControlClass(attrs={'size': 7}),
         label_from_instance_function=common_facility_choices_format_function
     )
     # info only field, qs is filled in custom method
@@ -63,7 +65,7 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
         empty_label=None,
         required=False,
         disabled=True,
-        widget=forms.Select(attrs={'size': 5}),
+        widget=SelectWithFormControlClass(attrs={'size': 5}),
         label_from_instance_function=label_from_user_role_for_facility_roles
     )
 
