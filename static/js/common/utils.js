@@ -29,7 +29,7 @@ function add_muted_text_after_div_label(div, text) {
 
 
 function __generate_muted_p(text) {
-    return '<p class="fw-light text-muted">' +
+    return '<p class="fw-light text-muted m-0">' +
         `${text}` +
         '</p>'
 }
@@ -67,4 +67,4 @@ const DEFAULT_UNEXPECTED_ERROR_MESSAGE = '' +
     'якщо після перезавантаження сторінки проблема не зникне, ' +
     'зверніться до адміністратора.'
 
-const ON_CLICK_REDIRECTS_TEXT = 'При натисканні вас перенаправить на її сторінку'
+const ON_CLICK_REDIRECTS_TEXT = 'При натисканні вас перенаправить на сторінку'
