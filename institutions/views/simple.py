@@ -37,7 +37,7 @@ class CreateInstitutionView(FormView):
 
 
 @admin_rights_required
-class UpdateFacilityView(UpdateView):
+class EditFacilityView(EditObjectUpdateViewMixin, UpdateView):
     model = Facility
     form_class = FacilityEditForm
     template_name = 'institutions/edit_facility.html'
