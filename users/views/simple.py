@@ -1,7 +1,7 @@
-from django.contrib import messages
+from django.contrib.auth.views import LoginView as LogView
 from django.contrib.auth.views import LoginView as LogView
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView, UpdateView
@@ -15,6 +15,7 @@ from users.logic.simple import (
 )
 from users.models import User, UserRole
 from utils.common.admin_rights import admin_rights_required
+from utils.forms import EditObjectUpdateViewMixin
 from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
@@ -37,7 +38,7 @@ class LoginView(LogView):
 
 
 @admin_rights_required
-class EditUserView(UpdateView):
+class EditUserView(EditObjectUpdateViewMixin, UpdateView):
     model = User
     form_class = EditUserForm
     success_url = reverse_lazy('users-list')
@@ -45,39 +46,17 @@ class EditUserView(UpdateView):
     # overriden due to 'user' taken by client user variable
     context_object_name = 'user_obj'
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-        data['form'].fill_initial_not_populated_automatically(user)
-        return data
-
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            _('Користувача успішно відредаговано')
-        )
-        return super().form_valid(form)
+    edit_success_message = _('Користувача успішно відредаговано')
 
 
 @admin_rights_required
-class EditUserRoleView(UpdateView):
+class EditUserRoleView(EditObjectUpdateViewMixin, UpdateView):
     model = UserRole
     form_class = EditUserRole
     success_url = reverse_lazy('users-roles-list')
     template_name = 'users/edit_user_role.html'
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        role = get_object_or_404(UserRole, pk=self.kwargs.get('pk'))
-        data['form'].fill_initial_not_populated_automatically(role)
-        return data
-
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            _('Роль користувача успішно відредаговано')
-        )
-        return super().form_valid(form)
+    edit_success_message = _('Роль користувача успішно відредаговано')
 
 
 @admin_rights_required

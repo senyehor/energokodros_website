@@ -1,12 +1,16 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
+from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
 from users.logic.simple import format_user_role
 from users.models import User, UserRole, UserRoleApplication
 from utils.common import object_to_queryset
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField, SelectWithFormControlClass
+from utils.forms import (
+    CrispyFormsMixin, SecureModelChoiceField,
+    SelectWithFormControlClass,
+)
 
 
 class LoginForm(auth_forms.AuthenticationForm):
@@ -82,7 +86,9 @@ class EditUserForm(forms.ModelForm, CrispyFormsMixin):
         model = User
         fields = ('full_name', 'email', 'is_admin')
 
-    def fill_initial_not_populated_automatically(self, user: User):
+    def additionally_fill(self, operated_object: Model):
+        # noinspection PyTypeChecker
+        user: User = operated_object
         self.fields['roles'].queryset = user.roles
 
     def __init__(self, *args, **kwargs):
@@ -116,7 +122,9 @@ class EditUserRole(forms.ModelForm, CrispyFormsMixin):
         model = UserRole
         fields = ('position_name',)
 
-    def fill_initial_not_populated_automatically(self, role: UserRole):
+    def additionally_fill(self, operated_object: Model):
+        # noinspection PyTypeChecker
+        role: UserRole = operated_object
         self.fields['user_info'].queryset = object_to_queryset(role.user)
         self.fields['facility_has_access_to_info'].queryset = \
             object_to_queryset(role.facility_has_access_to)
