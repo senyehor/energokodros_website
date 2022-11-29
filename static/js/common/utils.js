@@ -18,11 +18,6 @@ function update_select_with_options(select, options) {
     select.append(options_html);
 }
 
-function remove_disabled_set_width_100(elem) {
-    elem.removeAttr('disabled');
-    elem.addClass('w-100');
-}
-
 function add_muted_text_after_div_label(div, text) {
     div.find('label').after(__generate_muted_p(text));
 }
