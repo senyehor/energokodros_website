@@ -25,13 +25,10 @@ class UserRoleApplicationDecisionView(FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['user_has_no_roles'] = check_user_has_no_roles(self.__get_application_request().user)
+        role_application = self.__get_application_request()
+        ctx['user_has_no_roles'] = check_user_has_no_roles(role_application.user)
+        ctx['form'] = self.form_class.create_from_role_application(role_application)
         return ctx
-
-    def get_form(self, form_class=None):
-        return UserRoleApplicationReviewController.get_application_decision_form_for_application(
-            self.__get_application_request()
-        )
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = self.form_class(request.POST or None)
@@ -51,7 +48,10 @@ class UserRoleApplicationDecisionView(FormView):
         return super().form_valid(form)
 
     def __get_application_request(self):
-        return get_object_or_404(UserRoleApplication, pk=self.kwargs['pk'])
+        return get_object_or_404(
+            UserRoleApplication.objects.select_related('user'),
+            pk=self.kwargs['pk']
+        )
 
     def __application_approved_but_form_invalid(
             self, form: UserRoleApplicationRequestsDecisionForm):

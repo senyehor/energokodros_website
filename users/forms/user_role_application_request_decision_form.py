@@ -37,9 +37,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
 
     class Meta:
         model = UserRole
-        # user is added in custom creation method
-        fields_to_hide = ('user',)
-        fields = ('position_name', 'facility_has_access_to') + fields_to_hide
+        fields = ('position_name', 'facility_has_access_to')
         info_readonly_fields = (
             'user_with_email',
             'institution_verbose',
@@ -49,11 +47,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
 
     @classonlymethod
     def create_from_role_application(cls, application_request: UserRoleApplication):
-        obj = cls(
-            initial={
-                'user': application_request.user,
-            }
-        )
+        obj = cls()
         obj.__additionally_setup_form(application_request)
         return obj
 
@@ -63,7 +57,6 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         self.__add_readonly_prepopulated_fields(application_request)
         self.order_fields(self.Meta.fields_order)
         self.__add_decision_buttons()
-        self.hide_fields()
 
     def __add_object_has_access_to_field(self, institution: Facility):
         self.fields['facility_has_access_to'].queryset = \
