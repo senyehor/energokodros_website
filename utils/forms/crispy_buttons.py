@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from crispy_forms.bootstrap import StrictButton
+from django.utils.translation import gettext as _
 
 COMMON_CSS_CLASSES = 'btn mt-4'
 DEFAULT_BUTTON_VALUE = 'submit'
@@ -40,3 +41,9 @@ def create_primary_button(*args, **kwargs):
 def create_danger_button(*args, **kwargs):
     kwargs = __add_classes_for_button(kwargs, ('btn-danger',))
     return create_button(*args, **kwargs)
+
+
+UPDATE_DELETE_BUTTONS_SET = (
+    create_primary_button(_('Оновити')),
+    create_danger_button(_('Видалити'), value='delete')
+)
