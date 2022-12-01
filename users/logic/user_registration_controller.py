@@ -22,7 +22,7 @@ class UserRegistrationController:
         self.__user_form = user_form
         self.__role_application_without_user_form = role_application_without_user_form
 
-    def save_user_along_with_registration_request_return_user(self):
+    def save_user_along_with_registration_request_return_user(self) -> User:
         self.__user = self.__user_form.save(commit=False)
         self.__user.save()
         self.__role_application_without_user_form.set_valid_user(self.__user)
