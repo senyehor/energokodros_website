@@ -4,7 +4,8 @@ from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
-from users.logic import format_user_role
+# full path import to avoid circular imports
+from users.logic.simple import format_user_role
 from users.models import User, UserRole, UserRoleApplication
 from utils.common import object_to_queryset
 from utils.forms import (
@@ -25,7 +26,7 @@ class LoginForm(auth_forms.AuthenticationForm):
     }
 
 
-class NewUserForm(auth_forms.UserCreationForm):
+class NewUserForm(CrispyFormsMixin, auth_forms.UserCreationForm):
     class Meta:
         model = User
         fields = ('full_name', 'email')
@@ -52,6 +53,12 @@ class UserRoleApplicationForm(CrispyFormsMixin, forms.ModelForm):
 
     def set_application_request_user(self, user: User):
         self.instance.user = user
+
+
+class UserRoleApplicationFormForRegistration(UserRoleApplicationForm):
+    class Meta(UserRoleApplicationForm.Meta):
+        # buttons are set here to be displayed at the bottom of registration form
+        buttons = (create_primary_button(_('Відправити заявку на реєстрацію')),)
 
 
 class EditUserForm(CrispyFormsMixin, forms.ModelForm):

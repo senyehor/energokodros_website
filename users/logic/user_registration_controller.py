@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from users.forms import NewUserForm, UserRoleApplicationForm
+from users.forms import NewUserForm, UserRoleApplicationFormForRegistration
 from users.models import User
 from utils.common import send_html_email
 
@@ -14,11 +14,11 @@ logger = logging.getLogger(__name__)
 
 class UserRegistrationController:
     __user_form: NewUserForm
-    __role_application_without_user_form: UserRoleApplicationForm
+    __role_application_without_user_form: UserRoleApplicationFormForRegistration
     __user: User
 
     def __init__(self, user_form: NewUserForm,
-                 role_application_without_user_form: UserRoleApplicationForm):
+                 role_application_without_user_form: UserRoleApplicationFormForRegistration):
         self.__user_form = user_form
         self.__role_application_without_user_form = role_application_without_user_form
 
