@@ -32,7 +32,7 @@ class EditObjectUpdateViewMixin:
             form.additionally_fill(self.object)
 
     def form_valid(self: Union[UpdateView, 'EditObjectUpdateViewMixin'], form: Form):
-        if form.has_changed:
+        if form.has_changed():
             messages.success(
                 self.request,
                 self.edit_success_message
