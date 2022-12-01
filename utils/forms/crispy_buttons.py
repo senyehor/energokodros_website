@@ -18,12 +18,17 @@ def create_button(
         value=value,
         name=name,
         type=button_type,
-        css_class=COMMON_CSS_CLASSES + ' '.join(additional_css_classes)
+        css_class=' '.join(additional_css_classes + (COMMON_CSS_CLASSES,))
     )
 
 
 def __add_classes_for_button(kwargs: dict, classes_to_add: StrTuple) -> dict:
-    kwargs['additional_css_classes'] = kwargs['additional_css_classes'] + classes_to_add
+    additional_css_classes = kwargs.get('additional_css_classes', None)
+    if additional_css_classes:
+        additional_css_classes += classes_to_add
+    else:
+        additional_css_classes = classes_to_add
+    kwargs['additional_css_classes'] = additional_css_classes
     return kwargs
 
 
