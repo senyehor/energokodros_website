@@ -49,13 +49,7 @@ class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
         model = UserRoleApplication
         fields = ('institution', 'message')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_submit_button_at_the_end(
-            _('Відправити заявку на реєстрацію')
-        )
-
-    def set_valid_user(self, user: User):
+    def set_user(self, user: User):
         """be careful, no user validation is run here"""
         self.instance.user = user
 
