@@ -41,5 +41,3 @@ class EditFacilityView(EditObjectUpdateViewMixin, UpdateView):
     form_class = FacilityEditForm
     template_name = 'institutions/edit_facility.html'
     success_url = reverse_lazy('facilities-list')
-
-    edit_success_message = _('Установу успішно відредаговано')
