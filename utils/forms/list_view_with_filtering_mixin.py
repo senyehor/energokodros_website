@@ -1,30 +1,36 @@
 from functools import reduce
-from typing import Iterable
+from typing import Iterable, Union
 
 from django.db.models import Q, QuerySet
 from django.views.generic import ListView
 
+from utils.types import StrTuple
+
 
 class QuerySetFieldsIcontainsFilterPkOrderedMixin:
     """this mixin is supposed to be used with ListViews"""
-    filter_fields: set[str] = None
-    fields_order_by_before_pk: set[str] = set()
+    filter_fields: StrTuple = None
+    fields_order_by_before_pk: StrTuple = set()
 
-    def get_queryset(self) -> QuerySet:
+    def get_queryset(
+            self: Union[ListView, 'QuerySetFieldsIcontainsFilterPkOrderedMixin']
+    ) -> QuerySet:
         self.__check_used_properly()
         if search_value := self.__get_search_value():
             qs = QuerySetFieldsIcontainsFilter(
-                self.queryset,  # noqa
+                self.queryset,
                 self.filter_fields,
             ).filter(search_value)
         else:
-            qs = self.queryset  # noqa
+            qs = self.queryset
         return qs.order_by(*self.fields_order_by_before_pk, '-pk')
 
-    def __check_used_properly(self):
-        if not isinstance(self, ListView):
+    def __check_used_properly(
+            self: Union[ListView, 'QuerySetFieldsIcontainsFilterPkOrderedMixin']
+    ):
+        if issubclass(self.__class__, ListView):
             raise ValueError('this mixin must be used with a ListView')
-        if self.filter_fields is None:  # noqa
+        if self.filter_fields is None:
             raise ValueError('you must set filter_fields for a model')
         return True
 
