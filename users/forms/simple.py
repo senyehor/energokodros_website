@@ -4,11 +4,11 @@ from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
-from users.logic.simple import format_user_role
+from users.logic import format_user_role
 from users.models import User, UserRole, UserRoleApplication
 from utils.common import object_to_queryset
 from utils.forms import (
-    create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
+    CrispyFormsMixin, SecureModelChoiceField,
     SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
 )
 
@@ -48,10 +48,8 @@ class UserRoleApplicationForm(CrispyFormsMixin, forms.ModelForm):
     class Meta:
         model = UserRoleApplication
         fields = ('institution', 'message')
-        buttons = (create_primary_button(_('Відправити заявку на реєстрацію')),)
 
-    def set_user(self, user: User):
-        """be careful, no user validation is run here"""
+    def set_application_request_user(self, user: User):
         self.instance.user = user
 
 
