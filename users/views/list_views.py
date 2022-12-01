@@ -7,7 +7,7 @@ from users.logic.simple import (
 )
 from users.models import UserRole
 from utils.common import admin_rights_required
-from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
+from utils.forms import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
 @admin_rights_required
