@@ -8,10 +8,13 @@ from institutions.logic import (
 )
 from institutions.models import Facility
 from users.models import UserRole
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField, SelectWithFormControlClass
+from utils.forms import (
+    create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
+    SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
+)
 
 
-class NewFacilityForm(forms.ModelForm, CrispyFormsMixin):
+class NewFacilityForm(CrispyFormsMixin, forms.ModelForm):
     # based on this field choice user will be given corresponding facilities choices
     # to set as parent for a new facility
     institution = SecureModelChoiceField(
@@ -41,14 +44,10 @@ class NewFacilityForm(forms.ModelForm, CrispyFormsMixin):
             'description': forms.Textarea(attrs={'rows': 3}),
         }
         fields_order = ('institution', 'parent_facility') + fields
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.order_fields(self.Meta.fields_order)
-        self.add_submit_button_at_the_end(_("Додати об'єкт"))
+        buttons = (create_primary_button(_("Додати об'єкт")),)
 
 
-class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
+class FacilityEditForm(CrispyFormsMixin, forms.ModelForm):
     # info only field, qs is filled in custom method
     descendants = SecureModelChoiceField(
         queryset=Facility.objects.none(),
@@ -81,14 +80,10 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
             'description': forms.Textarea(attrs={'rows': 3}),
             'institution': forms.Textarea(attrs={'rows': 1})
         }
+        buttons = UPDATE_DELETE_BUTTONS_SET
 
     def additionally_fill(self, operated_object: Model):
         # noinspection PyTypeChecker
         facility: Facility = operated_object
         self.fields['descendants'].queryset = facility.get_descendants()
         self.fields['roles_that_have_access_to_this_facility'].queryset = facility.users_roles
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_submit_button_at_the_end(_("Оновити"))
-        # todo add delete option

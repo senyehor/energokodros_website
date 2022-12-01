@@ -8,8 +8,8 @@ from users.logic.simple import format_user_role
 from users.models import User, UserRole, UserRoleApplication
 from utils.common import object_to_queryset
 from utils.forms import (
-    CrispyFormsMixin, SecureModelChoiceField,
-    SelectWithFormControlClass,
+    create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
+    SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
 )
 
 
@@ -31,7 +31,7 @@ class NewUserForm(auth_forms.UserCreationForm):
         fields = ('full_name', 'email')
 
 
-class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
+class UserRoleApplicationForm(CrispyFormsMixin, forms.ModelForm):
     institution = SecureModelChoiceField(
         label=_('Оберіть заклад'),
         queryset=Facility.objects.get_institutions(),
@@ -48,13 +48,14 @@ class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
     class Meta:
         model = UserRoleApplication
         fields = ('institution', 'message')
+        buttons = (create_primary_button(_('Відправити заявку на реєстрацію')),)
 
     def set_user(self, user: User):
         """be careful, no user validation is run here"""
         self.instance.user = user
 
 
-class EditUserForm(forms.ModelForm, CrispyFormsMixin):
+class EditUserForm(CrispyFormsMixin, forms.ModelForm):
     # info only field, qs is filled in custom method
     roles = SecureModelChoiceField(
         queryset=UserRole.objects.none(),
@@ -79,20 +80,15 @@ class EditUserForm(forms.ModelForm, CrispyFormsMixin):
     class Meta:
         model = User
         fields = ('full_name', 'email', 'is_admin')
+        buttons = UPDATE_DELETE_BUTTONS_SET
 
     def additionally_fill(self, operated_object: Model):
         # noinspection PyTypeChecker
         user: User = operated_object
         self.fields['roles'].queryset = user.roles
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_submit_button_at_the_end(
-            _('Оновити дані')
-        )
 
-
-class EditUserRole(forms.ModelForm, CrispyFormsMixin):
+class EditUserRole(CrispyFormsMixin, forms.ModelForm):
     # should be prepopulated in corresponding method
     user_info = SecureModelChoiceField(
         queryset=User.objects.none(),
@@ -115,6 +111,7 @@ class EditUserRole(forms.ModelForm, CrispyFormsMixin):
     class Meta:
         model = UserRole
         fields = ('position_name',)
+        buttons = UPDATE_DELETE_BUTTONS_SET
 
     def additionally_fill(self, operated_object: Model):
         # noinspection PyTypeChecker
@@ -122,9 +119,3 @@ class EditUserRole(forms.ModelForm, CrispyFormsMixin):
         self.fields['user_info'].queryset = object_to_queryset(role.user)
         self.fields['facility_has_access_to_info'].queryset = \
             object_to_queryset(role.facility_has_access_to)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_submit_button_at_the_end(
-            _('Оновити роль')
-        )

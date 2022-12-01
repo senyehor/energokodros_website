@@ -2,10 +2,10 @@ from django.forms import ModelForm, Textarea
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
-from utils.forms import CrispyFormsMixin
+from utils.forms import create_primary_button, CrispyFormsMixin
 
 
-class InstitutionForm(ModelForm, CrispyFormsMixin):
+class InstitutionForm(CrispyFormsMixin, ModelForm):
     class Meta:
         model = Facility
         fields = ('name', 'description')
@@ -16,6 +16,7 @@ class InstitutionForm(ModelForm, CrispyFormsMixin):
         widgets = {
             'description': Textarea(attrs={'rows': 3})
         }
+        buttons = (create_primary_button(_('Додати установу')),)
 
     def save(self, commit=True):
         if self.errors:
@@ -23,7 +24,3 @@ class InstitutionForm(ModelForm, CrispyFormsMixin):
             super().save()
         Facility.add_root(instance=self.instance)
         return self.instance
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_submit_button_at_the_end('Створити заклад')
