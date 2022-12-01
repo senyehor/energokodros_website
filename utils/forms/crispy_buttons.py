@@ -7,6 +7,7 @@ COMMON_CSS_CLASSES = 'btn mt-4'
 DEFAULT_BUTTON_VALUE = 'submit'
 DEFAULT_BUTTON_NAME = 'submit'
 DEFAULT_BUTTON_TYPE = 'submit'
+DEFAULT_DELETE_VALUE = 'delete'
 StrTuple = Tuple[str, ...]
 
 
@@ -45,5 +46,5 @@ def create_danger_button(*args, **kwargs):
 
 UPDATE_DELETE_BUTTONS_SET = (
     create_primary_button(_('Оновити')),
-    create_danger_button(_('Видалити'), value='delete')
+    create_danger_button(_('Видалити'), value=DEFAULT_DELETE_VALUE)
 )
