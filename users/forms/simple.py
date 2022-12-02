@@ -49,7 +49,7 @@ class UserRoleApplicationForm(CrispyFormsMixin, forms.ModelForm):
     class Meta:
         model = UserRoleApplication
         fields = ('institution', 'message')
-        buttons = (create_primary_button(_('Відправити заявку на ролі')),)
+        buttons = (create_primary_button(_('Відправити заявку на роль')),)
 
     def set_application_request_user(self, user: User):
         self.instance.user = user
