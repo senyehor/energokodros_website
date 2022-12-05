@@ -169,28 +169,28 @@ class OneHourQuerier(AggregatedConsumptionQuerierBase):
 
 
 class OneDayQuerier(AggregatedConsumptionQuerierBase):
-    SELECT_PART = 'aggregation_interval_end::date AS date'
+    SELECT_PART = 'aggregation_interval_start::date AS date'
     GROUP_BY_PART = 'date'
     ORDER_BY_PART = GROUP_BY_PART
 
 
 class OneWeekQuerier(AggregatedConsumptionQuerierBase):
     SELECT_PART = """
-        DATE_TRUNC('week', aggregation_interval_end)::DATE || ' - ' ||
-        (DATE_TRUNC('week', aggregation_interval_end) + '6 days')::DATE AS week
+        DATE_TRUNC('week', aggregation_interval_start)::DATE || ' - ' ||
+        (DATE_TRUNC('week', aggregation_interval_start) + '6 days')::DATE AS week
     """
-    GROUP_BY_PART = "DATE_TRUNC('week', aggregation_interval_end)"
+    GROUP_BY_PART = "DATE_TRUNC('week', aggregation_interval_start)"
     ORDER_BY_PART = GROUP_BY_PART
 
 
 class OneMonthQuerier(AggregatedConsumptionQuerierBase):
     SELECT_PART = """
-        EXTRACT(YEAR FROM aggregation_interval_end) || '-' ||
-        EXTRACT(MONTH FROM aggregation_interval_end) AS month
+        EXTRACT(YEAR FROM aggregation_interval_start) || '-' ||
+        EXTRACT(MONTH FROM aggregation_interval_start) AS month
     """
     GROUP_BY_PART = """
-        EXTRACT(YEAR FROM aggregation_interval_end),
-        EXTRACT(MONTH FROM aggregation_interval_end)
+        EXTRACT(YEAR FROM aggregation_interval_start),
+        EXTRACT(MONTH FROM aggregation_interval_start)
     """
     ORDER_BY_PART = GROUP_BY_PART
 
@@ -203,6 +203,6 @@ class OneMonthQuerier(AggregatedConsumptionQuerierBase):
 
 
 class OneYearQuerier(AggregatedConsumptionQuerierBase):
-    SELECT_PART = 'EXTRACT(YEAR FROM aggregation_interval_end) AS year'
+    SELECT_PART = 'EXTRACT(YEAR FROM aggregation_interval_start) AS year'
     GROUP_BY_PART = 'year'
     ORDER_BY_PART = GROUP_BY_PART
