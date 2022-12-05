@@ -2,14 +2,9 @@
 {% block title %}
     Запити на ролі
 {% endblock %}
-{% block heading %}
-    <div>
-        <h2>Запити на отримання ролі від користувачів</h2>
-    </div>
-    <div class="ms-auto ms-3">
-        {% include 'common/search_form.html' with filter_fields_verbose="ім'я, пошта користувача чи назва закладу" %}
-    </div>
+{% block heading_text %}
+    Запити на отримання ролі від користувачів
 {% endblock %}
-{% block no_items_heading %}
-    <h2>Запити на отримання ролі від користувачів відсутні</h2>
+{% block search_form %}
+    {% include 'common/search_form.html' with filter_fields_verbose="ім'я, пошта користувача чи назва закладу" %}
 {% endblock %}
