@@ -111,7 +111,7 @@ class AggregatedConsumptionQuerierBase(ABC):
             return cursor.fetchall() or None
 
     def _format_time_related_row_part(self, to_format: datetime | str) -> str:
-        pass
+        ...
 
     @property
     def parameters(self) -> CommonQueryParameters:
@@ -154,7 +154,7 @@ class OneHourQuerier(AggregatedConsumptionQuerierBase):
 
     @property
     def parameters(self) -> OneHourAggregationIntervalQueryParameters:
-        # typehint correct parameters type as for this querier
+        # typehint correct parameters type for this querier
         # noinspection PyTypeChecker
         return super().parameters
 
