@@ -56,11 +56,20 @@ class AggregatedConsumptionQuerierBase(ABC):
     def get_consumption(self) -> AggregatedConsumptionQueryRows:
         non_formatted_rows = self.__get_rows()
         if self.CUSTOM_FORMATTING and non_formatted_rows:
-            return [
-                (self._format_time_related_row_part(row[0]), row[1])
-                for row in non_formatted_rows
-            ]
+            return self.__format_rows(non_formatted_rows)
         return non_formatted_rows
+
+    def __format_rows(
+            self, non_formatted_rows: AggregatedConsumptionQueryRows
+    ) -> AggregatedConsumptionQueryRows:
+        time_related_part_index, data_index = 0, 1
+        return [
+            (
+                self._format_time_related_row_part(row[time_related_part_index]),
+                row[data_index]
+            )
+            for row in non_formatted_rows
+        ]
 
     def __compose_query(self) -> str:
         return ' '.join(
