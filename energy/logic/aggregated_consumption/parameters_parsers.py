@@ -1,7 +1,7 @@
 import time
 from dataclasses import fields
 from datetime import date, datetime
-from typing import Any, Type, TypeAlias
+from typing import Any, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
     AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, PeriodStartGreaterThanEnd,
@@ -16,9 +16,7 @@ from energy.logic.aggregated_consumption.simple import \
     parse_str_parameter_to_int_with_correct_exception
 from institutions.models import Facility
 
-AnyParametersParser: TypeAlias = \
-    Type['CommonPostQueryParametersParser'] | \
-    Type['OneHourAggregationIntervalPostQueryParametersParser']
+AnyParametersParser: TypeAlias = 'CommonPostQueryParametersParser'
 
 
 class CommonPostQueryParametersParser:

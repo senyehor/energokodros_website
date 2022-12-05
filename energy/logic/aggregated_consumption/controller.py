@@ -1,7 +1,10 @@
+from typing import Type
+
 from energy.logic.aggregated_consumption. \
-    aggregation_interval_to_parameters_parser_and_querier_mapping import (
+    aggregation_interval_to_parameters_parser_and_querier_mapping import \
+    (
     AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING,
-    ParserAndQuerier,
+    ParserAndQuerierTypes,
 )
 from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters,
@@ -51,7 +54,7 @@ class AggregatedEnergyConsumptionController:
         check_role_has_access_for_facility(role, self.__facility)
 
     def __compose_params_for_querier(
-            self, parser: AnyParametersParser) -> AnyQueryParameters:
+            self, parser: Type[AnyParametersParser]) -> AnyQueryParameters:
         dynamic_parameters = self.__exclude_already_parsed_parameters()
         return parser(
             facility_to_get_consumption_for_or_all_descendants_if_any=self.__facility,
@@ -65,7 +68,7 @@ class AggregatedEnergyConsumptionController:
             if key not in self.__PARAMETERS_PASSED_MANUALLY
         }
 
-    def __get_parser_and_querier(self) -> ParserAndQuerier:
+    def __get_parser_and_querier(self) -> ParserAndQuerierTypes:
         return AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING[
             self.__aggregation_interval
         ]

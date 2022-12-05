@@ -2,7 +2,7 @@ import calendar
 from abc import ABC
 from datetime import datetime
 from decimal import Decimal
-from typing import Type, TypeAlias, TypedDict
+from typing import TypeAlias, TypedDict
 
 from django.db import connection
 from django.utils.translation import gettext_lazy as _
@@ -14,12 +14,7 @@ from energy.logic.aggregated_consumption.parameters import (
 
 AggregatedConsumptionQueryRows = list[tuple[datetime | str, Decimal]] | None
 
-AnyQuerier: TypeAlias = \
-    Type['OneHourQuerier'] | \
-    Type['OneDayQuerier'] | \
-    Type['OneWeekQuerier'] | \
-    Type['OneMonthQuerier'] | \
-    Type['OneYearQuerier']
+AnyQuerier: TypeAlias = 'AggregatedConsumptionQuerierBase'
 
 
 class AggregatedConsumptionQuerierBase(ABC):
