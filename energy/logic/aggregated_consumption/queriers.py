@@ -12,7 +12,7 @@ from energy.logic.aggregated_consumption.parameters import (
     CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 
-AggregatedConsumptionQueryRows: TypeAlias = list[tuple[datetime | str, Decimal]] | None
+AggregatedConsumptionQueryRows = list[tuple[datetime | str, Decimal]] | None
 
 AnyQuerier: TypeAlias = \
     Type['OneHourQuerier'] | \
