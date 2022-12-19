@@ -4,8 +4,6 @@ from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
-# full path import to avoid circular imports
-from users.logic.simple import format_user_role
 from users.models import User, UserRole, UserRoleApplication
 from utils.common import object_to_queryset
 from utils.forms import (
@@ -70,7 +68,8 @@ class EditUserForm(CrispyFormsMixin, forms.ModelForm):
         required=False,
         disabled=True,
         widget=SelectWithFormControlClass(attrs={'size': 4}),
-        label_from_instance_function=format_user_role
+        label_from_instance_function=lambda user_role:
+        _(f"{user_role.position_name}, об'єкт {user_role.facility_has_access_to.name}")
     )
     full_name = forms.CharField(
         label=_("Повне ім'я"),
