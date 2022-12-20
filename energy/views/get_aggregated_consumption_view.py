@@ -12,7 +12,7 @@ from energy.logic.aggregated_consumption.simple import convert_request_post_dict
 
 
 class ConsumptionPageView(FormView):
-    template_name = 'energy/aggregated_energy_consumption.html'
+    template_name = 'energy/consumption/aggregated_energy_consumption.html'
     http_method_names = ('get',)
 
     def get_form(self, form_class=None):

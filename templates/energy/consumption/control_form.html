@@ -6,8 +6,8 @@
             <div class="p">Фільтрація погодинно</div>
             <div class="d-flex align-items-center">
                 <div class="d-inline">
-                    {% include 'energy/__hour_filter_select.html' with start_or_end='start' %}
-                    {% include 'energy/__hour_filter_select.html' with start_or_end='end' %}
+                    {% include 'energy/consumption/__hour_filter_select.html' with start_or_end='start' %}
+                    {% include 'energy/consumption/__hour_filter_select.html' with start_or_end='end' %}
                 </div>
                 <div class="d-inline ms-2">
                     <a class="btn btn btn-primary" id="reset_hours_filters_btn">Скинути</a>
