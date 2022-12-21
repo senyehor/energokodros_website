@@ -42,13 +42,13 @@ class CreateUserRegistrationRequestView(CreateView):
 
     def form_invalid(  # noqa pylint: disable=W0221
             self, user_form: NewUserForm,
-            role_application_formset:
+            role_application_form:
             UserRoleApplicationFormForRegistration):
         return self.render_to_response(
             self.get_context_data(
                 user_form=user_form,
-                role_application_formset=
-                role_application_formset,
+                role_application_form=
+                role_application_form,
             ),
             status=400
         )
