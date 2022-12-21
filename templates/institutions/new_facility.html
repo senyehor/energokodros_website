@@ -1,15 +1,9 @@
-{% extends 'common/form_in_center.html' %}
+{% extends 'common/form_in_center_with_default_padding_and_width.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block title %}Новий об'єкт{% endblock %}
 {% block form_header %}
     Уведіть дані об'єкту
-{% endblock %}
-{% block padding_top_class %}
-    pt-2
-{% endblock %}
-{% block width_class %}
-    w-50
 {% endblock %}
 {% block form %}
     <form method="post">
