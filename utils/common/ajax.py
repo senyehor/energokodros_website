@@ -4,7 +4,7 @@ from django.db.models import Model
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 
-from utils.common import get_object_by_hashed_id_or_404
+from utils.common.model_objects_crypto_related import get_object_by_hashed_id_or_404
 
 
 def redirect_to_object_pk_in_post(_class: Type[Model], redirect_to_url: str) -> Callable:
