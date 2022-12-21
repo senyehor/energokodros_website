@@ -8,6 +8,7 @@ from django.views.generic import CreateView
 
 from users.forms import NewUserForm, UserRoleApplicationFormForRegistration
 from users.logic import UserRegistrationController
+from utils.common import delete_everything_created_in_transaction
 
 
 class CreateUserRegistrationRequestView(CreateView):
@@ -42,7 +43,7 @@ class CreateUserRegistrationRequestView(CreateView):
             self.request,
             _('Не вдалося відправити повідомлення на пошту, перевірте дані та спробуйте ще раз')
         )
-        transaction.set_rollback(True)
+        delete_everything_created_in_transaction()
         return redirect(reverse('register'))
 
     def form_invalid(  # noqa pylint: disable=W0221
