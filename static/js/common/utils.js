@@ -18,6 +18,12 @@ function update_select_with_options(select, options) {
     select.append(options_html);
 }
 
+function get_headers_for_ajax_object() {
+    return {
+        'X-CSRFToken': $.cookie('csrftoken')
+    }
+}
+
 function add_muted_text_after_div_label(div, text) {
     div.find('label').after(__generate_muted_p(text));
 }

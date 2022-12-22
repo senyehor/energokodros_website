@@ -19,9 +19,7 @@ function update_facilities_list_for_role() {
         data: {
             role_id: __get_selected_role_id()
         },
-        headers: {
-            'X-CSRFToken': $.cookie('csrftoken')
-        },
+        headers: get_headers_for_ajax_object(),
         success: (ids_and_labels) => {
             update_select_with_options(__get_facility_select(), ids_and_labels);
         },
