@@ -7,7 +7,8 @@ from django.forms import Form
 
 class CrispyFormsMixin:
     """
-    this mixin relies on crispy forms so form used with it heed to be displayed
+    provides unified way to make form crispy‚
+    relies on crispy forms so form used with it heed to be displayed
     by corresponding crispy tag
     """
 
