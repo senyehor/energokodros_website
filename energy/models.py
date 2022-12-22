@@ -53,13 +53,14 @@ class BoxSensorsSet(models.Model):
         auto_now_add=True,
         null=False
     )
-    sensor_number = models.IntegerField(
+    sensor_number_in_set = models.IntegerField(
         null=False,
         blank=False,
         validators=(
             MinValueValidator(MIN_SENSORS_COUNT_PER_BOX),
             MaxValueValidator(MAX_SENSORS_COUNT_PER_BOX)
-        )
+        ),
+        db_column='sensor_number'
     )
 
     class Meta:
