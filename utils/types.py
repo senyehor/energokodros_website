@@ -1,3 +1,4 @@
-from typing import Tuple
+from typing import Any, Tuple, TypeAlias
 
-StrTuple = Tuple[str, ...]
+StrTuple: TypeAlias = Tuple[str, ...]
+StrKeyDict: TypeAlias = dict[str, Any]
