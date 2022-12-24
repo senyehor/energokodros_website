@@ -4,7 +4,11 @@ function get_selected_option_for_select(select) {
 
 function reverse_url(url_name) {
     // url name should be included in d-none block with id same as url name
-    return $(`#${url_name}`).text();
+    let url = $(`#${url_name}`).text();
+    if (url) {
+        return url;
+    }
+    throw new Error('url not found')
 }
 
 function update_select_with_options(select, options) {
