@@ -3,9 +3,6 @@
 .gitignore
 Dockerfile
 poetry.lock
-docker-compose.*
-static
-staticfiles
 
 .idea/
 .git/
