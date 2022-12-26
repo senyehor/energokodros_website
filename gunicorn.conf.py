@@ -5,3 +5,4 @@ workers = 3
 # Whether to send Django output to the error log
 capture_output = True
 loglevel = "info"
+redirect_stderr = True
