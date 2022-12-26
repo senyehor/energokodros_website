@@ -94,12 +94,12 @@ class OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
             **kwargs
     ):
         self.__check_aggregation_interval_is_on_hour(kwargs.get('aggregation_interval'))
-        super().__init__(**kwargs)
         self.__hours_filtering_start_hour = hours_filtering_start_hour
         self.__hours_filtering_end_hour = hours_filtering_end_hour
         if hours_filtering_start_hour and hours_filtering_end_hour:
             self.__set_hours_filtering_range(hours_filtering_start_hour, hours_filtering_end_hour)
-            self._validate()
+        super().__init__(**kwargs)
+        self._validate()
 
     def get_parameters(self) -> OneHourAggregationIntervalQueryParameters:
         _ = super().get_parameters()
@@ -112,7 +112,8 @@ class OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
 
     def _validate(self):
         super()._validate()
-        self.__check_hours_filtering_range_is_correct()
+        if self.__check_hours_filtering_set():
+            self.__check_hours_filtering_range_is_correct()
 
     def __check_aggregation_interval_is_on_hour(self, aggregation_interval: Any):
         if aggregation_interval is not AggregationIntervalSeconds.ONE_HOUR:
@@ -134,6 +135,9 @@ class OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
         self.__hours_filtering_end_hour = parse_str_parameter_to_int_with_correct_exception(
             hours_filtering_end_hour
         )
+
+    def __check_hours_filtering_set(self):
+        return self.__hours_filtering_start_hour and self.__hours_filtering_end_hour
 
 
 class OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
