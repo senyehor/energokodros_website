@@ -153,3 +153,32 @@ CHARACTERS_PER_BOX_ORDINAL_NUMBER_FOR_BOX_IDENTIFIER = env.int(
 CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER = env.int(
     'CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER'
 )
+
+LOGGING = {
+    "version":                  1,
+    "disable_existing_loggers": False,
+    "root":                     {"level": "INFO", "handlers": ["console"]},
+    "handlers":                 {
+        "console": {
+            "level":     "INFO",
+            "class":     "logging.StreamHandler",
+            "formatter": "app",
+        },
+    },
+    "loggers":                  {
+        "django": {
+            "handlers":  ["console"],
+            "level":     "INFO",
+            "propagate": True
+        },
+    },
+    "formatters":               {
+        "app": {
+            "format":  (
+                u"%(asctime)s [%(levelname)-8s] "
+                "(%(module)s.%(funcName)s) %(message)s"
+            ),
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+}
