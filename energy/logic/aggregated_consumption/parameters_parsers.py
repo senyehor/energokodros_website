@@ -54,10 +54,10 @@ class CommonPostQueryParametersParser:
         period_end_epoch_seconds = parse_str_parameter_to_int_with_correct_exception(
             period_end_epoch_seconds
         )
-        self.__period_start = self.__validate_convert_epoch_seconds_to_date(
+        self.__period_start = self.__convert_epoch_seconds_to_date(
             period_start_epoch_seconds
         )
-        self.__period_end = self.__validate_convert_epoch_seconds_to_date(period_end_epoch_seconds)
+        self.__period_end = self.__convert_epoch_seconds_to_date(period_end_epoch_seconds)
 
     def __check_period_is_valid(self):
         if self.__period_start > self.__period_end:
@@ -68,7 +68,7 @@ class CommonPostQueryParametersParser:
         if period_length_seconds < self.__aggregation_interval:
             raise AggregationIntervalDoesNotFitPeriod
 
-    def __validate_convert_epoch_seconds_to_date(self, epoch_seconds: int) -> date:
+    def __convert_epoch_seconds_to_date(self, epoch_seconds: int) -> date:
         if epoch_seconds < 0:
             raise QueryParametersInvalid
         if int(time.time()) < epoch_seconds:
