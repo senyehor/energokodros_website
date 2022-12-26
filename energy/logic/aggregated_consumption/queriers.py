@@ -142,13 +142,16 @@ class OneHourQuerier(AggregatedConsumptionQuerierBase):
     def _compose_where(self) -> str:
         base_where = super()._compose_where()
         if self.parameters.is_hours_filtering_set():
-            return ' '.join(
-                (
-                    base_where,
-                    self.__compose_additional_hours_where_filters()
-                )
-            )
+            return self.__add_hours_filter_to_base_where(base_where)
         return base_where
+
+    def __add_hours_filter_to_base_where(self, base_where: str) -> str:
+        return ' '.join(
+            (
+                base_where,
+                self.__compose_additional_hours_where_filters()
+            )
+        )
 
     def __compose_additional_hours_where_filters(self) -> str:
         return self.__ADDITIONAL_HOURS_WHERE_FILTERS.format(
