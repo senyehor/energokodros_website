@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from users.forms import UserRoleApplicationRequestsDecisionForm
 from users.models import UserRole, UserRoleApplication
-from utils.common import try_send_email_add_warning_if_failed
+from utils.common.email import try_send_email_add_warning_if_failed
 
 
 class UserRoleApplicationReviewController:

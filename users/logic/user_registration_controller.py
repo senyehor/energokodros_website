@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from users.forms import NewUserForm, UserRoleApplicationFormForRegistration
 from users.models import User
-from utils.common import send_html_email
+from utils.common.email import send_html_email
 
 logger = logging.getLogger(__name__)
 
