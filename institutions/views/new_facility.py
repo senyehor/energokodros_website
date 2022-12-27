@@ -4,16 +4,16 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
-from utils.common.admin_rights import admin_rights_required
 from institutions.forms import NewFacilityForm
 from institutions.logic import (
     compose_formatted_institution_facilities_choices,
 )
 from institutions.models import Facility
 from utils.common import get_object_by_hashed_id_or_404
+from utils.common.admin_rights import admin_rights_and_login_required
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 def get_institution_facilities_choices(request) -> JsonResponse:
     institution: Facility = get_object_by_hashed_id_or_404(  # noqa
         Facility,
@@ -23,7 +23,7 @@ def get_institution_facilities_choices(request) -> JsonResponse:
     return JsonResponse(formatted_choices_ordered, safe=False)
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 class CreateFacilityView(FormView):
     template_name = 'institutions/new_facility.html'
     form_class = NewFacilityForm

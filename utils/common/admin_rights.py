@@ -1,37 +1,31 @@
 import functools
-import inspect
-from typing import Type
 
-from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
 
-from energokodros.settings import LOGIN_URL
 from users.models import User
-from utils.types import FuncView, View
+from utils.common.decoration import decorate_class_or_function_view
+from utils.types import FuncView, ViewType
 
 
-def admin_rights_required(obj_to_decorate: View) -> View:
-    if inspect.isfunction(obj_to_decorate):
-        return _admin_right_required_function_decorator(obj_to_decorate)
-    return _admin_right_required_class_decorator(obj_to_decorate)
+def admin_rights_and_login_required(view: ViewType):
+    return decorate_class_or_function_view(_admin_rights_and_login_required)(view)
 
 
-def _admin_right_required_class_decorator(_class: View) -> View:
-    _class.dispatch = method_decorator(_admin_right_required_function_decorator)(_class.dispatch)
-    return _class
+def _admin_rights_and_login_required(view: FuncView) -> FuncView:
+    view = login_required(view)
+    view = _admin_rights_required(view)
+    return view
 
 
-def _admin_right_required_function_decorator(function: FuncView) -> Type[FuncView]:
-    @functools.wraps(function)
-    def _wrapper(request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect(LOGIN_URL)
-        if request.user.is_admin:
-            return function(request, *args, **kwargs)
+def _admin_rights_required(view: FuncView) -> FuncView:
+    @functools.wraps(view)
+    def wrapper(request: HttpRequest, *args, **kwargs):
+        if is_admin_non_authenticated_safe(request.user):
+            return view(request, *args, **kwargs)
         return HttpResponse(status=403)
 
-    return _wrapper
+    return wrapper
 
 
 def is_admin_non_authenticated_safe(user: User) -> bool:
