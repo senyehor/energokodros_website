@@ -1,2 +1,3 @@
 from .controller import AggregatedEnergyConsumptionController
 from .exceptions import EnergyConsumptionExceptionWithMessage
+from .simple import show_no_roles_page_if_user_has_no_roles
