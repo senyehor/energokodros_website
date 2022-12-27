@@ -181,7 +181,7 @@ LOGGING = {
     "formatters":               {
         "app": {
             "format":  (
-                "%(asctime)s [%(levelname)-8s] "
+                "%(asctime)s [%(levelname)] "
                 "(%(module)s.%(funcName)s) %(message)s"
             ),
             "datefmt": "%Y-%m-%d %H:%M:%S",
