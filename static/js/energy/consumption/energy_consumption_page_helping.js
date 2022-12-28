@@ -7,6 +7,7 @@ $(document).ready(function () {
     __get_hours_filtering_reset_button().click(reset_hours_filters);
     __get_hours_filtering_start_select().change(__remove_error_from_hours_select);
     __get_hours_filtering_end_select().change(__remove_error_from_hours_select);
+    set_date_inputs_now();
 })
 
 let INCLUDE_HOURS_FILTER = false;
@@ -82,6 +83,12 @@ function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
     INCLUDE_HOURS_FILTER = true;
 }
 
+function set_date_inputs_now() {
+    let now = _get_current_date_for_date_input();
+    __get_period_start_input().val(now);
+    __get_period_end_input().val(now);
+}
+
 function _check_one_hour_interval_is_selected() {
     let value = parseInt(get_selected_option_for_select(__get_aggregation_interval_select()));
     let seconds_in_hour = 60 * 60;
@@ -95,6 +102,17 @@ function __remove_error_from_hours_select() {
 function __add_error_for_hours_filtering_select(select) {
     select.addClass('is-invalid');
     add_error_alert('Обидва погодинних фільтри повинні бути обрані одночасно, або жоден');
+}
+
+function _get_current_date_for_date_input() {
+    let now = new Date();
+    let month = (now.getMonth() + 1);
+    let day = now.getDate();
+    if (month < 10)
+        month = "0" + month;
+    if (day < 10)
+        day = "0" + day;
+    return now.getFullYear() + '-' + month + '-' + day;
 }
 
 function __get_hours_filtering_start_select() {
@@ -135,4 +153,12 @@ function __get_set_table_button() {
 
 function __get_set_chart_button() {
     return $('#set_chart_button')
+}
+
+function __get_period_start_input() {
+    return $('#period_start')
+}
+
+function __get_period_end_input() {
+    return $('#period_end')
 }
