@@ -1,8 +1,9 @@
+{% load i18n %}
 {% load active_link_tags %}
 <li>
     <a href="{% url 'users-roles-applications' %}"
        class="nav-link px-2 text-dark {% active_link 'users-roles-applications' %}">
-        Запити на реєстрацію
+        {% trans "Запити на ролі та реєстрацію" %}
         {% if users_roles_applications_count %}
             <span class="badge bg-success">{{ users_roles_applications_count }}</span>
         {% endif %}
@@ -11,18 +12,24 @@
 <li>
     <a href="{% url 'facilities-list' %}"
        class="nav-link px-2 text-dark {% active_link 'facilities-list' %}">
-        Заклади та об'єкти
+        {% trans "Заклади та об'єкти" %}
     </a>
 </li>
 <li>
     <a href="{% url 'users-list' %}"
        class="nav-link px-2 text-dark {% active_link 'users-list' %}">
-        Користувачі
+        {% trans "Користувачі" %}
     </a>
 </li>
 <li>
     <a href="{% url 'users-roles-list' %}"
        class="nav-link px-2 text-dark {% active_link 'users-roles-list' %}">
-        Ролі користувачів
+        {% trans "Ролі користувачі" %}
+    </a>
+</li>
+<li>
+    <a href="{% url 'create-box-with-sensors' %}"
+       class="nav-link px-2 text-dark {% active_link 'create-box-with-sensors' %}">
+        {% trans "Ящики та сенсори" %}
     </a>
 </li>
