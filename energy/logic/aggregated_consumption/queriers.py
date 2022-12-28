@@ -130,7 +130,7 @@ class AggregatedConsumptionQuerierBase(ABC):
 
 
 class __QueryingForCurrentDayMixin(AggregatedConsumptionQuerierBase):
-    CURRENT_DAY_WHERE: str = None
+    __CURRENT_DAY_WHERE = "WHERE aggregation_interval_start = '{current_date}'"
     __current_date: date = None
 
     def _compose_where_interval(self) -> str:
@@ -139,7 +139,7 @@ class __QueryingForCurrentDayMixin(AggregatedConsumptionQuerierBase):
         return super()._compose_where_interval()
 
     def __compose_current_day_where(self) -> str:
-        return self.CURRENT_DAY_WHERE.format(current_date=self.__current_date)
+        return self.__CURRENT_DAY_WHERE.format(current_date=self.__current_date)
 
     def __check_querying_is_for_current_day(self) -> bool:
         if self.parameters.period_start == self.parameters.period_end:
@@ -154,10 +154,6 @@ class OneHourQuerier(__QueryingForCurrentDayMixin, AggregatedConsumptionQuerierB
     ORDER_BY_PART = GROUP_BY_PART
 
     CUSTOM_FORMATTING = True
-
-    CURRENT_DAY_WHERE = """WHERE
-        aggregation_interval_start = '{current_date}'
-    """
 
     __ADDITIONAL_HOURS_WHERE_FILTERS = """
         AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
@@ -200,8 +196,6 @@ class OneDayQuerier(__QueryingForCurrentDayMixin, AggregatedConsumptionQuerierBa
     SELECT_PART = 'aggregation_interval_start::date AS date'
     GROUP_BY_PART = 'date'
     ORDER_BY_PART = GROUP_BY_PART
-
-    CURRENT_DAY_WHERE = "WHERE aggregation_interval_start = '{current_date}'"
 
 
 class OneWeekQuerier(AggregatedConsumptionQuerierBase):
