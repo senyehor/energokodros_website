@@ -63,7 +63,7 @@ class UserRoleApplicationFormForRegistration(UserRoleApplicationForm):
         buttons = (create_primary_button(_('Відправити заявку на реєстрацію')),)
 
 
-class EditUserForm(CrispyFormsMixin, forms.ModelForm):
+class UserForm(CrispyFormsMixin, forms.ModelForm):
     # info only field, qs is filled in custom method
     roles = SecureModelChoiceField(
         queryset=UserRole.objects.none(),
@@ -97,7 +97,7 @@ class EditUserForm(CrispyFormsMixin, forms.ModelForm):
         self.fields['roles'].queryset = user.roles
 
 
-class EditUserRole(CrispyFormsMixin, forms.ModelForm):
+class UserRoleForm(CrispyFormsMixin, forms.ModelForm):
     # should be prepopulated in corresponding method
     user_info = SecureModelChoiceField(
         queryset=User.objects.none(),
