@@ -52,7 +52,7 @@ class AggregatedConsumptionQuerierBase(ABC):
         self.__params = params
 
     def get_consumption(self) -> AggregatedConsumptionQueryRows:
-        non_formatted_rows = self.__get_rows()
+        non_formatted_rows = self.__get_consumption_data()
         if self.CUSTOM_FORMATTING and non_formatted_rows:
             return self.__format_rows(non_formatted_rows)
         return non_formatted_rows
@@ -115,7 +115,7 @@ class AggregatedConsumptionQuerierBase(ABC):
         ids = (str(_id) for _id in ids)
         return ', '.join(ids)
 
-    def __get_rows(self) -> AggregatedConsumptionQueryRows:
+    def __get_consumption_data(self) -> AggregatedConsumptionQueryRows:
         with connection.cursor() as cursor:
             cursor.execute(self.__compose_query())
             return cursor.fetchall() or None
