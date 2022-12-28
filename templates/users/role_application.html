@@ -1,0 +1,13 @@
+{% extends 'common/form_in_center_with_default_padding_and_width.html' %}
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Запит на роль{% endblock %}
+{% block form_header %}
+    Запит на роль
+{% endblock %}
+{% block form %}
+    <form method="post">
+        {% crispy form %}
+    </form>
+{% endblock %}

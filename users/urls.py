@@ -56,6 +56,11 @@ urlpatterns = [
         views.ProfileView.as_view(),
         name='my-profile'
     ),
+    path(
+        'role-application/',
+        views.RoleApplicationView.as_view(),
+        name='role-application'
+    ),
     path('', include('django.contrib.auth.urls')),
 ]
 
