@@ -24,11 +24,12 @@ class EnergyConsumptionDisplayPageControlForm(CrispyFormsMixin, Form):
         queryset=UserRole.objects.all(),
         empty_label=None,
     )
-    # should be populated via ajax depending on chosen role
+    # should be populated via ajax depending on chosen role,
+    # qs is not as facility validation is done when querying for facilities list for role
+    # field is used just for label and select widget
     facility_to_get_consumption_for = SecureModelChoiceField(
         label=_("Об'єкт"),
-        queryset=Facility.objects.all(),
-        initial=None
+        queryset=Facility.objects.none(),
     )
     aggregation_interval_seconds = ChoiceField(
         label=_('Інтервал агрегації'),
