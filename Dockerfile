@@ -1,9 +1,7 @@
 FROM --platform=linux/amd64 python:3.10.8-slim as dependencies-builder
-# python:
 ENV PYTHONFAULTHANDLER 1
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-# poetry:
 ENV POETRY_VERSION '1.2.2'
 ENV POETRY_VIRTUALENVS_CREATE false
 
