@@ -7,8 +7,14 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, UpdateView
 
-from users.forms import LoginForm, ProfileForm, UserForm, UserRoleApplicationForm, UserRoleForm
-from users.logic import remember_user_for_two_week, UserRegistrationController
+from users.forms import (
+    LoginForm, ProfileForm, UserForm,
+    UserRoleApplicationForm, UserRoleForm,
+)
+from users.logic import (
+    remember_user_for_two_week,
+    UserRegistrationController,
+)
 from users.models import User, UserRole
 from utils.common import admin_rights_and_login_required
 from utils.common.decoration import decorate_class_or_function_view
