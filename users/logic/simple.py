@@ -6,12 +6,12 @@ from django.http import HttpRequest
 
 from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
-from utils.common import is_admin_non_authenticated_safe
 
 
 def check_role_belongs_to_user(user: User, user_role: UserRole):
     if user_role.user != user:
         raise PermissionDenied
+    return True
 
 
 def check_role_has_access_for_facility(user_role: UserRole, facility: Facility):
