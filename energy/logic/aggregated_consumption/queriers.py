@@ -130,7 +130,11 @@ class AggregatedConsumptionQuerierBase(ABC):
 
 
 class __QueryingForCurrentDayMixin(AggregatedConsumptionQuerierBase):
-    __CURRENT_DAY_WHERE = "WHERE aggregation_interval_start = '{current_date}'"
+    __CURRENT_DAY_WHERE = """
+    WHERE
+        aggregation_interval_start >= '{current_date}'
+    AND aggregation_interval_start <= '{next_day_date}'
+    """
     __current_date: date = None
 
     def _compose_where_interval(self) -> str:
@@ -139,7 +143,11 @@ class __QueryingForCurrentDayMixin(AggregatedConsumptionQuerierBase):
         return super()._compose_where_interval()
 
     def __compose_current_day_where(self) -> str:
-        return self.__CURRENT_DAY_WHERE.format(current_date=self.__current_date)
+        next_day_date = self.__current_date + timedelta(days=1)
+        return self.__CURRENT_DAY_WHERE.format(
+            current_date=self.__current_date,
+            next_day_date=next_day_date
+        )
 
     def __check_querying_is_for_current_day(self) -> bool:
         if self.parameters.period_start == self.parameters.period_end:
