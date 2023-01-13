@@ -1,0 +1,17 @@
+{% extends 'common/form_in_center_with_default_padding_and_width.html' %}
+{% load crispy_forms_filters %}
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Ящик{% endblock %}
+{% block form_header %}
+    Уведіть дані ящику
+{% endblock %}
+{% block form %}
+    {{ wizard.management_form }}
+    <form method="post">{% csrf_token %}
+        {{ wizard.management_form }}
+        {{ wizard.form | crispy }}
+        {% include 'energy/box_with_sensors_creation/wizard_buttons.html' %}
+    </form>
+{% endblock %}

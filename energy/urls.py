@@ -17,5 +17,10 @@ urlpatterns = [
         'get-aggregated-consumption-for-facility/',
         views.get_aggregated_consumption,
         name='get-aggregated-consumption-for-facility'
+    ),
+    path(
+        'create-box-with-sensors/',
+        views.BoxWithSensorsCreateView.as_view(),
+        name='create-box-with-sensors'
     )
 ]

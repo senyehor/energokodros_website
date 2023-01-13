@@ -1,0 +1,19 @@
+{% extends 'common/form_in_center_with_default_padding_and_width.html' %}
+{% load crispy_forms_filters %}
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{% trans "Сенсори" %}{% endblock %}
+{% block form_header %}
+    {% trans "Уведіть дані сенсорів" %}
+{% endblock %}
+{% block form %}
+    <form method="post" id="sensors_form">{% csrf_token %}{{ wizard.management_form }}
+        {{ sensors_count_form | crispy }}
+        {{ wizard.form | crispy }}
+        {% include 'energy/box_with_sensors_creation/wizard_buttons.html' %}
+    </form>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/energy/box_with_sensors_creation/sensors.js' %}"></script>
+{% endblock %}

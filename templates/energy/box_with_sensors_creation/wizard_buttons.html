@@ -1,0 +1,13 @@
+{% load i18n %}
+{% if wizard.steps.prev %}
+    <button class="btn btn btn-primary mt-3" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">
+        {% trans "Назад" %}
+    </button>
+{% endif %}
+<button class="btn btn btn-primary mt-3" type="submit">
+    {% if wizard.next %}
+        {% trans "Створити" %}
+    {% else %}
+        {% trans "Далі" %}
+    {% endif %}
+</button>
