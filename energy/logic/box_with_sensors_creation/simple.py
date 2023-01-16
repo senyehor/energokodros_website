@@ -17,8 +17,8 @@ def create_box_sensor_sets_along_with_box_and_sensors(
     box = box_form.save()
     _ = create_box_sensor_set_form_and_sensor_form_match(box_sensor_set_formset, sensors_formset)
     for box_sensor_set_form, sensor_form in _:
-        sensor = sensor_form.save()
-        box_sensor_set = box_sensor_set_form.save(commit=False)
+        sensor: Sensor = sensor_form.save()
+        box_sensor_set: BoxSensorsSet = box_sensor_set_form.save(commit=False)
         facility = box_sensor_set_form.cleaned_data['facility']
         fill_box_sensor_set_relations(box_sensor_set, box, facility, sensor)
         box_sensor_set.save()
