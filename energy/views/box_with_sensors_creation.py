@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from django.contrib import messages
 from django.db import transaction
 from django.forms import Form
@@ -11,12 +9,13 @@ from formtools.wizard.views import SessionWizardView
 
 from energokodros.settings import TEMPLATES
 from energy.forms import (
-    BoxForm, BoxSensorSetFormset, BoxSensorsSetForm, ChooseInstitutionForm, SensorsFormset,
+    ChooseInstitutionForm,
 )
 from energy.logic.box_with_sensors_creation import (
+    create_box_sensor_sets_along_with_box_and_sensors,
     create_initial_sensor_numbers_for_sensors_formset,
     create_initial_sensor_numbers_in_set_for_box_sensor_set_formset,
-    FORMS, FORMS_ORDER_FROM_ZERO, FormsetData, STEPS,
+    FORMS, FormsetData, get_forms_from_from_list, STEPS,
 )
 from utils.common import admin_rights_and_login_required
 from utils.types import StrKeyDict
@@ -34,30 +33,17 @@ class BoxWithSensorsCreateView(SessionWizardView):
         box_form, sensors_formset, box_sensor_set_formset = self.__get_forms_from_form_list(
             form_list
         )
-        box = box_form.save()
-        for box_sensor_set_form, sensor_form in \
-                zip(box_sensor_set_formset.forms, sensors_formset.forms):
-            box_sensor_set_form: BoxSensorsSetForm = box_sensor_set_form
-            sensor = sensor_form.save()
-            box_sensor_set = box_sensor_set_form.save(commit=False)
-            box_sensor_set.facility = box_sensor_set_form.cleaned_data['facility']
-            box_sensor_set.sensor = sensor
-            box_sensor_set.box = box
-            box_sensor_set.save()
+        create_box_sensor_sets_along_with_box_and_sensors(
+            box_form, sensors_formset, box_sensor_set_formset
+        )
         messages.success(
             self.request,
             self.success_message
         )
         return redirect(self.success_url)
 
-    def __get_forms_from_form_list(self, form_list: list[Form]) -> \
-            Tuple[BoxForm, SensorsFormset, BoxSensorSetFormset]:
-        # noinspection PyTypeChecker
-        return (
-            form_list[FORMS_ORDER_FROM_ZERO[STEPS.BOX]],
-            form_list[FORMS_ORDER_FROM_ZERO[STEPS.SENSORS]],
-            form_list[FORMS_ORDER_FROM_ZERO[STEPS.BOX_SENSORS_SET]],
-        )
+    def __get_forms_from_form_list(self, forms: list[Form]):
+        return get_forms_from_from_list(forms)
 
     def __create_box_sensor_set_initial(self) -> FormsetData:
         return create_initial_sensor_numbers_in_set_for_box_sensor_set_formset(
