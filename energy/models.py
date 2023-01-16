@@ -24,6 +24,7 @@ class Sensor(models.Model):
 
 
 class BoxSensorsSet(models.Model):
+    _SENSOR_STARTING_NUMBER = 1
     boxes_set_id = models.AutoField(primary_key=True)
     box = models.ForeignKey(
         Box,
@@ -58,7 +59,7 @@ class BoxSensorsSet(models.Model):
         null=False,
         blank=False,
         validators=(
-            MinValueValidator(SENSOR_COUNT_PER_BOX),
+            MinValueValidator(_SENSOR_STARTING_NUMBER),
             MaxValueValidator(SENSOR_COUNT_PER_BOX)
         ),
         db_column='sensor_number'
