@@ -9,43 +9,17 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from formtools.wizard.views import SessionWizardView
 
+from energokodros.settings import TEMPLATES
 from energy.forms import (
     BoxForm, BoxSensorSetFormset, BoxSensorsSetForm, ChooseInstitutionForm, SensorsFormset,
 )
 from energy.logic.box_with_sensors_creation import (
     create_initial_sensor_numbers_for_sensors_formset,
     create_initial_sensor_numbers_in_set_for_box_sensor_set_formset,
-    FormsetData,
+    FORMS, FORMS_ORDER_FROM_ZERO, FormsetData, STEPS,
 )
 from utils.common import admin_rights_and_login_required
 from utils.types import StrKeyDict
-
-
-class STEPS:
-    BOX = 'box'
-    SENSORS = 'sensors'
-    BOX_SENSORS_SET = 'box_sensor_set'
-
-
-FORMS = (
-    (STEPS.BOX, BoxForm),
-    # default sensors count is max but can be adjusted by user
-    (STEPS.SENSORS, SensorsFormset),
-    # box_sensors_set should be created dynamically depending on sensor count from previous step
-    (STEPS.BOX_SENSORS_SET, BoxSensorSetFormset)
-)
-
-TEMPLATES = {
-    STEPS.BOX:             'energy/box_with_sensors_creation/box.html',
-    STEPS.SENSORS:         'energy/box_with_sensors_creation/sensors.html',
-    STEPS.BOX_SENSORS_SET: 'energy/box_with_sensors_creation/box_sensors_set.html',
-}
-
-FORMS_ORDER_FROM_ZERO = {
-    STEPS.BOX:             0,
-    STEPS.SENSORS:         1,
-    STEPS.BOX_SENSORS_SET: 2
-}
 
 
 @admin_rights_and_login_required
