@@ -7,15 +7,12 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from formtools.wizard.views import SessionWizardView
 
-from energokodros.settings import TEMPLATES
-from energy.forms import (
-    ChooseInstitutionForm,
-)
+from energy.forms import ChooseInstitutionForm
 from energy.logic.box_with_sensors_creation import (
-    create_box_sensor_sets_along_with_box_and_sensors,
+    BOX_WITH_SENSORS_CREATION_TEMPLATES, create_box_sensor_sets_along_with_box_and_sensors,
     create_initial_sensor_numbers_for_sensors_formset,
-    create_initial_sensor_numbers_in_set_for_box_sensor_set_formset,
-    FORMS, FormsetData, get_forms_from_from_list, STEPS,
+    create_initial_sensor_numbers_in_set_for_box_sensor_set_formset, FORMS, FormsetData,
+    get_forms_from_from_list, STEPS,
 )
 from utils.common import admin_rights_and_login_required
 from utils.types import StrKeyDict
@@ -62,7 +59,7 @@ class BoxWithSensorsCreateView(SessionWizardView):
         }
 
     def get_template_names(self):
-        return [TEMPLATES[self.steps.current]]
+        return [BOX_WITH_SENSORS_CREATION_TEMPLATES[self.steps.current]]
 
     def get_form_initial(self, step):
         if step == STEPS.SENSORS:
