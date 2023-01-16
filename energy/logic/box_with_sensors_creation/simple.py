@@ -19,7 +19,7 @@ def create_box_sensor_sets_along_with_box_and_sensors(
     for box_sensor_set_form, sensor_form in _:
         sensor = sensor_form.save()
         box_sensor_set = box_sensor_set_form.save(commit=False)
-        facility = box_sensor_set.cleaned_data['facility']
+        facility = box_sensor_set_form.cleaned_data['facility']
         fill_box_sensor_set_relations(box_sensor_set, box, facility, sensor)
         box_sensor_set.save()
     box.refresh_from_db()
