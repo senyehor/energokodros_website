@@ -1,8 +1,9 @@
 from typing import Iterable, Tuple
 
+from django.db import IntegrityError
 from django.forms import Form
 
-from energokodros.settings import MAX_SENSOR_COUNT_PER_BOX, MIN_SENSOR_COUNT_PER_BOX
+from energokodros.settings import SENSOR_COUNT_PER_BOX
 from energy.forms import BoxForm, BoxSensorSetFormset, BoxSensorsSetForm, SensorForm, SensorsFormset
 from energy.logic.box_with_sensors_creation.config_and_models import FORMS_ORDER_FROM_ZERO, STEPS
 from energy.models import Box, BoxSensorsSet, Sensor
@@ -21,6 +22,8 @@ def create_box_sensor_sets_along_with_box_and_sensors(
         facility = box_sensor_set.cleaned_data['facility']
         fill_box_sensor_set_relations(box_sensor_set, box, facility, sensor)
         box_sensor_set.save()
+    box.refresh_from_db()
+    validate_sensors_count(box)
 
 
 def create_box_sensor_set_form_and_sensor_form_match(
@@ -48,6 +51,6 @@ def get_forms_from_from_list(forms: list[Form]) -> \
     )
 
 
-def validate_sensors_count(count: int):
-    if MAX_SENSOR_COUNT_PER_BOX < count < MIN_SENSOR_COUNT_PER_BOX:
-        raise ValueError("invalid sensors count number")
+def validate_sensors_count(box: Box):
+    if box.box_sensor_sets.count() != SENSOR_COUNT_PER_BOX:
+        raise IntegrityError('Invalid sensor count')
