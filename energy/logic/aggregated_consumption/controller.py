@@ -11,7 +11,7 @@ from energy.logic.aggregated_consumption.parameters import (
     EnergyConsumptionQueryRawParameters,
 )
 from energy.logic.aggregated_consumption.parameters_parsers import AnyParametersParser
-from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionQueryRows
+from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionData
 from energy.logic.aggregated_consumption.simple import parse_aggregation_interval
 from institutions.models import Facility
 from users.logic import check_role_belongs_to_user, check_role_has_access_for_facility
@@ -41,7 +41,7 @@ class AggregatedEnergyConsumptionController:
             self.__query_parameters.get('aggregation_interval_seconds', None)
         )
 
-    def get_consumption(self) -> AggregatedConsumptionQueryRows:
+    def get_consumption(self) -> AggregatedConsumptionData:
         parser, querier = self.__get_parser_and_querier()
         params = self.__compose_params_for_querier(parser)
         return querier(params).get_consumption()

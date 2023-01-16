@@ -1,7 +1,8 @@
 import calendar
 from abc import ABC
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from decimal import Decimal
+from enum import IntEnum
 from typing import TypeAlias, TypedDict
 
 from django.db import connection
@@ -13,7 +14,7 @@ from energy.logic.aggregated_consumption.parameters import (
 )
 from energy.logic.aggregated_consumption.simple import get_box_set_ids_for_facility
 
-AggregatedConsumptionQueryRows = list[tuple[datetime | str, Decimal]] | None
+AggregatedConsumptionData = list[tuple[datetime | str, str]] | None
 
 AnyQuerier: TypeAlias = 'AggregatedConsumptionQuerierBase'
 
@@ -22,8 +23,6 @@ class AggregatedConsumptionQuerierBase(ABC):
     SELECT_PART: str = None
     GROUP_BY_PART: str = None
     ORDER_BY_PART: str = None
-
-    CUSTOM_FORMATTING: bool = False
 
     __TOTAL_CONSUMPTION_EXPRESSION = 'TRUNC(SUM(sensor_value), 7)'
     __QUERY_SELECT_WITH_FROM = 'SELECT {select}, ' + f"""
@@ -42,6 +41,12 @@ class AggregatedConsumptionQuerierBase(ABC):
         ORDER BY {order_by};
     """
 
+    __RawAggregatedConsumptionData = list[tuple[datetime | str, Decimal]] | None
+
+    class __RawAggregatedConsumptionDataIndexes(IntEnum):
+        TIME_PART = 0
+        CONSUMPTION_PART = 1
+
     class __BoxesSetIdSubqueryParameters(TypedDict):
         boxes_set_id_subquery: str
         id_or_ids_to_filter: str | int
@@ -51,22 +56,20 @@ class AggregatedConsumptionQuerierBase(ABC):
             raise NotImplementedError('this class must be subclassed')
         self.__params = params
 
-    def get_consumption(self) -> AggregatedConsumptionQueryRows:
-        non_formatted_rows = self.__get_consumption_data()
-        if self.CUSTOM_FORMATTING and non_formatted_rows:
-            return self.__format_rows(non_formatted_rows)
-        return non_formatted_rows
+    def get_consumption(self) -> AggregatedConsumptionData:
+        raw_rows = self.__get_consumption_data()
+        if raw_rows:
+            return self.__format_rows(raw_rows)
+        return None
 
-    def __format_rows(
-            self, non_formatted_rows: AggregatedConsumptionQueryRows
-    ) -> AggregatedConsumptionQueryRows:
-        time_related_part_index, data_index = 0, 1
+    def __format_rows(self, raw_rows: __RawAggregatedConsumptionData) -> AggregatedConsumptionData:
+        _ = self.__RawAggregatedConsumptionDataIndexes
         return [
             (
-                self._format_time_related_row_part(row[time_related_part_index]),
-                row[data_index]
+                self._format_row_time(row[_.TIME_PART]),
+                self._format_row_consumption(row[_.CONSUMPTION_PART])
             )
-            for row in non_formatted_rows
+            for row in raw_rows
         ]
 
     def __compose_query(self) -> str:
@@ -115,14 +118,16 @@ class AggregatedConsumptionQuerierBase(ABC):
         ids = (str(_id) for _id in ids)
         return ', '.join(ids)
 
-    def __get_consumption_data(self) -> AggregatedConsumptionQueryRows:
+    def __get_consumption_data(self) -> __RawAggregatedConsumptionData:
         with connection.cursor() as cursor:
             cursor.execute(self.__compose_query())
             return cursor.fetchall() or None
 
-    # pylint: disable-next=unused-argument
-    def _format_time_related_row_part(self, to_format: datetime | str) -> str:
-        ...
+    def _format_row_time(self, to_format: datetime | str) -> str:
+        return to_format
+
+    def _format_row_consumption(self, to_format: Decimal):
+        return f'{to_format:.10f}'
 
     @property
     def parameters(self) -> CommonQueryParameters:
@@ -161,14 +166,12 @@ class OneHourQuerier(__QueryingForCurrentDayMixin, AggregatedConsumptionQuerierB
     GROUP_BY_PART = 'time'
     ORDER_BY_PART = GROUP_BY_PART
 
-    CUSTOM_FORMATTING = True
-
     __ADDITIONAL_HOURS_WHERE_FILTERS = """
         AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
         AND EXTRACT(HOUR FROM aggregation_interval_start) <= {hours_filtering_end_hour}
     """
 
-    def _format_time_related_row_part(self, to_format: datetime | str) -> str:
+    def _format_row_time(self, to_format: datetime | str) -> str:
         # to_format contains start hour as we use aggregation_interval_start in select
         end_hour = str(to_format.hour + 1)
         return to_format.strftime(f'%d-%m-%Y %H:%M - {end_hour.zfill(2)}:%M')
@@ -226,9 +229,7 @@ class OneMonthQuerier(AggregatedConsumptionQuerierBase):
     """
     ORDER_BY_PART = GROUP_BY_PART
 
-    CUSTOM_FORMATTING = True
-
-    def _format_time_related_row_part(self, to_format: datetime | str) -> str:
+    def _format_row_time(self, to_format: datetime | str) -> str:
         year, month = to_format.split('-')
         month = _(calendar.month_name[int(month)])
         return f'{year} {month}'
