@@ -73,19 +73,6 @@ class BoxSensorsSetForm(CrispyFormsMixin, ModelForm):
         fields_order = ('sensor_number',) + fields + ('facility',)
 
 
-class ChooseSensorsCountForm(CrispyFormsMixin, Form):
-    __CHOICES = enumerate(
-        range(MIN_SENSOR_COUNT_PER_BOX, MAX_SENSOR_COUNT_PER_BOX + 1),
-        start=1
-    )
-
-    sensor_count = ChoiceField(
-        label=_('Оберіть кількість сенсорів'),
-        choices=__CHOICES,
-        initial=MAX_SENSOR_COUNT_PER_BOX
-    )
-
-
 __SensorsFormsetBase = formset_factory(
     SensorForm,
     # setting extra to zero as actual forms count will depend on data or initial
