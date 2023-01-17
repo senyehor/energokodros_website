@@ -1,9 +1,11 @@
+{% load static %}
 {% load active_link_tags %}
 {% load i18n %}
 {% if user.is_authenticated %}
     <header class="p-3 text-white">
         <div class="container px-1">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <img class="d-inline-block" src="{% static "icons/logo.svg" %}" alt="Logo" style="height: 6vh;">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
                         <a href="{% url 'aggregated-consumption' %}"
