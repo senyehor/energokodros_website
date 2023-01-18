@@ -68,7 +68,7 @@ class RoleApplicationView(FormView):
 class UserRoleView(EditObjectUpdateViewMixin, UpdateView):
     model = UserRole
     form_class = UserRoleForm
-    success_url = reverse_lazy('users-roles-list')
+    success_url = reverse_lazy('user-role-list')
     template_name = 'users/edit_user_role.html'
     edit_success_message = _('Роль користувача успішно відредаговано')
 

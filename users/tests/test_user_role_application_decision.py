@@ -46,7 +46,7 @@ class UserRoleApplicationDetailTest(TestCase):
         )
         self.assertRedirects(
             resp,
-            reverse_lazy('users-roles-applications'),
+            reverse_lazy('user-role-applications'),
         )
         try:
             UserRole.objects.get(
@@ -69,7 +69,7 @@ class UserRoleApplicationDetailTest(TestCase):
         )
         self.assertRedirects(
             resp,
-            reverse_lazy('users-roles-applications'),
+            reverse_lazy('user-role-applications'),
         )
         self.__check_user_application_is_deleted()
 
