@@ -1,16 +1,14 @@
 {% extends 'common/base.html' %}
 {% block content %}
     <div class="container" id="id_main_container">
-        <div class="container px-0 d-flex align-items-center flex-md-wrap">
-            <div>
-                <h2>
-                    {% block heading_text %}
-                    {% endblock %}
-                </h2>
-            </div>
+        <div class="container px-0 d-flex align-items-center flex-wrap">
+            <h4 class="d-block">
+                {% block heading_text %}
+                {% endblock %}
+            </h4>
             {% block heading_buttons %}
             {% endblock %}
-            <div class="ms-auto ms-3">
+            <div class="ms-auto">
                 {% block search_form %}
                 {% endblock %}
             </div>
