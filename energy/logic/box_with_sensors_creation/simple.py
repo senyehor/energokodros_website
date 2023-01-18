@@ -1,4 +1,4 @@
-from typing import Iterable, Tuple
+from typing import Iterable
 
 from django.db import IntegrityError
 from django.forms import Form
@@ -28,7 +28,7 @@ def create_box_sensor_sets_along_with_box_and_sensors(
 
 def create_box_sensor_set_form_and_sensor_form_match(
         box_sensor_set_formset: BoxSensorSetFormset, sensors_formset: SensorsFormset
-) -> Iterable[Tuple[BoxSensorsSetForm, SensorForm]]:
+) -> Iterable[tuple[BoxSensorsSetForm, SensorForm]]:
     return zip(box_sensor_set_formset.forms, sensors_formset.forms)
 
 
@@ -42,7 +42,7 @@ def fill_box_sensor_set_relations(
 
 
 def get_forms_from_from_list(forms: list[Form]) -> \
-        Tuple[BoxForm, SensorsFormset, BoxSensorSetFormset]:
+        tuple[BoxForm, SensorsFormset, BoxSensorSetFormset]:
     # noinspection PyTypeChecker
     return (
         forms[FORMS_ORDER_FROM_ZERO[STEPS.BOX]],
