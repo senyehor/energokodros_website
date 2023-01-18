@@ -3,7 +3,7 @@
 <li>
     <a href="{% url 'users-roles-applications' %}"
        class="nav-link px-2 text-dark {% active_link 'users-roles-applications' %}">
-        {% trans "Запити на ролі та реєстрацію" %}
+        {% trans "Запити на ролі" %}
         {% if users_roles_applications_count %}
             <span class="badge bg-success">{{ users_roles_applications_count }}</span>
         {% endif %}
