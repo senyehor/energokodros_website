@@ -1,17 +1,14 @@
-from django.views.generic import ListView
-
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from users.logic.simple import (
     get_applications_from_users_who_confirmed_email,
     get_users_with_confirmed_email,
 )
 from users.models import UserRole
-from utils.common import admin_rights_and_login_required
-from utils.forms import QuerySetFieldsIcontainsFilterPkOrderedMixin
+from utils.common import admin_rights_and_login_required, ListViewWithFiltering
 
 
 @admin_rights_and_login_required
-class UserRoleApplicationsListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+class UserRoleApplicationsListView(ListViewWithFiltering):
     queryset = get_applications_from_users_who_confirmed_email()
     filter_fields = ('user__full_name', 'user__email', 'institution__name')
     paginate_by = DEFAULT_PAGINATE_BY
@@ -19,7 +16,7 @@ class UserRoleApplicationsListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, 
 
 
 @admin_rights_and_login_required
-class UserListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+class UserListView(ListViewWithFiltering):
     queryset = get_users_with_confirmed_email()
     filter_fields = ('full_name', 'email')
     paginate_by = DEFAULT_PAGINATE_BY
@@ -27,7 +24,7 @@ class UserListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
 
 
 @admin_rights_and_login_required
-class UserRoleListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+class UserRoleListView(ListViewWithFiltering):
     queryset = UserRole.objects.all()
     filter_fields = ('facility_has_access_to__name', 'user__full_name', 'position_name')
     paginate_by = DEFAULT_PAGINATE_BY
