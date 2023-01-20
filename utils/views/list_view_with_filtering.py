@@ -7,7 +7,7 @@ from django.views.generic import ListView
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from utils.types import StrTuple
 
-ListViewWithMixin: TypeAlias = Union[ListView, 'QuerySetFieldsIcontainsFilterPkOrderedMixin']
+_ListViewWithMixinType: TypeAlias = Union[ListView, 'QuerySetFieldsIcontainsFilterPkOrderedMixin']
 
 
 class QuerySetFieldsIcontainsFilterPkOrderedMixin:
@@ -15,7 +15,7 @@ class QuerySetFieldsIcontainsFilterPkOrderedMixin:
     filter_fields: StrTuple = None
     fields_order_by_before_pk: StrTuple = set()
 
-    def get_queryset(self: ListViewWithMixin) -> QuerySet:
+    def get_queryset(self: _ListViewWithMixinType) -> QuerySet:
         self.__check_used_properly()
         if search_value := self.__get_search_value():
             qs = QuerySetFieldsIcontainsFilter(
@@ -26,7 +26,7 @@ class QuerySetFieldsIcontainsFilterPkOrderedMixin:
             qs = self.queryset
         return qs.order_by(*self.fields_order_by_before_pk, '-pk')
 
-    def __check_used_properly(self: ListViewWithMixin):
+    def __check_used_properly(self: _ListViewWithMixinType):
         if not issubclass(self.__class__, ListView):
             raise ValueError('this mixin must be used with a ListView')
         if self.filter_fields is None:
