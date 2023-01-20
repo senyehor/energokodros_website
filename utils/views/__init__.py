@@ -1,1 +1,2 @@
+from .edit_object_update_view import EditObjectUpdateView
 from .list_view_with_filtering import ListViewWithFiltering
