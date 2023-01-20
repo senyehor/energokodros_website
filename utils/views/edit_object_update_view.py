@@ -25,9 +25,9 @@ class EditDeleteObjectUpdateViewMixin:
     must be used as a mixin for UpdateView, needs to be first in superclass list
     to correctly override methods
     """
-    edit_success_message: str = _('Успішно відредаговано')
-    delete_success_message: str = _('Успішно видалено')
-    no_changes_message: str = _('Ви не внесли жодних змін, тож були перенаправлені')
+    EDIT_SUCCESS_MESSAGE: str = _('Успішно відредаговано')
+    DELETE_SUCCESS_MESSAGE: str = _('Успішно видалено')
+    NO_CHANGES_MESSAGE: str = _('Ви не внесли жодних змін, тож були перенаправлені')
 
     def post(self: EditDeleteObjectView, request: HttpRequest, *args, **kwargs):
         if request.POST['submit'] == DEFAULT_DELETE_VALUE:
@@ -50,12 +50,12 @@ class EditDeleteObjectUpdateViewMixin:
         if form.has_changed():
             messages.success(
                 self.request,
-                self.edit_success_message
+                self.EDIT_SUCCESS_MESSAGE
             )
         else:
             messages.info(
                 self.request,
-                self.no_changes_message
+                self.NO_CHANGES_MESSAGE
             )
         return super().form_valid(form)
 
@@ -63,7 +63,7 @@ class EditDeleteObjectUpdateViewMixin:
         self.get_object().delete()
         messages.warning(
             self.request,
-            self.delete_success_message,
+            self.DELETE_SUCCESS_MESSAGE,
         )
         # default redirect goes to self.get_success_url(), but is uses self.object,
         # which has just been deleted, so redirect to .success_url
