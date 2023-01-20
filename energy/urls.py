@@ -24,6 +24,8 @@ urlpatterns = [
         name='create-box-with-sensors'
     ),
     path(
-        'box-lists'
+        'box-list',
+        views.BoxListView.as_view(),
+        name='box-list',
     )
 ]
