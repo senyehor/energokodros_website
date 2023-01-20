@@ -3,7 +3,6 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
-from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
 from utils.common import admin_rights_and_login_required
@@ -16,7 +15,6 @@ class FacilitiesListView(ListViewWithFiltering):
     queryset = Facility.objects.all()
     fields_order_by_before_pk = ('depth',)
     filter_fields = ('name', 'description')
-    paginate_by = DEFAULT_PAGINATE_BY
     template_name = 'institutions/facilities_list.html'
 
 
