@@ -8,7 +8,7 @@ from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
 from utils.common import admin_rights_and_login_required
 from utils.views import ListViewWithFiltering
-from utils.views.edit_object_update_view import EditObjectUpdateView
+from utils.views.edit_object_update_view import EditDeleteObjectUpdateView
 
 
 @admin_rights_and_login_required
@@ -36,7 +36,7 @@ class CreateInstitutionView(FormView):
 
 
 @admin_rights_and_login_required
-class EditFacilityView(EditObjectUpdateView):
+class EditFacilityView(EditDeleteObjectUpdateView):
     model = Facility
     form_class = FacilityEditForm
     template_name = 'institutions/edit_facility.html'
