@@ -10,8 +10,8 @@ from institutions.tests.factories import InstitutionFactory
 
 
 class BoxFactory(django.DjangoModelFactory):
-    box_number = factory.Sequence(lambda n: f'{n}')
-    box_description = factory.Sequence(lambda n: f'box number {n} description')
+    identifier = factory.Sequence(lambda n: f'{n}')
+    description = factory.Sequence(lambda n: f'box number {n} description')
 
     class Meta:
         model = Box

@@ -38,13 +38,13 @@ class ChooseInstitutionForm(CrispyFormsMixin, Form):
 class BoxForm(CrispyFormsMixin, ModelForm):
     class Meta:
         model = Box
-        fields = ('box_identifier', 'box_description')
+        fields = ('identifier', 'description')
         labels = {
-            'box_identifier':  _('Ідентифікатор'),
-            'box_description': _('Опис')
+            'identifier':  _('Ідентифікатор'),
+            'description': _('Опис')
         }
         widgets = {
-            'box_description': Textarea({'rows': '4'})
+            'description': Textarea({'rows': '4'})
         }
 
 

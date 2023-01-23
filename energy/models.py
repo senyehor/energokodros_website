@@ -9,14 +9,23 @@ from institutions.models import Facility
 
 class Box(models.Model):
     box_id = models.AutoField(primary_key=True)
-    box_identifier = models.CharField(max_length=256, blank=False, null=False)
-    box_description = models.TextField(blank=False, null=False)
+    identifier = models.CharField(
+        max_length=256,
+        blank=False,
+        null=False,
+        db_column='box_identifier'
+    )
+    description = models.TextField(
+        blank=False,
+        null=False,
+        db_column='box_description'
+    )
 
     class Meta:
         db_table = 'boxes'
 
     def __str__(self):
-        return _(f'Ящик {self.box_identifier}')
+        return _(f'Ящик {self.identifier}')
 
     def get_absolute_url(self):
         return reverse_lazy('edit-box', kwargs={'pk': self.pk})

@@ -15,7 +15,7 @@ from utils.views import EditDeleteObjectUpdateView, ListViewWithFiltering
 @admin_rights_and_login_required
 class BoxListView(ListViewWithFiltering):
     queryset = Box.objects.all()
-    filter_fields = ('box_identifier', 'box_description')
+    filter_fields = ('identifier', 'description')
     template_name = 'energy/box_list.html'
 
 
