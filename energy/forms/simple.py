@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from energy.models import Box, BoxSensorsSet, Sensor
 from institutions.models import Facility
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField
+from utils.forms import CrispyFormsMixin, SecureModelChoiceField, UPDATE_DELETE_BUTTONS_SET
 
 
 class SensorForm(CrispyFormsMixin, ModelForm):
@@ -70,3 +70,8 @@ class BoxSensorsSetForm(CrispyFormsMixin, ModelForm):
             'sensor_number_in_set': _('Номер сенсора у ящику'),
         }
         fields_order = ('sensor_number',) + fields + ('facility',)
+
+
+class EditBoxForm(BoxForm):
+    class Meta(BoxForm.Meta):
+        buttons = UPDATE_DELETE_BUTTONS_SET

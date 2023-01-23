@@ -27,5 +27,10 @@ urlpatterns = [
         'box-list',
         views.BoxListView.as_view(),
         name='box-list',
+    ),
+    path(
+        'edit-box/<hashed_int:pk>',
+        views.BoxEditDeleteView.as_view(),
+        name='edit-box'
     )
 ]
