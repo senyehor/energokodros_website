@@ -46,7 +46,7 @@ class BoxForm(CrispyFormsMixin, ModelForm):
         }
 
 
-class BoxSensorsSetForm(CrispyFormsMixin, ModelForm):
+class BoxSensorSetForm(CrispyFormsMixin, ModelForm):
     # sensor number must be prepopulated from created sensors
     sensor_number = CharField(
         label=_('Номер сенсора'),
