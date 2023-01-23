@@ -1,9 +1,10 @@
 {% extends 'common/form_in_center_with_default_padding_and_width.html' %}
+{% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}Редагування ящику{% endblock %}
+{% block title %}{% trans "Редагування ящику" %}{% endblock %}
 {% block form_header %}
-    Редагування ящику
+    {% trans "Редагування ящику" %}
 {% endblock %}
 {% block form %}
     {% crispy form %}
