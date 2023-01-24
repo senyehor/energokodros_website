@@ -1,4 +1,4 @@
-from typing import Protocol, runtime_checkable, TypeAlias, Union
+from typing import TypeAlias, Union
 
 from django.contrib import messages
 from django.db.models import Model
@@ -11,10 +11,9 @@ from django.views.generic import UpdateView
 from utils.forms.crispy_buttons import DEFAULT_DELETE_VALUE
 
 
-@runtime_checkable
-class NeedsAdditionalFilling(Protocol):
-    def additionally_fill(self, operated_object: Model):
-        ...
+class AdditionalSetupRequiredFormMixin:
+    def additionally_setup(self, obj: Model):
+        raise NotImplementedError
 
 
 _EditDeleteObjectViewWithMixinType: TypeAlias = Union[UpdateView, 'EditDeleteObjectUpdateViewMixin']
@@ -43,8 +42,8 @@ class EditDeleteObjectUpdateViewMixin:
 
     def fill_from_object_if_needed(self: _EditDeleteObjectViewWithMixinType, data: dict):
         form: Form = data['form']
-        if isinstance(form, NeedsAdditionalFilling):
-            form.additionally_fill(self.object)
+        if isinstance(form, AdditionalSetupRequiredFormMixin):
+            form.additionally_setup(self.object)
 
     def form_valid(self: _EditDeleteObjectViewWithMixinType, form: Form):
         if form.has_changed():
@@ -70,5 +69,5 @@ class EditDeleteObjectUpdateViewMixin:
         return redirect(self.success_url)
 
 
-class EditDeleteObjectUpdateView(UpdateView, EditDeleteObjectUpdateViewMixin):
+class EditDeleteObjectUpdateView(EditDeleteObjectUpdateViewMixin, UpdateView):
     pass

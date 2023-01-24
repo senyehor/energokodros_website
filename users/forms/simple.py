@@ -11,6 +11,7 @@ from utils.forms import (
     create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
     SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
 )
+from utils.views import AdditionalSetupRequiredFormMixin
 
 
 class LoginForm(CrispyFormsMixin, auth_forms.AuthenticationForm):
@@ -63,7 +64,7 @@ class UserRoleApplicationFormForRegistration(UserRoleApplicationForm):
         buttons = (create_primary_button(_('Відправити заявку на реєстрацію')),)
 
 
-class UserForm(CrispyFormsMixin, forms.ModelForm):
+class UserForm(CrispyFormsMixin, forms.ModelForm, AdditionalSetupRequiredFormMixin):
     # info only field, qs is filled in custom method
     roles = SecureModelChoiceField(
         queryset=UserRole.objects.none(),
@@ -91,13 +92,13 @@ class UserForm(CrispyFormsMixin, forms.ModelForm):
         fields = ('full_name', 'email', 'is_admin')
         buttons = UPDATE_DELETE_BUTTONS_SET
 
-    def additionally_fill(self, operated_object: Model):
+    def additionally_setup(self, obj: Model):
         # noinspection PyTypeChecker
-        user: User = operated_object
+        user: User = obj
         self.fields['roles'].queryset = user.roles
 
 
-class UserRoleForm(CrispyFormsMixin, forms.ModelForm):
+class UserRoleForm(CrispyFormsMixin, forms.ModelForm, AdditionalSetupRequiredFormMixin):
     # should be prepopulated in corresponding method
     user_info = SecureModelChoiceField(
         queryset=User.objects.none(),
@@ -122,9 +123,9 @@ class UserRoleForm(CrispyFormsMixin, forms.ModelForm):
         fields = ('position_name',)
         buttons = UPDATE_DELETE_BUTTONS_SET
 
-    def additionally_fill(self, operated_object: Model):
+    def additionally_setup(self, obj: Model):
         # noinspection PyTypeChecker
-        role: UserRole = operated_object
+        role: UserRole = obj
         self.fields['user_info'].queryset = object_to_queryset(role.user)
         self.fields['facility_has_access_to_info'].queryset = \
             object_to_queryset(role.facility_has_access_to)
