@@ -147,11 +147,11 @@ function __get_control_form() {
     return $('#id_control_form');
 }
 
-function __get_set_table_button() {
+function __get_set_view_mode_to_table_button() {
     return $('#set_table_button')
 }
 
-function __get_set_chart_button() {
+function __get_set_view_mode_to_chart_button() {
     return $('#set_chart_button')
 }
 

@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    __get_set_table_button().click(__set_display_mode_to_table_and_update_if_data_is_present);
-    __get_set_chart_button().click(__set_display_mode_to_chart_and_update_if_data_is_present);
+    __get_set_view_mode_to_table_button().click(__set_display_mode_to_table_and_update_if_data_is_present);
+    __get_set_view_mode_to_chart_button().click(__set_display_mode_to_chart_and_update_if_data_is_present);
 })
 
 const DRAW_TABLE = 'table';
@@ -93,8 +93,8 @@ function __generate_table(data) {
 }
 
 function __set_display_mode_to_table_and_update_if_data_is_present() {
-    __set_button_to_chosen(__get_set_table_button());
-    __set_button_to_can_be_chosen(__get_set_chart_button());
+    __set_button_to_chosen(__get_set_view_mode_to_table_button());
+    __set_button_to_can_be_chosen(__get_set_view_mode_to_chart_button());
     CHOSEN_DISPLAYING_OPTION = DRAW_TABLE;
     if (LATEST_RECEIVED_DATA) {
         _draw_table(LATEST_RECEIVED_DATA);
@@ -102,8 +102,8 @@ function __set_display_mode_to_table_and_update_if_data_is_present() {
 }
 
 function __set_display_mode_to_chart_and_update_if_data_is_present() {
-    __set_button_to_chosen(__get_set_chart_button());
-    __set_button_to_can_be_chosen(__get_set_table_button());
+    __set_button_to_chosen(__get_set_view_mode_to_chart_button());
+    __set_button_to_can_be_chosen(__get_set_view_mode_to_table_button());
     CHOSEN_DISPLAYING_OPTION = DRAW_CHART;
     if (LATEST_RECEIVED_DATA) {
         _draw_chart(LATEST_RECEIVED_DATA);
