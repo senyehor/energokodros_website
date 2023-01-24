@@ -1,13 +1,13 @@
 from django.forms import (
-    CharField, Form, Textarea, TextInput,
+    CharField, Textarea, TextInput,
 )
 from django.utils.translation import gettext_lazy as _
 
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 from utils.forms import (
-    CrispyFormMixin, CrispyModelForm, SecureModelChoiceField, SelectWithFormControlClass,
-    set_form_buttons_to_update_delete,
+    CrispyModelForm, SecureModelChoiceField, SelectWithFormControlClass,
+    UPDATE_DELETE_BUTTONS_SET,
 )
 
 
@@ -24,15 +24,7 @@ class SensorForm(CrispyModelForm):
         labels = {
             'sensor_number': _('Номер'),
         }
-
-
-class ChooseInstitutionForm(CrispyFormMixin, Form):
-    institution = SecureModelChoiceField(
-        queryset=Facility.objects.get_institutions(),
-        required=False,
-        label=_("Оберіть заклад якому буде належати ящик"),
-        empty_label=None,
-    )
+        buttons = UPDATE_DELETE_BUTTONS_SET
 
 
 class BoxForm(CrispyModelForm):
@@ -46,6 +38,7 @@ class BoxForm(CrispyModelForm):
         widgets = {
             'description': Textarea({'rows': '4'})
         }
+        buttons = UPDATE_DELETE_BUTTONS_SET
 
 
 class BoxSensorSetForm(CrispyModelForm):
@@ -73,8 +66,4 @@ class BoxSensorSetForm(CrispyModelForm):
             'sensor_number_in_set': _('Номер сенсора у ящику'),
         }
         fields_order = ('sensor_number',) + fields + ('facility',)
-
-
-EditBoxForm = set_form_buttons_to_update_delete(BoxForm)
-EditSensorForm = set_form_buttons_to_update_delete(SensorForm)
-EditBoxSensorSetForm = set_form_buttons_to_update_delete(BoxSensorSetForm)
+        buttons = UPDATE_DELETE_BUTTONS_SET
