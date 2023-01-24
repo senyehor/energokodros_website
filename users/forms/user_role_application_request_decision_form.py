@@ -6,12 +6,13 @@ from institutions.logic import common_facility_choices_format_function
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
 from utils.forms import (
-    create_danger_button, create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
+    create_danger_button, create_primary_button, CrispyModelForm,
+    SecureModelChoiceField,
     SelectWithFormControlClass,
 )
 
 
-class UserRoleApplicationRequestsDecisionForm(CrispyFormsMixin, forms.ModelForm):
+class UserRoleApplicationRequestsDecisionForm(CrispyModelForm):
     """This form must be created from a user role application"""
     # qs set to all to allow any facility to be chosen
     # correct qs for institution is set in custom creating method

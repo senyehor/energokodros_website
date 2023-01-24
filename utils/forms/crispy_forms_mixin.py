@@ -2,10 +2,10 @@ from typing import Iterable
 
 from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
-from django.forms import Form
+from django.forms import Form, ModelForm
 
 
-class CrispyFormsMixin:
+class CrispyFormMixin:
     """
     provides unified way to make form crispy‚
     relies on crispy forms so form used with it heed to be displayed
@@ -36,3 +36,7 @@ class CrispyFormsMixin:
 
     def add_button(self, button: StrictButton):
         self.helper.layout.append(button)
+
+
+class CrispyModelForm(CrispyFormMixin, ModelForm):
+    pass

@@ -9,13 +9,13 @@ from institutions.logic import (
 from institutions.models import Facility
 from users.models import UserRole
 from utils.forms import (
-    create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
+    create_primary_button, CrispyModelForm, SecureModelChoiceField,
     SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
 )
 from utils.views import AdditionalSetupRequiredFormMixin
 
 
-class NewFacilityForm(CrispyFormsMixin, forms.ModelForm):
+class NewFacilityForm(CrispyModelForm):
     # based on this field choice user will be given corresponding facilities choices
     # to set as parent for a new facility
     institution = SecureModelChoiceField(
@@ -48,9 +48,7 @@ class NewFacilityForm(CrispyFormsMixin, forms.ModelForm):
         buttons = (create_primary_button(_("Додати об'єкт")),)
 
 
-class FacilityEditForm(
-    CrispyFormsMixin, forms.ModelForm, AdditionalSetupRequiredFormMixin
-):
+class FacilityEditForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
     # info only field, qs is filled in custom method
     descendants = SecureModelChoiceField(
         queryset=Facility.objects.none(),

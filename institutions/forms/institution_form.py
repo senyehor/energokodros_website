@@ -1,11 +1,11 @@
-from django.forms import ModelForm, Textarea
+from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
-from utils.forms import create_primary_button, CrispyFormsMixin
+from utils.forms import create_primary_button, CrispyModelForm
 
 
-class InstitutionForm(CrispyFormsMixin, ModelForm):
+class InstitutionForm(CrispyModelForm):
     class Meta:
         model = Facility
         fields = ('name', 'description')

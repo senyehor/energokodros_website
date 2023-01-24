@@ -1,17 +1,16 @@
 from django.forms import (
-    CharField, Form, ModelForm,
-    Textarea, TextInput,
+    CharField, Textarea, TextInput,
 )
 from django.utils.translation import gettext_lazy as _
 
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 from utils.forms import (
-    CrispyFormsMixin, SecureModelChoiceField, set_form_buttons_to_update_delete,
+    CrispyModelForm, SecureModelChoiceField, set_form_buttons_to_update_delete,
 )
 
 
-class SensorForm(CrispyFormsMixin, ModelForm):
+class SensorForm(CrispyModelForm):
     sensor_description = CharField(
         label=_('Опис'),
         required=True,
@@ -26,7 +25,7 @@ class SensorForm(CrispyFormsMixin, ModelForm):
         }
 
 
-class ChooseInstitutionForm(CrispyFormsMixin, Form):
+class ChooseInstitutionForm(CrispyModelForm):
     institution = SecureModelChoiceField(
         queryset=Facility.objects.get_institutions(),
         required=False,
@@ -35,7 +34,7 @@ class ChooseInstitutionForm(CrispyFormsMixin, Form):
     )
 
 
-class BoxForm(CrispyFormsMixin, ModelForm):
+class BoxForm(CrispyModelForm):
     class Meta:
         model = Box
         fields = ('identifier', 'description')
@@ -48,7 +47,7 @@ class BoxForm(CrispyFormsMixin, ModelForm):
         }
 
 
-class BoxSensorSetForm(CrispyFormsMixin, ModelForm):
+class BoxSensorSetForm(CrispyModelForm):
     # sensor number must be prepopulated from created sensors
     sensor_number = CharField(
         label=_('Номер сенсора'),

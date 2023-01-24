@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from institutions.models import Facility
 from users.models import User, UserRole
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField
+from utils.forms import CrispyFormMixin, SecureModelChoiceField
 
 AGGREGATION_INTERVAL_CHOICES = (
     (AggregationIntervalSeconds.ONE_HOUR.value, _('Година')),
@@ -15,7 +15,7 @@ AGGREGATION_INTERVAL_CHOICES = (
 )
 
 
-class EnergyConsumptionDisplayPageControlForm(CrispyFormsMixin, Form):
+class EnergyConsumptionDisplayPageControlForm(CrispyFormMixin, Form):
     """must be created for user using corresponding method,
     and some fields are added in the template"""
     # correct qs for role is set in __init__

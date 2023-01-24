@@ -8,13 +8,13 @@ from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
 from utils.common.object_to_queryset import object_to_queryset
 from utils.forms import (
-    create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
+    create_primary_button, CrispyFormMixin, CrispyModelForm, SecureModelChoiceField,
     SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
 )
 from utils.views import AdditionalSetupRequiredFormMixin
 
 
-class LoginForm(CrispyFormsMixin, auth_forms.AuthenticationForm):
+class LoginForm(CrispyFormMixin, auth_forms.AuthenticationForm):
     remember_me = forms.BooleanField(
         label=_("Запам'ятати мене на два тижні"),
         required=False
@@ -29,13 +29,13 @@ class LoginForm(CrispyFormsMixin, auth_forms.AuthenticationForm):
         buttons = (create_primary_button(_('Увійти')),)
 
 
-class NewUserForm(CrispyFormsMixin, auth_forms.UserCreationForm):
+class NewUserForm(CrispyFormMixin, auth_forms.UserCreationForm):
     class Meta:
         model = User
         fields = ('full_name', 'email')
 
 
-class UserRoleApplicationForm(CrispyFormsMixin, forms.ModelForm):
+class UserRoleApplicationForm(CrispyModelForm):
     institution = SecureModelChoiceField(
         label=_('Оберіть заклад'),
         queryset=Facility.objects.get_institutions(),
@@ -64,7 +64,7 @@ class UserRoleApplicationFormForRegistration(UserRoleApplicationForm):
         buttons = (create_primary_button(_('Відправити заявку на реєстрацію')),)
 
 
-class UserForm(CrispyFormsMixin, forms.ModelForm, AdditionalSetupRequiredFormMixin):
+class UserForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
     # info only field, qs is filled in custom method
     roles = SecureModelChoiceField(
         queryset=UserRole.objects.none(),
@@ -98,7 +98,7 @@ class UserForm(CrispyFormsMixin, forms.ModelForm, AdditionalSetupRequiredFormMix
         self.fields['roles'].queryset = user.roles
 
 
-class UserRoleForm(CrispyFormsMixin, forms.ModelForm, AdditionalSetupRequiredFormMixin):
+class UserRoleForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
     # should be prepopulated in corresponding method
     user_info = SecureModelChoiceField(
         queryset=User.objects.none(),
