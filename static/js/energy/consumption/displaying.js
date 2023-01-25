@@ -35,6 +35,23 @@ function _draw_chart(data) {
         type: 'bar',
         data: datasets,
         options: {
+            plugins: {
+                zoom: {
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'x',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Дані ',
+                }
+            },
             scales: {
                 x: {
                     stacked: true,
