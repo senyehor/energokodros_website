@@ -15,7 +15,7 @@ from utils.common.decoration import decorate_class_or_function_view
 @decorate_class_or_function_view(login_required)
 @decorate_class_or_function_view(show_no_roles_page_if_user_has_no_roles)
 class ConsumptionPageView(FormView):
-    template_name = 'energy/consumption/aggregated_energy_consumption.html'
+    template_name = 'energy/consumption/main_page.html'
 
     def get_form(self, form_class=None):
         return EnergyConsumptionDisplayPageControlForm(self.request.user)
