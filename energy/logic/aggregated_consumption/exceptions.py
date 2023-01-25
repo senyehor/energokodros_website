@@ -25,3 +25,7 @@ class PeriodStartGreaterThanEnd(EnergyConsumptionExceptionWithMessage):
 
 class StartHourGreaterThanEndHour(EnergyConsumptionExceptionWithMessage):
     message = _('Початкова година фільтрації більша за кінцеву')
+
+
+class NoConsumptionData(EnergyConsumptionExceptionWithMessage):
+    message = _('За заданими параметрами дані відсутні')

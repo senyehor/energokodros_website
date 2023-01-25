@@ -1,25 +1,23 @@
 from typing import Type
 
-from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
-from energy.logic.aggregated_consumption.parameters_parsers import (
-    AnyParametersParser,
-    CommonQueryParametersParser, OneDayAggregationIntervalQueryParametersParser,
-    OneHourAggregationIntervalQueryParametersParser,
-)
-from energy.logic.aggregated_consumption.queriers import (
+from energy.logic.aggregated_consumption.aggregated_consumption_queriers import (
     AnyQuerier, OneDayQuerier, OneHourQuerier,
     OneMonthQuerier, OneWeekQuerier, OneYearQuerier,
+)
+from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
+from energy.logic.aggregated_consumption.parameters_parsers import (
+    AnyParametersParser, CommonQueryParametersParser,
+    OneDayAggregationIntervalQueryParametersParser,
+    OneHourAggregationIntervalQueryParametersParser,
 )
 
 __DEFAULT_QUERY_PARAMETERS_PARSER = CommonQueryParametersParser
 
-ParserAndQuerier = tuple[AnyParametersParser, AnyQuerier]
-ParserAndQuerierTypes = tuple[Type[AnyParametersParser], Type[AnyQuerier]]
-
+AnyParserTypeWithAnyQuerierType = tuple[Type[AnyParametersParser], Type[AnyQuerier]]
 AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING: \
     dict[
         AggregationIntervalSeconds,
-        ParserAndQuerierTypes
+        AnyParserTypeWithAnyQuerierType
     ] = \
     {
         AggregationIntervalSeconds.ONE_HOUR:  (
@@ -43,3 +41,8 @@ AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING: \
             OneYearQuerier
         ),
     }
+
+
+def get_parser_and_querier_for_interval(interval: AggregationIntervalSeconds) \
+        -> AnyParserTypeWithAnyQuerierType:
+    return AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING[interval]
