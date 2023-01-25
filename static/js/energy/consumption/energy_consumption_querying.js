@@ -12,6 +12,10 @@ $(document).ready(function () {
         'click',
         get_consumption_data_and_update
     );
+    get_data_button.on(
+        'click',
+        clear_alerts
+    )
 })
 
 function get_consumption_data_and_update() {
@@ -30,8 +34,8 @@ function get_consumption_data_and_update() {
             draw_content(data);
         },
         error: (error) => {
-            if (error.message) {
-                add_error_alert(error.message);
+            if (error.responseJSON) {
+                add_warning_alert(error.responseJSON);
                 return
             }
             add_error_alert(DEFAULT_UNEXPECTED_ERROR_MESSAGE);
@@ -47,7 +51,7 @@ function __compose_aggregation_query_parameters() {
     let period_start_epoch_seconds = __get_period_start_epoch_seconds();
     let period_end_epoch_seconds = __get_period_end_epoch_seconds();
     let role = _(__get_role_select());
-    let base_params = {
+    let base_parameters = {
         role: role,
         facility: facility,
         period_start_epoch_seconds: period_start_epoch_seconds,
@@ -55,10 +59,10 @@ function __compose_aggregation_query_parameters() {
         aggregation_interval_seconds: aggregation_interval_seconds
     };
     if (INCLUDE_HOURS_FILTER) {
-        base_params.hours_filtering_start_hour = _(__get_hours_filtering_start_select());
-        base_params.hours_filtering_end_hour = _(__get_hours_filtering_end_select());
+        base_parameters.hours_filtering_start_hour = _(__get_hours_filtering_start_select());
+        base_parameters.hours_filtering_end_hour = _(__get_hours_filtering_end_select());
     }
-    return base_params;
+    return base_parameters;
 }
 
 function __get_aggregated_consumption_data_div() {
