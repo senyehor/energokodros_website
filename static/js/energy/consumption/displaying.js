@@ -49,7 +49,7 @@ function _draw_chart(data) {
                 },
                 title: {
                     display: true,
-                    text: 'Дані ',
+                    text: 'Дані у кіловат годинах',
                 }
             },
             scales: {
