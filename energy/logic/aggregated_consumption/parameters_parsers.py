@@ -1,9 +1,7 @@
 import time
 from dataclasses import fields
 from datetime import date, datetime
-from typing import Any
-
-from typing_extensions import TypeAlias
+from typing import Any, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
     AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, PeriodStartGreaterThanEnd,
