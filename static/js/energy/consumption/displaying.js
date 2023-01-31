@@ -13,6 +13,7 @@ let CHOSEN_DISPLAYING_OPTION = DRAW_TABLE;
 
 let LATEST_RECEIVED_DATA = null;
 
+let CONSUMPTION_INDEX_IN_RAW_DATA = 1, LABEL_INDEX_IN_RAW_DATA = 0, CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA = 2;
 
 function draw_content(data) {
     if (CHOSEN_DISPLAYING_OPTION === DRAW_TABLE) {
@@ -28,9 +29,9 @@ function draw_content(data) {
 function _draw_chart(data) {
     __get_aggregated_consumption_data_div().empty();
     __get_aggregated_consumption_data_div().append(
-        '<canvas id="energy_chart" style="overflow-x: scroll;"></canvas>'
+        '<canvas id="energy_chart"></canvas>'
     );
-    let datasets = __generate_chart_datasets(data);
+    let datasets = __generate_chart_data(data);
     const config = {
         type: 'bar',
         data: datasets,
@@ -57,7 +58,8 @@ function _draw_chart(data) {
                     stacked: true,
                 },
                 y: {
-                    stacked: true
+                    stacked: false,
+                    beginAtZero: true
                 }
             }
         }
@@ -72,33 +74,41 @@ function _draw_table(data) {
     __set_energy_html_content(__generate_table(data))
 }
 
-function __generate_chart_datasets(data) {
-    const time_index = 0;
-    const consumption_index = 1;
-    const consumption_forecast_index = 2;
+function __generate_chart_data(raw_consumption_data) {
     let labels = [];
     let consumption = [];
     let consumption_forecast = [];
-    for (const line of data) {
-        labels.push(line[time_index]);
-        consumption.push(parseFloat(line[consumption_index]));
-        consumption_forecast.push(parseFloat(line[consumption_forecast_index]))
+    if (_check_consumption_forecast_is_present(raw_consumption_data)) {
+        for (const line of raw_consumption_data) {
+            labels.push(line[LABEL_INDEX_IN_RAW_DATA]);
+            consumption.push(parseFloat(line[CONSUMPTION_INDEX_IN_RAW_DATA]));
+            consumption_forecast.push(parseFloat(line[CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA]))
+        }
+    } else {
+        consumption_forecast = null;
+        for (const line of raw_consumption_data) {
+            labels.push(line[LABEL_INDEX_IN_RAW_DATA]);
+            consumption.push(parseFloat(line[CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA]));
+        }
     }
-    return {
+    data = {
         labels: labels,
         datasets: [
             {
                 label: 'Споживання',
-                backgroundColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(255, 99, 132, 0.7)',
                 data: consumption,
-            },
-            {
-                label: 'Прогнозоване споживання',
-                backgroundColor: 'rgb(97,97,97)',
-                data: consumption_forecast,
             }
         ]
     };
+    if (consumption_forecast) {
+        data.datasets.push({
+            label: 'Прогнозоване споживання',
+            backgroundColor: 'rgba(66,66,66,0.7)',
+            data: consumption_forecast,
+        })
+    }
+    return data;
 }
 
 
@@ -106,13 +116,13 @@ function __set_energy_html_content(content) {
     __get_aggregated_consumption_data_div().html(content);
 }
 
-function __generate_table(data) {
+function __generate_table(raw_consumption_data) {
     let data_rows = '';
-    for (const time_and_date of data) {
+    for (const item of raw_consumption_data) {
         data_rows += `
             <tr>
-            <td>${time_and_date[0]}</td>
-            <td>${time_and_date[1]}</td>
+            <td>${item[LABEL_INDEX_IN_RAW_DATA]}</td>
+            <td>${item[CONSUMPTION_INDEX_IN_RAW_DATA]}</td>
             </tr>`
     }
     return '' +
@@ -127,6 +137,10 @@ function __generate_table(data) {
         data_rows +
         '</tbody>' +
         '</table>'
+}
+
+function _check_consumption_forecast_is_present(raw_consumption_data) {
+    return raw_consumption_data[0][CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA] !== undefined
 }
 
 function __set_display_mode_to_table_and_update_if_data_is_present() {
