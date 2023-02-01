@@ -66,4 +66,5 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     hours_filtering_end_hour: HOUR | None = None
 
     def is_hours_filtering_set(self):
-        return bool(self.hours_filtering_start_hour and self.hours_filtering_end_hour)
+        return self.hours_filtering_start_hour is not None \
+            and self.hours_filtering_end_hour is not None
