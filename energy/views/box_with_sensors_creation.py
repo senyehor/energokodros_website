@@ -21,8 +21,7 @@ from utils.types import StrKeyDict
 @admin_rights_and_login_required
 class BoxWithSensorsCreateView(SessionWizardView):
     form_list = FORMS
-    # todo to list instead of home
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('box-list')
     success_message = _('Успішно створено ящик та сенсори')
 
     @method_decorator(transaction.atomic)
