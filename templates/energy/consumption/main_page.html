@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% load js_reverse %}
 {% load i18n %}
 {% load crispy_forms_filters %}
 {% load static %}
@@ -28,6 +29,6 @@
     <script type="text/javascript" src="{% static "js/energy/consumption/displaying.js" %}"></script>
 {% endblock %}
 {% block display_none %}
-    <p id="get-facilities-list-for-role">{% url 'get-facilities-list-for-role' %}</p>
-    <p id="get-aggregated-consumption-for-facility">{% url 'get-aggregated-consumption-for-facility' %}</p>
+    {% create_url_name_id_p_tag_with_link_content 'get-facilities-list-for-role' %}
+    {% create_url_name_id_p_tag_with_link_content 'get-aggregated-consumption-for-facility' %}
 {% endblock %}

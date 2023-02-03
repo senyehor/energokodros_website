@@ -1,4 +1,5 @@
 {% extends 'common/form_in_center_with_default_padding_and_width.html' %}
+{% load js_reverse %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block title %}Новий об'єкт{% endblock %}
@@ -15,6 +16,5 @@
     <script src="{% static 'js/institutions/dynamic_facility_choices_for_institution.js' %}"></script>
 {% endblock %}
 {% block display_none %}
-    {#    todo remake to tag#}
-    <p id='get-institution-facilities'>{% url 'get-institution-facilities' %}</p>
+    {% create_url_name_id_p_tag_with_link_content 'get-institution-facilities' %}
 {% endblock %}
