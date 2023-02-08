@@ -21,7 +21,7 @@ class SensorForm(CrispyModelForm):
         model = Sensor
         fields = ('sensor_number', 'sensor_description')
         labels = {
-            'sensor_number': _('Номер'),
+            'sensor_number': _('Власний номер'),
         }
         buttons = UPDATE_DELETE_BUTTONS_SET
 
