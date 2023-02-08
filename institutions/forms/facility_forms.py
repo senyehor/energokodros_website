@@ -22,8 +22,7 @@ class NewFacilityForm(CrispyModelForm):
         queryset=Facility.objects.get_institutions(),
         required=False,
         label=_("Оберіть заклад, якому буде належати об'єкт"),
-        empty_label=None,
-        widget=SelectWithFormControlClass(),
+        empty_label=None
     )
     # this field should be populated based on institution choice by js
     parent_facility = SecureModelChoiceField(

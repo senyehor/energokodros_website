@@ -6,8 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 from utils.forms import (
-    CrispyModelForm, SecureModelChoiceField, SelectWithFormControlClass,
-    UPDATE_DELETE_BUTTONS_SET,
+    CrispyModelForm, SecureModelChoiceField, UPDATE_DELETE_BUTTONS_SET,
 )
 
 
@@ -54,8 +53,7 @@ class BoxSensorSetForm(CrispyModelForm):
         # correct choices must be set via ajax for to chosen institution
         queryset=Facility.objects.all(),
         required=True,
-        empty_label=None,
-        widget=SelectWithFormControlClass()
+        empty_label=None
     )
 
     class Meta:
