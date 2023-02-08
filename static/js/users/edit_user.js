@@ -1,7 +1,7 @@
 $(document).ready(function () {
     style_roles_select();
     __get_roles_select().change(
-        redirect_from_selected_option_and_clear_selected_on_click(
+        redirect_to_selected_object(
             'edit-user-role-pk-in-post'
         )
     );

@@ -2,12 +2,12 @@ $(document).ready(function () {
     style_selects();
 
     __get_facility_role_has_access_to_select().click(
-        redirect_from_selected_option_and_clear_selected_on_click(
+        redirect_to_selected_object(
             'edit-facility-pk-in-post'
         )
     );
     __get_user_role_owner_select().click(
-        redirect_from_selected_option_and_clear_selected_on_click(
+        redirect_to_selected_object(
             'edit-user-pk-in-post'
         )
     )
