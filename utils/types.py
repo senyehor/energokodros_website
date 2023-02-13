@@ -5,6 +5,7 @@ from django.views import View as View_for_typehint
 
 StrTuple: TypeAlias = Tuple[str, ...]
 StrKeyDict: TypeAlias = dict[str, Any]
+StrStrDict: TypeAlias = dict[str, str]
 FuncView: TypeAlias = Callable[[HttpRequest, ...], HttpResponse]
 ClassView: TypeAlias = View_for_typehint
 ViewType: TypeAlias = FuncView | ClassView
