@@ -1,4 +1,4 @@
-from energy.forms import BoxForm, BoxSensorSetFormset, SensorsFormset
+from energy.forms import BoxFormNoRelationFields, BoxSensorSetFormset, SensorsFormset
 
 
 class STEPS:
@@ -8,7 +8,7 @@ class STEPS:
 
 
 FORMS = (
-    (STEPS.BOX, BoxForm),
+    (STEPS.BOX, BoxFormNoRelationFields),
     # default sensors count is max but can be adjusted by user
     (STEPS.SENSORS, SensorsFormset),
     # box_sensors_set should be created dynamically depending on sensor count from previous step
