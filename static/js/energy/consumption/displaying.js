@@ -104,7 +104,7 @@ function __generate_chart_data(raw_consumption_data) {
     if (consumption_forecast) {
         data.datasets.push({
             label: 'Прогнозоване споживання',
-            backgroundColor: 'rgba(66,66,66,0.7)',
+            backgroundColor: 'rgba(152,255,134,0.7)',
             data: consumption_forecast,
         })
     }
