@@ -40,7 +40,7 @@ class Sensor(models.Model):
         db_table = 'sensors'
 
     def __str__(self):
-        return _(f'Сенсор {self.sensor_number}')
+        return _(f'Сенсор {self.sensor_number} ящику {self.set.box.identifier}')
 
     def get_absolute_url(self):
         return reverse_lazy('edit-sensor', kwargs={'pk': self.pk})
@@ -60,7 +60,7 @@ class BoxSensorSet(models.Model):
         Sensor,
         models.CASCADE,
         null=False,
-        related_name='+'
+        related_name='set'
     )
     facility = models.ForeignKey(
         Facility,
