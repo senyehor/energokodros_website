@@ -53,7 +53,7 @@ class CommonQueryParameters:
         self.__period_start = value
 
     def __create_one_second_to_midnight_time(self) -> time:
-        return time(23, 59, 29)
+        return time(23, 59, 59)
 
     def __create_all_zeros_time(self) -> time:
         return time(0, 0, 0)

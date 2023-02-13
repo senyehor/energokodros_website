@@ -23,8 +23,8 @@ def compose_secure_choices_for_queryset(
 def get_object_by_hashed_id_or_404(_class: ModelBase | Manager | QuerySet, hashed_id: str) -> Model:
     try:
         return get_object_or_404(_class, pk=INT_REVEALER(hashed_id))
-    except ValueError:  # failed to unhash id
-        return _class.none()
+    except ValueError as e:
+        raise Http404 from e
 
 
 def hash_id(model_object: Model) -> str:
