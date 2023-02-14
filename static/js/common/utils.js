@@ -28,7 +28,11 @@ function get_headers_for_ajax_object() {
     }
 }
 
-function add_muted_text_after_div_label(div, text) {
+function add_on_click_redirects_text_after_div_first_label(div) {
+    __add_muted_text_after_div_label(div, ON_CLICK_REDIRECTS_TEXT)
+}
+
+function __add_muted_text_after_div_label(div, text) {
     div.find('label').after(__generate_muted_p(text));
 }
 
