@@ -63,7 +63,7 @@ class BoxFormNoRelationFields(CrispyModelForm):
         buttons = UPDATE_DELETE_BUTTONS_SET
 
 
-class BoxSensorSetFormNoRelationFields(CrispyModelForm):
+class BoxSensorSetForm(CrispyModelForm):
     # sensor number must be prepopulated from created sensors
     sensor_number = CharField(
         label=_('Номер сенсора у наборі'),

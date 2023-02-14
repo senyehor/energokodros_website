@@ -2,7 +2,7 @@ from django.forms import BaseFormSet, Form, formset_factory
 from django.utils.translation import gettext_lazy as _
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
-from energy.forms import BoxSensorSetFormNoRelationFields, SensorFormNoRelationFields
+from energy.forms import BoxSensorSetForm, SensorFormNoRelationFields
 from institutions.models import Facility
 from utils.forms import CrispyFormMixin, SecureModelChoiceField
 
@@ -15,7 +15,7 @@ __SensorsFormsetBase = formset_factory(
 )
 
 __BoxSensorSetFormset = formset_factory(
-    BoxSensorSetFormNoRelationFields,
+    BoxSensorSetForm,
     # setting extra to zero as actual forms count will depend on data or initial
     extra=0,
     min_num=SENSOR_COUNT_PER_BOX,
