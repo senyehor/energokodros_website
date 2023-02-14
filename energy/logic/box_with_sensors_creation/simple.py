@@ -55,5 +55,5 @@ def get_forms_from_from_list(forms: list[Form]) -> \
 
 
 def validate_sensors_count(box: Box):
-    if box.box_sensor_sets.count() != SENSOR_COUNT_PER_BOX:
+    if box.sensor_sets.count() != SENSOR_COUNT_PER_BOX:
         raise IntegrityError('Invalid sensor count')
