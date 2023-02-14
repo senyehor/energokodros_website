@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from energy.forms import (
-    BoxFormNoRelationFields, BoxSensorSetForBoxWithSensorsCreationForm,
+    BoxForm, BoxSensorSetForBoxWithSensorsCreationForm,
     SensorForm,
 )
 from energy.logic.ajax import get_facilities_formatted_choices_for_user_role
@@ -25,7 +25,7 @@ class BoxListView(ListViewWithFiltering):
 @admin_rights_and_login_required
 class BoxEditDeleteView(EditDeleteObjectUpdateView):
     model = Box
-    form_class = BoxFormNoRelationFields
+    form_class = BoxForm
     success_url = reverse_lazy('box-list')
     template_name = 'energy/edit_box.html'
     EDIT_SUCCESS_MESSAGE = _('Ящик успішно відредаговано')
