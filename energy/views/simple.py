@@ -3,7 +3,10 @@ from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from energy.forms import BoxFormNoRelationFields, BoxSensorSetForm, SensorForm
+from energy.forms import (
+    BoxFormNoRelationFields, BoxSensorSetForBoxWithSensorsCreationForm,
+    SensorForm,
+)
 from energy.logic.ajax import get_facilities_formatted_choices_for_user_role
 from energy.models import Box, BoxSensorSet, Sensor
 from users.logic.simple import check_role_belongs_to_user
@@ -54,7 +57,7 @@ class BoxSensorSetListView(ListViewWithFiltering):
 @admin_rights_and_login_required
 class BoxSensorSetEditDeleteView(EditDeleteObjectUpdateView):
     model = BoxSensorSet
-    form_class = BoxSensorSetForm
+    form_class = BoxSensorSetForBoxWithSensorsCreationForm
     success_url = reverse_lazy('box-sensor-set-list')
     template_name = 'energy/edit_box_sensor_set.html'
     EDIT_SUCCESS_MESSAGE = _('Набір успішно відредаговано')
