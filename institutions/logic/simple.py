@@ -7,4 +7,4 @@ def label_from_user_role_for_facility_roles(role: UserRole) -> str:
 
 
 def get_all_facilities_of_facility_institution(facility: Facility):
-    return facility.get_tree(facility.get_root())
+    return facility.get_tree(facility.get_institution())
