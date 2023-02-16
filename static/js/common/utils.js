@@ -111,10 +111,16 @@ function redirect_to_object(redirect_url, id) {
 }
 
 function redirect_to_selected_object(redirect_url) {
-    // clearing selected as when users go back to page option remains selected
     return function () {
         let select = $(this);
         let id = get_selected_option_for_select(select);
+        redirect_to_object(redirect_url, id);
+    }
+}
+
+function redirect_to_selected_object_with_get_id_callback(redirect_url, get_id_callback) {
+    return function () {
+        let id = get_id_callback();
         redirect_to_object(redirect_url, id);
     }
 }
