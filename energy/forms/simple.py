@@ -85,6 +85,7 @@ class BoxSensorSetForm(BoxSensorSetForBoxWithSensorsCreationForm, AdditionalSetu
 
     class Meta(BoxSensorSetForBoxWithSensorsCreationForm.Meta):
         buttons = UPDATE_DELETE_BUTTONS_SET
+        fields_order = ('line_name', 'sensor_number_in_set', 'facility', 'sensor_number')
 
     def additionally_setup(self, obj: Model):
         # noinspection PyTypeChecker
