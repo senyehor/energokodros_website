@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
 from django.db.models import Model
-from django.forms import Form
+from django.forms import CharField, Form
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
@@ -126,6 +126,14 @@ class UserRoleForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
 
 
 class ProfileForm(Form):
+    email = CharField(
+        label=_('Моя пошта'),
+        disabled=True
+    )
+    full_name = CharField(
+        label=_("Повне ім'я"),
+        disabled=True
+    )
     # must be set dynamically for user
     roles = SecureModelChoiceField(
         label=_('Мої ролі'),
@@ -136,7 +144,9 @@ class ProfileForm(Form):
 
     def __init__(self, *args, user: User, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__set_roles_for_user(user)
+        self.__init_dynamic_fields(user)
 
-    def __set_roles_for_user(self, user: User):
+    def __init_dynamic_fields(self, user: User):
         self.fields['roles'].queryset = user.roles.all()
+        self.fields['email'].initial = user.email
+        self.fields['full_name'].initial = user.full_name
