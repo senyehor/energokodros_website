@@ -3,12 +3,10 @@ from django.http import HttpRequest, JsonResponse
 from django.views.generic import FormView
 
 from energy.forms import EnergyConsumptionDisplayPageControlForm
-from energy.logic import (
-    AggregatedEnergyConsumptionController,
-    EnergyConsumptionExceptionWithMessage,
+from energy.logic.aggregated_consumption import (
+    AggregatedEnergyConsumptionController, convert_request_post_dict_to_regular_dict,
+    EnergyConsumptionExceptionWithMessage, show_no_roles_page_if_user_has_no_roles,
 )
-from energy.logic.aggregated_consumption import show_no_roles_page_if_user_has_no_roles
-from energy.logic.aggregated_consumption.simple import convert_request_post_dict_to_raw_parameters
 from utils.common.decoration import decorate_class_or_function_view
 
 
@@ -24,9 +22,9 @@ class ConsumptionPageView(FormView):
 def get_aggregated_consumption(request: HttpRequest) -> JsonResponse:
     try:
         # noinspection PyTypeChecker
-        parameters = convert_request_post_dict_to_raw_parameters(request.POST)
+        parameters = convert_request_post_dict_to_regular_dict(request.POST)
         controller = AggregatedEnergyConsumptionController(request.user, parameters)
-        consumption = controller.get_consumption()
+        consumption = controller.get_consumption_with_optional_forecast()
     except EnergyConsumptionExceptionWithMessage as e:
         return JsonResponse(e.message, status=400, safe=False)
     return JsonResponse(consumption, safe=False)
