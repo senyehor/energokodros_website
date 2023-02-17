@@ -4,19 +4,19 @@ from datetime import datetime
 from typing import TypeAlias
 
 ConsumptionForecast: TypeAlias = float
-ConsumptionTime: TypeAlias = datetime | str
-ConsumptionValue: TypeAlias = Decimal
+RawConsumptionTime: TypeAlias = datetime | str
+RawConsumptionValue: TypeAlias = Decimal
 
 FormattedConsumptionTime: TypeAlias = str
 FormattedConsumptionValue: TypeAlias = str
 FormattedConsumptionForecast: TypeAlias = str
 
-RawAggregatedConsumptionData = list[tuple[ConsumptionTime, ConsumptionValue]] | None
+RawAggregatedConsumptionData = list[tuple[RawConsumptionTime, RawConsumptionValue]]
 AggregatedConsumptionData: TypeAlias = \
     list[
-        tuple[FormattedConsumptionTime, FormattedConsumptionValue, FormattedConsumptionForecast]
-    ] | None
+        tuple[FormattedConsumptionTime, FormattedConsumptionValue]
+    ]
 RawAggregatedConsumptionDataWithForecast: TypeAlias = \
-    list[tuple[ConsumptionTime, ConsumptionValue, ConsumptionForecast]]
+    list[tuple[RawConsumptionTime, RawConsumptionValue, ConsumptionForecast]]
 
 HOUR: TypeAlias = int

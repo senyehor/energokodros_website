@@ -1,13 +1,12 @@
 from abc import ABC
 from datetime import date, timedelta
 from enum import IntEnum
-from typing import Type, TypeAlias, TypedDict
+from typing import Callable, Type, TypeAlias, TypedDict
 
 from django.db import connection
 
-from energy.logic.aggregated_consumption.exceptions import NoConsumptionData
 from energy.logic.aggregated_consumption.formatters import (
-    AnyFormatter, CommonFormatter, OneHourFormatter,
+    CommonFormatter, OneHourFormatter,
     OneMonthFormatter,
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
@@ -16,7 +15,8 @@ from energy.logic.aggregated_consumption.parameters import (
 )
 from energy.logic.aggregated_consumption.simple import get_box_set_ids_for_facility
 from energy.logic.aggregated_consumption.types import (
-    AggregatedConsumptionData, RawAggregatedConsumptionData,
+    AggregatedConsumptionData, FormattedConsumptionTime, FormattedConsumptionValue,
+    RawAggregatedConsumptionData, RawConsumptionTime, RawConsumptionValue,
 )
 
 AnyQuerier: TypeAlias = '_AggregatedConsumptionQuerierBase'
@@ -56,7 +56,10 @@ class _AggregatedConsumptionQuerierBase(ABC):
         ORDER BY {order_by};
     """
 
-    formatter: AnyFormatter = CommonFormatter()
+    _format_time: Callable[
+        [RawConsumptionTime], FormattedConsumptionTime] = CommonFormatter.format_time
+    _format_consumption: Callable[
+        [RawConsumptionValue], FormattedConsumptionValue] = CommonFormatter.format_consumption
 
     class __RawAggregatedConsumptionDataIndexes(IntEnum):
         TIME_PART = 0
@@ -71,13 +74,13 @@ class _AggregatedConsumptionQuerierBase(ABC):
             raise NotImplementedError('this class must be subclassed')
         self.__parameters = parameters
 
-    def get_consumption(self) -> RawAggregatedConsumptionData:
+    def get_consumption(self) -> AggregatedConsumptionData | None:
         with connection.cursor() as cursor:
             cursor.execute(self.__compose_query())
             consumption = cursor.fetchall()
-            if not consumption:
-                raise NoConsumptionData
-            return consumption
+            if consumption:
+                return self.__format_consumption(consumption)
+            return None
 
     def __compose_query(self) -> str:
         return ' '.join(
@@ -125,6 +128,17 @@ class _AggregatedConsumptionQuerierBase(ABC):
         ids = (str(_id) for _id in ids)
         return ', '.join(ids)
 
+    def __format_consumption(self, raw_consumption: RawAggregatedConsumptionData) \
+            -> AggregatedConsumptionData:
+        _ = self.__RawAggregatedConsumptionDataIndexes
+        return [
+            (
+                self._format_time(line[_.TIME_PART]),
+                self._format_consumption(line[_.CONSUMPTION_PART])
+            )
+            for line in raw_consumption
+        ]
+
     @property
     def parameters(self) -> CommonQueryParameters:
         return self.__parameters
@@ -166,7 +180,7 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
         AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
         AND EXTRACT(HOUR FROM aggregation_interval_start) <= {hours_filtering_end_hour}
     """
-    formatter = OneHourFormatter()
+    _format_time = OneHourFormatter.format_time
 
     def _compose_where(self) -> str:
         base_where = super()._compose_where()
@@ -220,7 +234,7 @@ class _OneMonthQuerier(_AggregatedConsumptionQuerierBase):
         EXTRACT(MONTH FROM aggregation_interval_start)
     """
     ORDER_BY_PART = GROUP_BY_PART
-    formatter = OneMonthFormatter()
+    _format_time = OneMonthFormatter.format_time
 
 
 class _OneYearQuerier(_AggregatedConsumptionQuerierBase):
