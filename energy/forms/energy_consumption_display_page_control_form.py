@@ -1,4 +1,4 @@
-from django.forms import ChoiceField, Form
+from django.forms import BooleanField, ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
@@ -34,6 +34,9 @@ class EnergyConsumptionDisplayPageControlForm(CrispyFormMixin, Form):
     aggregation_interval_seconds = ChoiceField(
         label=_('Інтервал агрегації'),
         choices=AGGREGATION_INTERVAL_CHOICES,
+    )
+    include_forecast = BooleanField(
+        label=_('Прогноз споживання')
     )
 
     def __init__(self, user: User, *args, **kwargs):
