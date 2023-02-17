@@ -1,12 +1,14 @@
 import os
 from datetime import datetime
+from typing import Callable
 
 from energy.logic.aggregated_consumption.exceptions import ForecastForParametersDoesNotExist
+from energy.logic.aggregated_consumption.formatters import CommonFormatter
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.types import (
-    RawAggregatedConsumptionData, RawAggregatedConsumptionDataWithForecast, RawConsumptionForecast,
-    RawConsumptionTime,
+    AggregatedConsumptionData, AggregatedConsumptionDataWithForecast, FormattedConsumptionForecast,
+    RawConsumptionForecast, RawConsumptionTime,
 )
 from institutions.models import Facility
 
@@ -16,27 +18,29 @@ class ConsumptionForecaster:
     currently this is just a stub returning hardcoded data,
     but will be a forecasting AI
     """
+    _format_forecast: Callable[[RawConsumptionForecast], FormattedConsumptionForecast] = \
+        CommonFormatter.format_forecast
 
-    def __init__(self, parameters: AnyQueryParameters, consumption: RawAggregatedConsumptionData):
+    def __init__(self, parameters: AnyQueryParameters, consumption: AggregatedConsumptionData):
         self.__parameters = parameters
         self.__consumption = consumption
 
-    def get_consumption_forecast(self) -> RawAggregatedConsumptionDataWithForecast:
+    def get_consumption_with_forecast(self) -> AggregatedConsumptionDataWithForecast:
         return [
             (
                 date,
                 consumption,
-                self.__get_forecast_for_date(date)
+                self._format_forecast(self.__get_forecast_for_date(date))
             )
             for date, consumption in self.__consumption
         ]
 
-    def __get_forecast_for_date(self, date: ConsumptionTime) -> ConsumptionForecast:
+    def __get_forecast_for_date(self, date: RawConsumptionTime) -> RawConsumptionForecast:
         if self.__check_is_kindergarten_and_interval_is_one_hour():
             return self.__get_forecast_for_kindergarten(date)
         raise ForecastForParametersDoesNotExist
 
-    def __get_forecast_for_kindergarten(self, date: datetime) -> ConsumptionForecast:
+    def __get_forecast_for_kindergarten(self, date: datetime) -> RawConsumptionForecast:
         day_number = date.weekday()
         hour = date.hour
         forecast_source = self.__get_forecast_source_for_kindergarten(
