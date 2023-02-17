@@ -1,11 +1,12 @@
 import os
 from datetime import datetime
 
+from energy.logic.aggregated_consumption.exceptions import ForecastForParametersDoesNotExist
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.types import (
-    ConsumptionForecast, ConsumptionTime, RawAggregatedConsumptionData,
-    RawAggregatedConsumptionDataWithForecast,
+    RawAggregatedConsumptionData, RawAggregatedConsumptionDataWithForecast, RawConsumptionForecast,
+    RawConsumptionTime,
 )
 from institutions.models import Facility
 
@@ -33,7 +34,7 @@ class ConsumptionForecaster:
     def __get_forecast_for_date(self, date: ConsumptionTime) -> ConsumptionForecast:
         if self.__check_is_kindergarten_and_interval_is_one_hour():
             return self.__get_forecast_for_kindergarten(date)
-        return 0
+        raise ForecastForParametersDoesNotExist
 
     def __get_forecast_for_kindergarten(self, date: datetime) -> ConsumptionForecast:
         day_number = date.weekday()
@@ -56,7 +57,7 @@ class ConsumptionForecaster:
             Facility.objects.get(pk=os.getenv('KINDERGARTEN_ID'))
 
     def __get_forecast_source_for_kindergarten(self, is_day_working: bool) \
-            -> dict[int, ConsumptionForecast]:
+            -> dict[int, RawConsumptionForecast]:
         if is_day_working:
             return KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKING_DAY_BY_HOUR
         return KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR
