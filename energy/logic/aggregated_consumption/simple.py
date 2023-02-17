@@ -19,14 +19,6 @@ def parse_str_parameter_to_int_with_correct_exception(value: str) -> int:
         raise QueryParametersInvalid from e
 
 
-def parse_include_forecast_parameter(include_forecast: str) -> bool:
-    if include_forecast == 'true':
-        return True
-    if include_forecast == 'false':
-        return False
-    raise QueryParametersInvalid('include_forecast must be true or false')
-
-
 def show_no_roles_page_if_user_has_no_roles(view: FuncView) -> FuncView:
     @functools.wraps(view)
     def wrapper(request: HttpRequest, *args, **kwargs):

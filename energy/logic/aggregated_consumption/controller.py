@@ -1,10 +1,9 @@
+from energy.logic.aggregated_consumption.exceptions import QueryParametersInvalid
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
 from energy.logic.aggregated_consumption.parameters_parsers import ParameterParser
-from energy.logic.aggregated_consumption.queriers import \
-    AggregatedConsumptionQuerier
-from energy.logic.aggregated_consumption.simple import parse_include_forecast_parameter
+from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.types import (
-    AggregatedConsumptionData, AggregatedConsumptionDataWithForecast,
+    AggregatedConsumptionData, AggregatedConsumptionDataWithForecast, RawAggregatedConsumptionData,
 )
 from users.logic import check_role_belongs_to_user, check_role_has_access_for_facility
 from users.models import User, UserRole
@@ -16,9 +15,7 @@ class AggregatedEnergyConsumptionController:
 
     def __init__(self, user: User, parameters: StrStrDict):
         role = self.__extract_role(parameters)
-        self.__include_forecast = parse_include_forecast_parameter(
-            parameters.pop('include_forecast', None)
-        )
+        self.__include_forecast = self.__extract_include_forecast(parameters)
         self.__parameters = ParameterParser(parameters).get_parameters()
         # noinspection PyTypeChecker
         self.__check_user_is_role_owner_and_role_has_access_to_facility(
@@ -28,13 +25,19 @@ class AggregatedEnergyConsumptionController:
 
     def get_consumption_with_optional_forecast(self) \
             -> AggregatedConsumptionData | AggregatedConsumptionDataWithForecast:
-        consumption = AggregatedConsumptionQuerier(self.__parameters).get_consumption()
+        querier = self.__create_consumption_querier()
         if self.__include_forecast:
-            consumption_with_forecast = ConsumptionForecaster(
-                self.__parameters, consumption
-            ).get_consumption_with_forecast()
-            return consumption_with_forecast
-        return consumption
+            raw_consumption = querier.get_raw_consumption()
+            forecaster = self.__create_forecaster(raw_consumption)
+            return forecaster.get_consumption_with_forecast()
+        return querier.get_formatted_consumption()
+
+    def __create_forecaster(self, raw_consumption: RawAggregatedConsumptionData) \
+            -> ConsumptionForecaster:
+        return ConsumptionForecaster(self.__parameters, raw_consumption)
+
+    def __create_consumption_querier(self) -> AggregatedConsumptionQuerier:
+        return AggregatedConsumptionQuerier(self.__parameters)
 
     def __extract_role(self, parameters: dict[str, str]) -> UserRole:
         # noinspection PyTypeChecker
@@ -51,3 +54,11 @@ class AggregatedEnergyConsumptionController:
         check_role_has_access_for_facility(
             role, self.__parameters.facility_to_get_consumption_for_or_all_descendants_if_any
         )
+
+    def __extract_include_forecast(self, parameters: StrStrDict) -> bool:
+        include_forecast = parameters.pop('include_forecast', None)
+        if include_forecast == 'true':
+            return True
+        if include_forecast == 'false':
+            return False
+        raise QueryParametersInvalid('include_forecast must be true or false')
