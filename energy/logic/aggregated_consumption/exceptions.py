@@ -33,3 +33,7 @@ class NoConsumptionData(EnergyConsumptionExceptionWithMessage):
 
 class ForecastForParametersDoesNotExist(EnergyConsumptionExceptionWithMessage):
     message = _('Для заданих параметрів прогноз відсутній')
+
+
+class FacilityAndDescendantsHaveNoSensors(EnergyConsumptionExceptionWithMessage):
+    message = _("У обраного об'єкту немає прив'язаних сенсорів")
