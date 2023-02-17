@@ -27,7 +27,7 @@ function get_consumption_data_and_update() {
         headers: get_headers_for_ajax_object(),
         success: (data) => {
             if (data === null) {
-                add_error_alert('За заданими фільтрами дані відсутні');
+                add_warning_alert('За заданими фільтрами дані відсутні');
                 return;
             }
             LATEST_RECEIVED_DATA = data;
