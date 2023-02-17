@@ -1,7 +1,7 @@
 import time
 from dataclasses import fields
 from datetime import date, datetime
-from typing import Any, TypeAlias
+from typing import Any, Type, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
     AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, PeriodStartGreaterThanEnd,
@@ -9,26 +9,54 @@ from energy.logic.aggregated_consumption.exceptions import (
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
-    CommonQueryParameters,
-    OneHourAggregationIntervalQueryParameters,
+    AnyQueryParameters, CommonQueryParameters,
+    EnergyConsumptionQueryRawParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.simple import \
     parse_str_parameter_to_int_with_correct_exception
 from institutions.models import Facility
+from utils.common import get_object_by_hashed_id_or_404
 
-AnyParametersParser: TypeAlias = 'CommonQueryParametersParser'
+AnyQueryParametersParser: TypeAlias = '_CommonQueryParametersParser'
 
 
-class CommonQueryParametersParser:
+class ParameterParser:
+    def __init__(self, raw_parameters: dict[str, str]):
+        self.__raw_parameters = EnergyConsumptionQueryRawParameters(**raw_parameters)
+
+    def get_parameters(self) -> AnyQueryParameters:
+        aggregation_interval = self.__extract_aggregation_interval()
+        parser = self.__get_parser_for_aggregation_interval(aggregation_interval)
+        _ = self.__raw_parameters
+        return parser(
+            aggregation_interval=aggregation_interval,
+            facility_pk_to_get_consumption_for_or_all_descendants_if_any=_['facility_pk'],
+            period_end_epoch_seconds=_['period_end_epoch_seconds'],
+            period_start_epoch_seconds=_['period_start_epoch_seconds']
+        ).get_parameters()
+
+    def __extract_aggregation_interval(self) -> AggregationIntervalSeconds:
+        aggregation_interval_seconds = parse_str_parameter_to_int_with_correct_exception(
+            self.__raw_parameters.pop('aggregation_interval_seconds')
+        )
+        return AggregationIntervalSeconds(aggregation_interval_seconds)
+
+    def __get_parser_for_aggregation_interval(
+            self, aggregation_interval: AggregationIntervalSeconds) \
+            -> Type[AnyQueryParametersParser]:
+        return _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING[aggregation_interval]
+
+
+class _CommonQueryParametersParser:
     def __init__(
             self, *,
-            facility_to_get_consumption_for_or_all_descendants_if_any: Facility,
             aggregation_interval: AggregationIntervalSeconds,
+            facility_pk_to_get_consumption_for_or_all_descendants_if_any: str,
             period_start_epoch_seconds: str,
             period_end_epoch_seconds: str
     ):
         self.__facility_to_get_consumption_for_or_all_descendants_if_any = \
-            facility_to_get_consumption_for_or_all_descendants_if_any
+            self.__parse_facility(facility_pk_to_get_consumption_for_or_all_descendants_if_any)
         self.__aggregation_interval = aggregation_interval
         self.__set_period_boundaries(period_start_epoch_seconds, period_end_epoch_seconds)
         self._validate()
@@ -48,15 +76,10 @@ class CommonQueryParametersParser:
 
     def __set_period_boundaries(self, period_start_epoch_seconds: str,
                                 period_end_epoch_seconds: str):
-        period_start_epoch_seconds = parse_str_parameter_to_int_with_correct_exception(
-            period_start_epoch_seconds
-        )
-        period_end_epoch_seconds = parse_str_parameter_to_int_with_correct_exception(
-            period_end_epoch_seconds
-        )
-        self._period_start = self.__convert_epoch_seconds_to_date(
-            period_start_epoch_seconds
-        )
+        _ = parse_str_parameter_to_int_with_correct_exception
+        period_start_epoch_seconds = _(period_start_epoch_seconds)
+        period_end_epoch_seconds = _(period_end_epoch_seconds)
+        self._period_start = self.__convert_epoch_seconds_to_date(period_start_epoch_seconds)
         self._period_end = self.__convert_epoch_seconds_to_date(period_end_epoch_seconds)
 
     def __check_period_is_valid(self):
@@ -76,16 +99,20 @@ class CommonQueryParametersParser:
             raise FutureFilteringDate
         return datetime.fromtimestamp(epoch_seconds).date()
 
+    def __parse_facility(self, facility_pk: str) -> Facility:
+        # noinspection PyTypeChecker
+        return get_object_by_hashed_id_or_404(Facility, facility_pk)
 
-class __AllowQueryingForCurrentDayParser(CommonQueryParametersParser):
+
+class __AllowQueryingForCurrentDayParser(_CommonQueryParametersParser):
     def _check_period_contains_at_least_one_aggregation_interval(
-            self: CommonQueryParametersParser):
+            self: _CommonQueryParametersParser):
         if self._period_start == self._period_end:
             return
         super()._check_period_contains_at_least_one_aggregation_interval()
 
 
-class OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
+class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
     """one hour aggregation interval has additional parameters"""
     __HOURS = range(24)
 
@@ -140,5 +167,19 @@ class OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
         return self.__hours_filtering_start_hour and self.__hours_filtering_end_hour
 
 
-class OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
+class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
     pass
+
+
+_AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING: \
+    dict[
+        AggregationIntervalSeconds,
+        Type[AnyQueryParametersParser]
+    ] = \
+    {
+        AggregationIntervalSeconds.ONE_HOUR:  _OneHourAggregationIntervalQueryParametersParser,
+        AggregationIntervalSeconds.ONE_DAY:   _OneDayAggregationIntervalQueryParametersParser,
+        AggregationIntervalSeconds.ONE_WEEK:  _CommonQueryParametersParser,
+        AggregationIntervalSeconds.ONE_MONTH: _CommonQueryParametersParser,
+        AggregationIntervalSeconds.ONE_YEAR:  _CommonQueryParametersParser
+    }
