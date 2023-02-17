@@ -19,7 +19,7 @@ class ConsumptionForecaster:
     but will be a forecasting AI
     """
     _format_forecast: Callable[[RawConsumptionForecast], FormattedConsumptionForecast] = \
-        CommonFormatter.format_forecast
+        staticmethod(CommonFormatter.format_forecast)
 
     def __init__(self, parameters: AnyQueryParameters, consumption: AggregatedConsumptionData):
         self.__parameters = parameters
