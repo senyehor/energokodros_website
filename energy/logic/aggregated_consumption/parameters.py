@@ -10,15 +10,14 @@ from institutions.models import Facility
 AnyQueryParameters: TypeAlias = 'CommonQueryParameters'
 
 
-class EnergyConsumptionQueryRawParameters(TypedDict):
-    role: str
-    facility: str
+class EnergyConsumptionQueryRawParameters(TypedDict, total=False):
+    facility_pk: str
     aggregation_interval_seconds: str
     period_start_epoch_seconds: str
     period_end_epoch_seconds: str
     # one hour interval specific filters
-    hours_filtering_start_hour: str | None
-    hours_filtering_end_hour: str | None
+    hours_filtering_start_hour: str
+    hours_filtering_end_hour: str
 
 
 @dataclass(kw_only=True)
