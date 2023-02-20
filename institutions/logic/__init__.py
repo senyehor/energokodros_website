@@ -1,6 +1,7 @@
 from .facility_formatting_and_ajax_related import (
-    common_facility_choices_format_function, compose_formatted_facility_descendants_and_itself,
-    compose_formatted_institution_facilities_choices,
+    get_facility_name_space_padded_according_to_nesting,
+    make_facility_and_descendants_choices_with_padding_according_to_nesting,
+    make_institution_facilities_choices_with_padding_according_to_nesting,
 )
 from .simple import (
     get_all_descendants_of_facility_with_self, get_all_facilities_of_facility_institution,

@@ -3,7 +3,7 @@ from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 
 from institutions.logic import (
-    common_facility_choices_format_function,
+    get_facility_name_space_padded_according_to_nesting,
     label_from_user_role_for_facility_roles,
 )
 from institutions.models import Facility
@@ -56,7 +56,7 @@ class FacilityEditForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
         required=False,
         disabled=True,
         widget=SelectWithFormControlClass(attrs={'size': 7}),
-        label_from_instance_function=common_facility_choices_format_function
+        label_from_instance_function=get_facility_name_space_padded_according_to_nesting
     )
     # info only field, qs is filled in custom method
     roles_that_have_access_to_this_facility = SecureModelChoiceField(

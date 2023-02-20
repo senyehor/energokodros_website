@@ -7,7 +7,7 @@ from energy.forms.box_with_sensors_creation import (
 )
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.logic import (
-    common_facility_choices_format_function, get_all_facilities_of_facility_institution,
+    get_all_facilities_of_facility_institution, get_facility_name_space_padded_according_to_nesting,
 )
 from institutions.models import Facility
 from utils.common.object_to_queryset import object_to_queryset
@@ -80,7 +80,7 @@ class BoxSensorSetForm(BoxSensorSetForBoxWithSensorsCreationForm, AdditionalSetu
         # correct choices must be set in additionally_setup
         queryset=Facility.objects.all(),
         empty_label=None,
-        label_from_instance_function=common_facility_choices_format_function
+        label_from_instance_function=get_facility_name_space_padded_according_to_nesting
     )
 
     class Meta(BoxSensorSetForBoxWithSensorsCreationForm.Meta):
