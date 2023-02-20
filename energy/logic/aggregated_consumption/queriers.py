@@ -1,22 +1,21 @@
 from abc import ABC
 from datetime import date, timedelta
 from enum import IntEnum
-from typing import Callable, Iterable, Type, TypeAlias, TypedDict
+from typing import Iterable, Type, TypeAlias, TypedDict
 
 from django.db import connection
 
 from energy.logic.aggregated_consumption.exceptions import FacilityAndDescendantsHaveNoSensors
 from energy.logic.aggregated_consumption.formatters import (
-    CommonFormatter, OneHourFormatter,
-    OneMonthFormatter,
+    OneHourFormatter,
+    OneMonthFormatter, RawAggregatedDataFormatter,
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    AggregatedConsumptionData, FormattedConsumptionTime, FormattedConsumptionValue,
-    RawAggregatedConsumptionData, RawConsumptionTime, RawConsumptionValue,
+    AggregatedConsumptionData, RawAggregatedConsumptionData,
 )
 from energy.models import BoxSensorSet
 
@@ -37,6 +36,10 @@ class AggregatedConsumptionQuerier:
 
     def __get_querier_for_parameters(self) -> Type[AnyQuerier]:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
+
+    @property
+    def formatter(self) -> RawAggregatedDataFormatter:
+        return self.__get_querier_for_parameters().formatter
 
 
 class _AggregatedConsumptionQuerierBase(ABC):
@@ -60,12 +63,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         GROUP BY {group_by}
         ORDER BY {order_by};
     """
-
-    _format_time: Callable[
-        [RawConsumptionTime], FormattedConsumptionTime] = staticmethod(CommonFormatter.format_time)
-    _format_consumption: Callable[
-        [RawConsumptionValue], FormattedConsumptionValue] = \
-        staticmethod(CommonFormatter.format_consumption)
+    formatter: RawAggregatedDataFormatter = RawAggregatedDataFormatter()
 
     class __RawAggregatedConsumptionDataIndexes(IntEnum):
         TIME_PART = 0
@@ -152,8 +150,8 @@ class _AggregatedConsumptionQuerierBase(ABC):
         _ = self.__RawAggregatedConsumptionDataIndexes
         return [
             (
-                self._format_time(line[_.TIME_PART]),
-                self._format_consumption(line[_.CONSUMPTION_PART])
+                self.formatter.format_time(line[_.TIME_PART]),
+                self.formatter.format_consumption(line[_.CONSUMPTION_PART])
             )
             for line in raw_consumption
         ]
@@ -199,7 +197,7 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
         AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
         AND EXTRACT(HOUR FROM aggregation_interval_start) <= {hours_filtering_end_hour}
     """
-    _format_time = staticmethod(OneHourFormatter.format_time)
+    formatter = OneHourFormatter()
 
     def _compose_where(self) -> str:
         base_where = super()._compose_where()
@@ -254,7 +252,7 @@ class _OneMonthQuerier(_AggregatedConsumptionQuerierBase):
     """
     ORDER_BY_PART = GROUP_BY_PART
 
-    _format_time = staticmethod(OneMonthFormatter.format_time)
+    formatter = OneMonthFormatter()
 
 
 class _OneYearQuerier(_AggregatedConsumptionQuerierBase):
