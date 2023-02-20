@@ -4,10 +4,10 @@ from typing import Iterable, TypeAlias, Union
 from django.db.models import Q, QuerySet
 from django.views.generic import ListView
 
-from energokodros.settings import DEFAULT_PAGINATE_BY
 from utils.types import StrTuple
 
 _ListViewWithMixinType: TypeAlias = Union[ListView, 'QuerySetFieldsIcontainsFilterPkOrderedMixin']
+DEFAULT_PAGINATE_BY = 7
 
 
 class QuerySetFieldsIcontainsFilterPkOrderedMixin:
