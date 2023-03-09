@@ -1,6 +1,7 @@
 import datetime
 from dataclasses import dataclass
 from datetime import date, datetime, time
+from enum import StrEnum
 from typing import TypeAlias, TypedDict
 
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
@@ -18,6 +19,7 @@ class EnergyConsumptionQueryRawParameters(TypedDict, total=False):
     # one hour interval specific filters
     hours_filtering_start_hour: str
     hours_filtering_end_hour: str
+    hour_filtering_method: 'HourFilteringMethods'
 
 
 @dataclass(kw_only=True)
@@ -56,6 +58,11 @@ class CommonQueryParameters:
 
     def __create_all_zeros_time(self) -> time:
         return time(0, 0, 0)
+
+
+class HourFilteringMethods(StrEnum):
+    EVERY_DAY = 'filter-every-day'
+    WHOLE_INTERVAL = 'filter-whole-interval'
 
 
 @dataclass(kw_only=True)
