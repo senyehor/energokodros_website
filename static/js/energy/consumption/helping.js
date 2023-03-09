@@ -15,7 +15,7 @@ $(document).ready(function () {
 let INCLUDE_HOURS_FILTER = false;
 
 let FILTER_EVERY_DAY_VALUE = 'filter-every-day', FILTER_WHOLE_INTERVAL_VALUE = 'filter-whole-interval';
-let CHOSEN_HOUR_FILTERING_OPTION = FILTER_EVERY_DAY_VALUE;
+let CHOSEN_HOUR_FILTERING_METHOD = FILTER_EVERY_DAY_VALUE;
 let FILTER_EVERY_DAY_BUTTON = null, FILTER_WHOLE_INTERVAL_BUTTON = null;
 
 const DEFAULT_START_HOUR_FILTER_OPTION = 0, DEFAULT_END_HOUR_FILTER_OPTION = 23;
@@ -102,12 +102,12 @@ function add_hour_filtering_filter_day_or_interval_buttons() {
     FILTER_WHOLE_INTERVAL_BUTTON = $('#filter_whole_interval_button_id');
     FILTER_EVERY_DAY_BUTTON.click(() => {
         __set_button_to_chosen(FILTER_EVERY_DAY_BUTTON);
-        CHOSEN_HOUR_FILTERING_OPTION = FILTER_EVERY_DAY_VALUE;
+        CHOSEN_HOUR_FILTERING_METHOD = FILTER_EVERY_DAY_VALUE;
         __set_button_to_can_be_chosen(FILTER_WHOLE_INTERVAL_BUTTON);
     });
     FILTER_WHOLE_INTERVAL_BUTTON.click(() => {
         __set_button_to_chosen(FILTER_WHOLE_INTERVAL_BUTTON);
-        CHOSEN_HOUR_FILTERING_OPTION = FILTER_WHOLE_INTERVAL_VALUE;
+        CHOSEN_HOUR_FILTERING_METHOD = FILTER_WHOLE_INTERVAL_VALUE;
         __set_button_to_can_be_chosen(FILTER_EVERY_DAY_BUTTON);
     })
 }
