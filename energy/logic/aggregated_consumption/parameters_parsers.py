@@ -118,13 +118,14 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
     __HOURS: Iterable[int] = range(24)
 
     def __init__(
-            self, *, hours_filtering_start_hour: str = None, hours_filtering_end_hour: str = None,
+            self, *, hours_filtering_start_hour: str = None,
+            hours_filtering_end_hour: str = None, hour_filtering_method: str = None,
             **kwargs
     ):
         self.__check_aggregation_interval_is_on_hour(kwargs.get('aggregation_interval'))
         self.__hours_filtering_start_hour = hours_filtering_start_hour
         self.__hours_filtering_end_hour = hours_filtering_end_hour
-        if hours_filtering_start_hour is not None and hours_filtering_end_hour is not None:
+        self.__hour_filtering_method = hour_filtering_method
             self.__set_hours_filtering_range(hours_filtering_start_hour, hours_filtering_end_hour)
         super().__init__(**kwargs)
         self._validate()
