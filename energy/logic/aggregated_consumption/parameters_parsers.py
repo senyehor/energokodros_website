@@ -138,7 +138,8 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
         return OneHourAggregationIntervalQueryParameters(
             **base_kwargs,
             hours_filtering_start_hour=self.__hours_filtering_start_hour,
-            hours_filtering_end_hour=self.__hours_filtering_end_hour
+            hours_filtering_end_hour=self.__hours_filtering_end_hour,
+            hours_filtering_method=self.__hour_filtering_method
         )
 
     def _validate(self):
