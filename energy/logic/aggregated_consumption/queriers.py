@@ -193,10 +193,11 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
     GROUP_BY_PART = 'time'
     ORDER_BY_PART = GROUP_BY_PART
 
-    __ADDITIONAL_HOURS_WHERE_FILTERS = """
+    __ADDITIONAL_HOURS_WHERE_FILTERS_FOR_FILTER_EVERY_DAY = """
         AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
         AND EXTRACT(HOUR FROM aggregation_interval_start) <= {hours_filtering_end_hour}
     """
+
     formatter = OneHourFormatter()
 
     def _compose_where(self) -> str:
@@ -214,7 +215,7 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
         )
 
     def __compose_additional_hours_where_filters(self) -> str:
-        return self.__ADDITIONAL_HOURS_WHERE_FILTERS.format(
+        return self.__ADDITIONAL_HOURS_WHERE_FILTERS_FOR_FILTER_EVERY_DAY.format(
             hours_filtering_start_hour=self.parameters.hours_filtering_start_hour,
             hours_filtering_end_hour=self.parameters.hours_filtering_end_hour
         )
