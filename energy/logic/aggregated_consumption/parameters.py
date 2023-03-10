@@ -75,3 +75,31 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
         return self.hours_filtering_start_hour is not None \
             and self.hours_filtering_end_hour is not None \
             and self.hours_filtering_method is not None
+
+    @property
+    def period_start(self) -> datetime:
+        if self.__hour_filtering_method_every_day:
+            return super().period_start
+        if self.__hour_filtering_method_whole_interval:
+            return datetime.combine(
+                self._period_start,
+                time(self.hours_filtering_start_hour, 00, 00)
+            )
+
+    @property
+    def period_end(self) -> datetime:
+        if self.__hour_filtering_method_every_day:
+            return super().period_start
+        if self.__hour_filtering_method_whole_interval:
+            return datetime.combine(
+                self._period_end,
+                time(self.hours_filtering_end_hour, 00, 00)
+            )
+
+    @property
+    def __hour_filtering_method_every_day(self) -> bool:
+        return self.hours_filtering_method == self.HourFilteringMethods.EVERY_DAY
+
+    @property
+    def __hour_filtering_method_whole_interval(self) -> bool:
+        return self.hours_filtering_method == self.HourFilteringMethods.WHOLE_INTERVAL
