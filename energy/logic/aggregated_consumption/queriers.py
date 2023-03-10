@@ -202,7 +202,7 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
 
     def _compose_where(self) -> str:
         base_where = super()._compose_where()
-        if self.parameters.is_hours_filtering_set():
+        if self.parameters.filter_every_day():
             return self.__add_hours_filter_to_base_where(base_where)
         return base_where
 
