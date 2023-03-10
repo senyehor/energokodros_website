@@ -71,7 +71,8 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
         EVERY_DAY = 'filter-every-day'
         WHOLE_INTERVAL = 'filter-whole-interval'
 
-    def filter_every_day(self):
+    @property
+    def filter_every_day(self) -> bool:
         return self.hours_filtering_start_hour is not None \
             and self.hours_filtering_end_hour is not None \
             and self.__hour_filtering_method_every_day
