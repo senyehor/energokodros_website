@@ -33,7 +33,7 @@ class CommonQueryParameters:
     def period_end(self) -> datetime:
         return datetime.combine(
             self._period_end,
-            self.__create_one_second_to_midnight_time()
+            self.__create_all_zeros_time()
         )
 
     @period_end.setter
@@ -52,9 +52,6 @@ class CommonQueryParameters:
     def period_start(self, value: date):
         # noinspection PyAttributeOutsideInit
         self._period_start = value
-
-    def __create_one_second_to_midnight_time(self) -> time:
-        return time(23, 59, 59)
 
     def __create_all_zeros_time(self) -> time:
         return time(0, 0, 0)
