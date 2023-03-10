@@ -64,8 +64,8 @@ class CommonQueryParameters:
 class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     aggregation_interval = AggregationIntervalSeconds.ONE_HOUR
     hours_filtering_method: Union['HourFilteringMethods', None]
-    hours_filtering_start_hour: HOUR | None = None
-    hours_filtering_end_hour: HOUR | None = None
+    hours_filtering_start_hour: HOUR | None
+    hours_filtering_end_hour: HOUR | None
 
     class HourFilteringMethods(StrEnum):
         EVERY_DAY = 'filter-every-day'
