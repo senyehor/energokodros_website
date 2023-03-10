@@ -90,7 +90,7 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
                 self._period_end,
                 time(self.hours_filtering_end_hour, 00, 00)
             )
-        return super().period_start
+        return super().period_end
 
     @property
     def __hour_filtering_method_every_day(self) -> bool:
