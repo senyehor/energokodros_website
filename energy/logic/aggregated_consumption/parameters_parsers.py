@@ -4,7 +4,8 @@ from datetime import date, datetime
 from typing import Any, Callable, Iterable, Type, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
-    AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, PeriodStartGreaterThanEnd,
+    AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, InvalidHourFilteringMethod,
+    PeriodStartGreaterThanEnd,
     QueryParametersInvalid, StartHourGreaterThanEndHour,
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
@@ -165,6 +166,15 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
         self.__hours_filtering_end_hour = parse_str_parameter_to_int_with_correct_exception(
             hours_filtering_end_hour
         )
+
+    def __set_hour_filtering_method(self):
+        try:
+            self.__hour_filtering_method = \
+                OneHourAggregationIntervalQueryParameters.HourFilteringMethods(
+                    self.__hour_filtering_method
+                )
+        except ValueError as e:
+            raise InvalidHourFilteringMethod from e
 
     def __check_hour_filtering_options_are_set(self):
         return self.__hours_filtering_start_hour is not None \
