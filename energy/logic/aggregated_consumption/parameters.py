@@ -2,7 +2,7 @@ import datetime
 from dataclasses import dataclass
 from datetime import date, datetime, time
 from enum import StrEnum
-from typing import TypeAlias, TypedDict
+from typing import TypeAlias, TypedDict, Union
 
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.types import HOUR
@@ -63,6 +63,7 @@ class CommonQueryParameters:
 @dataclass(kw_only=True)
 class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     aggregation_interval = AggregationIntervalSeconds.ONE_HOUR
+    hours_filtering_method: Union['HourFilteringMethods', None]
     hours_filtering_start_hour: HOUR | None = None
     hours_filtering_end_hour: HOUR | None = None
 
