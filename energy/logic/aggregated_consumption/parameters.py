@@ -104,3 +104,13 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     @property
     def __hour_filtering_method_whole_interval(self) -> bool:
         return self.hours_filtering_method == self.HourFilteringMethods.WHOLE_INTERVAL
+
+    @period_start.setter
+    def period_start(self, value: date):
+        # noinspection PyAttributeOutsideInit
+        self._period_start = value
+
+    @period_end.setter
+    def period_end(self, value: datetime):
+        # noinspection PyAttributeOutsideInit
+        self._period_end = value
