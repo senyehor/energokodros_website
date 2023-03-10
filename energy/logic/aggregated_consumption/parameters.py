@@ -19,7 +19,7 @@ class EnergyConsumptionQueryRawParameters(TypedDict, total=False):
     # one hour interval specific filters
     hours_filtering_start_hour: str
     hours_filtering_end_hour: str
-    hour_filtering_method: 'HourFilteringMethods'
+    hour_filtering_method: str
 
 
 @dataclass(kw_only=True)
