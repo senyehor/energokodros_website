@@ -4,7 +4,8 @@ from energy.logic.aggregated_consumption.formatters import RawAggregatedDataForm
 from energy.logic.aggregated_consumption.parameters_parsers import ParameterParser
 from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.types import (
-    AggregatedConsumptionData, AggregatedConsumptionDataWithForecast, RawAggregatedConsumptionData,
+    AggregatedConsumptionDataWithForecastWithTotalConsumption,
+    AggregatedConsumptionDataWithTotalConsumption, RawAggregatedConsumptionData,
 )
 from users.logic import check_role_belongs_to_user, check_role_has_access_for_facility
 from users.models import User, UserRole
@@ -24,14 +25,21 @@ class AggregatedEnergyConsumptionController:
             role
         )
 
-    def get_consumption_with_optional_forecast(self) \
-            -> AggregatedConsumptionData | AggregatedConsumptionDataWithForecast:
+    def get_consumption_with_optional_forecast_and_total_consumption(self) -> \
+            AggregatedConsumptionDataWithTotalConsumption \
+            | AggregatedConsumptionDataWithForecastWithTotalConsumption \
+            | None:
         querier = self.__create_consumption_querier()
         if self.__include_forecast:
-            raw_consumption = querier.get_raw_consumption()
+            _ = querier.get_raw_consumption_with_raw_total_consumption()
+            if not _:
+                return None
+            raw_consumption, raw_total_consumption = _
             forecaster = self.__create_forecaster(raw_consumption, querier.formatter)
-            return forecaster.get_consumption_with_forecast()
-        return querier.get_formatted_consumption()
+            consumption_with_forecast = forecaster.get_consumption_with_forecast()
+            total_consumption = querier.formatter.format_total_consumption(raw_total_consumption)
+            return consumption_with_forecast, total_consumption
+        return querier.get_formatted_consumption_with_formatted_total_consumption()
 
     def __create_forecaster(
             self, raw_consumption: RawAggregatedConsumptionData,
