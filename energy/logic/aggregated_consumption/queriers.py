@@ -100,7 +100,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         if _:
             raw_consumption, raw_total_consumption = _
             return (
-                self.__format_consumption(raw_consumption),
+                self.format_consumption(raw_consumption),
                 self.__format_total_consumption(raw_total_consumption)
             )
         return None
@@ -188,7 +188,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
             return ids
         raise FacilityAndDescendantsHaveNoSensors
 
-    def __format_consumption(self, raw_consumption: RawAggregatedConsumptionData) \
+    def format_consumption(self, raw_consumption: RawAggregatedConsumptionData) \
             -> AggregatedConsumptionData:
         _ = self.__RawAggregatedConsumptionDataIndexes
         return [
