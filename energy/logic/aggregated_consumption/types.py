@@ -26,5 +26,8 @@ AggregatedConsumptionDataWithForecast: TypeAlias = \
 AggregatedConsumptionDataWithTotalConsumption = tuple[
     AggregatedConsumptionData, FormattedTotalConsumption
 ]
+AggregatedConsumptionDataWithForecastWithTotalConsumption = tuple[
+    AggregatedConsumptionDataWithForecast, FormattedTotalConsumption
+]
 
 HOUR: TypeAlias = int
