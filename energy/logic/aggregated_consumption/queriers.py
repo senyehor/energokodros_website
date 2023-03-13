@@ -28,23 +28,41 @@ AnyQuerier: TypeAlias = '_AggregatedConsumptionQuerierBase'
 class AggregatedConsumptionQuerier:
     def __init__(self, parameters: AnyQueryParameters):
         self.__parameters = parameters
+        self.__raw_consumption = None
+        self.__total_consumption = None
+        self.__queried = False
+        self.__querier = self.__get_querier_type()(self.__parameters)
 
-    def get_formatted_consumption_with_formatted_total_consumption(self) \
-            -> AggregatedConsumptionDataWithTotalConsumption | None:
-        querier = self.__get_querier_for_parameters()
-        return querier(self.__parameters).get_formatted_consumption_with_total_consumption()
+    def get_formatted_consumption(self) -> AggregatedConsumptionData | None:
+        self.__query_if_not_queried()
+        return self.__querier.format_consumption(
+            self.__raw_consumption
+        )
 
-    def get_raw_consumption_with_raw_total_consumption(self) -> \
-            RawAggregatedConsumptionDataWithRawTotalConsumption | None:
-        querier = self.__get_querier_for_parameters()
-        return querier(self.__parameters).get_raw_consumption_with_total_consumption()
+    def get_raw_consumption(self) -> RawAggregatedConsumptionData | None:
+        self.__query_if_not_queried()
+        return self.__raw_consumption
 
-    def __get_querier_for_parameters(self) -> Type[AnyQuerier]:
+    def get_total_consumption(self) -> FormattedTotalConsumption | None:
+        return self.__total_consumption
+
+    def __query(self):
+        _ = self.__querier.get_raw_consumption_with_total_consumption()
+        self.__queried = True
+        if not _:
+            return
+        self.__raw_consumption, self.__raw_total_consumption = _
+
+    def __query_if_not_queried(self):
+        if not self.__queried:
+            self.__query()
+
+    def __get_querier_type(self) -> Type[AnyQuerier]:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
 
     @property
     def formatter(self) -> RawAggregatedDataFormatter:
-        return self.__get_querier_for_parameters().formatter
+        return self.__get_querier_type().formatter
 
 
 class _AggregatedConsumptionQuerierBase(ABC):
