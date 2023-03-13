@@ -31,10 +31,6 @@ class StartHourGreaterThanEndHour(EnergyConsumptionExceptionWithMessage):
     message = _('Початкова година фільтрації більша за кінцеву')
 
 
-class NoConsumptionData(EnergyConsumptionExceptionWithMessage):
-    message = _('За заданими параметрами дані відсутні')
-
-
 class ForecastForParametersDoesNotExist(EnergyConsumptionExceptionWithMessage):
     message = _('Для заданих параметрів прогноз відсутній')
 
