@@ -35,7 +35,7 @@ class AggregatedConsumptionQuerier:
 
     def get_formatted_consumption(self) -> AggregatedConsumptionData | None:
         self.__query_if_not_queried()
-        if self.__total_consumption:
+        if self.__raw_consumption:
             return self.__querier.format_consumption(
                 self.__raw_consumption
             )
@@ -53,7 +53,7 @@ class AggregatedConsumptionQuerier:
         self.__queried = True
         if not _:
             return
-        self.__raw_consumption, self.__raw_total_consumption = _
+        self.__raw_consumption, self.__total_consumption = _
 
     def __query_if_not_queried(self):
         if not self.__queried:
