@@ -17,7 +17,7 @@ urlpatterns = [
     ),
     path(
         'get-aggregated-consumption-for-facility/',
-        views.get_aggregated_consumption,
+        views.get_consumption_with_total_consumption,
         name='get-aggregated-consumption-for-facility'
     ),
     path(

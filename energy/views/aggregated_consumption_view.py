@@ -19,7 +19,7 @@ class ConsumptionPageView(FormView):
         return EnergyConsumptionDisplayPageControlForm(self.request.user)
 
 
-def get_aggregated_consumption(request: HttpRequest) -> JsonResponse:
+def get_consumption_with_total_consumption(request: HttpRequest) -> JsonResponse:
     try:
         # noinspection PyTypeChecker
         parameters = convert_request_post_dict_to_regular_dict(request.POST)
