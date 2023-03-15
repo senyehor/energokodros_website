@@ -11,19 +11,23 @@ const AVAILABLE_BUTTON_CLASS = 'btn-outline-primary';
 
 let CHOSEN_DISPLAYING_OPTION = DRAW_TABLE;
 
-let LATEST_RECEIVED_DATA = null;
+let CONSUMPTION = null, TOTAL_CONSUMPTION = null;
 
-let CONSUMPTION_INDEX_IN_RAW_DATA = 1, LABEL_INDEX_IN_RAW_DATA = 0, CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA = 2;
+let CONSUMPTION_INDEX_IN_RAW_DATA = 1,
+    LABEL_INDEX_IN_RAW_DATA = 0,
+    CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA = 2;
 
-function draw_content(data) {
-    if (CHOSEN_DISPLAYING_OPTION === DRAW_TABLE) {
-        _draw_table(data);
-        return;
+function draw_content() {
+    if (CONSUMPTION) {
+        if (CHOSEN_DISPLAYING_OPTION === DRAW_TABLE) {
+            _draw_table(CONSUMPTION);
+            return;
+        }
+        if (CHOSEN_DISPLAYING_OPTION === DRAW_CHART) {
+            _draw_chart(CONSUMPTION);
+        }
     }
-    if (CHOSEN_DISPLAYING_OPTION === DRAW_CHART) {
-        _draw_chart(data);
-
-    }
+    throw new Error('consumption is not set')
 }
 
 function _draw_chart(data) {
@@ -127,7 +131,7 @@ function __generate_table(raw_consumption_data) {
     }
     return '' +
         '<table class="table">' +
-        '<thead>' +
+        '<thead style="position: sticky; top: 0; background: white;">' +
         '<tr>' +
         '<th scope="col">Час</th>' +
         '<th scope="col">Кіловат години</th>' +
@@ -136,6 +140,12 @@ function __generate_table(raw_consumption_data) {
         '<tbody>' +
         data_rows +
         '</tbody>' +
+        '</table>' +
+        '<table class="table" style="position: sticky; bottom: 0; background: white">' +
+        '<thead>' +
+        '<th scope="col">Загалом</th>' +
+        `<th scope="col">${TOTAL_CONSUMPTION}</th>` +
+        '</thead>' +
         '</table>'
 }
 
@@ -147,8 +157,8 @@ function __set_display_mode_to_table_and_update_if_data_is_present() {
     __set_button_to_chosen(__get_set_view_mode_to_table_button());
     __set_button_to_can_be_chosen(__get_set_view_mode_to_chart_button());
     CHOSEN_DISPLAYING_OPTION = DRAW_TABLE;
-    if (LATEST_RECEIVED_DATA) {
-        _draw_table(LATEST_RECEIVED_DATA);
+    if (CONSUMPTION) {
+        _draw_table(CONSUMPTION);
     }
 }
 
@@ -156,8 +166,8 @@ function __set_display_mode_to_chart_and_update_if_data_is_present() {
     __set_button_to_chosen(__get_set_view_mode_to_chart_button());
     __set_button_to_can_be_chosen(__get_set_view_mode_to_table_button());
     CHOSEN_DISPLAYING_OPTION = DRAW_CHART;
-    if (LATEST_RECEIVED_DATA) {
-        _draw_chart(LATEST_RECEIVED_DATA);
+    if (CONSUMPTION) {
+        _draw_chart(CONSUMPTION);
     }
 }
 
