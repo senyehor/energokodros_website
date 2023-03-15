@@ -24,10 +24,14 @@ def get_consumption_with_total_consumption(request: HttpRequest) -> JsonResponse
         # noinspection PyTypeChecker
         parameters = convert_request_post_dict_to_regular_dict(request.POST)
         controller = AggregatedEnergyConsumptionController(request.user, parameters)
-        consumption, total_consumption = \
+        consumption_with_optional_forecast, total_consumption = \
             controller.get_consumption_with_optional_forecast_and_total_consumption()
     except EnergyConsumptionExceptionWithMessage as e:
         return JsonResponse(e.message, status=400, safe=False)
     return JsonResponse(
-        {'consumption': consumption, 'total_consumption': total_consumption}, safe=False
+        {
+            'consumption_with_optional_forecast': consumption_with_optional_forecast,
+            'total_consumption':                  total_consumption
+        },
+        safe=False
     )

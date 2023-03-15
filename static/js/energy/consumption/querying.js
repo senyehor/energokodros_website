@@ -26,7 +26,7 @@ function get_consumption_data_and_update() {
         data: __compose_aggregation_query_parameters(),
         headers: get_headers_for_ajax_object(),
         success: (data) => {
-            CONSUMPTION = data.consumption;
+            CONSUMPTION_WITH_OPTIONAL_FORECAST = data.consumption_with_optional_forecast;
             if (CONSUMPTION === null) {
                 add_warning_alert('За заданими фільтрами дані відсутні');
                 return;

@@ -11,20 +11,20 @@ const AVAILABLE_BUTTON_CLASS = 'btn-outline-primary';
 
 let CHOSEN_DISPLAYING_OPTION = DRAW_TABLE;
 
-let CONSUMPTION = null, TOTAL_CONSUMPTION = null;
+let CONSUMPTION_WITH_OPTIONAL_FORECAST = null, TOTAL_CONSUMPTION = null;
 
 let CONSUMPTION_INDEX_IN_RAW_DATA = 1,
     LABEL_INDEX_IN_RAW_DATA = 0,
     CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA = 2;
 
 function draw_content() {
-    if (CONSUMPTION) {
+    if (CONSUMPTION_WITH_OPTIONAL_FORECAST) {
         if (CHOSEN_DISPLAYING_OPTION === DRAW_TABLE) {
-            _draw_table(CONSUMPTION);
+            _draw_table(CONSUMPTION_WITH_OPTIONAL_FORECAST);
             return;
         }
         if (CHOSEN_DISPLAYING_OPTION === DRAW_CHART) {
-            _draw_chart(CONSUMPTION);
+            _draw_chart(CONSUMPTION_WITH_OPTIONAL_FORECAST);
         }
     }
     throw new Error('consumption is not set')
@@ -157,8 +157,8 @@ function __set_display_mode_to_table_and_update_if_data_is_present() {
     __set_button_to_chosen(__get_set_view_mode_to_table_button());
     __set_button_to_can_be_chosen(__get_set_view_mode_to_chart_button());
     CHOSEN_DISPLAYING_OPTION = DRAW_TABLE;
-    if (CONSUMPTION) {
-        _draw_table(CONSUMPTION);
+    if (CONSUMPTION_WITH_OPTIONAL_FORECAST) {
+        _draw_table(CONSUMPTION_WITH_OPTIONAL_FORECAST);
     }
 }
 
@@ -166,8 +166,8 @@ function __set_display_mode_to_chart_and_update_if_data_is_present() {
     __set_button_to_chosen(__get_set_view_mode_to_chart_button());
     __set_button_to_can_be_chosen(__get_set_view_mode_to_table_button());
     CHOSEN_DISPLAYING_OPTION = DRAW_CHART;
-    if (CONSUMPTION) {
-        _draw_chart(CONSUMPTION);
+    if (CONSUMPTION_WITH_OPTIONAL_FORECAST) {
+        _draw_chart(CONSUMPTION_WITH_OPTIONAL_FORECAST);
     }
 }
 
