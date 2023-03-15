@@ -140,6 +140,12 @@ function __generate_table(raw_consumption_data) {
         '<tbody>' +
         data_rows +
         '</tbody>' +
+        '</table>' +
+        '<table class="table" style="position: sticky; bottom: 0; background: white">' +
+        '<thead>' +
+        '<th scope="col">Загалом</th>' +
+        `<th scope="col">${TOTAL_CONSUMPTION}</th>` +
+        '</thead>' +
         '</table>'
 }
 
