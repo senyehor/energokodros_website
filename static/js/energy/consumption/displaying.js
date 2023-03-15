@@ -131,7 +131,7 @@ function __generate_table(raw_consumption_data) {
     }
     return '' +
         '<table class="table">' +
-        '<thead>' +
+        '<thead style="position: sticky; top: 0; background: white;">' +
         '<tr>' +
         '<th scope="col">Час</th>' +
         '<th scope="col">Кіловат години</th>' +
