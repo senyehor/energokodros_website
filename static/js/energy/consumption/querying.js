@@ -32,7 +32,7 @@ function get_consumption_data_and_update() {
             }
             CONSUMPTION = data.consumption;
             TOTAL_CONSUMPTION = data.total_consumption;
-            draw_content(data);
+            draw_content();
         },
         error: (error) => {
             if (error.responseJSON) {
