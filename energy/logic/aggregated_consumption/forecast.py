@@ -9,7 +9,7 @@ from energy.logic.aggregated_consumption.formatters import (
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.types import (
-    ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumptionData,
+    ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumption,
     RawConsumptionForecast, RawConsumptionTime,
 )
 from institutions.models import Facility
@@ -24,7 +24,7 @@ class ConsumptionForecaster:
         staticmethod(format_forecast)
 
     def __init__(
-            self, parameters: AnyQueryParameters, consumption: RawConsumptionData,
+            self, parameters: AnyQueryParameters, consumption: RawConsumption,
             raw_aggregation_data_formatter: RawAggregatedDataFormatter):
         self.__parameters = parameters
         self.__consumption = consumption
