@@ -41,7 +41,7 @@ class AggregatedEnergyConsumptionController:
                 querier.formatter
             )
             return consumption_with_forecast, total_consumption
-        consumption = querier.get_formatted_consumption()
+        consumption = querier.get_consumption()
         return consumption, total_consumption
 
     def __get_consumption_with_forecast(

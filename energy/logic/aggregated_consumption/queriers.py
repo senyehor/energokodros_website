@@ -32,7 +32,7 @@ class AggregatedConsumptionQuerier:
         self.__querier = self.__get_querier_type()(self.__parameters)
         self.__query()
 
-    def get_formatted_consumption(self) -> Consumption | None:
+    def get_consumption(self) -> Consumption | None:
         if self.__raw_consumption:
             return self.__querier.format_consumption(
                 self.__raw_consumption
