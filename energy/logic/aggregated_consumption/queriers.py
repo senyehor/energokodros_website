@@ -89,7 +89,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
     """
     __MAIN_SELECT = "SELECT * FROM consumption, total_consumption;"
 
-    _formatter: RawAggregatedDataFormatter = RawAggregatedDataFormatter()
+    formatter: RawAggregatedDataFormatter = RawAggregatedDataFormatter()
 
     class __RawAggregatedConsumptionDataIndexes(IntEnum):
         TIME_PART = 0
@@ -208,15 +208,15 @@ class _AggregatedConsumptionQuerierBase(ABC):
         _ = self.__RawAggregatedConsumptionDataIndexes
         return [
             (
-                self._formatter.format_time(line[_.TIME_PART]),
-                self._formatter.format_consumption(line[_.CONSUMPTION_PART])
+                self.formatter.format_time(line[_.TIME_PART]),
+                self.formatter.format_consumption(line[_.CONSUMPTION_PART])
             )
             for line in raw_consumption
         ]
 
     def __format_total_consumption(self, raw_total_consumption: RawTotalConsumption) \
             -> FormattedTotalConsumption:
-        return self._formatter.format_total_consumption(raw_total_consumption)
+        return self.formatter.format_total_consumption(raw_total_consumption)
 
     @property
     def parameters(self) -> CommonQueryParameters:
@@ -260,7 +260,7 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
         AND EXTRACT(HOUR FROM aggregation_interval_start) <= {hours_filtering_end_hour}
     """
 
-    _formatter = OneHourFormatter()
+    formatter = OneHourFormatter()
 
     def _compose_where(self) -> str:
         base_where = super()._compose_where()
@@ -315,7 +315,7 @@ class _OneMonthQuerier(_AggregatedConsumptionQuerierBase):
     """
     ORDER_BY_PART = GROUP_BY_PART
 
-    _formatter = OneMonthFormatter()
+    formatter = OneMonthFormatter()
 
 
 class _OneYearQuerier(_AggregatedConsumptionQuerierBase):
