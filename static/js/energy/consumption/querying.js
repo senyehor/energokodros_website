@@ -26,11 +26,11 @@ function get_consumption_data_and_update() {
         data: __compose_aggregation_query_parameters(),
         headers: get_headers_for_ajax_object(),
         success: (data) => {
-            if (data === null) {
+            CONSUMPTION = data.consumption;
+            if (CONSUMPTION === null) {
                 add_warning_alert('За заданими фільтрами дані відсутні');
                 return;
             }
-            CONSUMPTION = data.consumption;
             TOTAL_CONSUMPTION = data.total_consumption;
             draw_content();
         },
