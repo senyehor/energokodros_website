@@ -8,26 +8,26 @@ RawConsumptionTime: TypeAlias = datetime | str
 RawConsumptionValue: TypeAlias = Decimal
 RawTotalConsumption: TypeAlias = Decimal
 
-FormattedConsumptionTime: TypeAlias = str
-FormattedConsumptionValue: TypeAlias = str
-FormattedConsumptionForecast: TypeAlias = str
-FormattedTotalConsumption: TypeAlias = str
+ConsumptionTime: TypeAlias = str
+ConsumptionValue: TypeAlias = str
+ConsumptionForecast: TypeAlias = str
+TotalConsumption: TypeAlias = str
 
-RawAggregatedConsumptionData = list[tuple[RawConsumptionTime, RawConsumptionValue]]
-RawAggregatedConsumptionDataWithRawTotalConsumption = tuple[
-    RawAggregatedConsumptionData, RawTotalConsumption
+RawConsumptionData = list[tuple[RawConsumptionTime, RawConsumptionValue]]
+RawConsumptionDataWIthRawTotalConsumption = tuple[
+    RawConsumptionData, RawTotalConsumption
 ]
-AggregatedConsumptionData: TypeAlias = \
+Consumption: TypeAlias = \
     list[
-        tuple[FormattedConsumptionTime, FormattedConsumptionValue]
+        tuple[ConsumptionTime, ConsumptionValue]
     ]
-AggregatedConsumptionDataWithForecast: TypeAlias = \
-    list[tuple[FormattedConsumptionTime, FormattedConsumptionValue, FormattedConsumptionForecast]]
-AggregatedConsumptionDataWithTotalConsumption = tuple[
-    AggregatedConsumptionData, FormattedTotalConsumption
+ConsumptionWithConsumptionForecast: TypeAlias = \
+    list[tuple[ConsumptionTime, ConsumptionValue, ConsumptionForecast]]
+ConsumptionWithTotalConsumption = tuple[
+    Consumption, TotalConsumption
 ]
-AggregatedConsumptionDataWithForecastWithTotalConsumption = tuple[
-    AggregatedConsumptionDataWithForecast, FormattedTotalConsumption
+ConsumptionWIthConsumptionForecastWithTotalConsumption = tuple[
+    ConsumptionWithConsumptionForecast, TotalConsumption
 ]
 
 HOUR: TypeAlias = int
