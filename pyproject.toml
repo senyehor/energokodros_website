@@ -6,7 +6,7 @@ authors = ["senyehor <senyehor@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10.0"
-Django = "^4.1.0"
+Django = "4.1.0"
 python-dotenv = "^0.20.0"
 django-environ = "^0.8.1"
 django-crispy-forms = "^1.14.0"
