@@ -251,7 +251,7 @@ class __QueryingForCurrentDayMixin(_AggregatedConsumptionQuerierBase):
 
 
 class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerierBase):
-    SELECT_PART = 'aggregation_interval_start:: TIMESTAMP WITHOUT TIME ZONE AS time'
+    SELECT_PART = 'aggregation_interval_start AS time'
     GROUP_BY_PART = 'time'
     ORDER_BY_PART = GROUP_BY_PART
 
