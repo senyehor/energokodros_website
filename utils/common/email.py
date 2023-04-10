@@ -8,8 +8,6 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-logger = logging.getLogger(__name__)
-
 
 def try_send_email_add_warning_if_failed(
         request: HttpRequest, email: str, subject: str, message: str
