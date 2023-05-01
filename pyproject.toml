@@ -15,6 +15,7 @@ django-active-link = "^0.1.8"
 django-treebeard = "^4.5.1"
 psycopg2 = "^2.9.5"
 django-formtools = "^2.4.0"
+redis = "^4.5.4"
 
 [tool.poetry.dev-dependencies]
 factory-boy = "^3.2.1"
