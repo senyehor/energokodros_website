@@ -18,3 +18,9 @@ class AggregationStateRetriever(ABC):
     @abstractmethod
     def get_last_time_aggregation_was_run(self) -> datetime | None:
         ...
+
+
+class AggregationStartedCheckerBase(ABC):
+    @abstractmethod
+    def check_aggregation_started(self) -> bool:
+        ...
