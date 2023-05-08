@@ -3,7 +3,7 @@ from datetime import datetime
 from redis.client import Redis
 
 from energy.logic.run_aggregation.bases import AggregationStateRetriever
-from energy.logic.run_aggregation.exceptions import InvalidAggregationState
+from energy.logic.run_aggregation.exceptions import InvalidAggregatorState
 from energy.logic.run_aggregation.models_and_constants import (
     AggregationStates,
     LAST_TIME_AGGREGATION_WAS_RUN_FORMAT,
@@ -26,7 +26,7 @@ class RedisAggregationStateRetriever(AggregationStateRetriever):
         try:
             return AggregationStates(raw_state)
         except ValueError as e:
-            raise InvalidAggregationState from e
+            raise InvalidAggregatorState from e
 
     def get_last_time_aggregation_was_run(self) -> datetime | None:
         try:
