@@ -37,4 +37,4 @@ class RedisAggregationRunner(AggregationRunner):
 
     def __ensure_start_aggregation_message_receiver_count_is_correct(self, receiver_count: int):
         if receiver_count != self.__EXPECTED_START_AGGREGATION_REQUEST_RECEIVER_COUNT:
-            raise InvalidStartAggregationRequestReceiverCount
+            raise InvalidStartAggregationRequestReceiverCount(receiver_count)
