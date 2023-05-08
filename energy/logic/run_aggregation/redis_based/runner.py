@@ -15,7 +15,8 @@ class RedisAggregationRunner(AggregationRunner):
 
     def __init__(
             self, r: Redis, start_aggregation_message: str,
-            aggregator_channel: str, state_retriever: 'RedisAggregationStateRetriever'):
+            aggregator_channel: str, state_retriever: 'RedisAggregationStateRetriever'
+    ):
         self.__r = r
         self.__start_aggregation_message = start_aggregation_message
         self.__channel = aggregator_channel
