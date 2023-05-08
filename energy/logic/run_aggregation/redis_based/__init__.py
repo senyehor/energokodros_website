@@ -20,6 +20,6 @@ AGGREGATION_STATE_RETRIEVER = RedisAggregationStateRetriever(
 AGGREGATION_RUNNER = RedisAggregationRunner(
     r=REDIS,
     start_aggregation_message=env('START_AGGREGATION_MESSAGE'),
-    aggregator_channel=env('AGGREGATOR_CONTROLLER_REDIS_CHANNEL'),
+    start_aggregation_channel=env('AGGREGATOR_CONTROLLER_REDIS_CHANNEL'),
     state_retriever=AGGREGATION_STATE_RETRIEVER
 )
