@@ -4,13 +4,13 @@ from datetime import datetime
 from energy.logic.run_aggregation.models_and_constants import AggregationStates
 
 
-class AggregationRunner(ABC):
+class AggregationRunnerBase(ABC):
     @abstractmethod
     def run_aggregation(self):
         ...
 
 
-class AggregationStateRetriever(ABC):
+class AggregationStateRetrieverBase(ABC):
     @abstractmethod
     def get_state(self) -> AggregationStates:
         ...

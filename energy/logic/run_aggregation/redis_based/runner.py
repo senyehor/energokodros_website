@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from redis.client import Redis
 
-from energy.logic.run_aggregation.bases import AggregationRunner, AggregationStartedCheckerBase
+from energy.logic.run_aggregation.bases import AggregationRunnerBase, AggregationStartedCheckerBase
 from energy.logic.run_aggregation.exceptions import AggregationAlreadyRunning
 from energy.logic.run_aggregation.models_and_constants import AggregationStates
 from energy.logic.run_aggregation.redis_based.exceptions import (
@@ -11,7 +11,7 @@ from energy.logic.run_aggregation.redis_based.exceptions import (
 from energy.logic.run_aggregation.redis_based.state_retriever import RedisAggregationStateRetriever
 
 
-class RedisAggregationRunner(AggregationRunner):
+class RedisAggregationRunner(AggregationRunnerBase):
     __EXPECTED_START_AGGREGATION_REQUEST_RECEIVER_COUNT = 1
 
     def __init__(
