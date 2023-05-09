@@ -34,9 +34,8 @@ class RedisAggregationRunner(AggregationRunnerBase):
         self.__ensure_aggregation_started()
 
     def __ensure_aggregation_started(self):
-        if self.__aggregation_started_checker.check_aggregation_started():
-            return
-        raise AggregationDidNotStart
+        if not self.__aggregation_started_checker.check_aggregation_started():
+            raise AggregationDidNotStart
 
     def __send_start_aggregation_message(self):
         receiver_count = self.__r.publish(
