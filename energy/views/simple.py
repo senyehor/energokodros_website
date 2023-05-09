@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 
 from energy.logic import get_facilities_formatted_choices_for_user_role
-from energy.logic.run_aggregation import AGGREGATION_RUNNER
+from energy.logic.run_aggregation import AGGREGATION_RUNNER, AGGREGATION_STATE_RETRIEVER
 from energy.logic.run_aggregation.exceptions import RunAggregationExceptionBase
 from users.logic.simple import check_role_belongs_to_user
 from users.models import UserRole
@@ -35,3 +35,14 @@ def run_aggregation(request: HttpRequest) -> JsonResponse:
             status=400
         )
     return JsonResponse({'message': 'aggregation started successfully'})
+
+
+@login_required
+def get_aggregation_status_and_last_time_run(request: HttpRequest):
+    _ = AGGREGATION_STATE_RETRIEVER
+    return JsonResponse(
+        {
+            'aggregator_state':          _.get_state(),
+            'aggregation_last_rime_run': _.get_last_time_aggregation_was_run()
+        }
+    )
