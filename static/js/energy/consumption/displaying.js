@@ -51,10 +51,6 @@ function _draw_chart(data) {
                         },
                         mode: 'x',
                     }
-                },
-                title: {
-                    display: true,
-                    text: 'Дані у кіловат годинах',
                 }
             },
             scales: {
@@ -99,7 +95,7 @@ function __generate_chart_data(raw_consumption_data) {
         labels: labels,
         datasets: [
             {
-                label: 'Споживання',
+                label: 'Споживання в кіловат-годинах',
                 backgroundColor: 'rgb(255, 99, 132, 0.7)',
                 data: consumption,
             }
