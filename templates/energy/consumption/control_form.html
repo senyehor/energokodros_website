@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load crispy_forms_filters %}
-<div class="container d-inline-block p-0" id="div_control_form">
+<div class="container d-inline-block p-0">
     <form id="id_control_form" method="post">
         {{ form | crispy }}
         <div id="id_hours_filtering">
@@ -31,9 +31,25 @@
             </div>
         </div>
         <a class="btn btn btn-primary mt-3" id="get_data_button">{% trans "Отримати дані" %}</a>
-        <a class="btn btn btn-primary mt-3" id="run_aggregation_button">
-            {% trans "Запустити агрегацію" %}
-        </a>
         <p class="fw-light text-muted mt-3">{% trans "Усі параметри застосовуються включно" %}</p>
     </form>
+    <hr>
+    <p class="fw-bold">{% trans "Агрегація:" %}</p>
+    <div>
+        <p id="aggregation_status_p_id" class="d-inline">
+            {% trans "Поточний статус:" %}
+        </p>
+        <p class="d-inline" id="current_aggregation_state_id">
+        </p>
+    </div>
+    <div>
+        <p id="aggregation_status_p_id" class="d-inline">
+            {% trans "Останній запуск:" %}
+        </p>
+        <p class="d-inline" id="aggregation_last_time_run_id">
+        </p>
+    </div>
+    <a class="btn btn-primary mt-0" id="run_aggregation_button">
+        {% trans "Запустити" %}
+    </a>
 </div>
