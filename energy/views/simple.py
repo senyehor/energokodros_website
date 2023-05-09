@@ -42,7 +42,7 @@ def get_aggregation_status_and_last_time_run(request: HttpRequest):
     _ = AGGREGATION_STATE_RETRIEVER
     return JsonResponse(
         {
-            'aggregator_state':          _.get_state(),
-            'aggregation_last_rime_run': _.get_last_time_aggregation_was_run()
+            'aggregation_status':        _.get_state(),
+            'aggregation_last_rime_run': _.get_last_time_aggregation_was_run(formatted=True)
         }
     )
