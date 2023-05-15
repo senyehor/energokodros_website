@@ -7,7 +7,7 @@ RawConsumptionForecast: TypeAlias = float
 RawConsumptionTime: TypeAlias = datetime | str
 RawConsumptionValue: TypeAlias = Decimal
 RawTotalConsumption: TypeAlias = Decimal
-RawQueryRaws = list[tuple[RawConsumptionTime, RawConsumptionValue, RawTotalConsumption]]
+RawQueryRows = list[tuple[RawConsumptionTime, RawConsumptionValue, RawTotalConsumption]]
 
 ConsumptionTime: TypeAlias = str
 ConsumptionValue: TypeAlias = str
