@@ -140,9 +140,15 @@ class _AggregatedConsumptionQuerierBase(ABC):
             )
             for row in rows
         )
-        raw_total_consumption = rows[0][_.TOTAL_CONSUMPTION_PART]
+        raw_total_consumption = self.__extract_raw_total_consumption(rows)
+        # raw_aggregate_consumption types inside are recognized as Any, so disable type checker
         # noinspection PyTypeChecker
         return raw_aggregated_consumption, raw_total_consumption
+
+    def __extract_raw_total_consumption(self, rows: RawQueryRows) -> RawTotalConsumption:
+        _ = self.__ConsumptionWithTotalConsumptionRawsIndexes
+        # take any row, as total consumption is the same in every row
+        return rows[0][_.TOTAL_CONSUMPTION_PART]
 
     def __compose_query(self) -> str:
         return ' '.join(
