@@ -50,6 +50,8 @@
         </p>
     </div>
     <a class="btn mt-0" id="run_aggregation_button">
-        {% trans "Запустити" %}
+        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"
+              id="start_aggregation_request_processing_spinner"></span>
+        <span id="run_aggregation_button_text">{% trans "Запустити" %}</span>
     </a>
 </div>
