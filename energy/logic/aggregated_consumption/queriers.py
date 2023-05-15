@@ -15,8 +15,8 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    Consumption, ConsumptionWithTotalConsumption, RawConsumption, RawConsumptionTime,
-    RawConsumptionValue, RawConsumptionWithRawTotalConsumption, RawTotalConsumption,
+    Consumption, ConsumptionWithTotalConsumption, RawConsumption,
+    RawConsumptionWithRawTotalConsumption, RawQueryRaws, RawTotalConsumption,
     TotalConsumption,
 )
 from energy.models import BoxSensorSet
@@ -130,7 +130,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         return None
 
     def __split_rows_into_raw_consumption_and_total_consumption(
-            self, rows: list[RawConsumptionTime, RawConsumptionValue, RawTotalConsumption]
+            self, rows: RawQueryRaws
     ) -> RawConsumptionWithRawTotalConsumption:
         _ = self.__ConsumptionWithTotalConsumptionRawsIndexes
         raw_aggregated_consumption = (
