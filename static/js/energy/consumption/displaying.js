@@ -126,23 +126,22 @@ function __generate_table(raw_consumption_data) {
             </tr>`
     }
     return '' +
-        '<table class="table">' +
-        '<thead style="position: sticky; top: 0; background: white;">' +
+        '<table class="rounded rounded-3 w-100">' +
+        '<thead>' +
         '<tr>' +
         '<th scope="col">Час</th>' +
         '<th scope="col">Кіловат години</th>' +
         '</tr>' +
         '</thead>' +
-        '<tbody>' +
-        data_rows +
-        '</tbody>' +
-        '</table>' +
-        '<table class="table" style="position: sticky; bottom: 0; background: white">' +
-        '<thead>' +
+        '<tfoot>' +
+        '<tr>' +
         '<th scope="col">Загалом</th>' +
         `<th scope="col">${TOTAL_CONSUMPTION}</th>` +
-        '</thead>' +
-        '</table>'
+        '</tr>' +
+        '</tfoot>' +
+        '<tbody>' +
+        data_rows +
+        '</tbody>'
 }
 
 function _check_consumption_forecast_is_present(raw_consumption_data) {
