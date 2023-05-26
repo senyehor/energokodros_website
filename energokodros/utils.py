@@ -1,9 +1,10 @@
 import os
 from distutils.util import strtobool
+from pathlib import Path
 
 from dotenv import load_dotenv
 
-if not load_dotenv('../.env', override=True):
+if not load_dotenv(Path(__file__).resolve().parent.parent.joinpath(".env"), override=True):
     raise EnvironmentError('Failed to find or load .env file')
 
 
