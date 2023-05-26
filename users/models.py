@@ -92,7 +92,7 @@ class UserRole(models.Model):
         verbose_name_plural = _('Ролі користувача')
 
     def __str__(self):
-        return _(f'{self.position_name}, {self.facility_has_access_to}')
+        return _(f'{self.position_name}, {self.facility_has_access_to}, {self.user}')
 
 
 class UserRoleApplication(models.Model):
