@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.http import HttpRequest
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from users.forms import UserRoleApplicationRequestsDecisionForm
@@ -49,7 +50,7 @@ class UserRoleApplicationReviewController:
             subject = 'Ваш запит на роль відхилено'
             message = 'На жаль, адміністратор не схвалив ваш запит.'
         if message_from_admin := self.application_decision_form.get_message_for_user():
-            message += f'<br>Повідомлення від адміністратора:<br> {message_from_admin}'
+            message += mark_safe(f'<br>Повідомлення від адміністратора:<br> {message_from_admin}')
 
         try_send_email_add_warning_if_failed(
             self.request,
