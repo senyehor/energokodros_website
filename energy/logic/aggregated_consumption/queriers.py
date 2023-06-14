@@ -1,5 +1,5 @@
 from abc import ABC
-from datetime import date, timedelta
+from datetime import timedelta
 from enum import IntEnum
 from typing import Iterable, Type, TypeAlias, TypedDict
 
@@ -74,7 +74,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
     """
     __QUERY_WHERE_INTERVAL = """
         WHERE aggregation_interval_start >= '{aggregation_interval_start}'
-        AND aggregation_interval_end < '{aggregation_interval_end}'
+        AND aggregation_interval_end <= '{aggregation_interval_end}'
     """
     __QUERY_WHERE_BOXES_SETS = """
         AND boxes_set_id IN ({box_set_ids})
@@ -177,9 +177,14 @@ class _AggregatedConsumptionQuerierBase(ABC):
         )
 
     def _compose_where_interval(self) -> str:
+        # in order to filter aggregation_interval_end correctly, period end must be shifted,
+        # as we want to include all the intervals behind period end,
+        # having aggregation_interval_end <= period_end_one_day_forward_shifted soft
+        # to include 23 - 00 interval
+        period_end_one_day_forward_shifted = self.parameters.period_end + timedelta(days=1)
         return self.__QUERY_WHERE_INTERVAL.format(
             aggregation_interval_start=self.parameters.period_start,
-            aggregation_interval_end=self.parameters.period_end,
+            aggregation_interval_end=period_end_one_day_forward_shifted,
         )
 
     def __compose_where_boxes_sets(self) -> str:
@@ -229,34 +234,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         return self.__parameters
 
 
-class __QueryingForCurrentDayMixin(_AggregatedConsumptionQuerierBase):
-    __CURRENT_DAY_WHERE = """
-    WHERE
-        aggregation_interval_start >= '{current_date}'
-    AND aggregation_interval_start < '{next_day_date}'
-    """
-    __current_date: date = None
-
-    def _compose_where_interval(self) -> str:
-        if self.__check_querying_is_for_current_day():
-            return self.__compose_current_day_where()
-        return super()._compose_where_interval()
-
-    def __compose_current_day_where(self) -> str:
-        next_day_date = self.__current_date + timedelta(days=1)
-        return self.__CURRENT_DAY_WHERE.format(
-            current_date=self.__current_date,
-            next_day_date=next_day_date
-        )
-
-    def __check_querying_is_for_current_day(self) -> bool:
-        if self.parameters.period_start == self.parameters.period_end:
-            self.__current_date = self.parameters.period_start
-            return True
-        return False
-
-
-class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerierBase):
+class _OneHourQuerier(_AggregatedConsumptionQuerierBase):
     SELECT_PART = 'aggregation_interval_start AS time'
     GROUP_BY_PART = 'time'
     ORDER_BY_PART = GROUP_BY_PART
@@ -295,7 +273,7 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
         return super().parameters
 
 
-class _OneDayQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerierBase):
+class _OneDayQuerier(_AggregatedConsumptionQuerierBase):
     SELECT_PART = 'aggregation_interval_start::date AS date'
     GROUP_BY_PART = 'date'
     ORDER_BY_PART = GROUP_BY_PART
