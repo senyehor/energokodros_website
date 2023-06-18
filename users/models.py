@@ -21,3 +21,6 @@ class User(AbstractBaseUser):
     email = models.EmailField(_('електронна пошта'), unique=True)
     is_admin = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
+
+    class Meta:
+        db_table = 'users'
