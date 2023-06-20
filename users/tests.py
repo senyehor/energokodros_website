@@ -21,19 +21,19 @@ class UserTest(TestCase):
         raw_password = self.some_password
         name = self.valid_full_name
         user = User.objects.create(email=email, password=raw_password, full_name=name)
-        self.assertEqual(email, user.email, _("user email was set incorrectly"))
-        self.assertTrue(user.check_password(raw_password), _("user password was set incorrectly"))
-        self.assertEqual(name, user.full_name, _("user full name was set incorrectly"))
-        self.assertEqual(email, user.get_username(), _("email is not used as username"))
+        self.assertEqual(email, user.email, _('user email was set incorrectly'))
+        self.assertTrue(user.check_password(raw_password), _('user password was set incorrectly'))
+        self.assertEqual(name, user.full_name, _('user full name was set incorrectly'))
+        self.assertEqual(email, user.get_username(), _('email is not used as username'))
 
     def test_creating_with_incorrect_fields_sets(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError, msg=_('User was created with wrong fields set')):
             User.objects.create()
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError, msg=_('User was created with wrong fields set')):
             User.objects.create(full_name=self.valid_full_name)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError, msg=_('User was created with wrong fields set')):
             User.objects.create(email=self.valid_email)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError, msg=_('User was created with wrong fields set')):
             User.objects.create(full_name=self.valid_full_name, email=self.valid_email)
 
     def test_full_name_check(self):
@@ -80,7 +80,7 @@ class UserFactory(django.DjangoModelFactory):
     full_name = factory.Sequence(lambda: UserFactory.full_name)
 
     @staticmethod
-    def generate_full_name():  # noqa: E pylint: disable=no-self-use
+    def generate_full_name():
         first_names = [
             'Яснолик-Гузь',
             'Шарль',
