@@ -28,11 +28,28 @@ class AccessLevel(models.Model):
 
 class Object(models.Model):
     object_id = models.AutoField(primary_key=True)
-    institution = models.ForeignKey(Institution, models.CASCADE, null=True)
+    institution = models.ForeignKey(
+        Institution,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='objects'
+    )
     object_name = models.CharField(max_length=1000, blank=True, null=False)
     object_description = models.TextField(blank=True, null=True)
-    parent = models.ForeignKey('self', models.CASCADE, null=True, blank=True)
-    access_level = models.ForeignKey('AccessLevel', models.RESTRICT, null=False, blank=False)
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='children'
+    )
+    access_level = models.ForeignKey(
+        'AccessLevel',
+        models.RESTRICT,
+        null=False,
+        blank=False,
+        related_name='+'
+    )
 
     class Meta:
         db_table = 'objects'
