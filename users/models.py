@@ -39,6 +39,24 @@ class User(AbstractBaseUser):
         db_table = 'users'
 
 
+class UserRegistrationRequest(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='registration_requests'
+    )
+    institution = models.ForeignKey(
+        Institution,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='+'
+    )
+    message = models.TextField(blank=False, null=False)
+
+
 class UserRole(models.Model):
     user = models.ForeignKey(
         User,
