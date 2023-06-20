@@ -1,2 +1,4 @@
 [MASTER]
 ignore-paths=.*/migrations
+[MESSAGES CONTROL]
+disable=R0901,C0111,R0903
