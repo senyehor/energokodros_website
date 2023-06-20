@@ -16,6 +16,9 @@ class Institution(models.Model):
     class Meta:
         db_table = 'institutions'
 
+    def __str__(self):
+        return self.institution_name
+
 
 class AccessLevel(models.Model):
     access_level_id = models.AutoField(primary_key=True)
@@ -24,6 +27,9 @@ class AccessLevel(models.Model):
 
     class Meta:
         db_table = 'access_levels'
+
+    def __str__(self):
+        return self.level_def
 
 
 class Object(models.Model):
@@ -53,3 +59,6 @@ class Object(models.Model):
 
     class Meta:
         db_table = 'objects'
+
+    def __str__(self):
+        return self.object_name + ' із ' + str(self.institution)
