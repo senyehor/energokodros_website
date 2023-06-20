@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from institutions.models import Institution, AccessLevel
 from users.utils import _full_name_validator
 
 
@@ -36,3 +37,32 @@ class User(AbstractBaseUser):
 
     class Meta:
         db_table = 'users'
+
+
+class UserRole(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='roles'
+    )
+    institution = models.ForeignKey(
+        Institution,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='users_roles'
+    )
+    access_level = models.ForeignKey(
+        AccessLevel,
+        on_delete=models.RESTRICT,
+        null=False,
+        blank=False,
+        related_name='+'
+    )
+    position = models.CharField(
+        max_length=255,
+        null=False,
+        blank=False
+    )
