@@ -56,6 +56,9 @@ class UserRegistrationRequest(models.Model):
     )
     message = models.TextField(blank=False, null=False)
 
+    class Meta:
+        db_table = 'users_registration_requests'
+
 
 class UserRole(models.Model):
     user = models.ForeignKey(
