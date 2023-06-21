@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}Реєстрація{% endblock %}
+{% block content %}
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="card w-50 p-0">
+            <div class="card-body">
+                <form method="post" class="display-block">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    {{ user_registration_request_formset.non_form_errors }}
+                    {{ user_registration_request_formset.management_form }}
+                    {{ user_registration_request_formset.0 | crispy }}
+                    <button type="submit" class="btn btn-primary mt-4">Відправити заявку на реєстрацію</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
