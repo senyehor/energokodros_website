@@ -9,4 +9,10 @@ overridden_account_patterns = [
 urlpatterns = overridden_account_patterns + [
     path('', include('django.contrib.auth.urls')),
     path('registration', views.CreateUserRegistrationRequest.as_view(), name='register'),
+    path(
+        'successfully-created-registration-request',
+        views.successfully_created_registration_request,
+        name='successfully_created_registration_request'
+    ),
+
 ]
