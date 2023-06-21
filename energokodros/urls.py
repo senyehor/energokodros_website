@@ -1,5 +1,8 @@
-from django.urls import path, include
+from django.urls import include, re_path
+
+import users.views
 
 urlpatterns = [
-    path('users/', include('users.urls')),
+    re_path(r'|^$|home', users.views.index_view),
+    re_path(r'users/', include('users.urls')),
 ]
