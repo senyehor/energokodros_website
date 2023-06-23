@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext as _
 
 
 class Institution(models.Model):
@@ -7,11 +8,16 @@ class Institution(models.Model):
         db_column='institution_id'
     )
     institution_name = models.CharField(
+        _("назва закладу"),
         max_length=1000,
         null=False,
         blank=False
     )
-    institution_description = models.TextField(null=False, blank=False)
+    institution_description = models.TextField(
+        _("опис закiладу"),
+        null=False,
+        blank=False
+    )
 
     class Meta:
         db_table = 'institutions'
@@ -22,26 +28,44 @@ class Institution(models.Model):
 
 class AccessLevel(models.Model):
     access_level_id = models.AutoField(primary_key=True)
-    level_def = models.IntegerField(unique=True, null=False, blank=False)
-    level_description = models.TextField(blank=False, null=False)
+    level_def = models.IntegerField(
+        _("код рівню доступу"),
+        unique=True,
+        null=False,
+        blank=False
+    )
+    level_description = models.TextField(
+        _("опис рівню доступу"),
+        blank=False,
+        null=False
+    )
 
     class Meta:
         db_table = 'access_levels'
 
     def __str__(self):
-        return self.level_def
+        return self.level_description
 
 
 class Object(models.Model):
     object_id = models.AutoField(primary_key=True)
+    object_name = models.CharField(
+        _("назва об'єкту"),
+        max_length=1000,
+        blank=True,
+        null=False
+    )
+    object_description = models.TextField(
+        _("опис об'єкту"),
+        blank=True,
+        null=True
+    )
     institution = models.ForeignKey(
         Institution,
         on_delete=models.CASCADE,
         null=False,
         related_name='related_objects'
     )
-    object_name = models.CharField(max_length=1000, blank=True, null=False)
-    object_description = models.TextField(blank=True, null=True)
     parent = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
@@ -61,4 +85,4 @@ class Object(models.Model):
         db_table = 'objects'
 
     def __str__(self):
-        return self.object_name + ' із ' + str(self.institution)
+        return _(f'{self.object_name} в {self.institution}')
