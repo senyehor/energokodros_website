@@ -1,22 +1,28 @@
-from datetime import timedelta
-
-from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as LogView
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView
 
-from users.forms import LoginForm, NewUserForm, UserRegistrationRequestFormset
+from users.decorators import admin
+from users.forms import (
+    LoginForm,
+    NewUserForm,
+    UserRegistrationRequestFormset,
+    UserRegistrationRequestsDecisionForm
+)
+from users.logic import remember_user_for_two_week
+from users.models import UserRole, UserRegistrationRequest
 
 
 class LoginView(LogView):
-    form_class = LoginForm
-    remember_me = forms.BooleanField(required=False, label="Запам'ятати мене на два тижні")
+    authentication_form = LoginForm
 
     def form_valid(self, form):
         if form.data.get('remember_me'):
-            self.request.session.set_expiry(timedelta(weeks=2))
+            remember_user_for_two_week(self.request, )
         return super().form_valid(form)
 
 
