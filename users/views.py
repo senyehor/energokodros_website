@@ -61,12 +61,16 @@ class CreateUserRegistrationRequest(CreateView):
         return self.render_to_response(
             self.get_context_data(
                 form=form,
-                user_registration_request_formset=user_registration_request_formset
-            )
+                user_registration_request_formset=user_registration_request_formset,
+            ),
+            status=400
         )
 
 
+@login_required
 def index_view(request: HttpRequest):
+    if request.user.is_authenticated and request.user.is_admin:
+        return redirect(reverse_lazy('admin_page'))
     return render(request, 'index.html')
 
 
