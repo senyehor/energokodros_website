@@ -5,5 +5,5 @@ import users.views
 urlpatterns = [
     re_path(r'^$|home', users.views.index_view),
     re_path(r'users/', include('users.urls')),
-    path('admin/', include('admin.urls')),
+    path('administrator/', include('administrator.urls')),
 ]

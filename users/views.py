@@ -7,8 +7,7 @@ from django.views.generic import CreateView
 
 from users.forms import (
     LoginForm,
-    NewUserForm,
-    UserRegistrationRequestFormset
+    NewUserForm, UserRegistrationRequestFormset,
 )
 from users.logic import _get_user_registration_formset, remember_user_for_two_week
 
