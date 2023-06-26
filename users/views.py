@@ -14,7 +14,7 @@ from users.forms import (
     UserRegistrationRequestFormset,
     UserRegistrationRequestsDecisionForm
 )
-from users.logic import remember_user_for_two_week
+from users.logic import _get_user_registration_formset, remember_user_for_two_week
 from users.models import UserRole, UserRegistrationRequest
 
 
@@ -23,7 +23,7 @@ class LoginView(LogView):
 
     def form_valid(self, form):
         if form.data.get('remember_me'):
-            remember_user_for_two_week(self.request, )
+            remember_user_for_two_week(self.request)
         return super().form_valid(form)
 
 
@@ -49,9 +49,7 @@ class CreateUserRegistrationRequest(CreateView):
             user_registration_request_formset: UserRegistrationRequestFormset):
         self.object = form.save(commit=False)  # noqa
         self.object.save()
-        # formsets are supposed to work with bulk data, but we just need it to
-        # join NewUser + UserRegistrationRequestForm in quantity 1, so we fearlessly take [0]
-        form = user_registration_request_formset.save(commit=False)[0]
+        form = _get_user_registration_formset(user_registration_request_formset)
         form.user = self.object
         form.save()
         return redirect(reverse_lazy('successfully_created_registration_request'))
