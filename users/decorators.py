@@ -3,7 +3,7 @@ import functools
 from django.http import HttpResponse
 
 
-def admin(function):
+def admin_rights_required(function):
     @functools.wraps(function)
     def _wrapper(request, *args, **kwargs):
         return function(request, *args, **kwargs) \
