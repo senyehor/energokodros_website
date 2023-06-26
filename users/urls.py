@@ -15,14 +15,4 @@ urlpatterns = overridden_account_patterns + [
         views.successfully_created_registration_request,
         name='successfully_created_registration_request'
     ),
-    path(
-        'review-registration-request',
-        views.RegistrationRequestReview.as_view(),
-        name='review_registration_request'
-    ),
-    path(
-        'admin-page',
-        views.admin_page,
-        name='admin_page'
-    ),
 ]
