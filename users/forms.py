@@ -26,7 +26,7 @@ class NewUserForm(auth_forms.UserCreationForm):
 
 class UserRegistrationRequestForm(forms.ModelForm):
     institution = forms.ModelChoiceField(
-        queryset=Institution.objects.all(),
+        queryset=Institution.objects.all().only('institution_id', 'institution_name'),
         label=_('Оберіть установу')
     )
     message = forms.CharField(
