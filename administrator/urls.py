@@ -4,7 +4,7 @@ from administrator import views
 
 urlpatterns = [
     path(
-        'administrator-page',
+        '',
         views.admin_page,
         name='admin_page'
     ),
@@ -16,6 +16,6 @@ urlpatterns = [
     path(
         'get-message-for-registration-request',
         views.GetMessageForRegistrationRequest.as_view(),
-        name='get_message_for_registration_request_link'
+        name='get_message_for_registration_request'
     )
 ]
