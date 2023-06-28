@@ -16,6 +16,7 @@ django-treebeard = "^4.5.1"
 psycopg2 = "^2.9.5"
 django-formtools = "^2.4.0"
 redis = "^4.5.4"
+python-docx = "^0.8.11"
 
 [tool.poetry.dev-dependencies]
 factory-boy = "^3.2.1"
