@@ -25,13 +25,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'crispy_forms',
-    'django_extensions',
-
     'users',
     'boxes',
     'energy',
     'institutions',
+
+    'crispy_forms',
+    'django_extensions',
+
 ]
 
 MIDDLEWARE = [
@@ -108,7 +109,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, STATIC_URL)]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = reverse_lazy('login')
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
