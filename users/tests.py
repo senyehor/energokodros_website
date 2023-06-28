@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from factory import django
 
 from institutions.tests import InstitutionFactory
-from users.models import UserRegistrationRequest
+from users.models import UserRegistrationData, UserRegistrationRequest
 
 User = get_user_model()
 
@@ -113,6 +113,13 @@ class UserFactory(django.DjangoModelFactory):
         model = User
 
 
+class UserRegistrationDataFactory(UserFactory):
+    email_code = factory.Sequence(lambda n: f'code {n}')
+
+    class Meta:
+        model = UserRegistrationData
+
+
 class UserRegistrationRequestFormsetTest(TestCase):
     # new users will not be created alone, only with application for institution
     # + position, or we will have applications for
@@ -124,45 +131,6 @@ class UserRegistrationRequestFormsetTest(TestCase):
         # using .build() to not save user
         self.user: User = UserFactory.build(password=self.raw_password)
         self.institution = InstitutionFactory()
-
-    @staticmethod
-    def __get_form_data() -> dict[str, str]:
-        data = TypedDict(
-            'data',
-            {
-                'full_name': str,
-                'email': str,
-                'password1': str,
-                'password2': str,
-                # part below is related to UserRegistrationRequestForm and keys are generated
-                # automatically by UserRegistrationRequestFormset and for some reason always
-                # include empty id and user, even though they are not included in
-                # UserRegistrationRequestForm, so it`s keys are just copied
-                # from knowingly correct form
-                'registration_requests-0-institution': str,
-                'registration_requests-0-message': str,
-
-                'registration_requests-0-id': str,
-                'registration_requests-0-user': str,
-
-                'registration_requests-TOTAL_FORMS': str,
-                'registration_requests-INITIAL_FORMS': str,
-                'registration_requests-MIN_NUM_FORMS': str,
-                'registration_requests-MAX_NUM_FORMS': str,
-            }
-        )
-        # here we assign values that are always the same in form submission data
-        sample_data = data()  # noqa
-        # empty message is included even when field is not filled
-        sample_data['registration_requests-0-message'] = ''
-        sample_data['registration_requests-0-id'] = ''
-        sample_data['registration_requests-0-user'] = ''
-        sample_data['registration_requests-TOTAL_FORMS'] = '1'
-        sample_data['registration_requests-INITIAL_FORMS'] = '0'
-        sample_data['registration_requests-MIN_NUM_FORMS'] = '1'
-        sample_data['registration_requests-MAX_NUM_FORMS'] = '1'
-
-        return sample_data.copy()
 
     def test_with_correct_data_set(self):
         # HUGE WARNING: when debugging something VERY strange is
