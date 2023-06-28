@@ -1,8 +1,9 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext as _
 
 from institutions.models import AccessLevel, Institution
+from users.logic import UserRegistrationCode
 from users.utils import _full_name_validator
 
 
@@ -80,6 +81,39 @@ class UserRole(models.Model):
 
     def __str__(self):
         return _(f'{self.position} {self.user.full_name} в {self.institution}')
+
+
+class UserRegistrationData(User):
+    email_code = models.CharField(
+        _('код верифікації пошти'),
+        max_length=UserRegistrationCode.LENGTH,
+        null=False
+    )
+    email_confirmed = models.BooleanField(
+        _('чи підтвердив користувач реєстрацію'),
+        null=False,
+        default=False
+    )
+
+    def confirm_email(self):
+        self.email_confirmed = True
+        self.save()
+
+    def review_registration(self, accepted: bool = False, is_admin: bool = False):
+        with transaction.atomic():
+            if accepted:
+                # here we provide empty password and set it explicitly later, as
+                # user registration data already has password, and it is already encrypted,
+                # so we can set it following way
+                user = User.objects.create(
+                    self.full_name,
+                    email=self.email,
+                    password='',
+                    is_admin=is_admin
+                )
+                user.password = self.password
+                user.save()
+            self.delete()
 
 
 class UserRegistrationRequest(models.Model):
