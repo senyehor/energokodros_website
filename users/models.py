@@ -158,7 +158,7 @@ class UserRegistrationData(User):
 
 class UserRoleApplication(models.Model):
     user = models.ForeignKey(
-        UserRegistrationData,
+        User,
         on_delete=models.CASCADE,
         null=False,
         blank=False,
