@@ -5,7 +5,6 @@ from django.db import models, transaction
 from django.utils.translation import gettext as _
 
 from institutions.models import AccessLevel, Institution
-from users.logic import UserRegistrationCode
 from users.utils import _full_name_validator
 
 
@@ -114,13 +113,8 @@ class UserRegistrationData(User):
     # we will operate user roles (non-confirmed user can not have a role)
     email_code = models.CharField(
         _('код верифікації пошти'),
-        max_length=UserRegistrationCode.LENGTH,
+        max_length=64,  # length for current code algorithm
         null=False
-    )
-    email_confirmed = models.BooleanField(
-        _('чи підтвердив користувач реєстрацію'),
-        null=False,
-        default=False
     )
     applied_at = models.DateTimeField(
         _('дата подання заяви'),
