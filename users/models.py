@@ -27,7 +27,10 @@ class User(AbstractBaseUser):
         _('електронна пошта'),
         unique=True,
         null=False,
-        blank=False
+        blank=False,
+        error_messages={
+            'unique': _('Користувач із такою поштою вже існує'),
+        }
     )
     is_admin = models.BooleanField(
         _('чи є адміністратором'),
@@ -41,6 +44,8 @@ class User(AbstractBaseUser):
 
     class Meta:
         db_table = 'users'
+        verbose_name = _('Користувач')
+        verbose_name_plural = _('Користувачі')
 
     def __str__(self):
         return _(self.full_name)
@@ -77,13 +82,14 @@ class UserRole(models.Model):
 
     class Meta:
         db_table = 'users_roles'
+        verbose_name = _('Роль користувача')
+        verbose_name_plural = _('Ролі користувача')
 
     def __str__(self):
         return _(f'{self.position} {self.user.full_name} в {self.institution}')
 
 
 class UserRegistrationDataManager(UserManager):
-
     def create(self, full_name: str, email: str, password: str, is_admin: bool = False,
                email_code: str = None, email_confirmed: bool = False) -> 'UserRegistrationData':
         user = super().create(full_name, email, password, is_admin)
@@ -98,6 +104,8 @@ class UserRegistrationDataManager(UserManager):
 
 
 class UserRegistrationData(User):
+    # we do not care about storing non-confirmed user`s data in User model, as
+    # we will operate user roles (non-confirmed user can not have a role)
     email_code = models.CharField(
         _('код верифікації пошти'),
         max_length=UserRegistrationCode.LENGTH,
@@ -131,6 +139,11 @@ class UserRegistrationData(User):
                 user.save()
             self.delete()
 
+    class Meta:
+        db_table = 'users_registration_data'
+        verbose_name = _('Дані реєстрації користувача')
+        verbose_name_plural = verbose_name
+
 
 class UserRegistrationRequest(models.Model):
     user = models.ForeignKey(
@@ -155,6 +168,8 @@ class UserRegistrationRequest(models.Model):
 
     class Meta:
         db_table = 'users_registration_requests'
+        verbose_name = _('Запит на реєстрацію користувача')
+        verbose_name_plural = _('Запити на реєстрацію користувача')
 
     def __str__(self):
         return _(f'Запит на реєстрацію від {self.user.full_name} в {str(self.institution)}')
