@@ -4,11 +4,11 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
-from users.models import UserRegistrationRequest
+from users.models import UserRoleApplication
 
 
-def _get_message_for_registration_request(request_id: int):
-    return get_object_or_404(UserRegistrationRequest, id=request_id).message
+def _get_message_for_role_application(request_id: int):
+    return get_object_or_404(UserRoleApplication, id=request_id).message
 
 
 def _send_registration_review_result_email(email: str, approved: bool, message: str) -> bool:

@@ -4,7 +4,7 @@ from django.views import View
 
 from administrator.decorators import admin_rights_required
 from administrator.forms import UserRegistrationRequestsDecisionForm
-from administrator.logic import _get_message_for_registration_request
+from administrator.logic import _get_message_for_role_application
 
 
 @admin_rights_required
@@ -53,7 +53,7 @@ class GetMessageForRegistrationRequest(View):
         if request.is_ajax():  # noqa
             if request_id := request.POST.get('request_id'):  # noqa
                 return JsonResponse(
-                    {'message': _get_message_for_registration_request(request_id)},
+                    {'message': _get_message_for_role_application(request_id)},
                     status=200
                 )
         return HttpResponse(status=405)
