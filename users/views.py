@@ -45,7 +45,7 @@ class CreateUserRegistrationRequest(CreateView):
     def form_valid(self, form: NewUserForm, registration_formset: RegistrationFormset):  # noqa pylint: disable=W0221
         self.object = form.save(commit=False)  # noqa
         self.object.save()
-        form = self.__get_user_from_registration_formset(registration_formset)
+        form = self.__get_form_from_registration_formset(registration_formset)
         form.user = self.object
         form.save()
         return redirect(reverse_lazy('home'))
@@ -64,10 +64,11 @@ class CreateUserRegistrationRequest(CreateView):
         )
 
     @staticmethod
-    def __get_user_from_registration_formset(registration_formset: BaseInlineFormSet) -> User:
-        # here we take [0], as formset is supposed to work with bulk data,
-        # but is used here to join user creating from and user role application form
-        return registration_formset.save(commit=False)[0]
+    def __get_form_from_registration_formset(registration_formset: BaseInlineFormSet) -> User:
+        forms = registration_formset.save(commit=False)
+        if len(forms) == 1:
+            return forms[0]
+        raise ValueError('only one user is supposed to be in this formset')
 
 
 @login_required
