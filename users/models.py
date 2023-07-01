@@ -37,6 +37,11 @@ class User(AbstractBaseUser):
         default=False,
         null=False
     )
+    is_active = models.BooleanField(
+        _('чи підтвердив користувач пошту'),
+        null=False,
+        default=False
+    )
 
     USERNAME_FIELD = 'email'
 
@@ -78,11 +83,6 @@ class UserRole(models.Model):
         max_length=255,
         null=False,
         blank=False
-    )
-    is_active = models.BooleanField(
-        _('чи підтвердив користувач пошту'),
-        null=False,
-        default=False
     )
 
     class Meta:
