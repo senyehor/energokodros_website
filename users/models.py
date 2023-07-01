@@ -7,9 +7,10 @@ from users.utils import _full_name_validator
 
 
 class UserManager(BaseUserManager):
-    def create(self, full_name: str, email: str, password: str, is_admin: bool = False) -> 'User':
+    def create(self, full_name: str, email: str, password: str,
+               is_admin: bool = False, is_active: bool = False) -> 'User':
         email = self.normalize_email(email)
-        user = self.model(full_name=full_name, email=email, is_admin=is_admin)
+        user = self.model(full_name=full_name, email=email, is_admin=is_admin, is_active=is_active)
         user.set_password(password)
         return user
 
@@ -77,6 +78,11 @@ class UserRole(models.Model):
         max_length=255,
         null=False,
         blank=False
+    )
+    is_active = models.BooleanField(
+        _('чи підтвердив користувач пошту'),
+        null=False,
+        default=False
     )
 
     class Meta:
