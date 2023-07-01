@@ -15,6 +15,7 @@ class LoginForm(auth_forms.AuthenticationForm):
 
     error_messages = {
         'invalid_login': _('Уведіть правильну електронну пошту та пароль або зареєструйтесь'),
+        'inactive':      _('Електронна пошта ще не підтверджена'),
     }
 
 

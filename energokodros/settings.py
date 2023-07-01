@@ -44,6 +44,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'energokodros.urls'
 
+AUTHENTICATION_BACKENDS = [
+    'users.backends.AllowTryAuthenticateInactive',
+]
+
 TEMPLATES = [
     {
         'BACKEND':  'django.template.backends.django.DjangoTemplates',
@@ -110,3 +114,7 @@ LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# id`s encoding constants
+KEYSPACE = env('KEYSPACE')
+CHAFF = int(env('CHAFF'))
