@@ -84,7 +84,7 @@ def index_view(request: HttpRequest):
     return render(request, 'index.html')
 
 
-def successfully_created_registration_request(request: HttpRequest):
+def successfully_created_registration_request(request):
     return render(request, 'registration/successfully_created_registration_request.html')
 
 
@@ -94,4 +94,8 @@ def confirm_email(request, user_id: int, email: str):
         request,
         _('Пошту успішно підтверджено')
     )
-    return redirect('home')
+    return redirect('successfully_confirmed_email')
+
+
+def successfully_confirmed_email(request):
+    return render(request, 'registration/successfully_confirmed_email.html')
