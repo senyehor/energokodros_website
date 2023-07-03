@@ -80,7 +80,7 @@ def index_view(request: HttpRequest):
 
 
 def successfully_created_registration_request(request: HttpRequest):
-    return render(request, 'successfully_created_registration_request.html')
+    return render(request, 'registration/successfully_created_registration_request.html')
 
 
 def confirm_email(request, user_id: int, email: str):
