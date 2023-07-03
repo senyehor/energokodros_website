@@ -13,11 +13,14 @@ urlpatterns = overridden_account_patterns + [
         views.CreateUserRegistrationRequest.as_view(),
         name='register'
     ),
-    path('', include('django.contrib.auth.urls')),
     path(
         'successfully-created-registration-request/',
         views.successfully_created_registration_request,
         name='successfully_created_registration_request'
     ),
-    path('confirm-email/', views.confirm_email, name='confirm_email')
-]
+    path(
+        'confirm-email/<hashed_int:user_id>/<hashed_string:user_email>',
+        views.confirm_email,
+        name='confirm_email'
+    )
+] + path('', include('django.contrib.auth.urls'))
