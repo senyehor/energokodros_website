@@ -45,11 +45,11 @@ class CreateUserRegistrationRequest(CreateView):
 
     def form_valid(self, form: NewUserForm, registration_formset: RegistrationFormset):  # noqa pylint: disable=W0221
         self.object = form.save(commit=False)  # noqa
-        self.object.save()
         form = self.__get_form_from_registration_formset(registration_formset)
         form.user = self.object
-        form.save()
         if self.__send_email_confirmation_message():
+            self.object.save()
+            form.save()
             return redirect(reverse_lazy('successfully_created_registration_request'))
         return HttpResponse(status=500)
 
