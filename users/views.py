@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as LogView
+from django.db import transaction
 from django.forms import BaseInlineFormSet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
+from django.views import View
 from django.views.generic import CreateView
 
 from users.forms import (
@@ -88,14 +91,14 @@ def successfully_created_registration_request(request):
     return render(request, 'registration/successfully_created_registration_request.html')
 
 
-def confirm_email(request, user_id: int, email: str):
-    EmailConfirmationController.confirm_email_if_exists_or_404(user_id, email)
-    messages.success(
-        request,
-        _('Пошту успішно підтверджено')
-    )
-    return redirect('successfully_confirmed_email')
+class ConfirmEmail(View):
+    def post(self, request, user_id: int, user_email: str):  # noqa
+        EmailConfirmationController.confirm_email_if_user_exists_or_404(user_id, user_email)
+        messages.success(
+            request,
+            _('Пошту успішно підтверджено')
+        )
+        return redirect('successfully_confirmed_email')
 
-
-def successfully_confirmed_email(request):
-    return render(request, 'registration/successfully_confirmed_email.html')
+    def get(self, request):  # noqa
+        return render(request, 'registration/successfully_confirmed_email.html')
