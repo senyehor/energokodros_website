@@ -1,6 +1,5 @@
 import string
 
-from django.urls import register_converter
 from hashids import Hashids
 
 from energokodros.settings import MIN_HASH_LENGTH, SECRET_KEY
@@ -33,10 +32,6 @@ class StringHasher:
 
     def to_url(self, value: str) -> str:  # noqa
         return hide_str(value)
-
-
-register_converter(IntHasher, 'hashed_int')
-register_converter(StringHasher, 'hashed_string')
 
 
 def hide_int(val: int) -> str:
