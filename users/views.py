@@ -17,7 +17,7 @@ from users.forms import (
     RegistrationFormset
 )
 from users.logic import EmailConfirmationController, remember_user_for_two_week
-from users.models import User
+from users.models import UserRoleApplication
 
 
 class LoginView(LogView):
@@ -48,16 +48,11 @@ class CreateUserRegistrationRequest(CreateView):
 
     @method_decorator(transaction.atomic)
     def form_valid(self, form: NewUserForm, registration_formset: RegistrationFormset):  # noqa pylint: disable=W0221
-        self.object = form.save(commit=False)  # noqa
-        self.object.save()
-        form = self.__get_form_from_registration_formset(registration_formset)
-        form.user = self.object
-        user_role_application = form.save()
+        self.__save_user_with_role_application(form, registration_formset)
         if self.__send_email_confirmation_message():
             return redirect(reverse_lazy('successfully_created_registration_request'))
         # deleting created user and it`s application if we failed to send email confirmation message
-        self.object.delete()
-        user_role_application.delete()
+        self.__delete_user_with_role_application()
         return HttpResponse(status=500)
 
     def form_invalid(  # noqa pylint: pylint: disable=W0221
@@ -73,13 +68,27 @@ class CreateUserRegistrationRequest(CreateView):
             status=400
         )
 
+    def __delete_user_with_role_application(self):
+        self.object.delete()
+        self.user_role_application.delete()
+
+    def __save_user_with_role_application(
+            self, form: NewUserForm, registration_formset: RegistrationFormset):
+        self.object = form.save(commit=False)  # noqa
+        self.object.save()
+        user_role_application = self.__get_form_from_registration_formset(registration_formset)
+        user_role_application.user = self.object
+        self.user_role_application = user_role_application
+        self.user_role_application.save()
+
     def __send_email_confirmation_message(self) -> bool:
         return EmailConfirmationController.send_email_confirmation_message(
             self.request, self.object
         )
 
     @staticmethod
-    def __get_form_from_registration_formset(registration_formset: BaseInlineFormSet) -> User:
+    def __get_form_from_registration_formset(
+            registration_formset: BaseInlineFormSet) -> UserRoleApplication:
         forms = registration_formset.save(commit=False)
         if len(forms) == 1:
             return forms[0]
