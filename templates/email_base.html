@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    {#title is not needed for email#}
+</head>
+<body class="bg-light">
+<div class="container">
+    {% block content %}
+        {# VITALY IMPORTANT: due to the fact that email html only supports internal styles #}
+        {# email`s are compliled using boostrap-email ruby and all auxiliary are __*.html #}
+    {% endblock %}
+</div>
+</body>
+</html>
