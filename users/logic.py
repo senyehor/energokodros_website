@@ -10,28 +10,27 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from users.models import User
-from utils.crypto import hide_int, hide_str
 
 logger = logging.getLogger(__name__)
 
 
 class EmailConfirmationController:
     @classmethod
-    def send_email_confirmation_message(cls, user: User) -> bool:
-        ctx = cls.__generate_context_for_user(user)
-        text_message_content = cls.__generate_text_content(
-            confirmation_link=reverse_lazy('confirm_email', kwargs=ctx)
+    def send_email_confirmation_message(cls, request: HttpRequest, user: User) -> bool:
+        ctx = cls.__generate_context(request, user)
+        html = render_to_string(
+            template_name='registration/email_confirmation.html',
+            context=ctx
         )
-        html = render_to_string('registration/email_confirmation.html', ctx)
         msg = EmailMultiAlternatives(
             subject=_('Підтвердження реєстрації'),
-            body=text_message_content,
+            body=html,
             # django requires from_email to be explicitly set to None
             # to use settings.DEFAULT_FROM_EMAIL
             from_email=None,
             to=[user.email]
         )
-        msg.attach_alternative(html, 'text/html')
+        msg.content_subtype = 'html'
         try:
             msg.send()
         except SMTPException as e:
@@ -43,23 +42,23 @@ class EmailConfirmationController:
         return True
 
     @staticmethod
-    def confirm_email_if_exists_or_404(user_id: int, email: str):
+    def confirm_email_if_user_exists_or_404(user_id: int, email: str):
         user = get_object_or_404(User, pk=user_id, email=email)
         user.is_active = True
         user.save()
 
     @staticmethod
-    def __generate_context_for_user(user: User) -> dict[str, str]:
-        return {
-            'user_id':    hide_int(user.id),
-            'user_email': hide_str(user.email),
-        }
-
-    @staticmethod
-    def __generate_text_content(confirmation_link: str) -> str:
-        return _(
-            f'Для підтвердження пошти перейдіть по наступному посиланню {confirmation_link}'
+    def __generate_context(request: HttpRequest, user: User) -> dict[str, str]:
+        link_without_host = reverse_lazy(
+            '',
+            kwargs={
+                'user_id':    user.pk,
+                'user_email': user.email,
+            }
         )
+        return {
+            'link': request.get_host() + link_without_host,
+        }
 
 
 def remember_user_for_two_week(request: HttpRequest):
