@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from factory import django
 
 from institutions.tests import InstitutionFactory
-from users.models import UserRegistrationData, UserRegistrationRequest
+from users.models import UserRoleApplication
 
 User = get_user_model()
 
@@ -112,42 +112,45 @@ class UserFactory(django.DjangoModelFactory):
         model = User
 
 
-class UserRegistrationDataFactory(UserFactory):
-    email_code = factory.Sequence(lambda n: f'code {n}')
+_user_registration_data_dict = TypedDict(
+    'data_dict',  # noqa
+    {
+        'full_name':                           str,
+        'email':                               str,
+        'password1':                           str,
+        'password2':                           str,
+        # part below is related to UserRegistrationRequestForm and keys are generated
+        # automatically by UserRegistrationRequestFormset and for some reason always
+        # include empty id and user, even though they are not included in
+        # UserRegistrationRequestForm, so it`s keys are just copied
+        # from knowingly correct form
+        'registration_requests-0-institution': str,
+        'registration_requests-0-message':     str,
 
-    class Meta:
-        model = UserRegistrationData
+        'registration_requests-0-id':          str,
+        'registration_requests-0-user':        str,
+
+        'registration_requests-TOTAL_FORMS':   str,
+        'registration_requests-INITIAL_FORMS': str,
+        'registration_requests-MIN_NUM_FORMS': str,
+        'registration_requests-MAX_NUM_FORMS': str,
+    }
+)
 
 
-class UserRegistrationRequestFormsetTest(TestCase):
-    # new users will not be created alone, only with application for institution
-    # + position, or we will have applications for
-    # new roles (user, institution, access_level) from existing users
+class UserRegistrationTest(TestCase):
+    # here new users creating along with application for institution
+    # + position is tested
     def setUp(self):
         self.client = Client()
         self.raw_password = '%tv{,,E)36'
-        self.message = 'певне повідомлення'
-        # using .build() to not save user
+        self.message = 'some message'
         self.user: User = UserFactory.build(password=self.raw_password)
         self.institution = InstitutionFactory()
 
     def test_with_correct_data_set(self):
-        # HUGE WARNING: when debugging something VERY strange is
-        # happening, (if I have a breakpoint outside of test)
-        # UserRegistrationRequestForm will fail validation with no apparent reason
-        # django request ticket # todo
-        data = self.__get_form_data()
-        data['full_name'] = self.user.full_name
-        data['email'] = self.user.email
-        data['password1'] = self.raw_password
-        data['password2'] = self.raw_password
-        data['registration_requests-0-institution'] = str(self.institution.pk)
-        resp: HttpResponse = self.client.post(
-            reverse_lazy('register'),
-            {
-                **data
-            },
-            follow=True
+        resp = self.__send_registration_request(
+            self.__get_correct_data_set_with_values_from_set_up()
         )
         self.assertEqual(
             resp.status_code,
@@ -161,18 +164,67 @@ class UserRegistrationRequestFormsetTest(TestCase):
             )
         except ObjectDoesNotExist:
             assert False, 'user is not created'
-        except MultipleObjectsReturned:
-            assert False, 'multiple users are created'
         try:
-            user_registration_request = UserRegistrationRequest.objects.get(
+            UserRoleApplication.objects.get(
                 user=user
             )
         except ObjectDoesNotExist:
             assert False, 'user registration request is not created'
         except MultipleObjectsReturned:
             assert False, 'multiple user registration requests are created'
+
+    def test_user_and_role_application_is_created_correctly(self):
+        self._send_correct_data()
+        user = User.objects.get(
+            full_name=self.user.full_name,
+            email=self.user.email
+        )
+        self.assertFalse(
+            user.is_active,
+            'user must me inactive on registration (email unconfirmed)'
+        )
+        user_registration_request = UserRoleApplication.objects.get(
+            user=user
+        )
         self.assertEqual(
-            user_registration_request.institution.pk,
-            self.institution.pk,
-            'incorrect institution is saved for registration request'
+            user_registration_request.institution,
+            self.institution,
+            'registration request is set for wrong institution'
+        )
+
+    def _send_correct_data(self) -> HttpResponse:
+        return self.__send_registration_request(
+            self.__get_correct_data_set_with_values_from_set_up()
+        )
+
+    def __get_correct_data_set_with_values_from_set_up(self):
+        data = self._get_form_data()
+        data['full_name'] = self.user.full_name
+        data['email'] = self.user.email
+        data['password1'] = self.raw_password
+        data['password2'] = self.raw_password
+        data['registration_requests-0-institution'] = str(self.institution.pk)
+        return data
+
+    @classmethod
+    def _get_form_data(cls) -> _user_registration_data_dict:
+        sample_data = _user_registration_data_dict()  # noqa
+        # here we assign values that are always the same in form submission data
+        # empty message is included even when user did not write anything
+        sample_data['registration_requests-0-message'] = ''
+        sample_data['registration_requests-0-id'] = ''
+        sample_data['registration_requests-0-user'] = ''
+        sample_data['registration_requests-TOTAL_FORMS'] = '1'
+        sample_data['registration_requests-INITIAL_FORMS'] = '0'
+        sample_data['registration_requests-MIN_NUM_FORMS'] = '1'
+        sample_data['registration_requests-MAX_NUM_FORMS'] = '1'
+        return sample_data.copy()
+
+    def __send_registration_request(self, data: dict[str, str]) -> HttpResponse:
+        return self.client.post(
+            reverse_lazy('register'),
+            {
+                **data
+            },
+            follow=True
         )
