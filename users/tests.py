@@ -45,12 +45,11 @@ class UserTest(TestCase):
         def test_for_names_list(names: list[str], should_throw: bool):
             for name in names:
                 try:
-                    user = User.objects.create(
+                    User.objects.create(
                         full_name=name,
                         email=self.valid_email,
                         password=self.some_password
                     )
-                    user.delete()
                 except ValidationError:
                     if not should_throw:
                         assert False, 'validating full name throws exception for a valid name'
