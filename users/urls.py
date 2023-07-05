@@ -16,7 +16,7 @@ urlpatterns = [  # noqa
     ),
     path(
         'confirm-email/<hashed_int:user_id>/<hashed_str:user_email>/',
-        views.ConfirmEmail.as_view(),
+        views.confirm_email,
         name='confirm_email'
     ),
     path(

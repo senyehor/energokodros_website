@@ -8,7 +8,6 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from django.views import View
 from django.views.generic import CreateView
 
 from users.forms import (
@@ -55,7 +54,7 @@ class CreateUserRegistrationRequest(CreateView):
         self.__delete_user_with_role_application()
         return HttpResponse(status=500)
 
-    def form_invalid(  # noqa pylint: pylint: disable=W0221
+    def form_invalid(  # noqa pylint: disable=W0221
             self, form: NewUserForm,
             registration_formset:
             RegistrationFormset):
@@ -106,14 +105,13 @@ def successfully_created_registration_request(request):
     return render(request, 'registration/successfully_created_registration_request.html')
 
 
-class ConfirmEmail(View):
-    def get(self, request, user_id: int, user_email: str):  # noqa
-        EmailConfirmationController.confirm_email_if_user_exists_or_404(user_id, user_email)
-        messages.success(
-            request,
-            _('Пошту успішно підтверджено')
-        )
-        return redirect('successfully_confirmed_email')
+def confirm_email(request: HttpRequest, user_id: int, user_email: str):
+    EmailConfirmationController.confirm_email_if_user_exists_or_404(user_id, user_email)
+    messages.success(
+        request,
+        _('Пошту успішно підтверджено')
+    )
+    return redirect('successfully_confirmed_email')
 
 
 def successfully_confirmed_email(request: HttpRequest):
