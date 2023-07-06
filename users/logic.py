@@ -76,3 +76,7 @@ def remember_user_for_two_week(request: HttpRequest):
 
 def _remember_user_for_timedelta(request: HttpRequest, td: timedelta):
     request.session.set_expiry(td)
+
+
+def _is_admin(request: HttpRequest):
+    return request.user.is_authenticated and request.user.is_admin  # noqa
