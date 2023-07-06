@@ -5,7 +5,6 @@
     Сторінка адміністратора
 {% endblock %}
 {% block content %}
-
     <div class="container">
         <form method="post" action="{% url 'review_registration_request' %}">
             {% csrf_token %}
@@ -16,6 +15,6 @@
         </form>
     </div>
     <script type="text/javascript" src="{% static 'js/administrator.js' %}"></script>
-    <p id="get-message-for-registration-request-link"
-       style="display: none;">{% url 'get_message_for_registration_request' %}</p>
+    <input type="hidden" id="get-message-for-registration-request-link"
+           value="{% url 'get_message_for_registration_request' %}">
 {% endblock %}
