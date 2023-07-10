@@ -1,9 +1,11 @@
 import functools
+import os
 
 from django.http import HttpRequest, QueryDict
 from django.shortcuts import render
 
 from energy.logic.aggregated_consumption.exceptions import QueryParametersInvalid
+from institutions.models import Facility
 from users.logic import check_user_has_no_roles
 from utils.types import FuncView, StrStrDict
 
@@ -27,3 +29,7 @@ def show_no_roles_page_if_user_has_no_roles(view: FuncView) -> FuncView:
         return view(request, *args, **kwargs)
 
     return wrapper
+
+
+def check_institution_is_kindergarten_28(institution: Facility) -> bool:
+    return institution.pk == int(os.getenv('KINDERGARTEN_ID'))
