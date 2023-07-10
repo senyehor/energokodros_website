@@ -18,10 +18,8 @@ RawConsumption = list[tuple[RawConsumptionTime, RawConsumptionValue]]
 RawConsumptionWithRawTotalConsumption = tuple[
     RawConsumption, RawTotalConsumption
 ]
-Consumption: TypeAlias = \
-    list[
-        tuple[ConsumptionTime, ConsumptionValue]
-    ]
+ConsumptionRow: TypeAlias = tuple[ConsumptionTime, ConsumptionValue]
+Consumption: TypeAlias = list[ConsumptionRow]
 ConsumptionWithConsumptionForecast: TypeAlias = \
     list[tuple[ConsumptionTime, ConsumptionValue, ConsumptionForecast]]
 ConsumptionWithTotalConsumption = tuple[
