@@ -42,6 +42,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
     def create_from_application_request(cls, application_request: UserRoleApplication):
         obj = cls()
         obj.__prepopulate_fields(application_request)
+        obj.is_bound = True
         return obj
 
     def __prepopulate_fields(self, application_request: UserRoleApplication):  # pylint: disable=W0238
