@@ -87,7 +87,6 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
     def __order_fields(self):
         unordered_fields = self.fields
         ordered_fields = {field: unordered_fields[field] for field in self.Meta.form_fields_order}
-        field_not_included = [field for field in unordered_fields if field not in ordered_fields]
-        for field in field_not_included:
-            ordered_fields[field] = unordered_fields[field]
+        # adding fields that are not included in ordered_fields
+        ordered_fields.update(unordered_fields)
         self.fields = ordered_fields
