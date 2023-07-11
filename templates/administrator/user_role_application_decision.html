@@ -1,0 +1,15 @@
+{% extends 'common/base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}
+    Розгляд запиту на отримання ролі
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form| crispy }}
+            <button name="decision" type="submit" class="btn btn-primary mt-4" value="accept">Підтвердити</button>
+            <button name="decision" type="submit" class="btn btn-primary mt-4" value="decline">Відхилити</button>
+        </form>
+    </div>
+{% endblock %}

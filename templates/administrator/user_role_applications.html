@@ -1,0 +1,28 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block title %}Запити на отримання ролі{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if page_obj.object_list %}
+            <h1>Запити на отримання ролі від користувачів</h1>
+            <hr>
+            <div class="container p-0" id="applications">
+                {% for application in page_obj.object_list %}
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text m-0">
+                                {{ application }}
+                            </p>
+                            <a href="{{ application.get_url_for_application_decision }}"
+                               class="display-none stretched-link"></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h1>Запити на отримання ролі від користувачів відсутні</h1>
+        {% endif %}
+    </div>
+    {% include 'common/paginator.html' with paginator=paginator is_paginated=is_paginated %}
+    <script src="{% static 'js/administrator/user_role_applications.js' %}" type="module"></script>
+{% endblock %}
