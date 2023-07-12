@@ -1,5 +1,6 @@
 from .aggregated_consumption_view import ConsumptionPageView, get_consumption_with_total_consumption
 from .box_with_sensors_creation import BoxWithSensorsCreateView
+from .energy_report import get_energy_report
 from .generic import (
     BoxEditDeleteView, BoxListView, BoxSensorSetEditDeleteView, BoxSensorSetListView,
     SensorEditDeleteView,

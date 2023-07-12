@@ -82,6 +82,11 @@ ajax_url = [
         'get-aggregation-status-and-last-time-run/',
         views.get_aggregation_status_and_last_time_run,
         name='get-aggregation-status-and-last-time-run'
+    ),
+    path(
+        'get-energy-report/',
+        views.get_energy_report,
+        name='get-energy-report'
     )
 ]
 
