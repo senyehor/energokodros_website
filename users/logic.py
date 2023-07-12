@@ -1,15 +1,13 @@
 import logging
 from datetime import timedelta
-from smtplib import SMTPException
 
-from django.core.mail import EmailMultiAlternatives
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 
 from users.models import User
+from utils.common import send_html_email
 
 logger = logging.getLogger(__name__)
 
@@ -19,27 +17,16 @@ class EmailConfirmationController:
     def send_email_confirmation_message(cls, request: HttpRequest, user: User) -> bool:
         ctx = cls.__generate_context(request, user)
         html = render_to_string(
-            template_name='registration/email_confirmation.html',
+            template_name='email/email_confirmation.html',
             context=ctx
         )
-        msg = EmailMultiAlternatives(
-            subject=_('Підтвердження реєстрації'),
-            body=html,
-            # django requires from_email to be explicitly set to None
-            # to use settings.DEFAULT_FROM_EMAIL
-            from_email=None,
-            to=[user.email]
-        )
-        msg.content_subtype = 'html'
-        try:
-            msg.send()
-        except SMTPException as e:
+        success = send_html_email(user.email, 'Підтвердження реєстрації', html)
+        if not success:
             logger.error(
-                msg='something went wrong during sending confirmation email',
-                exc_info=e
+                msg='something went wrong during sending confirmation email for '
+                    f'email {user.email}',
             )
-            return False
-        return True
+        return success
 
     @staticmethod
     def confirm_email_if_user_exists_or_404(user_id: int, email: str):
