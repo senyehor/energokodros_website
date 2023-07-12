@@ -188,7 +188,7 @@ class UserRegistrationTest(TestCase):
             user=user
         )
         self.assertEqual(
-            user_registration_request.institution,
+            user_registration_request.application_institution,
             self.institution,
             'registration request is set for wrong institution'
         )
