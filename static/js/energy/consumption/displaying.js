@@ -56,6 +56,11 @@ function _draw_chart(data) {
             scales: {
                 x: {
                     stacked: true,
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 90,
+                        minRotation: 90
+                    }
                 },
                 y: {
                     stacked: false,
