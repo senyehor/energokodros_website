@@ -19,7 +19,7 @@ def try_send_email_add_warning_if_failed(
             'text':   message
         }
     )
-    if send_html_email(email, subject, html):
+    if not send_html_email(email, subject, html):
         messages.warning(request, _(f'Не вдалося надіслати повідомлення на пошту {email}'))
 
 
