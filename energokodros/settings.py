@@ -31,6 +31,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'django_extensions',
+    'active_link',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'administrator.context_processors.user_roles_applications_to_review_count'
             ],
         },
     },
@@ -125,3 +127,5 @@ EMAIL_USE_TLS = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIN_HASH_LENGTH = env.int('MIN_HASH_LENGTH')
+
+ACTIVE_LINK_STRICT = True
