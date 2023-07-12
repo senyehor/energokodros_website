@@ -7,7 +7,8 @@ from administrator.decorators import admin_rights_required
 from administrator.forms import UserRoleApplicationRequestsDecisionForm
 from administrator.logic import (
     _check_user_has_no_roles,
-    _get_applications_from_users_who_confirmed_email_ordered, UserRoleApplicationReviewController,
+    _get_applications_from_users_who_confirmed_email_ordered,
+    UserRoleApplicationReviewController,
 )
 from users.models import UserRoleApplication
 
@@ -17,9 +18,6 @@ def admin_page(request: HttpRequest):
     return render(
         request,
         'administrator/administrator.html',
-        {
-            'pending_registration_requests_form': UserRoleApplicationRequestsDecisionForm()
-        }
     )
 
 
@@ -29,7 +27,7 @@ class UserRoleApplicationsList(ListView):
     queryset = _get_applications_from_users_who_confirmed_email_ordered()
     context_object_name = 'applications'
     paginate_by = 10
-    template_name = 'administrator/user_role_applications.html'
+    template_name = 'administrator/users_roles_applications.html'
 
 
 @admin_rights_required

@@ -6,9 +6,9 @@
         {% if page_obj.object_list %}
             <h1>Запити на отримання ролі від користувачів</h1>
             <hr>
-            <div class="container p-0" id="applications">
+            <div class="container px-0" id="applications">
                 {% for application in page_obj.object_list %}
-                    <div class="card">
+                    <div class="card mt-2">
                         <div class="card-body">
                             <p class="card-text m-0">
                                 {{ application }}
