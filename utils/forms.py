@@ -2,6 +2,7 @@ from typing import Literal
 
 from django.core.exceptions import SuspiciousOperation
 from django.db import models as db_models
+from django.db.models import Model, QuerySet
 from django.forms import models
 
 from utils.crypto import hide_int, reveal_int
@@ -14,11 +15,15 @@ class SecureModelChoiceField(models.ModelChoiceField):
             return super().to_python(value)
         try:
             return hide_int(value.pk)
-        except ValueError:
-            raise SuspiciousOperation
+        except ValueError as e:
+            raise SuspiciousOperation from e
 
-    def to_python(self, value: str) -> db_models.Model:
+    def to_python(self, value: str) -> db_models.Model | None:
         try:
             return super().to_python(reveal_int(value))
-        except ValueError:
-            raise SuspiciousOperation
+        except ValueError as e:
+            raise SuspiciousOperation from e
+
+
+def create_queryset_from_object(obj: Model) -> QuerySet:
+    return obj.__class__.objects.all().filter(pk=obj.pk)
