@@ -42,8 +42,10 @@ class ReportCreator:
         self.__add_report_parameters_info()
         self.__add_consumption_table()
         self.__add_chart()
-        kerivnuk = self.__report.add_paragraph(_('Науковий керівник '))
-        kerivnuk.add_run(_('Микола СОТНИК')).alignment = 2
+        self.__add_project_manager()
+        return self.__export_report_to_binary()
+
+    def __export_report_to_binary(self) -> BytesIO:
         binary_report = BytesIO()
         self.__report.save(binary_report)
         binary_report.seek(io.SEEK_SET)
@@ -146,3 +148,6 @@ class ReportCreator:
         plt.savefig(image, format='png', bbox_inches='tight')
         image.seek(io.SEEK_SET)
         self.__report.add_picture(image)
+
+    def __add_project_manager(self):
+        self.__report.add_paragraph(_('Науковий керівник Микола СОТНИК'))
