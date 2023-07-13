@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'boxes',
     'energy',
     'institutions',
+    'utils',
 
     'crispy_forms',
     'django_extensions',
