@@ -1,6 +1,7 @@
 import logging
 from smtplib import SMTPException
 
+from crispy_forms.bootstrap import StrictButton
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpRequest
@@ -43,3 +44,13 @@ def send_html_email(email: str, subject: str, html: str) -> bool:
         )
         return False
     return True
+
+
+def generate_submit_type_button(button_text: str, button_value: str) -> StrictButton:
+    return StrictButton(
+        button_text,
+        name='decision',
+        value=button_value,
+        css_class='btn btn-primary mt-4',
+        type='submit'
+    )
