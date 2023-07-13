@@ -1,4 +1,6 @@
 {% extends 'common/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% load crispy_forms_filters %}
 {% block title %}
     Розгляд запиту на отримання ролі
@@ -8,15 +10,14 @@
         {% if user_has_no_roles %}
             <div class="card bg-warning">
                 <h3 class="card-body">
-                    Цей користувач ще не має жодної ролі, уважно перевірте пошту&#8201;&#8211;&#8201;це може бути стороння людина, що подала заявку на реєстрацію
+                    Цей користувач ще не має жодної ролі, уважно перевірте пошту&#8201;&#8211;&#8201;це може бути
+                    стороння людина, що подала заявку на реєстрацію
                 </h3>
             </div>
         {% endif %}
         <form method="post">
-            {% csrf_token %}
-            {{ form| crispy }}
-            <button name="decision" type="submit" class="btn btn-primary mt-4" value="accept">Підтвердити</button>
-            <button name="decision" type="submit" class="btn btn-primary mt-4" value="decline">Відхилити</button>
+            {% crispy form form.helper %}
         </form>
     </div>
+    <script type="text/javascript" src="{% static "js/administrator/users_roles_application.js" %}"></script>
 {% endblock %}
