@@ -1,4 +1,4 @@
-from administrator.logic.helper_functions import (
+from administrator.logic import (
     get_applications_from_users_who_confirmed_email_ordered,
     is_admin,
 )

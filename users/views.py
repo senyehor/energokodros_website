@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import CreateView
 
-from administrator.logic.helper_functions import is_admin
+from administrator.logic import is_admin
 from users.forms import (
     LoginForm,
     NewUserForm,
