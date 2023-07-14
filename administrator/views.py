@@ -32,7 +32,6 @@ class UserRoleApplicationsList(ListView):
 
 @admin_rights_required
 class UserRoleApplicationDecision(FormView):
-    http_method_names = ['get', 'post']  # removing PUT method that is in FormView by default
     template_name = 'administrator/user_role_application_decision.html'
     form_class = UserRoleApplicationRequestsDecisionForm
     success_url = reverse_lazy('users_roles_applications')
