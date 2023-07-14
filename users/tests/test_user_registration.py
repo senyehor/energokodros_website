@@ -125,7 +125,7 @@ class UserRegistrationTest(TestCase):
         )
 
     def __fill_data_set(self, user: User, institution: Institution, raw_password: str):
-        data = self._get_form_data()
+        data = self.__get_form_data()
         data['full_name'] = user.full_name
         data['email'] = user.email
         data['password1'] = raw_password
@@ -135,19 +135,17 @@ class UserRegistrationTest(TestCase):
         data['registration_requests-0-institution'] = hide_int(institution.pk)
         return data
 
-    @classmethod
-    def _get_form_data(cls) -> _user_registration_data_dict:
-        sample_data = _user_registration_data_dict()  # noqa
+    def __get_form_data(self) -> _user_registration_data_dict:
+        data = _user_registration_data_dict()  # noqa
         # here we assign values that are always the same in form submission data
-        # empty message is included even when user did not write anything
-        sample_data['registration_requests-0-message'] = ''
-        sample_data['registration_requests-0-id'] = ''
-        sample_data['registration_requests-0-user'] = ''
-        sample_data['registration_requests-TOTAL_FORMS'] = '1'
-        sample_data['registration_requests-INITIAL_FORMS'] = '0'
-        sample_data['registration_requests-MIN_NUM_FORMS'] = '1'
-        sample_data['registration_requests-MAX_NUM_FORMS'] = '1'
-        return sample_data.copy()
+        data['registration_requests-0-message'] = ''
+        data['registration_requests-0-id'] = ''
+        data['registration_requests-0-user'] = ''
+        data['registration_requests-TOTAL_FORMS'] = '1'
+        data['registration_requests-INITIAL_FORMS'] = '0'
+        data['registration_requests-MIN_NUM_FORMS'] = '1'
+        data['registration_requests-MAX_NUM_FORMS'] = '1'
+        return data
 
     def __send_registration_request(self, data: _user_registration_data_dict) -> HttpResponse:
         return self.client.post(
