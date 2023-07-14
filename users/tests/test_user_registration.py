@@ -1,13 +1,13 @@
 from typing import TypedDict
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse, reverse_lazy
 
 from institutions.models import Institution
-from institutions.tests import InstitutionFactory
+from institutions.tests.factories import InstitutionFactory
 from users.logic import EmailConfirmationController
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
@@ -71,8 +71,6 @@ class UserRegistrationTest(TestCase):
             )
         except ObjectDoesNotExist:
             assert False, 'user registration request is not created'
-        except MultipleObjectsReturned:
-            assert False, 'multiple user registration requests are created'
 
     def test_user_and_role_application_is_created_correctly(self):
         self._send_correct_registration_data()
@@ -84,11 +82,11 @@ class UserRegistrationTest(TestCase):
             user.is_active,
             'user must me inactive on registration (email unconfirmed)'
         )
-        user_registration_request = UserRoleApplication.objects.get(
+        user_role_application = UserRoleApplication.objects.get(
             user=user
         )
         self.assertEqual(
-            user_registration_request.institution,
+            user_role_application.institution,
             self.institution,
             'registration request is set for wrong institution'
         )
