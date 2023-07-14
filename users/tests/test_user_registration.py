@@ -11,7 +11,7 @@ from institutions.tests.factories import InstitutionFactory
 from users.logic import EmailConfirmationController
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
-from utils.crypto import hide_int
+from utils.for_tests_only import hide_id
 
 User = get_user_model()
 
@@ -117,14 +117,14 @@ class UserRegistrationTest(TestCase):
 
     def send_correct_registration_data(self) -> HttpResponse:
         return self.__send_registration_request(
-            self.__complete_data(
+            self.complete_data(
                 self.user,
                 self.institution,
                 self.raw_password
             )
         )
 
-    def __complete_data(self, user: User, institution: Institution, raw_password: str):
+    def complete_data(self, user: User, institution: Institution, raw_password: str):
         data = self.__get_form_data()
         data['full_name'] = user.full_name
         data['email'] = user.email
@@ -132,7 +132,7 @@ class UserRegistrationTest(TestCase):
         data['password2'] = raw_password
         # SecureModelChoiceField is used to hide all the id`s,
         # so we have to directly hide it here
-        data['registration_requests-0-institution'] = hide_int(institution.pk)
+        data['registration_requests-0-institution'] = hide_id(institution.pk)
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
