@@ -48,7 +48,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
             ) + fields + ('message_for_user',)
 
     @classonlymethod
-    def create_from_application_request(cls, application_request: UserRoleApplication):
+    def create_from_role_application(cls, application_request: UserRoleApplication):
         obj = cls(initial={
             'user':        application_request.user,
             'institution': application_request.institution
