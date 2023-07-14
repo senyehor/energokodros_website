@@ -1,26 +1,20 @@
-{% if paginator and is_paginated %}
-    {% if paginator.has_other_pages %}
-        <div class="btn-group" role="group" aria-label="Item pagination">
-            {% if paginator.has_previous %}
-                <a href="?page={{ paginator.previous_page_number }}"
-                   class="btn btn-outline-primary">&laquo;</a>
+{% if paginator and page %}
+    <div class="btn-group" role="group" aria-label="Item pagination">
+        <a href="{% if page.has_previous %}?page={{ page.previous_page_number }}{% endif %}"
+           class="btn btn-outline-primary {% if not page.has_previous %}disabled{% endif %}">&laquo;</a>
+        {% for page_number in paginator.page_range %}
+            {% if page.number == page_number %}
+                <button class="btn btn-outline-primary active">
+                    <span>{{ page_number }}</span>
+                </button>
+            {% else %}
+                <a href="?page={{ page_number }}"
+                   class="btn btn-outline-primary">
+                    {{ page_number }}
+                </a>
             {% endif %}
-            {% for page_number in paginator.paginator.page_range %}
-                {% if paginator.number == page_number %}
-                    <button class="btn btn-outline-primary active">
-                        <span>{{ page_number }}</span>
-                    </button>
-                {% else %}
-                    <a href="?page={{ page_number }}"
-                       class="btn btn-outline-primary">
-                        {{ page_number }}
-                    </a>
-                {% endif %}
-            {% endfor %}
-            {% if paginator.has_next %}
-                <a href="?page={{ paginator.next_page_number }}"
-                   class="btn btn-outline-primary">&raquo;</a>
-            {% endif %}
-        </div>
-    {% endif %}
+        {% endfor %}
+        <a href="{% if page.has_next %}?page={{ page.next_page_number }}{% endif %}"
+           class="btn btn-outline-primary {% if not page.has_next %}disabled{% endif %}">&raquo;</a>
+    </div>
 {% endif %}
