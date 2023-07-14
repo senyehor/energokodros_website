@@ -130,7 +130,7 @@ class UserRegistrationTest(TestCase):
         data['email'] = user.email
         data['password1'] = raw_password
         data['password2'] = raw_password
-        # we are using SecureModelChoiceField to hide all the id`s,
+        # SecureModelChoiceField is used to hide all the id`s,
         # so we have to directly hide it here
         data['registration_requests-0-institution'] = hide_int(institution.pk)
         return data
