@@ -4,6 +4,8 @@ import factory
 from django.contrib.auth import get_user_model
 from factory import django
 
+from institutions.tests.factories import InstitutionFactory
+
 User = get_user_model()
 
 
@@ -39,3 +41,12 @@ class UserFactory(django.DjangoModelFactory):
 
     class Meta:
         model = User
+
+
+class UserRoleApplicationRequestFactory(django.DjangoModelFactory):
+    class Meta:
+        model = 'users.UserRoleApplication'
+
+    user = factory.SubFactory(UserFactory, is_active=True)
+    institution = factory.SubFactory(InstitutionFactory)
+    message = factory.Faker('text', max_nb_chars=50)
