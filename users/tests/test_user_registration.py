@@ -107,7 +107,7 @@ class UserRegistrationTest(TestCase):
         )
         self.assertRedirects(
             resp,
-            reverse('successfully_confirmed_email')
+            reverse('successfully-confirmed-email')
         )
         user.refresh_from_db()
         self.assertTrue(
