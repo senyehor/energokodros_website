@@ -49,7 +49,7 @@ class CreateUserRegistrationRequest(CreateView):
     def form_valid(self, form: NewUserForm, registration_formset: RegistrationFormset):  # noqa pylint: disable=W0221
         self.__save_user_with_role_application(form, registration_formset)
         if self.__send_email_confirmation_message():
-            return redirect(reverse_lazy('successfully_created_registration_request'))
+            return redirect(reverse_lazy('successfully-created-registration-request'))
         # deleting created user and it`s application if we failed to send email confirmation message
         self.__delete_user_with_role_application()
         return HttpResponse(status=500)
@@ -107,7 +107,7 @@ def successfully_created_registration_request(request):
 
 def confirm_email(request: HttpRequest, user_id: int, user_email: str):
     EmailConfirmationController.confirm_email_if_user_exists_or_404(user_id, user_email)
-    return redirect('successfully_confirmed_email')
+    return redirect('successfully-confirmed-email')
 
 
 def successfully_confirmed_email(request: HttpRequest):

@@ -49,7 +49,7 @@ class UserRoleApplicationDetailTest(TestCase):
         )
         self.assertRedirects(
             resp,
-            reverse_lazy('users_roles_applications'),
+            reverse_lazy('users-roles-applications'),
         )
         try:
             UserRole.objects.get(
@@ -72,7 +72,7 @@ class UserRoleApplicationDetailTest(TestCase):
         )
         self.assertRedirects(
             resp,
-            reverse_lazy('users_roles_applications'),
+            reverse_lazy('users-roles-applications'),
         )
         self.__check_user_application_is_deleted()
 
@@ -80,7 +80,7 @@ class UserRoleApplicationDetailTest(TestCase):
             self, decision: _decision, position: str = '',
             access_level: AccessLevel = None) -> HttpResponse:
         return self.client.post(
-            reverse('user_role_application', kwargs={'pk': self.user_role_application.pk}),
+            reverse('user-role-application-decision', kwargs={'pk': self.user_role_application.pk}),
             {
                 **self.__complete_data(
                     decision=decision,
