@@ -17,12 +17,12 @@ class InstitutionTest(TestCase):
             institution_description=self.institution_description
         )
         self.assertEqual(
-            institution.institution_name,
+            institution.name,
             self.name,
             _('institution name is set incorrectly')
         )
         self.assertEqual(
-            institution.institution_description,
+            institution.description,
             self.institution_description,
             _('institution description is set incorrectly')
         )
@@ -39,12 +39,12 @@ class AccessLevelTest(TestCase):
             level_description=self.level_description
         )
         self.assertEqual(
-            access_level.level_def,
+            access_level.code,
             self.level_def,
             _('level definition is set incorrectly')
         )
         self.assertEqual(
-            access_level.level_description,
+            access_level.description,
             self.level_description,
             _('level definition is set incorrectly')
         )
@@ -77,12 +77,12 @@ class ObjectTest(TestCase):
             _('institution is set incorrectly')
         )
         self.assertEqual(
-            obj.object_name,
+            obj.name,
             self.name,
             _('object_name is set incorrectly')
         )
         self.assertEqual(
-            obj.object_description,
+            obj.description,
             self.description,
             _('object_description is set incorrectly')
         )
