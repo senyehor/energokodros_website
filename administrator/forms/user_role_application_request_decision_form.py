@@ -124,27 +124,5 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
             )
         )
 
-    @property
-    def application__user(self) -> User:  # pylint: disable=R1710
-        if user := self.cleaned_data.get('user', None):
-            # case when validation went successfully
-            return user
-        # case when validation failed, but fail was suppressed,
-        # as admin declined application, so no validation is actually needed
-        # (required field to accept user is not needed for declining)
-        if user_bound_field := self._bound_fields_cache.get('user', None):
-            # VERY WEIRD when I run debug, this case works
-            return user_bound_field.field.clean(self.data['user'])
-        for name, bound_field in self._bound_items():
-            # VERY WEIRD when I run regularly, this case works
-            if name == 'user':
-                return bound_field.field.clean(self.data['user'])
-
-    @property
-    def application__institution(self) -> Institution:
-        # we need access to institution only when accepting,
-        # so there is no need to do it similarly to application__user property
-        return self.cleaned_data['institution']
-
     def get_message_for_user(self) -> str:
         return self.data['message_for_user']
