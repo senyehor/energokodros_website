@@ -1,18 +1,45 @@
 import logging
-from datetime import timedelta
 
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 
+from users.forms import NewUserForm, UserRoleApplicationForm
 from users.models import User
 from utils.common import send_html_email
 
 logger = logging.getLogger(__name__)
 
 
-class EmailConfirmationController:
+class UserRegistrationController:
+    __user_form: NewUserForm
+    __role_application_without_user_form: UserRoleApplicationForm
+    __user: User
+
+    def __init__(self, user_form: NewUserForm,
+                 role_application_without_user_form: UserRoleApplicationForm):
+        self.__user_form = user_form
+        self.__role_application_without_user_form = role_application_without_user_form
+
+    def save_user_along_with_registration_request_return_user(self):
+        self.__user = self.__user_form.save(commit=False)
+        self.__user.save()
+        self.__role_application_without_user_form.set_valid_user(self.__user)
+        self.__role_application_without_user_form.save()
+        return self.__user
+
+    def send_email_confirmation_message(self, request: HttpRequest):
+        return _EmailConfirmationController.send_email_confirmation_message(
+            request, self.__user
+        )
+
+    @staticmethod
+    def confirm_email_if_user_exists(user_id: int, email: str):
+        _EmailConfirmationController.confirm_email_if_user_exists_or_404(user_id, email)
+
+
+class _EmailConfirmationController:
     @classmethod
     def send_email_confirmation_message(cls, request: HttpRequest, user: User) -> bool:
         ctx = cls.__generate_context(request, user)
@@ -49,11 +76,3 @@ class EmailConfirmationController:
                 'user_email': user.email,
             }
         )
-
-
-def remember_user_for_two_week(request: HttpRequest):
-    _remember_user_for_timedelta(request, timedelta(weeks=2))
-
-
-def _remember_user_for_timedelta(request: HttpRequest, td: timedelta):
-    request.session.set_expiry(td)
