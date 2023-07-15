@@ -1,16 +1,13 @@
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div
 from django import forms
 from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import AccessLevel, Institution
 from users.models import User, UserRole, UserRoleApplication
-from utils.common import generate_submit_type_button
-from utils.forms import SecureModelChoiceField
+from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 
 
-class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
+class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin):
     """This form must be created from a user role application"""
     access_level = SecureModelChoiceField(
         label=_('Призначте рівень доступу'),
@@ -40,12 +37,12 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
         # user and institution is added in custom creation method
         fields_to_hide = ('user', 'institution')
         fields = ('access_level', 'position') + fields_to_hide
-        form_fields_order = \
-            (
-                'user_with_email',
-                'institution_verbose',
-                'message_from_user',  # info readonly fields
-            ) + fields + ('message_for_user',)
+        info_readonly_fields = (
+            'user_with_email',
+            'institution_verbose',
+            'message_from_user',
+        )
+        fields_order = info_readonly_fields + fields + ('message_for_user',)
 
     @classonlymethod
     def create_from_role_application(cls, application_request: UserRoleApplication):
@@ -58,15 +55,10 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
 
     def __additionally_setup_form(self, application_request: UserRoleApplication):  # pylint: disable=W0238
         self.__add_readonly_prepopulated_fields(application_request)
-        self.__hide_fields()
         self.__order_fields()
         self.__add_decision_buttons()
+        self.hide_fields()
         self._errors = None
-
-    def __hide_fields(self):
-        self.helper = FormHelper(self)
-        for field in self.Meta.fields_to_hide:
-            self.helper[field].wrap(Div, css_class="d-none")
 
     def __add_readonly_prepopulated_fields(self, application_request: UserRoleApplication):
         # this fields will not be used in UserRole creation, so required = False
@@ -94,34 +86,23 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm):
 
     def __order_fields(self):
         unordered_fields = self.helper.layout.fields
-
-        def get_wrapped_field_name_if_div(_field: Div | str) -> str:
-            if isinstance(_field, str):
-                return _field
-            if len(_field.fields) != 1:
-                raise ValueError('only one wrapped field expected')
-            return _field.fields[0]
-
+        # using map to 'reveal' field names if they are wrapped in a div
         field_names = list(map(
-            get_wrapped_field_name_if_div, unordered_fields
+            self._get_wrapped_field_name_if_div, unordered_fields
         ))
         ordered_fields = []
-        for field in self.Meta.form_fields_order:
+        for field in self.Meta.fields_order:
             ordered_fields.append(self.helper.layout.fields[field_names.index(field)])
         self.helper.layout.fields = ordered_fields
 
     def __add_decision_buttons(self):
-        self.helper.layout.append(
-            generate_submit_type_button(
-                _('Підтвердити'),
-                'accept'
-            )
+        self.add_button_at_the_end(
+            _('Підтвердити'),
+            'accept'
         )
-        self.helper.layout.append(
-            generate_submit_type_button(
-                _('Відхилити'),
-                'decline',
-            )
+        self.add_button_at_the_end(
+            _('Відхилити'),
+            'decline',
         )
 
     def get_message_for_user(self) -> str:
