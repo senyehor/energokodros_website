@@ -1,4 +1,6 @@
+from django.db.transaction import atomic
 from django.forms import Textarea
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 
 from institutions.logic.create_admin_roles_for_new_institution import \
@@ -20,9 +22,11 @@ class InstitutionForm(CrispyModelForm):
         }
         buttons = (create_primary_button(_('Додати установу')),)
 
+    @method_decorator(atomic)
     def save(self, commit=True):
         if self.errors:
             # pass raising exception to base class
             super().save()
-        Facility.add_root(instance=self.instance)
+        institution = Facility.add_root(instance=self.instance)
+        create_admin_roles_for_new_institution(institution)
         return self.instance
