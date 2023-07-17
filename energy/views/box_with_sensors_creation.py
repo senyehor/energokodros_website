@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.db import transaction
+from django.db.transaction import atomic
 from django.forms import Form
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -24,7 +24,7 @@ class BoxWithSensorsCreateView(SessionWizardView):
     success_url = reverse_lazy('box-list')
     success_message = _('Успішно створено ящик та сенсори')
 
-    @method_decorator(transaction.atomic)
+    @method_decorator(atomic)
     def done(self, form_list, **kwargs):
         box_form, sensors_formset, box_sensor_set_formset = self.__get_forms_from_form_list(
             form_list
