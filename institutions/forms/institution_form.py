@@ -1,6 +1,8 @@
 from django.forms import Textarea
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
+from institutions.logic.create_admin_roles_for_new_institution import \
+    create_admin_roles_for_new_institution
 from institutions.models import Facility
 from utils.forms import create_primary_button, CrispyModelForm
 
