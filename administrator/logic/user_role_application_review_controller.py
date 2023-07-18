@@ -59,7 +59,7 @@ class UserRoleApplicationReviewController:
             subject = 'Ваш запит на роль відхилено'
             message = 'На жаль, адміністратор не схвалив ваш запит.'
         if message_from_admin := self.application_decision_form.get_message_for_user():
-            message += f'\nПовідомлення від адміністратора:\n{message_from_admin}'
+            message += f'<br>Повідомлення від адміністратора:<br> {message_from_admin}'
 
         try_send_email_add_warning_if_failed(
             self.request,
