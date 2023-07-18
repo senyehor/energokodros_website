@@ -8,35 +8,22 @@ from django.urls import reverse, reverse_lazy
 
 from institutions.models import Institution
 from institutions.tests.factories import InstitutionFactory
-from users.logic import EmailConfirmationController
+from users.logic.user_registration_controller import _EmailConfirmationController
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
-from utils.for_tests_only import hide_id
+from utils.for_tests_only import hide_pk
 
 User = get_user_model()
 
 _user_registration_data_dict = TypedDict(
     'data_dict',  # noqa
     {
-        'full_name':                           str,
-        'email':                               str,
-        'password1':                           str,
-        'password2':                           str,
-        # part below is related to UserRegistrationRequestForm and keys are generated
-        # automatically by UserRegistrationRequestFormset and for some reason always
-        # include empty id and user, even though they are not included in
-        # UserRegistrationRequestForm, so it`s keys are just copied
-        # from knowingly correct form
-        'registration_requests-0-institution': str,
-        'registration_requests-0-message':     str,
-
-        'registration_requests-0-id':          str,
-        'registration_requests-0-user':        str,
-
-        'registration_requests-TOTAL_FORMS':   str,
-        'registration_requests-INITIAL_FORMS': str,
-        'registration_requests-MIN_NUM_FORMS': str,
-        'registration_requests-MAX_NUM_FORMS': str,
+        'full_name':   str,
+        'email':       str,
+        'password1':   str,
+        'password2':   str,
+        'institution': str,
+        'message':     str,
     }
 )
 
@@ -93,9 +80,9 @@ class UserRegistrationTest(TestCase):
 
     def test_email_confirmation(self):
         self.send_correct_registration_data()
-        # here we mock request just to use it`s is_secure and get_host to generate link
+        # here we mock request just to use it`s is_secure and get_host methods to generate link
         request = RequestFactory().get('')
-        _ = EmailConfirmationController
+        _ = _EmailConfirmationController
         # here we get just first user, as it should be created and be the only one
         user = User.objects.all().first()
         link_for_user = _._EmailConfirmationController__generate_link_for_user(  # noqa pylint: disable=C0301,W0212
@@ -128,21 +115,13 @@ class UserRegistrationTest(TestCase):
         data['email'] = user.email
         data['password1'] = raw_password
         data['password2'] = raw_password
-        # SecureModelChoiceField is used to hide all the id`s,
-        # so we have to directly hide it here
-        data['registration_requests-0-institution'] = hide_id(institution.pk)
+        data['institution'] = hide_pk(institution.pk)
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
         # here we assign values that are always the same in form submission data
         data = {
-            'registration_requests-0-message':     '',
-            'registration_requests-0-id':          '',
-            'registration_requests-0-user':        '',
-            'registration_requests-TOTAL_FORMS':   '1',
-            'registration_requests-INITIAL_FORMS': '0',
-            'registration_requests-MIN_NUM_FORMS': '1',
-            'registration_requests-MAX_NUM_FORMS': '1'
+            'message': ''
         }
         data = _user_registration_data_dict(
             **data
