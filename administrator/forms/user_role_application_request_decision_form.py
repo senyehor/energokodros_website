@@ -97,12 +97,12 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
 
     def __add_decision_buttons(self):
         button_name = 'decision'
-        self.add_button_at_the_end(
+        self.add_submit_button_at_the_end(
             _('Підтвердити'),
             'accept',
             button_name
         )
-        self.add_button_at_the_end(
+        self.add_submit_button_at_the_end(
             _('Відхилити'),
             'decline',
             button_name
