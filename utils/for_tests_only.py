@@ -1,5 +1,5 @@
 from utils.crypto import hide_int
 
 
-def hide_id(_id: int) -> str:
+def hide_pk(_id: int) -> str:
     return hide_int(_id)
