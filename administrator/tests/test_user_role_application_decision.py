@@ -10,7 +10,7 @@ from institutions.models import AccessLevel
 from institutions.tests.factories import AccessLevelFactory
 from users.models import UserRole, UserRoleApplication
 from users.tests.factories import UserFactory, UserRoleApplicationFactory
-from utils.for_tests_only import hide_id
+from utils.for_tests_only import hide_pk
 
 fake = Faker()
 
@@ -77,7 +77,7 @@ class UserRoleApplicationDetailTest(TestCase):
         self.__check_user_application_is_deleted()
 
     def send_decision(
-            self, decision: _decision, position: str = '',
+            self, decision: _decision = None, position: str = None,
             access_level: AccessLevel = None) -> HttpResponse:
         return self.client.post(
             reverse('user-role-application-decision', kwargs={'pk': self.user_role_application.pk}),
@@ -93,18 +93,18 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def __complete_data(self, decision: _decision, position: str, access_level: AccessLevel):
         complete_data = self.__get_form_data()
-        complete_data['decision'] = decision
-        complete_data['position'] = position
+        complete_data['decision'] = decision if decision else ''
+        complete_data['position'] = position if position else ''
         # ignoring access_level when declining
-        complete_data['access_level'] = hide_id(access_level.pk) if access_level else ''
+        complete_data['access_level'] = hide_pk(access_level.pk) if access_level else ''
         return complete_data
 
     def __get_form_data(self) -> _user_role_application_decision_data_dict:
         # here we have to set data as if it was pre-populated by form
         data = {
             'message_for_user': '',
-            'user':             hide_id(self.user_role_application.user.pk),
-            'institution':      hide_id(self.user_role_application.institution.pk)
+            'user':             hide_pk(self.user_role_application.user.pk),
+            'institution':      hide_pk(self.user_role_application.institution.pk)
         }
         data = _user_role_application_decision_data_dict(**data)
         return data
