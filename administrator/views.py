@@ -23,9 +23,7 @@ def admin_page(request: HttpRequest):
 
 @admin_rights_required
 class UserRoleApplicationsListView(ListView):
-    # pagination without ordering might be inconsistent - from docs
     queryset = get_applications_from_users_who_confirmed_email_ordered()
-    context_object_name = 'applications'
     paginate_by = 7
     template_name = 'administrator/users_roles_applications.html'
 
