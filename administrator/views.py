@@ -10,6 +10,7 @@ from administrator.logic import (
     get_applications_from_users_who_confirmed_email_ordered,
     UserRoleApplicationReviewController
 )
+from energokodros.settings import DEFAULT_PAGINATE_BY
 from users.models import UserRoleApplication
 
 
@@ -24,7 +25,7 @@ def admin_page(request: HttpRequest):
 @admin_rights_required
 class UserRoleApplicationsListView(ListView):
     queryset = get_applications_from_users_who_confirmed_email_ordered()
-    paginate_by = 7
+    paginate_by = DEFAULT_PAGINATE_BY
     template_name = 'administrator/users_roles_applications.html'
 
 
