@@ -53,11 +53,12 @@ class CrispyFormsMixin:
     def helper(self, value):
         self._helper = value
 
-    def add_button_at_the_end(self, text: str, value: str = 'submit'):
+    def add_button_at_the_end(self, text: str, value: str = 'submit', name: str = 'submit'):
         self.helper.layout.append(
             generate_submit_type_button(
                 text,
-                value
+                value,
+                name
             )
         )
 
