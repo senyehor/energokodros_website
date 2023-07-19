@@ -1,0 +1,14 @@
+{% extends 'common/base.html' %}
+{% block content %}
+    <div class="container">
+        {% if page_obj.object_list %}
+            {% block heading %}
+            {% endblock %}
+            <hr>
+            {% include 'common/page_items_with_paginator.html' %}
+        {% else %}
+            {% block no_items_heading %}
+            {% endblock %}
+        {% endif %}
+    </div>
+{% endblock %}
