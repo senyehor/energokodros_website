@@ -1,18 +1,12 @@
-{% extends 'common/base.html' %}
+{% extends 'common/form_in_center.html' %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_filters %}
-{% block title %}Реєстрація{% endblock %}
-{% block content %}
-    <div class="d-flex align-items-center justify-content-center pt-5">
-        <div class="d-block w-50 p-0">
-            <div class="card">
-                <div class="card-body">
-                    <form method="post" class="d-block">
-                        {{ form | crispy }}
-                        {% crispy role_application_form %}
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+{% block form_header %}
+    Реєстрація
+{% endblock %}
+{% block form %}
+    <form method="post">
+        {{ form | crispy }}
+        {% crispy role_application_form %}
+    </form>
 {% endblock %}
