@@ -4,7 +4,12 @@
     Запити на ролі
 {% endblock %}
 {% block heading %}
-    <h2>Запити на отримання ролі від користувачів</h2>
+    <div class="container px-0 d-flex align-items-center justify-content-between">
+        <div>
+            <h2>Запити на отримання ролі від користувачів</h2>
+        </div>
+        {% include 'common/search_form.html' with filter_fields_verbose="ім'я, пошта чи назва закладу" %}
+    </div>
 {% endblock %}
 {% block no_items_heading %}
     <h2>Запити на отримання ролі від користувачів відсутні</h2>
