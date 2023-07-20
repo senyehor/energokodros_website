@@ -12,6 +12,7 @@ from administrator.logic import (
 )
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from users.models import UserRoleApplication
+from utils.filters import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
 @admin_rights_required
@@ -23,8 +24,9 @@ def admin_page(request: HttpRequest):
 
 
 @admin_rights_required
-class UserRoleApplicationsListView(ListView):
+class UserRoleApplicationsListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     queryset = get_applications_from_users_who_confirmed_email_ordered()
+    filter_fields = ('user__full_name', 'user__email', 'institution__name')
     paginate_by = DEFAULT_PAGINATE_BY
     template_name = 'administrator/users_roles_applications.html'
 
