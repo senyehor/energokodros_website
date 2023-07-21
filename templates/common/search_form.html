@@ -1,7 +1,13 @@
 {% load static %}
-<form method="get" role="search" id="searchForm">
-    <input type="search" class="form-control" placeholder="Вікно пошуку ({{ filter_fields_verbose }})"
-           aria-label="Search" name="search_value">
+<form method="get" role="search" id="searchForm" class="container px-0">
+    <div class="row g-1">
+        <div class="col col-md-auto">
+            <input type="search" class="form-control d-inline" placeholder="Вікно пошуку ({{ filter_fields_verbose }})"
+                   aria-label="Search" name="search_value" id="searchFormInput">
+        </div>
+        <div class="col col-md-auto">
+            <button type="button" class="form-control btn btn-primary" id="clearFilter">Очистити пошук</button>
+        </div>
+    </div>
 </form>
-<button type="button" class="btn btn-primary d-block" id="clearFilter">Очистити пошук</button>
 <script src="{% static 'js/common/search_form.js' %}"></script>
