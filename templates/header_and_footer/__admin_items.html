@@ -1,0 +1,16 @@
+{% load active_link_tags %}
+<li>
+    <a href="{% url 'users-roles-applications' %}"
+       class="nav-link px-2 text-dark {% active_link 'users-roles-applications' %}">
+        Запити на реєстрацію
+        {% if users_roles_applications_count %}
+            <span class="badge bg-success">{{ users_roles_applications_count }}</span>
+        {% endif %}
+    </a>
+</li>
+<li>
+    <a href="{% url 'access-levels' %}"
+       class="nav-link px-2 text-dark {% active_link 'access-levels' %}">
+        Рівні доступу
+    </a>
+</li>
