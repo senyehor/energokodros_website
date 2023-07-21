@@ -12,11 +12,11 @@ class QuerySetFieldsIcontainsFilterPkOrderedMixin:
     def get_queryset(self) -> QuerySet:
         self.__check_used_properly()
         if search_value := self.__get_search_value():
-            return QuerySetFieldsIcontainsFilterPkOrdered(
+            return QuerySetFieldsIcontainsFilter(
                 self.queryset,  # noqa
                 self.filter_fields,
-            ).filter(search_value)
-        return self.queryset  # noqa
+            ).filter(search_value).order_by('-pk')
+        return self.queryset.order_by('-pk')  # noqa
 
     def __check_used_properly(self):
         if not isinstance(self, ListView):
@@ -29,7 +29,7 @@ class QuerySetFieldsIcontainsFilterPkOrderedMixin:
         return self.request.GET.get('search_value', None)  # noqa
 
 
-class QuerySetFieldsIcontainsFilterPkOrdered:
+class QuerySetFieldsIcontainsFilter:
     def __init__(self, qs: QuerySet, fields_to_filter: Iterable[str]):
         self._qs = qs
         self._fields_to_filter = [f'{field}__icontains' for field in fields_to_filter]
