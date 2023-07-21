@@ -34,7 +34,10 @@ class AccessLevel(models.Model):
         unique=True,
         null=False,
         blank=False,
-        db_column='level_def'
+        db_column='level_def',
+        error_messages={
+            'unique': _('Такий код рівню доступу вже існує')
+        }
     )
     description = models.TextField(
         _('опис рівню доступу'),
