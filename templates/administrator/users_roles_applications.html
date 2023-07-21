@@ -3,10 +3,10 @@
     Запити на ролі
 {% endblock %}
 {% block heading %}
-    <div class="container px-0 d-flex align-items-center justify-content-between">
-        <div>
-            <h2>Запити на отримання ролі від користувачів</h2>
-        </div>
+    <div>
+        <h2>Запити на отримання ролі від користувачів</h2>
+    </div>
+    <div>
         {% include 'common/search_form.html' with filter_fields_verbose="ім'я, пошта чи назва закладу" %}
     </div>
 {% endblock %}
