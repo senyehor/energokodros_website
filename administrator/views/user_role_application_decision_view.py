@@ -27,16 +27,17 @@ class UserRoleApplicationDecisionView(FormView):
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = self.form_class(request.POST or None)
+        if not form.is_valid(self.application_approved):
+            return self.form_invalid(form)
         self.controller = UserRoleApplicationReviewController(
             form,
             self.__get_application_request(),
             self.request,
             self.application_approved
         )
-        valid = self.controller.validate_form()
-        return self.form_valid(form) if valid else self.form_invalid(form)
+        return self.form_valid()
 
-    def form_valid(self, form: UserRoleApplicationRequestsDecisionForm):
+    def form_valid(self):  # noqa pylint: disable=W0221
         self.controller.process_depending_on_decision()
         return redirect(reverse('users-roles-applications'))
 
@@ -46,7 +47,3 @@ class UserRoleApplicationDecisionView(FormView):
     @property
     def application_approved(self):
         return self.request.POST['decision'] == 'accept'
-
-    @property
-    def application_declined(self):
-        return not self.application_approved
