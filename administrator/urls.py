@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 import administrator.views
 
@@ -18,4 +18,5 @@ urlpatterns = [
         administrator.views.UserRoleApplicationDecisionView.as_view(),
         name='user-role-application-decision'
     ),
+    path('', include('institutions.urls')),
 ]
