@@ -1,100 +1,60 @@
+from typing import NamedTuple
+
 from django.db import models
 from django.utils.translation import gettext as _
+from treebeard.ns_tree import NS_Node, NS_NodeManager
 
 
-class Institution(models.Model):
-    institution_id = models.AutoField(primary_key=True)
-    name = models.CharField(
-        _('назва закладу'),
-        max_length=1000,
-        null=False,
-        blank=False,
-        db_column='institution_name'
-    )
-    description = models.TextField(
-        _('опис закладу'),
-        null=False,
-        blank=False,
-        db_column='institution_description'
-    )
-
-    class Meta:
-        db_table = 'institutions'
-        verbose_name = _('Заклад')
-        verbose_name_plural = _('Заклади')
-
-    def __str__(self):
-        return self.name
+class FacilityManager(NS_NodeManager):
+    def institutions(self):
+        # we separate a regular facility (that have a parent facility)
+        # and institution, that are on top of hierarchy
+        return self.model.get_root_nodes()
 
 
-class AccessLevel(models.Model):
-    access_level_id = models.AutoField(primary_key=True)
-    code = models.IntegerField(
-        _('код рівню доступу'),
-        unique=True,
-        null=False,
-        blank=False,
-        db_column='level_def',
-        error_messages={
-            'unique': _('Такий код рівню доступу вже існує')
-        }
-    )
-    description = models.TextField(
-        _('опис рівню доступу'),
-        blank=False,
-        null=False,
-        db_column='level_description'
-    )
-
-    class Meta:
-        db_table = 'access_levels'
-        verbose_name = _('Рівень доступу')
-        verbose_name_plural = _('Рівні доступу')
-
-    def __str__(self):
-        return self.description
-
-
-class Object(models.Model):
-    object_id = models.AutoField(primary_key=True)
+class Facility(NS_Node):
     name = models.CharField(
         _("назва об'єкту"),
         max_length=1000,
         blank=True,
         null=False,
-        db_column='object_name'
+        db_column='name'
     )
     description = models.TextField(
         _("опис об'єкту"),
         blank=True,
         null=True,
-        db_column='object_description'
-    )
-    institution = models.ForeignKey(
-        Institution,
-        on_delete=models.CASCADE,
-        null=False,
-        related_name='related_objects'
-    )
-    parent = models.ForeignKey(
-        'self',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='children'
-    )
-    access_level = models.ForeignKey(
-        AccessLevel,
-        models.RESTRICT,
-        null=False,
-        blank=False,
-        related_name='+'
+        db_column='description'
     )
 
+    objects = FacilityManager()
+
+    class MoveOptions(NamedTuple):
+        # library gives a lot of options, but that much is not needed
+        # by default last-sibling is used so last-child was chosen
+        CHILD = 'last-child'
+        SIBLING = 'last-sibling'
+
+    def move(self, target: 'Facility', pos: MoveOptions):  # noqa pylint: disable=W0222
+        super().move(target, pos)
+
+    def get_institution(self) -> 'Facility':
+        return self.get_root()
+
     class Meta:
-        db_table = 'objects'
+        db_table = 'facilities'
         verbose_name = _("Об'єкт")
         verbose_name_plural = _("Об'єкти")
 
     def __str__(self):
-        return _(f'{self.name} в {self.institution}')
+        return _(f'{self.name}')
+
+    # methods below are not implemented for nested set in django_treebeard, so
+    # currently they are just 'stubbed'
+    @classmethod
+    def find_problems(cls):
+        raise NotImplementedError
+
+    @classmethod
+    def fix_tree(cls):
+        raise NotImplementedError
