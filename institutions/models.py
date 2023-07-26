@@ -1,5 +1,6 @@
 import functools
-from typing import Callable, NamedTuple
+from enum import Enum
+from typing import Callable
 
 from django.db import models
 from django.utils.translation import gettext as _
@@ -30,14 +31,14 @@ class Facility(NS_Node):
 
     objects = FacilityManager()
 
-    class MoveOptions(NamedTuple):
+    class MoveOptions(Enum):
         # library gives a lot of options, but that much is not needed
         # by default last-sibling is used so last-child was chosen
         CHILD = 'last-child'
         SIBLING = 'last-sibling'
 
     def move(self, target: 'Facility', pos: MoveOptions):  # noqa pylint: disable=W0222
-        super().move(target, pos)
+        super().move(target, pos.value)
 
     def get_institution(self) -> 'Facility':
         return self.get_root()
@@ -50,7 +51,7 @@ class Facility(NS_Node):
     def __str__(self):
         return _(f'{self.name}')
 
-    def enable_db_auto_refresh_for_add_or_move(self):
+    def enable_db_auto_refresh_for_add_or_move_and_refresh(self):
         if hasattr(self, '__db_auto_refresh_enabled') and self.__db_auto_refresh_enabled:  # pylint: disable=E0203
             return
 
