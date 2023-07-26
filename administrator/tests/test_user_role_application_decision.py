@@ -1,4 +1,5 @@
-from typing import Literal, TypedDict
+from enum import Enum
+from typing import TypedDict
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -6,41 +7,43 @@ from django.test import Client, TestCase
 from django.urls import reverse, reverse_lazy
 from faker import Faker
 
-from institutions.models import AccessLevel
-from institutions.tests.factories import AccessLevelFactory
+from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
 from users.tests.factories import UserFactory, UserRoleApplicationFactory
 from utils.for_tests_only import hide_pk
 
 fake = Faker()
 
-_decision = Literal['accept', 'decline']
-_user_role_application_decision_data_dict = TypedDict(
-    'data_dict',  # noqa
-    {
-        'decision':         _decision,
-        'message_for_user': str,
-        'position':         str,
-        'access_level':     str,
-        'user':             str,
-        'institution':      str,
-    }
-)
-
 
 class UserRoleApplicationDetailTest(TestCase):
+    class _DECISIONS(Enum):
+        ACCEPT = 'accept'
+        DECLINE = 'decline'
+
+    _user_role_application_decision_data_dict = TypedDict(
+        '_user_role_application_decision_data_dict',
+        {
+            'decision':             _DECISIONS,  # noqa
+            'message_for_user':     str,
+            'position':             str,
+            'user':                 str,
+            'institution':          str,
+            'object_has_access_to': str
+        }
+    )
+
     def setUp(self):
-        self.client = Client()
-        self.client.force_login(UserFactory(is_admin=True))
+        self.admin_client = Client()
+        self.admin_client.force_login(UserFactory(is_admin=True))
         self.user_role_application = UserRoleApplicationFactory()
-        self.access_level = AccessLevelFactory()
-        self.position: str = fake.words()
+        self.object_has_access_to = self.user_role_application.institution
+        self.position_to_grant_user: str = fake.text(max_nb_chars=20)
 
     def test_accepting_application(self):
         resp = self.send_decision(
-            'accept',
-            self.position,
-            self.access_level
+            decision=self._DECISIONS.ACCEPT,
+            object_has_access_to=self.user_role_application.institution,
+            position=self.position_to_grant_user
         )
         self.assertEqual(
             200,
@@ -54,8 +57,8 @@ class UserRoleApplicationDetailTest(TestCase):
         try:
             UserRole.objects.get(
                 user=self.user_role_application.user,
-                institution=self.user_role_application.institution,
-                access_level=self.access_level
+                object_has_access_to=self.user_role_application.institution,
+                position=self.position_to_grant_user
             )
         except ObjectDoesNotExist:
             assert False, 'user role is not created even though response status code is 200'
@@ -63,7 +66,7 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def test_declining_application(self):
         resp = self.send_decision(
-            'decline'
+            self._DECISIONS.DECLINE
         )
         self.assertEqual(
             200,
@@ -77,26 +80,33 @@ class UserRoleApplicationDetailTest(TestCase):
         self.__check_user_application_is_deleted()
 
     def send_decision(
-            self, decision: _decision = None, position: str = None,
-            access_level: AccessLevel = None) -> HttpResponse:
-        return self.client.post(
-            reverse('user-role-application-decision', kwargs={'pk': self.user_role_application.pk}),
+            self, decision: _DECISIONS,
+            object_has_access_to: Facility = None, position: str = None) -> HttpResponse:
+        return self.admin_client.post(
+            reverse(
+                'user-role-application-decision',
+                kwargs={'pk': self.user_role_application.pk}
+            ),
             {
                 **self.__complete_data(
-                    decision=decision,
-                    position=position,
-                    access_level=access_level
+                    decision.value,
+                    position,
+                    object_has_access_to
                 )
             },
             follow=True
         )
 
-    def __complete_data(self, decision: _decision, position: str, access_level: AccessLevel):
+    def __complete_data(
+            self, decision: str,
+            position: str | None, object_has_access_to: Facility | None):
         complete_data = self.__get_form_data()
-        complete_data['decision'] = decision if decision else ''
+        complete_data['decision'] = decision
+        # when declining application neither position nor object_has_access_to
+        # have to be filled in form, so they are just ''
         complete_data['position'] = position if position else ''
-        # ignoring access_level when declining
-        complete_data['access_level'] = hide_pk(access_level.pk) if access_level else ''
+        _ = hide_pk(object_has_access_to.pk) if object_has_access_to else ''
+        complete_data['object_has_access_to'] = _
         return complete_data
 
     def __get_form_data(self) -> _user_role_application_decision_data_dict:
@@ -104,9 +114,8 @@ class UserRoleApplicationDetailTest(TestCase):
         data = {
             'message_for_user': '',
             'user':             hide_pk(self.user_role_application.user.pk),
-            'institution':      hide_pk(self.user_role_application.institution.pk)
         }
-        data = _user_role_application_decision_data_dict(**data)
+        data = self._user_role_application_decision_data_dict(**data)
         return data
 
     def __check_user_application_is_deleted(self):
