@@ -2,20 +2,23 @@ from django import forms
 from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
-from institutions.models import AccessLevel, Institution
+from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 
 
 class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin):
     """This form must be created from a user role application"""
-    access_level = SecureModelChoiceField(
-        label=_('Призначте рівень доступу'),
-        queryset=AccessLevel.objects.all(),
-        required=True
+    # object_has_access_to and user are prepopulated in create_from_role_application method but
+    # set to SecureModelChoiceField to be correctly converted to python object on submission
+    object_has_access_to = SecureModelChoiceField(
+        queryset=Facility.objects.all()
+    )
+    user = SecureModelChoiceField(
+        queryset=User.objects.all(),
     )
     position = forms.CharField(
-        label=_('Призначте позицію'),
+        label=_('Уведіть позицію'),
         max_length=255,
         required=True,
     )
@@ -25,18 +28,12 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         required=False,
         widget=forms.Textarea({'rows': 2})
     )
-    user = SecureModelChoiceField(
-        queryset=User.objects.all(),
-    )
-    institution = SecureModelChoiceField(
-        queryset=Institution.objects.all(),
-    )
 
     class Meta:
         model = UserRole
         # user and institution is added in custom creation method
-        fields_to_hide = ('user', 'institution')
-        fields = ('access_level', 'position') + fields_to_hide
+        fields_to_hide = ('user',)
+        fields = ('position', 'object_has_access_to') + fields_to_hide
         info_readonly_fields = (
             'user_with_email',
             'institution_verbose',
@@ -47,8 +44,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
     @classonlymethod
     def create_from_role_application(cls, application_request: UserRoleApplication):
         obj = cls(initial={
-            'user':        application_request.user,
-            'institution': application_request.institution
+            'user': application_request.user,
         })
         obj.__additionally_setup_form(application_request)
         return obj
@@ -60,13 +56,21 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         return True
 
     def __additionally_setup_form(self, application_request: UserRoleApplication):  # pylint: disable=W0238
+        self.__add_object_has_access_to_field(application_request.institution)
         self.__add_readonly_prepopulated_fields(application_request)
         self.__order_fields()
         self.__add_decision_buttons()
         self.hide_fields()
 
+    def __add_object_has_access_to_field(self, institution: Facility):
+        self.fields['object_has_access_to'] = SecureModelChoiceField(
+            label=_("Оберіть об'єкт"),
+            queryset=Facility.objects.get_all_facility_objects(institution),
+            required=True
+        )
+
     def __add_readonly_prepopulated_fields(self, application_request: UserRoleApplication):
-        # this fields will not be used in UserRole creation, so required = False
+        # these fields will not be used in UserRole creation, so required = False
         self.fields['user_with_email'] = forms.CharField(
             label=_('Користувач та пошта'),
             max_length=255,
