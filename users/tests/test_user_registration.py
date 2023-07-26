@@ -6,37 +6,35 @@ from django.http import HttpResponse
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse, reverse_lazy
 
-from institutions.models import Institution
-from institutions.tests.factories import InstitutionFactory
-from users.logic.user_registration_controller import _EmailConfirmationController
+from institutions.models import Facility
+from institutions.tests.factories import FacilityFactory
+from users.logic.user_registration_controller import _EmailConfirmationController  # noqa
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
 from utils.for_tests_only import hide_pk
 
 User = get_user_model()
 
-_user_registration_data_dict = TypedDict(
-    'data_dict',  # noqa
-    {
-        'full_name':   str,
-        'email':       str,
-        'password1':   str,
-        'password2':   str,
-        'institution': str,
-        'message':     str,
-    }
-)
-
 
 class UserRegistrationTest(TestCase):
-    # here new users creating along with application for institution
-    # + position is tested
+    _user_registration_data_dict = TypedDict(
+        '_user_registration_data_dict',
+        {
+            'full_name':   str,
+            'email':       str,
+            'password1':   str,
+            'password2':   str,
+            'institution': str,
+            'message':     str,
+        }
+    )
+
     def setUp(self):
         self.client = Client()
         self.raw_password = '%tv{,,E)36'
         self.message = 'some message'
         self.user: User = UserFactory.build(password=self.raw_password)
-        self.institution = InstitutionFactory()
+        self.institution = FacilityFactory()
 
     def test_with_correct_data_set(self):
         resp = self.send_correct_registration_data()
@@ -109,7 +107,7 @@ class UserRegistrationTest(TestCase):
             self.raw_password
         )
 
-    def __complete_data(self, user: User, institution: Institution, raw_password: str):
+    def __complete_data(self, user: User, institution: Facility, raw_password: str):
         data = self.__get_form_data()
         data['full_name'] = user.full_name
         data['email'] = user.email
@@ -119,17 +117,17 @@ class UserRegistrationTest(TestCase):
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
-        # here we assign values that are always the same in form submission data
+        # when field is not filled it is sent with empy data anyway
         data = {
             'message': ''
         }
-        data = _user_registration_data_dict(
+        data = self._user_registration_data_dict(
             **data
         )
         return data
 
     def send_registration_request(
-            self, user: User, institution: Institution, raw_password: str) -> HttpResponse:
+            self, user: User, institution: Facility, raw_password: str) -> HttpResponse:
         return self.client.post(
             reverse_lazy('register'),
             {
