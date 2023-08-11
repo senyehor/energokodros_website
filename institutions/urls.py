@@ -1,10 +1,11 @@
 from django.urls import path
 
-from institutions.views import AccessLevelListView
+from institutions.views.simple import InstitutionsList
 
-access_level_patters = [
-    path('access-levels/', AccessLevelListView.as_view(), name='access-levels'),
-    path('access-levels/new/', lambda x: None, name='access-levels-new'),
+urlpatterns = [
+    path(
+        'institutions-and-objects/',
+        InstitutionsList.as_view(),
+        name='institutions-and-objects'
+    ),
 ]
-
-urlpatterns = access_level_patters
