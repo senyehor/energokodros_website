@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
 
     'users',
-    'boxes',
     'energy',
     'institutions',
     'utils',
