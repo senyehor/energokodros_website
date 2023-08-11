@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
-from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
@@ -38,28 +37,16 @@ class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
         required=False,
         widget=forms.Textarea({'rows': 2})
     )
-    user = SecureModelChoiceField(
-        queryset=User.objects.all(),
-        required=True
-    )
 
     class Meta:
         model = UserRoleApplication
-        fields = ('institution', 'message', 'user')
-        fields_to_hide = ('user',)
+        fields = ('institution', 'message')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.add_submit_button_at_the_end(
             _('Відправити заявку на реєстрацію')
         )
-
-    @classonlymethod
-    def create_without_user_field(cls, *args, **kwargs):
-        """this method is intended to use for registration"""
-        obj = cls(*args, **kwargs)
-        obj.fields.pop('user', None)
-        return obj
 
     def set_valid_user(self, user: User):
         """be careful, no user validation is run here"""

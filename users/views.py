@@ -32,13 +32,13 @@ class CreateUserRegistrationRequest(CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['role_application_form'] = UserRoleApplicationForm.create_without_user_field()
+        ctx['role_application_form'] = UserRoleApplicationForm()
         return ctx
 
     def post(self, request, *args, **kwargs):
         self.object = None
         user_form = self.form_class(self.request.POST or None)
-        role_application_without_user = UserRoleApplicationForm.create_without_user_field(
+        role_application_without_user = UserRoleApplicationForm(
             data=self.request.POST or None
         )
         if user_form.is_valid() and role_application_without_user.is_valid():
