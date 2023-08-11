@@ -4,9 +4,9 @@ from treebeard.ns_tree import NS_Node, NS_NodeManager
 
 
 class FacilityManager(NS_NodeManager):
-    def institutions(self):
+    def get_institutions(self):
         # we separate a regular facility (that have a parent facility)
-        # and institution, that are on top of hierarchy
+        # and institutions, that are on top of hierarchy
         return self.model.get_root_nodes()
 
     def get_all_facility_objects(self, facility: 'Facility'):
