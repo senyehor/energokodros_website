@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.db import models
 from django.utils.translation import gettext as _
 from treebeard.ns_tree import NS_Node, NS_NodeManager
@@ -11,6 +13,10 @@ class FacilityManager(NS_NodeManager):
 
     def get_all_facility_objects(self, facility: 'Facility'):
         return self.model.get_tree(facility.get_root())
+
+
+class MoveOptions(Enum):
+    CHILD = 'last-child'
 
 
 class Facility(NS_Node):
@@ -37,6 +43,9 @@ class Facility(NS_Node):
         db_table = 'facilities'
         verbose_name = _("Об'єкт")
         verbose_name_plural = _("Об'єкти")
+
+    def move(self, target: 'Facility', pos: MoveOptions):  # noqa pylint: disable=W0222
+        super().move(target, pos.value)
 
     def __str__(self):
         return _(f'{self.name}')

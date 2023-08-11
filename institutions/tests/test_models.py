@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from institutions.models import Facility
+from institutions.models import Facility, MoveOptions
 
 
 class FacilityTest(TestCase):
@@ -17,7 +17,7 @@ class FacilityTest(TestCase):
             child_child.is_descendant_of(root),
             'child_child is not descendant of root'
         )
-        child_child.move(root, child.MoveOptions.CHILD)
+        child_child.move(root, MoveOptions.CHILD)
         self.assertTrue(
             child_child.is_child_of(root),
             'child_child is not child of root after moving'
