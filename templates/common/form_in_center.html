@@ -1,8 +1,9 @@
 {% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
-    <div class="d-flex align-items-center justify-content-center" style="height: 100%;" id="form-container">
-        <div class="card p-0" id="form-card">
+    <div class="d-flex align-items-center justify-content-center {% block padding_top_class %}{% endblock %}"
+         style="height: 100%;" id="form-container">
+        <div class="card p-0 {% block width_class %}{% endblock %}" id="form-card">
             <div class="card-header">
                 {% block form_header %}
                 {% endblock %}
