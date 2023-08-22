@@ -15,7 +15,7 @@ from utils.common import get_object_by_hashed_id_or_404
 from utils.types import StrStrDict
 
 
-class AggregatedEnergyConsumptionController:
+class AggregatedEnergyWithOptionalForecastQuerier:
 
     def __init__(self, user: User, parameters: StrStrDict):
         role = self.__extract_role(parameters)
