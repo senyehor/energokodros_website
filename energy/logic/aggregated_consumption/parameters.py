@@ -16,8 +16,8 @@ class EnergyConsumptionQueryRawParameters(TypedDict, total=False):
     period_start_epoch_seconds: str
     period_end_epoch_seconds: str
     # one hour interval specific filters
-    hours_filtering_start_hour: str
-    hours_filtering_end_hour: str
+    hour_filtering_start_hour: str
+    hour_filtering_end_hour: str
     hour_filtering_method: str
 
 

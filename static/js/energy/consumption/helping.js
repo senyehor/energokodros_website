@@ -6,8 +6,8 @@ $(document).ready(function () {
     );
     set_default_hour_filtering_choices();
     __get_hours_filtering_reset_button().click(set_default_hour_filtering_choices);
-    __get_hours_filtering_start_select().change(__remove_error_from_hours_select);
-    __get_hours_filtering_end_select().change(__remove_error_from_hours_select);
+    __get_hour_filtering_start_select().change(__remove_error_from_hours_select);
+    __get_hour_filtering_end_select().change(__remove_error_from_hours_select);
     set_date_inputs_now();
     add_hour_filtering_filter_day_or_interval_buttons()
 })
@@ -64,18 +64,18 @@ function check_control_form_required_fields_are_filled(event) {
 }
 
 function set_default_hour_filtering_choices() {
-    __get_hours_filtering_start_select()
+    __get_hour_filtering_start_select()
         .val(DEFAULT_START_HOUR_FILTER_OPTION)
         .attr('selected', true);
-    __get_hours_filtering_end_select()
+    __get_hour_filtering_end_select()
         .val(DEFAULT_END_HOUR_FILTER_OPTION)
         .attr('selected', true);
 }
 
 function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
     INCLUDE_HOURS_FILTER = false;
-    let start_value = get_selected_option_for_select(__get_hours_filtering_start_select());
-    let end_value = get_selected_option_for_select(__get_hours_filtering_end_select());
+    let start_value = get_selected_option_for_select(__get_hour_filtering_start_select());
+    let end_value = get_selected_option_for_select(__get_hour_filtering_end_select());
     // default values cover everything, so there is no point to pass them
     if (
         start_value === DEFAULT_START_HOUR_FILTER_OPTION
@@ -143,11 +143,11 @@ function _get_current_date_for_date_input() {
     return now.getFullYear() + '-' + month + '-' + day;
 }
 
-function __get_hours_filtering_start_select() {
+function __get_hour_filtering_start_select() {
     return $('#id_hour_filter_start');
 }
 
-function __get_hours_filtering_end_select() {
+function __get_hour_filtering_end_select() {
     return $('#id_hour_filter_end');
 }
 
