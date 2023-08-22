@@ -3,11 +3,6 @@ from dataclasses import fields
 from datetime import date, datetime
 from typing import Any, Callable, Iterable, Type, TypeAlias
 
-from energy.logic.aggregated_consumption.exceptions import (
-    AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, InvalidHourFilteringMethod,
-    PeriodStartGreaterThanEnd,
-    QueryParametersInvalid, StartHourGreaterThanEndHour,
-)
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters,
@@ -15,6 +10,11 @@ from energy.logic.aggregated_consumption.parameters import (
 )
 from energy.logic.aggregated_consumption.simple import \
     parse_str_parameter_to_int_with_correct_exception
+from energy.logic.aggregated_consumption.verbose_exceptions_for_user import (
+    AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, InvalidHourFilteringMethod,
+    InvalidHourFilteringValue, PeriodStartGreaterThanEnd,
+    QueryParametersInvalid, StartHourGreaterThanEndHour,
+)
 from institutions.models import Facility
 from utils.common import get_object_by_hashed_id_or_404
 

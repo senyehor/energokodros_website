@@ -1,4 +1,3 @@
-from energy.logic.aggregated_consumption.exceptions import QueryParametersInvalid
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
 from energy.logic.aggregated_consumption.formatters import RawAggregatedDataFormatter
 from energy.logic.aggregated_consumption.parameters import CommonQueryParameters
@@ -9,6 +8,7 @@ from energy.logic.aggregated_consumption.types import (
     ConsumptionWIthConsumptionForecastWithTotalConsumption,
     ConsumptionWithTotalConsumption, RawConsumption,
 )
+from energy.logic.aggregated_consumption.verbose_exceptions_for_user import QueryParametersInvalid
 from users.logic import check_role_belongs_to_user, check_role_has_access_for_facility
 from users.models import User, UserRole
 from utils.common import get_object_by_hashed_id_or_404

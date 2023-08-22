@@ -11,6 +11,14 @@ class InvalidHourFilteringMethod(EnergyConsumptionExceptionWithMessage):
     message = _('Такого методу погодинної фільтрації не існує')
 
 
+class InvalidHourFilteringValue(EnergyConsumptionExceptionWithMessage):
+    message = _('Невірне значення для погодинної фільтрації')
+
+
+class IncompleteHourFiltersSet(EnergyConsumptionExceptionWithMessage):
+    message = _('Невірне значення для погодинної фільтрації')
+
+
 class QueryParametersInvalid(EnergyConsumptionExceptionWithMessage):
     message = _('Сталася помилка при опрацюванні параметрів')
 
