@@ -50,9 +50,9 @@ class CommonQueryParameters:
 @dataclass(kw_only=True)
 class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     aggregation_interval = AggregationIntervalSeconds.ONE_HOUR
-    hours_filtering_method: Union['HourFilteringMethods', None]
-    hours_filtering_start_hour: HOUR | None
-    hours_filtering_end_hour: HOUR | None
+    hour_filtering_method: Union['HourFilteringMethods', None]
+    hour_filtering_start_hour: HOUR | None
+    hour_filtering_end_hour: HOUR | None
 
     class HourFilteringMethods(str, Enum):
         EVERY_DAY = 'filter-every-day'
@@ -60,14 +60,10 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
 
     @property
     def filter_every_day(self) -> bool:
-        return self.hours_filtering_start_hour is not None \
-            and self.hours_filtering_end_hour is not None \
+        return self.hour_filtering_start_hour is not None \
+            and self.hour_filtering_end_hour is not None \
             and self.__hour_filtering_method_every_day
 
     @property
     def __hour_filtering_method_every_day(self) -> bool:
-        return self.hours_filtering_method == self.HourFilteringMethods.EVERY_DAY
-
-    @property
-    def __hour_filtering_method_whole_interval(self) -> bool:
-        return self.hours_filtering_method == self.HourFilteringMethods.WHOLE_INTERVAL
+        return self.hour_filtering_method == self.HourFilteringMethods.EVERY_DAY
