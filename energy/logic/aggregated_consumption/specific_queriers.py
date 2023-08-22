@@ -263,8 +263,8 @@ class _OneHourQuerier(_AggregatedConsumptionQuerierBase):
 
     def __compose_additional_hours_where_filters(self) -> str:
         return self.__ADDITIONAL_HOURS_WHERE_FILTERS_FOR_FILTER_EVERY_DAY.format(
-            hours_filtering_start_hour=self.parameters.hour_filtering_start_hour,
-            hours_filtering_end_hour=self.parameters.hour_filtering_end_hour
+            hour_filtering_start_hour=self.parameters.hour_filtering_start_hour,
+            hour_filtering_end_hour=self.parameters.hour_filtering_end_hour
         )
 
     @property
