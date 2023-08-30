@@ -17,7 +17,7 @@ class InstitutionForm(ModelForm, CrispyFormsMixin):
             'description': Textarea(attrs={'rows': 3})
         }
 
-    def save(self):  # noqa pylint: disable=W0221
+    def save(self, commit=True):
         if self.errors:
             # pass raising exception to base class
             super().save()
