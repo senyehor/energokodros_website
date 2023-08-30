@@ -27,7 +27,7 @@ class UserRoleApplicationDecisionView(FormView):
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = self.form_class(request.POST or None)
-        if not form.is_valid(validation_needed=self.application_approved):
+        if self.__application_approved_but_form_invalid(form):
             return self.form_invalid(form)
         self.controller = UserRoleApplicationReviewController(
             form,
@@ -44,6 +44,14 @@ class UserRoleApplicationDecisionView(FormView):
     def __get_application_request(self):
         return get_object_or_404(UserRoleApplication, pk=self.kwargs['pk'])
 
+    def __application_approved_but_form_invalid(
+            self, form: UserRoleApplicationRequestsDecisionForm):
+        return self.application_approved and not form.is_valid()
+
     @property
     def application_approved(self):
         return self.request.POST['decision'] == 'accept'
+
+    @property
+    def application_declined(self):
+        return not self.application_approved
