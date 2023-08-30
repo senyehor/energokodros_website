@@ -6,7 +6,7 @@
     <div>
         <h2>Заклади</h2>
     </div>
-    <a class="btn btn-primary d-block" href="{% url 'access-levels-new' %}">Додати установу</a>
+    <a class="btn btn-primary d-block" href="{% url 'new-institution' %}">Додати установу</a>
     <div>
         {% include 'common/search_form.html' with filter_fields_verbose='назва чи опис' %}
     </div>
