@@ -6,8 +6,8 @@
     <div>
         <h2>Заклади</h2>
     </div>
-    <a class="btn btn-primary d-block" href="{% url 'new-institution' %}">Додати установу</a>
-    <div>
+    <a class="btn btn-primary d-block ms-3" href="{% url 'new-institution' %}">Додати установу</a>
+    <div class="ms-auto ms-3">
         {% include 'common/search_form.html' with filter_fields_verbose='назва чи опис' %}
     </div>
 {% endblock %}
