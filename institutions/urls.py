@@ -1,11 +1,16 @@
 from django.urls import path
 
-from institutions.views.simple import InstitutionsList
+from institutions.views.simple import InstitutionCreateView, InstitutionsListView
 
 urlpatterns = [
     path(
-        'institutions-and-objects/',
-        InstitutionsList.as_view(),
-        name='institutions-and-objects'
+        'institutions/',
+        InstitutionsListView.as_view(),
+        name='institutions-list'
     ),
+    path(
+        'new-institution',
+        InstitutionCreateView.as_view(),
+        name='new-institution'
+    )
 ]
