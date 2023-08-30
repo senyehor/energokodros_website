@@ -14,7 +14,7 @@ class FacilitiesListView(ListView):
     queryset = Facility.objects.all().order_by('depth')
     filter_fields = ('name', 'description')
     paginate_by = DEFAULT_PAGINATE_BY
-    template_name = 'institutions/institutions_list.html'
+    template_name = 'institutions/facilities_list.html'
 
 
 @admin_rights_required
