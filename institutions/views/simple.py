@@ -1,3 +1,4 @@
+from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView
 
 from energokodros.settings import DEFAULT_PAGINATE_BY
@@ -15,3 +16,4 @@ class InstitutionsListView(ListView):
 class InstitutionCreateView(FormView):
     form_class = InstitutionForm
     template_name = 'institutions/new_institution.html'
+    success_url = reverse_lazy('institutions_list')
