@@ -7,10 +7,11 @@ from administrator.decorators import admin_rights_required
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms.institution_form import InstitutionForm
 from institutions.models import Facility
+from utils.filters import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
 @admin_rights_required
-class FacilitiesListView(ListView):
+class FacilitiesListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     queryset = Facility.objects.all().order_by('depth')
     filter_fields = ('name', 'description')
     paginate_by = DEFAULT_PAGINATE_BY
