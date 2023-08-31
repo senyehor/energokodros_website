@@ -6,7 +6,7 @@ urlpatterns = [  # noqa
     path('login/', views.LoginView.as_view()),
     path(
         'registration/',
-        views.CreateUserRegistrationRequest.as_view(),
+        views.CreateUserRegistrationRequestView.as_view(),
         name='register'
     ),
     path(
@@ -20,14 +20,10 @@ urlpatterns = [  # noqa
         name='confirm-email'
     ),
     path(
-        'successfully-confirmed-email',
-        views.successfully_confirmed_email,
-        name='successfully-confirmed-email'
-    ),
-    path(
         'profiles/',
         views.ProfilesView.as_view(),
         name='profiles'
     )
 ]
+
 urlpatterns.append(path('', include('django.contrib.auth.urls')))
