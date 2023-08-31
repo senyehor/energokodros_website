@@ -1,6 +1,6 @@
 [MASTER]
 ignore-paths=.*/migrations
-ignore-patterns=manage.py
+ignore-patterns=manage.py,__init__.py
 load-plugins=pylint_django
 django-settings-module=energokodros.settings
 [MESSAGES CONTROL]
