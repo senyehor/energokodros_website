@@ -12,6 +12,7 @@ from utils.filters import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 @admin_rights_required
 class FacilitiesListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+    # ordering by depth to show institutions first
     queryset = Facility.objects.all().order_by('depth')
     filter_fields = ('name', 'description')
     paginate_by = DEFAULT_PAGINATE_BY
