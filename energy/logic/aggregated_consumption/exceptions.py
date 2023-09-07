@@ -5,6 +5,10 @@ class EnergyConsumptionLogicException(Exception):
     """
 
 
+class InvalidIncludeForecastValue(EnergyConsumptionLogicException):
+    pass
+
+
 class InvalidHourFilteringValue(EnergyConsumptionLogicException):
     pass
 
