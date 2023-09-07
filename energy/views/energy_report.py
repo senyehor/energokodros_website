@@ -22,5 +22,4 @@ def get_energy_report(request: HttpRequest):
     report = ReportCreator(
         consumption_with_optional_forecast, total_consumption, controller.get_parameters()
     ).create_report()
-    # todo fix filename
     return FileResponse(report, filename='report.docx')
