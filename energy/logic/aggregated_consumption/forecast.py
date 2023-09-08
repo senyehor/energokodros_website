@@ -29,6 +29,7 @@ class ConsumptionForecaster:
         self.__raw_aggregation_data_formatter = raw_aggregation_data_formatter
 
     def get_consumption_with_forecast(self) -> ConsumptionWithConsumptionForecast:
+        self.__check_forecast_is_available_for_parameters()
         _ = self.__raw_aggregation_data_formatter
         return [
             (
@@ -40,42 +41,51 @@ class ConsumptionForecaster:
         ]
 
     def __get_forecast_for_date(self, date: RawConsumptionTime) -> RawConsumptionForecast:
-        if self.__check_is_kindergarten_and_interval_is_one_hour():
-            return self.__get_forecast_for_kindergarten(date)
-        raise ForecastForParametersDoesNotExist
+        return self.__get_forecast_for_kindergarten(date)
 
     def __get_forecast_for_kindergarten(self, date: datetime) -> RawConsumptionForecast:
-        day_number = date.weekday()
-        hour = date.hour
-        forecast_source = self.__get_forecast_source_for_kindergarten(
-            self.__check_day_is_working(day_number)
-        )
-        return forecast_source[hour]
+        is_workday = self.__check_day_is_workday(date.weekday())
+        if self.__parameters.aggregation_interval == AggregationIntervalSeconds.ONE_HOUR:
+            hour = date.hour
+            return self.__get_forecast_for_hour_for_kindergarten(is_workday, hour)
+        if self.__parameters.aggregation_interval == AggregationIntervalSeconds.ONE_DAY:
+            if is_workday:
+                return KINDERGARTEN_CONSUMPTION_PER_WORKDAY
+            return KINDERGARTEN_CONSUMPTION_PER_WEEKEND_DAY
+        # double-checking parameters are correct
+        raise ForecastForParametersDoesNotExist
 
-    def __check_is_kindergarten_and_interval_is_one_hour(self) -> bool:
-        is_kindergarten = self.__check_facility_is_kindergarten()
-        interval_is_one_day = self.__check_aggregation_interval_is_one_hour()
-        return is_kindergarten and interval_is_one_day
+    def __check_forecast_is_available_for_parameters(self):
+        facility_is_kindergarten = self.__check_facility_is_kindergarten()
+        interval_is_one_hour_or_one_day = self.__check_aggregation_interval_is_one_hour_or_one_day()
+        if facility_is_kindergarten and interval_is_one_hour_or_one_day:
+            return
+        raise ForecastForParametersDoesNotExist
 
-    def __check_aggregation_interval_is_one_hour(self) -> bool:
-        return self.__parameters.aggregation_interval == AggregationIntervalSeconds.ONE_HOUR
+    def __check_aggregation_interval_is_one_hour_or_one_day(self) -> bool:
+        one_hour = self.__parameters.aggregation_interval == AggregationIntervalSeconds.ONE_HOUR
+        one_day = self.__parameters.aggregation_interval == AggregationIntervalSeconds.ONE_DAY
+        return one_hour or one_day
 
     def __check_facility_is_kindergarten(self) -> bool:
+        """forecast is only available for kindergarten 28"""
         return check_institution_is_kindergarten_28(
             self.__parameters.facility_to_get_consumption_for_or_all_descendants_if_any
         )
 
-    def __get_forecast_source_for_kindergarten(self, is_day_working: bool) \
-            -> dict[int, RawConsumptionForecast]:
-        if is_day_working:
-            return KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKING_DAY_BY_HOUR
-        return KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR
+    def __get_forecast_for_hour_for_kindergarten(self, is_workday: bool, hour_0_to_23: int) \
+            -> RawConsumptionForecast:
+        if is_workday:
+            forecast_source = KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_HOUR
+        else:
+            forecast_source = KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR
+        return forecast_source[hour_0_to_23]
 
-    def __check_day_is_working(self, day_number_from_zero: int) -> bool:
+    def __check_day_is_workday(self, day_number_from_zero: int) -> bool:
         return day_number_from_zero in range(5)
 
 
-KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKING_DAY_BY_HOUR = {
+KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_HOUR = {
     0:  1.57,
     1:  1.57,
     2:  1.57,
@@ -102,8 +112,8 @@ KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKING_DAY_BY_HOUR = {
     23: 1.57
 }
 
-KINDERGARTEN_CONSUMPTION_PER_WORKING_DAY = sum(
-    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKING_DAY_BY_HOUR.values()
+KINDERGARTEN_CONSUMPTION_PER_WORKDAY = sum(
+    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_HOUR.values()
 )
 
 KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR = {
