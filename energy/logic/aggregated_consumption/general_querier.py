@@ -1,5 +1,5 @@
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
-from energy.logic.aggregated_consumption.formatters import RawAggregatedDataFormatter
+from energy.logic.aggregated_consumption.formatters import CommonFormatter
 from energy.logic.aggregated_consumption.parameters import CommonQueryParameters
 from energy.logic.aggregated_consumption.parameters_parsers import ParameterParser
 from energy.logic.aggregated_consumption.specific_queriers import AggregatedConsumptionQuerier
@@ -51,14 +51,14 @@ class AggregatedEnergyWithOptionalForecastQuerier:
 
     def __make_forecast_for_actual_consumption(
             self, raw_consumption: RawConsumption,
-            raw_consumption_formatter: RawAggregatedDataFormatter
+            raw_consumption_formatter: CommonFormatter
     ) -> ConsumptionWithConsumptionForecast:
         forecaster = self.__create_forecaster(raw_consumption, raw_consumption_formatter)
         return forecaster.get_consumption_with_forecast()
 
     def __create_forecaster(
             self, raw_consumption: RawConsumption,
-            raw_aggregation_data_formatter: RawAggregatedDataFormatter) -> ConsumptionForecaster:
+            raw_aggregation_data_formatter: CommonFormatter) -> ConsumptionForecaster:
         return ConsumptionForecaster(
             self.__parameters, raw_consumption, raw_aggregation_data_formatter
         )

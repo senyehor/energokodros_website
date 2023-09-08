@@ -9,7 +9,7 @@ from energy.logic.aggregated_consumption.types import (
 )
 
 
-class RawAggregatedDataFormatter:
+class CommonFormatter:
     @staticmethod
     def format_time(time: RawConsumptionTime) -> ConsumptionTime:
         return time
@@ -24,7 +24,7 @@ class RawAggregatedDataFormatter:
         return f'{total_consumption:.10f}'
 
 
-class OneHourFormatter(RawAggregatedDataFormatter):
+class OneHourFormatter(CommonFormatter):
     @staticmethod
     def format_time(time: datetime) -> ConsumptionTime:
         # time contains start hour as we use aggregation_interval_start in select
@@ -32,7 +32,7 @@ class OneHourFormatter(RawAggregatedDataFormatter):
         return time.strftime(f'%d-%m-%Y %H:%M - {end_hour.zfill(2)}:%M')
 
 
-class OneMonthFormatter(RawAggregatedDataFormatter):
+class OneMonthFormatter(CommonFormatter):
     @staticmethod
     def format_time(time: str) -> ConsumptionTime:
         def __get_year_and_month_from_time(_time: str) -> tuple[str, str]:

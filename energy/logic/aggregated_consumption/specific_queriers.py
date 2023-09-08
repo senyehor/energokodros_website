@@ -6,8 +6,7 @@ from typing import Iterable, Type, TypeAlias, TypedDict
 from django.db import connection
 
 from energy.logic.aggregated_consumption.formatters import (
-    OneHourFormatter,
-    OneMonthFormatter, RawAggregatedDataFormatter,
+    CommonFormatter, OneHourFormatter, OneMonthFormatter,
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
@@ -58,7 +57,7 @@ class AggregatedConsumptionQuerier:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
 
     @property
-    def formatter(self) -> RawAggregatedDataFormatter:
+    def formatter(self) -> CommonFormatter:
         return self.__querier.formatter
 
 
@@ -90,7 +89,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
     """
     __MAIN_SELECT = "SELECT * FROM consumption, total_consumption;"
 
-    formatter: RawAggregatedDataFormatter = RawAggregatedDataFormatter()
+    formatter: CommonFormatter = CommonFormatter()
 
     class __RawAggregatedConsumptionDataIndexes(IntEnum):
         TIME_PART = 0
