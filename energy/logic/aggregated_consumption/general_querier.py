@@ -5,7 +5,7 @@ from energy.logic.aggregated_consumption.parameters_parsers import ParameterPars
 from energy.logic.aggregated_consumption.specific_queriers import AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.types import (
     ConsumptionWithConsumptionForecast,
-    ConsumptionWIthConsumptionForecastWithTotalConsumption,
+    ConsumptionWithConsumptionForecastWithTotalConsumption,
     ConsumptionWithTotalConsumption, RawConsumption,
 )
 
@@ -28,7 +28,7 @@ class AggregatedEnergyWithOptionalForecastQuerier:
 
     def get_consumption_and_total_consumption_with_optional_forecast(self) -> \
             ConsumptionWithTotalConsumption \
-            | ConsumptionWIthConsumptionForecastWithTotalConsumption \
+            | ConsumptionWithConsumptionForecastWithTotalConsumption \
             | tuple[None, None]:
         querier = self.__create_consumption_querier()
         total_consumption = querier.get_total_consumption()
