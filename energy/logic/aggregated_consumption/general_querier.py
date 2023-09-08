@@ -6,7 +6,7 @@ from energy.logic.aggregated_consumption.specific_queriers import AggregatedCons
 from energy.logic.aggregated_consumption.types import (
     ConsumptionWithConsumptionForecast,
     ConsumptionWithConsumptionForecastWithTotalConsumption,
-    ConsumptionWithTotalConsumption, RawConsumption,
+    ConsumptionWithTotalConsumption, RawConsumption, RawConsumptionWithRawTotalConsumption,
 )
 
 from users.logic import check_role_belongs_to_user, check_role_has_access_for_facility
@@ -35,7 +35,7 @@ class AggregatedEnergyWithOptionalForecastQuerier:
         if self.__parameters.include_forecast:
             raw_consumption = querier.get_raw_consumption()
             if raw_consumption:
-                consumption_with_forecast = self.__get_consumption_with_forecast(
+                consumption_with_forecast = self.__make_forecast_for_actual_consumption(
                     raw_consumption,
                     querier.formatter
                 )
@@ -45,7 +45,11 @@ class AggregatedEnergyWithOptionalForecastQuerier:
         consumption = querier.get_consumption()
         return consumption, total_consumption
 
-    def __get_consumption_with_forecast(
+    def get_all_raw_consumption_and_total_consumption_with_optional_forecast(self) -> \
+            RawConsumptionWithRawTotalConsumption:
+        pass
+
+    def __make_forecast_for_actual_consumption(
             self, raw_consumption: RawConsumption,
             raw_consumption_formatter: RawAggregatedDataFormatter
     ) -> ConsumptionWithConsumptionForecast:
