@@ -26,7 +26,7 @@ class AggregatedEnergyWithOptionalForecastQuerier:
             role
         )
 
-    def get_consumption_with_optional_forecast_and_total_consumption(self) -> \
+    def get_consumption_and_total_consumption_with_optional_forecast(self) -> \
             ConsumptionWithTotalConsumption \
             | ConsumptionWIthConsumptionForecastWithTotalConsumption \
             | tuple[None, None]:

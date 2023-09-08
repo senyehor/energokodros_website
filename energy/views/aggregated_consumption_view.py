@@ -26,7 +26,7 @@ def get_consumption_with_total_consumption(request: HttpRequest) -> JsonResponse
         parameters = convert_request_post_dict_to_regular_dict(request.POST)
         controller = AggregatedEnergyWithOptionalForecastQuerier(request.user, parameters)
         consumption_with_optional_forecast, total_consumption = \
-            controller.get_consumption_with_optional_forecast_and_total_consumption()
+            controller.get_consumption_and_total_consumption_with_optional_forecast()
     except EnergyConsumptionExceptionWithMessage as e:
         return JsonResponse(e.message, status=400, safe=False)
     return JsonResponse(

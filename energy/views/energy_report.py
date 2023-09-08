@@ -16,7 +16,7 @@ def get_energy_report(request: HttpRequest):
     try:
         controller = AggregatedEnergyWithOptionalForecastQuerier(request.user, raw_parameters)
         consumption_with_optional_forecast, total_consumption = \
-            controller.get_consumption_with_optional_forecast_and_total_consumption()
+            controller.get_consumption_and_total_consumption_with_optional_forecast()
     except EnergyConsumptionExceptionWithMessage as e:
         return JsonResponse(e.message, status=400, safe=False)
     report = ReportCreator(
