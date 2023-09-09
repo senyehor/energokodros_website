@@ -48,10 +48,11 @@ class AggregatedConsumptionQuerier:
         return None
 
     def __query(self):
-        _ = self.__querier.get_raw_consumption_with_raw_total_consumption()
-        if not _:
+        consumption_with_total_consumption = \
+            self.__querier.get_raw_consumption_with_raw_total_consumption()
+        if not consumption_with_total_consumption:
             return
-        self.__raw_consumption, self.__total_consumption = _
+        self.__raw_consumption, self.__total_consumption = consumption_with_total_consumption
 
     def __get_querier_type(self) -> Type[AnyQuerier]:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
