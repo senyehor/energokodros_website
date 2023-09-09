@@ -13,7 +13,7 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    Consumption, ConsumptionWithTotalConsumption, RawConsumption,
+    Consumption, RawConsumption,
     RawConsumptionWithRawTotalConsumption, RawQueryRows, RawTotalConsumption,
     TotalConsumption,
 )
@@ -108,17 +108,6 @@ class _AggregatedConsumptionQuerierBase(ABC):
         if self.__class__ == _AggregatedConsumptionQuerierBase:
             raise NotImplementedError('this class must be subclassed')
         self.__parameters = parameters
-
-    def get_formatted_consumption_with_total_consumption(self) \
-            -> ConsumptionWithTotalConsumption | None:
-        _ = self.get_raw_consumption_with_total_consumption()
-        if _:
-            raw_consumption, raw_total_consumption = _
-            return (
-                self.format_consumption(raw_consumption),
-                self.format_total_consumption(raw_total_consumption)
-            )
-        return None
 
     def get_raw_consumption_with_total_consumption(self) \
             -> RawConsumptionWithRawTotalConsumption | None:
