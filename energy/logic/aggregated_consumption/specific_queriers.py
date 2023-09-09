@@ -48,7 +48,7 @@ class AggregatedConsumptionQuerier:
         return None
 
     def __query(self):
-        _ = self.__querier.get_raw_consumption_with_total_consumption()
+        _ = self.__querier.get_raw_consumption_with_raw_total_consumption()
         if not _:
             return
         self.__raw_consumption, self.__total_consumption = _
@@ -109,7 +109,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
             raise NotImplementedError('this class must be subclassed')
         self.__parameters = parameters
 
-    def get_raw_consumption_with_total_consumption(self) \
+    def get_raw_consumption_with_raw_total_consumption(self) \
             -> RawConsumptionWithRawTotalConsumption | None:
         with connection.cursor() as cursor:
             cursor.execute(self.__compose_query())
