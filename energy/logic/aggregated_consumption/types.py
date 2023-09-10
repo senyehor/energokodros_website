@@ -30,6 +30,13 @@ class ConsumptionRecord(NamedTuple):
     value: ConsumptionValue
 
 
+class ConsumptionRecordRawAndFormatted(NamedTuple):
+    raw: RawConsumptionRecord
+    formatted: ConsumptionRecord
+
+
+ConsumptionRawAndFormatted = Iterable[ConsumptionRecordRawAndFormatted]
+
 Consumption: TypeAlias = Iterable[ConsumptionRecord]
 
 RawConsumptionWithRawTotalConsumption = tuple[
