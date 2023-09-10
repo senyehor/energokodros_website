@@ -4,6 +4,8 @@ from typing import Iterable, NamedTuple, TypeAlias
 
 RawConsumptionValue: TypeAlias = Decimal
 RawConsumptionTime: TypeAlias = datetime | str
+RawConsumptionForecast: TypeAlias = float
+RawTotalConsumption: TypeAlias = Decimal
 
 
 class RawConsumptionRecord(NamedTuple):
@@ -11,8 +13,8 @@ class RawConsumptionRecord(NamedTuple):
     value: RawConsumptionValue
 
 
-RawConsumptionForecast: TypeAlias = float
-RawTotalConsumption: TypeAlias = Decimal
+RawConsumption = Iterable[RawConsumptionRecord]
+
 RawQueryRows = Iterable[
     tuple[type(RawConsumptionRecord.time), type(RawConsumptionRecord.value), RawTotalConsumption]
 ]
@@ -22,11 +24,18 @@ ConsumptionValue: TypeAlias = str
 ConsumptionForecast: TypeAlias = str
 TotalConsumption: TypeAlias = str
 
+
+class ConsumptionRecord(NamedTuple):
+    time: ConsumptionTime
+    value: ConsumptionValue
+
+
+Consumption: TypeAlias = Iterable[ConsumptionRecord]
+
 RawConsumptionWithRawTotalConsumption = tuple[
     Iterable[RawConsumptionRecord], RawTotalConsumption
 ]
-ConsumptionRow: TypeAlias = tuple[ConsumptionTime, ConsumptionValue]
-Consumption: TypeAlias = list[ConsumptionRow]
+
 ConsumptionWithFormattedTimeAndRawValueRow = tuple[ConsumptionTime, RawConsumptionRecord]
 ConsumptionWithFormattedTimeAndRawValue: TypeAlias = list[
     ConsumptionWithFormattedTimeAndRawValueRow

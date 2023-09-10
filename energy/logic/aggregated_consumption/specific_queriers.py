@@ -13,7 +13,8 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    Consumption, ConsumptionWithFormattedTimeAndRawValue, RawConsumptionRecord,
+    Consumption, ConsumptionRecord, ConsumptionWithFormattedTimeAndRawValue, RawConsumption,
+    RawConsumptionRecord,
     RawConsumptionWithRawTotalConsumption, RawQueryRows, RawTotalConsumption,
     TotalConsumption,
 )
@@ -30,12 +31,11 @@ class _RawAggregatedConsumptionDataIndexes(IntEnum):
 
 
 class AggregatedConsumptionQuerier:
+    __raw_consumption: RawConsumption
+    __raw_total_consumption: RawTotalConsumption
+
     def __init__(self, parameters: AnyQueryParameters):
         self.__parameters = parameters
-        # noinspection PyTypeChecker
-        self.__raw_consumption: RawConsumptionRecord = None
-        # noinspection PyTypeChecker
-        self.__raw_total_consumption: RawTotalConsumption = None
         self.__querier = self.__get_querier_type()(self.__parameters)
         self.__formatter = self.__querier.formatter
         self.__query()
@@ -43,13 +43,13 @@ class AggregatedConsumptionQuerier:
     def get_formatted_consumption(self) -> Consumption | None:
         if self.__raw_consumption:
             _ = _RawAggregatedConsumptionDataIndexes
-            return [
-                (
-                    self.__formatter.format_time(row[_.TIME_PART]),
-                    self.__formatter.format_consumption(row[_.CONSUMPTION_PART])
+            return (
+                ConsumptionRecord(
+                    time=self.__formatter.format_time(row[_.TIME_PART]),
+                    value=self.__formatter.format_consumption(row[_.CONSUMPTION_PART])
                 )
                 for row in self.__raw_consumption
-            ]
+            )
         return None
 
     def get_consumption_with_raw_value_and_formatted_time(self) -> \
@@ -146,7 +146,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
     ) -> RawConsumptionWithRawTotalConsumption:
         _ = self.__ConsumptionWithTotalConsumptionRowsIndexes
         raw_aggregated_consumption = (
-            RawConsumption(
+            RawConsumptionRecord(
                 time=row[_.TIME_PART],
                 value=row[_.CONSUMPTION_PART]
             )
