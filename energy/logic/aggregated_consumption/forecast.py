@@ -6,8 +6,8 @@ from energy.logic.aggregated_consumption.models import AggregationIntervalSecond
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.simple import check_institution_is_kindergarten_28
 from energy.logic.aggregated_consumption.types import (
-    ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumption,
-    RawConsumptionForecast, RawConsumptionTime,
+    ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumptionForecast,
+    RawConsumptionRecord, RawConsumptionTime,
 )
 from energy.logic.aggregated_consumption.verbose_exceptions_for_user import \
     ForecastForParametersDoesNotExist
@@ -22,7 +22,7 @@ class ConsumptionForecaster:
         staticmethod(format_forecast)
 
     def __init__(
-            self, parameters: AnyQueryParameters, consumption: RawConsumption,
+            self, parameters: AnyQueryParameters, consumption: RawConsumptionRecord,
             raw_aggregation_data_formatter: CommonFormatter):
         self.__parameters = parameters
         self.__consumption = consumption
