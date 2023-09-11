@@ -53,9 +53,7 @@ class ConsumptionRecordWithForecastForIt(NamedTuple):
 
 
 ConsumptionWithConsumptionForecast = Iterable[ConsumptionRecordWithForecastForIt]
-ConsumptionWithTotalConsumption = tuple[
-    Consumption, TotalConsumption
-]
+ConsumptionWithTotalConsumption = tuple[Consumption, TotalConsumption]
 ConsumptionWithConsumptionForecastWithTotalConsumption = tuple[
     ConsumptionWithConsumptionForecast, TotalConsumption
 ]
