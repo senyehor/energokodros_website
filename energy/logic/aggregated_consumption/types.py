@@ -30,6 +30,9 @@ class ConsumptionRecord(NamedTuple):
     value: ConsumptionValue
 
 
+Consumption: TypeAlias = Iterable[ConsumptionRecord]
+
+
 class ConsumptionRecordRawAndFormatted(NamedTuple):
     raw: RawConsumptionRecord
     formatted: ConsumptionRecord
@@ -37,18 +40,19 @@ class ConsumptionRecordRawAndFormatted(NamedTuple):
 
 ConsumptionRawAndFormatted = Iterable[ConsumptionRecordRawAndFormatted]
 
-Consumption: TypeAlias = Iterable[ConsumptionRecord]
-
 RawConsumptionWithRawTotalConsumption = tuple[
     Iterable[RawConsumptionRecord], RawTotalConsumption
 ]
 
-ConsumptionWithFormattedTimeAndRawValueRow = tuple[ConsumptionTime, RawConsumptionRecord]
-ConsumptionWithFormattedTimeAndRawValue: TypeAlias = list[
-    ConsumptionWithFormattedTimeAndRawValueRow
-]
-ConsumptionWithConsumptionForecast: TypeAlias = \
-    list[tuple[ConsumptionTime, ConsumptionValue, ConsumptionForecast]]
+
+class ConsumptionRecordWithForecastForIt(NamedTuple):
+    # ConsumptionRecord is not the parent to make field order more explicit
+    time: ConsumptionTime
+    value: ConsumptionValue
+    forecast: ConsumptionForecast
+
+
+ConsumptionWithConsumptionForecast = Iterable[ConsumptionRecordWithForecastForIt]
 ConsumptionWithTotalConsumption = tuple[
     Consumption, TotalConsumption
 ]
