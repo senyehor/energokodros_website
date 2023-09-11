@@ -52,10 +52,24 @@ class ConsumptionRecordWithForecastForIt(NamedTuple):
     forecast: ConsumptionForecast
 
 
+class ConsumptionForecastRawAndFormatted(NamedTuple):
+    raw: RawConsumptionForecast
+    formatted: ConsumptionForecast
+
+
+class ConsumptionRecordRawAndFormattedWithRawAndFormattedForecast(NamedTuple):
+    raw_consumption: RawConsumptionRecord
+    formatted_consumption: ConsumptionRecord
+    forecast_raw_and_formatted: ConsumptionForecastRawAndFormatted
+
+
 ConsumptionWithConsumptionForecast = Iterable[ConsumptionRecordWithForecastForIt]
 ConsumptionWithTotalConsumption = tuple[Consumption, TotalConsumption]
 ConsumptionWithConsumptionForecastWithTotalConsumption = tuple[
     ConsumptionWithConsumptionForecast, TotalConsumption
+]
+ConsumptionRawAndFormattedWithForecastRawAndFormatted = Iterable[
+    ConsumptionRecordRawAndFormattedWithRawAndFormattedForecast
 ]
 
 HOUR: TypeAlias = int
