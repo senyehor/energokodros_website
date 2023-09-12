@@ -38,18 +38,18 @@ class AggregatedConsumptionQuerier:
 
     def get_formatted_consumption(self) -> Consumption | None:
         if self.__raw_consumption:
-            return (
+            return [
                 ConsumptionRecord(
                     time=self.__formatter.format_time(row.time),
                     value=self.__formatter.format_consumption(row.value)
                 )
                 for row in self.__raw_consumption
-            )
+            ]
         return None
 
     def get_raw_and_formatted_consumption(self) -> ConsumptionRawAndFormatted | None:
         if self.__raw_consumption:
-            return (
+            return [
                 ConsumptionRecordRawAndFormatted(
                     raw_consumption_record=row,
                     formatted_consumption_record=ConsumptionRecord(
@@ -58,7 +58,7 @@ class AggregatedConsumptionQuerier:
                     )
                 )
                 for row in self.__raw_consumption
-            )
+            ]
         return None
 
     def get_formatted_total_consumption(self) -> TotalConsumption | None:
