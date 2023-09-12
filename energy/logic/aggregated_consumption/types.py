@@ -34,8 +34,8 @@ Consumption: TypeAlias = Iterable[ConsumptionRecord]
 
 
 class ConsumptionRecordRawAndFormatted(NamedTuple):
-    raw: RawConsumptionRecord
-    formatted: ConsumptionRecord
+    raw_consumption_record: RawConsumptionRecord
+    formatted_consumption_record: ConsumptionRecord
 
 
 ConsumptionRawAndFormatted = Iterable[ConsumptionRecordRawAndFormatted]
@@ -58,16 +58,12 @@ class ConsumptionForecastRawAndFormatted(NamedTuple):
 
 
 class ConsumptionRecordRawAndFormattedWithRawAndFormattedForecast(NamedTuple):
-    raw_consumption: RawConsumptionRecord
-    formatted_consumption: ConsumptionRecord
+    raw_consumption_record: RawConsumptionRecord
+    formatted_consumption_record: ConsumptionRecord
     forecast_raw_and_formatted: ConsumptionForecastRawAndFormatted
 
 
 ConsumptionWithConsumptionForecast = Iterable[ConsumptionRecordWithForecastForIt]
-ConsumptionWithTotalConsumption = tuple[Consumption, TotalConsumption]
-ConsumptionWithConsumptionForecastWithTotalConsumption = tuple[
-    ConsumptionWithConsumptionForecast, TotalConsumption
-]
 ConsumptionRawAndFormattedWithForecastRawAndFormatted = Iterable[
     ConsumptionRecordRawAndFormattedWithRawAndFormattedForecast
 ]

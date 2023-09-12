@@ -51,8 +51,8 @@ class AggregatedConsumptionQuerier:
         if self.__raw_consumption:
             return (
                 ConsumptionRecordRawAndFormatted(
-                    raw=row,
-                    formatted=ConsumptionRecord(
+                    raw_consumption_record=row,
+                    formatted_consumption_record=ConsumptionRecord(
                         time=self.__formatter.format_time(row.time),
                         value=self.__formatter.format_consumption(row.value)
                     )
