@@ -91,12 +91,13 @@ class ReportCreator:
         )
         table.style = 'Table Grid'
         header_row = table.rows[0]
-        header_row.cells[0].text = _('Діапазон')
-        header_row.cells[1].text = _('Показник електроспоживання, кВт/год')
+        INTERVAL_INDEX, VALUE_INDEX = 0, 1
+        header_row.cells[INTERVAL_INDEX].text = _('Діапазон')
+        header_row.cells[VALUE_INDEX].text = _('Показник електроспоживання, кВт/год')
 
-        for record_number, consumption in enumerate(energy_records):
-            table.rows[record_number + 1].cells[0].text = consumption.value
-            table.rows[record_number + 1].cells[1].text = consumption.time
+        for record_number, consumption in enumerate(energy_records, start=1):
+            table.rows[record_number].cells[INTERVAL_INDEX].text = consumption.value
+            table.rows[record_number].cells[VALUE_INDEX].text = consumption.time
 
         total_row = table.rows[-1]
         total_text = total_row.cells[0].add_paragraph()
