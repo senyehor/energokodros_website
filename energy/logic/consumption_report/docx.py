@@ -96,8 +96,8 @@ class ReportCreator:
         header_row.cells[VALUE_INDEX].text = _('Показник електроспоживання, кВт/год')
 
         for record_number, consumption in enumerate(energy_records, start=1):
-            table.rows[record_number].cells[INTERVAL_INDEX].text = consumption.value
-            table.rows[record_number].cells[VALUE_INDEX].text = consumption.time
+            table.rows[record_number].cells[INTERVAL_INDEX].text = consumption.time
+            table.rows[record_number].cells[VALUE_INDEX].text = consumption.value
 
         total_row = table.rows[-1]
         total_text = total_row.cells[0].add_paragraph()
