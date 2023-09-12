@@ -114,7 +114,7 @@ class ReportCreator:
             raw_and_formatted_record.raw_consumption_record.value for raw_and_formatted_record in
             self.__energy_consumption_raw_and_formatted_with_optional_forecast
         ]
-        _, ax = plt.subplots()
+        __, ax = plt.subplots()
         ax.bar(
             labels, values, color=(1, 0.39, 0.51), hatch='//', label=_('Фактичне споживання'),
             zorder=4, alpha=0.5
