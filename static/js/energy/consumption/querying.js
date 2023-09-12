@@ -18,6 +18,8 @@ $(document).ready(function () {
     )
 })
 
+const NO_DATA_FOR_PARAMETERS_MESSAGE = 'За заданими фільтрами дані відсутні';
+
 function get_consumption_data_and_update() {
     $.ajax({
         url: reverse_url('get-aggregated-consumption-for-facility'),
@@ -28,7 +30,7 @@ function get_consumption_data_and_update() {
         success: (data) => {
             CONSUMPTION_WITH_OPTIONAL_FORECAST = data.consumption_with_optional_forecast;
             if (CONSUMPTION_WITH_OPTIONAL_FORECAST === null) {
-                add_warning_alert('За заданими фільтрами дані відсутні');
+                add_warning_alert(NO_DATA_FOR_PARAMETERS_MESSAGE);
                 return;
             }
             TOTAL_CONSUMPTION = data.total_consumption;
