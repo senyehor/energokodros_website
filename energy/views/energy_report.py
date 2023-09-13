@@ -23,8 +23,7 @@ def get_energy_report(request: HttpRequest):
     except EnergyConsumptionExceptionWithMessage as e:
         return JsonResponse(e.message, status=400, safe=False)
     if not raw_and_formatted_consumption_with_raw_and_formatted_optional_forecast:
-        # todo fix via uniform response with metadata
-        return FileResponse(None)
+        return JsonResponse(None, status=202, safe=False)
     report = ReportCreator(
         raw_and_formatted_consumption_with_raw_and_formatted_optional_forecast,
         total_consumption,
