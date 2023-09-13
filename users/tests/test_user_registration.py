@@ -11,7 +11,7 @@ from institutions.tests.factories import FacilityFactory
 from users.logic.user_registration_controller import _EmailConfirmationController  # noqa
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
-from utils.for_tests_only import hide_pk
+from utils.forms import SecureModelChoiceField
 
 User = get_user_model()
 
@@ -114,7 +114,7 @@ class UserRegistrationTest(TestCase):
         data['email'] = user.email
         data['password1'] = raw_password
         data['password2'] = raw_password
-        data['institution'] = hide_pk(institution.pk)
+        data['institution'] = SecureModelChoiceField._hide_id(institution.pk) # pylint: disable=W0212
         return data
 
     def __get_form_data(self) -> _user_registration_data_dict:
