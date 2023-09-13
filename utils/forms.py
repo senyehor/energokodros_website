@@ -49,7 +49,7 @@ class SecureModelChoiceField(models.ModelChoiceField):
 class CrispyFormsMixin:
     """
     this mixin relies on crispy forms so form used with it heed to be displayed
-    by {% crispy form form.helper %}
+    by corresponding crispy tag
     """
 
     def hide_fields(self):
