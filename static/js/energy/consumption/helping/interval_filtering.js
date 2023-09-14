@@ -46,15 +46,6 @@ function set_interval_filters(interval) {
     }
 }
 
-function add_or_remove_hours_filtering_for_aggregation_interval_select() {
-    let hours_filtering_div = __get_hours_filtering_div();
-    if (_check_interval_is_one_hour()) {
-        hours_filtering_div.removeClass('d-none');
-    } else {
-        hours_filtering_div.addClass('d-none');
-    }
-}
-
 function set_default_hour_filtering_choices() {
     __get_hour_filtering_start_select()
         .val(DEFAULT_START_HOUR_FILTER_OPTION)
