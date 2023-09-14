@@ -1,14 +1,9 @@
 $(document).ready(function () {
     update_facilities_list_for_role();
     __get_roles_select().change(update_facilities_list_for_role);
-    __get_aggregation_interval_select().change(
-        add_or_remove_hours_filtering_for_aggregation_interval_select
-    );
-    set_default_hour_filtering_choices();
     __get_hours_filtering_reset_button().click(set_default_hour_filtering_choices);
     __get_hour_filtering_start_select().change(__remove_error_from_hours_select);
     __get_hour_filtering_end_select().change(__remove_error_from_hours_select);
-    set_date_inputs_now();
     add_hour_filtering_filter_day_or_interval_buttons()
 })
 
@@ -17,8 +12,6 @@ let INCLUDE_HOURS_FILTER = false;
 let FILTER_EVERY_DAY_VALUE = 'filter-every-day', FILTER_WHOLE_INTERVAL_VALUE = 'filter-whole-interval';
 let CHOSEN_HOUR_FILTERING_METHOD = FILTER_EVERY_DAY_VALUE;
 let FILTER_EVERY_DAY_BUTTON = null, FILTER_WHOLE_INTERVAL_BUTTON = null;
-
-const DEFAULT_START_HOUR_FILTER_OPTION = '0', DEFAULT_END_HOUR_FILTER_OPTION = '23';
 
 function update_facilities_list_for_role() {
     $.ajax({
@@ -42,15 +35,6 @@ function update_facilities_list_for_role() {
     });
 }
 
-function add_or_remove_hours_filtering_for_aggregation_interval_select() {
-    let hours_filtering_div = __get_hours_filtering_div();
-    if (_check_one_hour_interval_is_selected()) {
-        hours_filtering_div.removeClass('d-none');
-    } else {
-        hours_filtering_div.addClass('d-none');
-    }
-}
-
 function check_control_form_required_fields_are_filled(event) {
     let form = __get_control_form();
     let fields = form.find('input:required, select:required').serializeArray();
@@ -61,15 +45,6 @@ function check_control_form_required_fields_are_filled(event) {
             return false
         }
     })
-}
-
-function set_default_hour_filtering_choices() {
-    __get_hour_filtering_start_select()
-        .val(DEFAULT_START_HOUR_FILTER_OPTION)
-        .attr('selected', true);
-    __get_hour_filtering_end_select()
-        .val(DEFAULT_END_HOUR_FILTER_OPTION)
-        .attr('selected', true);
 }
 
 function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
@@ -107,19 +82,10 @@ function set_date_inputs_now() {
     __get_period_start_input().val(now);
     __get_period_end_input().val(now);
 }
-function _check_one_hour_interval_is_selected() {
-    let value = parseInt(get_selected_option_for_select(__get_aggregation_interval_select()));
-    let seconds_in_hour = 60 * 60;
-    return value === seconds_in_hour;
-}
+
 
 function __remove_error_from_hours_select() {
     $(this).removeClass('is-invalid');
-}
-
-function __add_error_for_hours_filtering_select(select) {
-    select.addClass('is-invalid');
-    add_error_alert('Обидва погодинних фільтри повинні бути обрані одночасно, або жоден');
 }
 
 function _get_current_date_for_date_input() {
@@ -187,8 +153,4 @@ function __get_include_forecast_checkbox() {
 
 function __get_forecast_checkbox_value() {
     return __get_include_forecast_checkbox().is(':checked');
-}
-
-function __get_hour_filtering_options_buttons_container() {
-    return $('#filter_whole_interval_or_each_day_id');
 }
