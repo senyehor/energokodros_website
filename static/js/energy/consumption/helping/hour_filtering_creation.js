@@ -10,6 +10,12 @@ function make_hour_filters() {
     `
 }
 
+function make_date_filtration_for_one_hour_or_one_day_intervals() {
+    let start = _make_date_filtration(START, 'Початок');
+    let end = _make_date_filtration(END, 'Кінець');
+    return start + end;
+}
+
 function _make_interval_filter_options() {
     let text = '<div class="d-inline">Фільтрація інтервалу агрегації</div>';
     let filter_every_day_button = `
@@ -73,19 +79,24 @@ function __make_hour_filter_select_div(text, start_or_end) {
     `
     return `
         <div class="d-inline form-group w-auto">
-        ${label}
-        <div class="d-inline-block">
-        ${hour_select}
+            ${label}
+            <div class="d-inline-block">
+                ${hour_select}
+            </div>
         </div>
-        <div>
     `
 }
 
-function __make_date_filtration(start_or_end, text) {
+function _make_date_filtration(start_or_end, text) {
     let label = `<label for="period_${start_or_end}">${text}</label>`;
     let date_input = `
         <input class="d-block" type="date"
         name="period_${start_or_end}" id="period_${start_or_end}" required>`;
-    return label + date_input;
+    return `
+        <div id="div_id_period_${start_or_end}" class="form-group">
+            ${label}
+            ${date_input}
+        </div>
+    `;
 }
 
