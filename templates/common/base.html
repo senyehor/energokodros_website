@@ -9,5 +9,9 @@
     {% endif %}
     {% block content %}
     {% endblock %}
+    <div class="d-none">
+        {% block display_none %}
+        {% endblock %}
+    </div>
     {% include 'common/../header_and_footer/footer.html' %}
 {% endblock %}
