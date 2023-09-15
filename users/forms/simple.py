@@ -9,7 +9,7 @@ from users.models import User, UserRole, UserRoleApplication
 from utils.common.object_to_queryset import object_to_queryset
 from utils.forms import (
     create_primary_button, CrispyFormMixin, CrispyModelForm, SecureModelChoiceField,
-    SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
+    SelectWithFormSelectClass, UPDATE_DELETE_BUTTONS_SET,
 )
 from utils.views import AdditionalSetupRequiredFormMixin
 
@@ -39,7 +39,7 @@ class UserRoleApplicationForm(CrispyModelForm):
     institution = SecureModelChoiceField(
         label=_('Оберіть заклад'),
         queryset=Facility.objects.get_institutions(),
-        widget=SelectWithFormControlClass({'size': 4}),
+        widget=SelectWithFormSelectClass({'size': 4}),
         required=True
     )
     message = forms.CharField(
@@ -72,7 +72,7 @@ class UserForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
         empty_label=None,
         required=False,
         disabled=True,
-        widget=SelectWithFormControlClass(attrs={'size': 4}),
+        widget=SelectWithFormSelectClass(attrs={'size': 4}),
         label_from_instance_function=lambda user_role:
         _(f"{user_role.position_name}, об'єкт {user_role.facility_has_access_to.name}")
     )
@@ -138,7 +138,7 @@ class ProfileForm(Form):
     roles = SecureModelChoiceField(
         label=_('Мої ролі'),
         queryset=UserRole.objects.none(),
-        widget=SelectWithFormControlClass({'size': 6}),
+        widget=SelectWithFormSelectClass({'size': 6}),
         empty_label=None
     )
 
