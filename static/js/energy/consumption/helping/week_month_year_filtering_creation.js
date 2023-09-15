@@ -64,7 +64,7 @@ function create_select_for_interval(interval, start_or_end) {
     let options = create_html_options(INTERVAL_TO_GENERATE_CHOICES_FUNCTION[interval]);
     let name = INTERVAL_TO_INTERVAL_NAME[interval];
     return `
-        <select class="d-inline form-control w-auto" id="${name}_select_${start_or_end}_id">
+        <select class="d-inline form-select w-auto" id="${name}_select_${start_or_end}_id">
             ${options}
         </select>
     `;
