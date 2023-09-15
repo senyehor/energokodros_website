@@ -22,7 +22,3 @@ function __get_year_select(start_or_end) {
 function __get_month_select(start_or_end) {
     return $(`#${INTERVAL_TO_INTERVAL_NAME.get(ONE_MONTH_IN_SECONDS)}_${start_or_end}_id`);
 }
-
-function __get_week_select(start_or_end) {
-    return $(`#${INTERVAL_TO_INTERVAL_NAME.get(ONE_WEEK_IN_SECONDS)}_${start_or_end}_id`);
-}
