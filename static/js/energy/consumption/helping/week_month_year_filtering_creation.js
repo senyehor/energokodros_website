@@ -8,19 +8,17 @@ const EARLIEST_YEAR_CAN_BE_QUERIED = 2022; // project started in 2022
 const INTERVAL_TO_HTML_START_WITH_END = new Map();
 
 const INTERVAL_TO_CHOICES = new Map([
-    [ONE_WEEK_IN_SECONDS, generate_week_choices()],
     [ONE_MONTH_IN_SECONDS, generate_month_choices()],
     [ONE_YEAR_IN_SECONDS, generate_year_choices()]
 ])
 
 const INTERVAL_TO_INTERVAL_NAME = new Map([
-    [ONE_WEEK_IN_SECONDS, 'week'],
     [ONE_MONTH_IN_SECONDS, 'month'],
     [ONE_YEAR_IN_SECONDS, 'year']
 ])
 
 
-function create_filters_for_week_month_or_year(interval) {
+function create_filters_for_month_or_year(interval) {
     let start_and_end_htmls = INTERVAL_TO_HTML_START_WITH_END.get(interval);
     let html_start = start_and_end_htmls[0], html_end = start_and_end_htmls[1];
     let start_div = `
@@ -55,11 +53,6 @@ function create_month_select(start_or_end) {
     );
 }
 
-function create_week_select(start_or_end) {
-    return create_select_for_interval(
-        ONE_WEEK_IN_SECONDS, start_or_end
-    );
-}
 
 function create_select_for_interval(interval, start_or_end) {
     let options = create_html_options(INTERVAL_TO_CHOICES.get(interval));
@@ -107,8 +100,6 @@ function create_html_options(options_value_then_label) {
 function setup_interval_to_html_mapping() {
     let year_create_select_set = [create_year_select];
     let month_create_select_set = [create_year_select, create_month_select];
-    let week_create_select_set
-        = [create_year_select, create_month_select, create_week_select];
 
     function create_html_for_set(set, start_or_end) {
         let select_htmls = Array.from(set, (f) => f(start_or_end));
@@ -129,12 +120,4 @@ function setup_interval_to_html_mapping() {
             create_html_for_set(month_create_select_set, END),
         ]
     )
-    INTERVAL_TO_HTML_START_WITH_END.set(
-        ONE_WEEK_IN_SECONDS,
-        [
-            create_html_for_set(week_create_select_set, START),
-            create_html_for_set(week_create_select_set, END),
-        ]
-    );
-
 }
