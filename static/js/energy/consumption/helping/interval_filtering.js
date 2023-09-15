@@ -22,10 +22,10 @@ function on_interval_select_change() {
         set_interval_filters(CURRENT_INTERVAL_CHOSEN);
         return;
     }
-    // todo make for week month year
+    update_interval_filters(CURRENT_INTERVAL_CHOSEN);
 }
 
-function set_interval_filters(interval) {
+function update_interval_filters(interval) {
     __get_interval_filtering_div().empty();
     if (interval === ONE_HOUR_IN_SECONDS || interval === ONE_DAY_IN_SECONDS) {
         if (interval === ONE_HOUR_IN_SECONDS) {
