@@ -90,12 +90,8 @@ function __remove_error_from_hours_select() {
 
 function _get_current_date_for_date_input() {
     let now = new Date();
-    let month = (now.getMonth() + 1);
-    let day = now.getDate();
-    if (month < 10)
-        month = "0" + month;
-    if (day < 10)
-        day = "0" + day;
+    let month = String(now.getMonth() + 1).padStart(2, '0');
+    let day = String(now.getDate()).padStart(2, '0');
     return now.getFullYear() + '-' + month + '-' + day;
 }
 
