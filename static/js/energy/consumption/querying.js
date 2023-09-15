@@ -67,23 +67,6 @@ function __get_aggregated_consumption_data_div() {
     return $('#energy_content');
 }
 
-function __get_period_start_epoch_seconds() {
-    return __get_data_input_epoch_value_seconds_by_id(__get_period_start_input());
-}
-
-function __get_data_input_epoch_value_seconds_by_id(date_input) {
-    // converting to seconds from milliseconds
-    return Date.parse(date_input.val()) / 1000;
-}
-
-function __get_period_end_epoch_seconds() {
-    return __get_data_input_epoch_value_seconds_by_id(__get_period_end_input());
-}
-
-function __get_aggregation_interval_select() {
-    return $('#id_aggregation_interval_seconds');
-}
-
 function __get_role_select() {
     return $('#id_role');
 }

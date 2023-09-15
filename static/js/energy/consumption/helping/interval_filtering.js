@@ -77,3 +77,8 @@ function __get_current_interval() {
         get_selected_option_for_select(__get_aggregation_interval_select())
     );
 }
+
+function get_data_input_epoch_value_seconds_by_id(date_input) {
+    // converting to seconds from milliseconds
+    return Date.parse(date_input.val()) / 1000;
+}
