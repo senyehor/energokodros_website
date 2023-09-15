@@ -68,13 +68,14 @@ function check_interval_filtering_does_not_need_to_be_changed(previous_interval,
         && check_interval_is_week_month_or_year(current_interval);
 }
 
-function check_interval_is_hour_or_day(interval) {
-    return (interval === ONE_HOUR_IN_SECONDS) || (interval === ONE_DAY_IN_SECONDS)
+function check_interval_is_hour_or_day_or_week(interval) {
+    return (interval === ONE_HOUR_IN_SECONDS)
+        || (interval === ONE_DAY_IN_SECONDS)
+        || (interval === ONE_WEEK_IN_SECONDS)
 }
 
-function check_interval_is_week_month_or_year(interval) {
-    return (interval === ONE_WEEK_IN_SECONDS)
-        || (interval === ONE_MONTH_IN_SECONDS)
+function check_interval_is_month_or_year(interval) {
+    return (interval === ONE_MONTH_IN_SECONDS)
         || (interval === ONE_YEAR_IN_SECONDS)
 }
 
