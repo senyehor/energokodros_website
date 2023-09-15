@@ -11,7 +11,7 @@ function make_hour_filters() {
     `
 }
 
-function make_date_filtration_for_one_hour_or_one_day_intervals() {
+function make_date_filtration_for_hour_or_day_or_week_intervals() {
     let start = _make_date_filtration(START, INTERVAL_FILTERING_START_LABEL);
     let end = _make_date_filtration(END, INTERVAL_FILTERING_END_LABEL);
     return start + end;
