@@ -1,9 +1,7 @@
 $(document).ready(function () {
     update_facilities_list_for_role();
     __get_roles_select().change(update_facilities_list_for_role);
-    __get_hour_filtering_start_select().change(__remove_error_from_hours_select);
-    __get_hour_filtering_end_select().change(__remove_error_from_hours_select);
-    add_hour_filtering_filter_day_or_interval_buttons()
+    add_hour_filtering_filter_day_or_interval_buttons();
 })
 
 let INCLUDE_HOURS_FILTER = false;
