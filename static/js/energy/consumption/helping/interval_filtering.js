@@ -2,7 +2,7 @@ $(document).ready(() => {
     __get_aggregation_interval_select().change(
         on_interval_select_change
     );
-    __get_hours_filtering_reset_button().click(__set_default_hour_filtering_choices);
+    __get_hours_filtering_reset_button().click(set_default_hour_filtering_choices);
     __get_aggregation_interval_select().trigger('change');
 })
 
