@@ -71,7 +71,3 @@ function __get_current_interval() {
         get_selected_option_for_select(__get_aggregation_interval_select())
     );
 }
-
-function __check_interval_in_seconds_is_selected(interval) {
-    return __get_current_interval() === interval;
-}
