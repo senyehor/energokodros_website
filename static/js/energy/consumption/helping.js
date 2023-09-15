@@ -74,14 +74,6 @@ function _get_current_date_for_date_input() {
     return now.getFullYear() + '-' + month + '-' + day;
 }
 
-function __get_hour_filtering_start_select() {
-    return $('#id_hour_filter_start');
-}
-
-function __get_hour_filtering_end_select() {
-    return $('#id_hour_filter_end');
-}
-
 function __get_hours_filtering_reset_button() {
     return $('#reset_hours_filters_btn');
 }
