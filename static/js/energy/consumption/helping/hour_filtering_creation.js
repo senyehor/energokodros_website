@@ -1,5 +1,6 @@
 const START = 'start', END = 'end';
-
+const INTERVAL_FILTERING_START_LABEL = '<label class="d-block">Початок</label>';
+const INTERVAL_FILTERING_END_LABEL = '<label class="d-block">Кінець</label>'
 
 function make_hour_filters() {
     return `
@@ -11,8 +12,8 @@ function make_hour_filters() {
 }
 
 function make_date_filtration_for_one_hour_or_one_day_intervals() {
-    let start = _make_date_filtration(START, 'Початок');
-    let end = _make_date_filtration(END, 'Кінець');
+    let start = _make_date_filtration(START, INTERVAL_FILTERING_START_LABEL);
+    let end = _make_date_filtration(END, INTERVAL_FILTERING_END_LABEL);
     return start + end;
 }
 
@@ -87,8 +88,7 @@ function __make_hour_filter_select_div(text, start_or_end) {
     `
 }
 
-function _make_date_filtration(start_or_end, text) {
-    let label = `<label for="period_${start_or_end}">${text}</label>`;
+function _make_date_filtration(start_or_end, label) {
     let date_input = `
         <input class="d-block" type="date"
         name="period_${start_or_end}" id="period_${start_or_end}" required>`;
