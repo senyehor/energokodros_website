@@ -6,10 +6,11 @@ $(document).ready(() => {
 const EARLIEST_YEAR_CAN_BE_QUERIED = 2022; // project started in 2022
 
 const INTERVAL_TO_HTML_START_WITH_END = new Map();
-const INTERVAL_TO_GENERATE_CHOICES_FUNCTION = new Map([
-    [ONE_WEEK_IN_SECONDS, generate_week_choices],
-    [ONE_MONTH_IN_SECONDS, generate_month_choices],
-    [ONE_YEAR_IN_SECONDS, generate_year_choices]
+
+const INTERVAL_TO_CHOICES = new Map([
+    [ONE_WEEK_IN_SECONDS, generate_week_choices()],
+    [ONE_MONTH_IN_SECONDS, generate_month_choices()],
+    [ONE_YEAR_IN_SECONDS, generate_year_choices()]
 ])
 
 const INTERVAL_TO_INTERVAL_NAME = new Map([
@@ -61,8 +62,8 @@ function create_week_select(start_or_end) {
 }
 
 function create_select_for_interval(interval, start_or_end) {
-    let options = create_html_options(INTERVAL_TO_GENERATE_CHOICES_FUNCTION[interval]);
-    let name = INTERVAL_TO_INTERVAL_NAME[interval];
+    let options = create_html_options(INTERVAL_TO_CHOICES.get(interval));
+    let name = INTERVAL_TO_INTERVAL_NAME.get(interval);
     return `
         <select class="d-inline form-select w-auto" id="${name}_select_${start_or_end}_id">
             ${options}
