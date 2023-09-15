@@ -14,6 +14,8 @@ const ONE_HOUR_IN_SECONDS = 60 * 60,
 
 const DEFAULT_START_HOUR_FILTER_OPTION = '0', DEFAULT_END_HOUR_FILTER_OPTION = '23';
 
+const UNRECOGNIZED_INTERVAL = new Error('Unrecognized interval');
+
 let CURRENT_INTERVAL_CHOSEN = null;
 
 function on_interval_select_change() {
@@ -42,7 +44,7 @@ function update_interval_filters(interval) {
     } else if (check_interval_is_week_month_or_year(interval)) {
         __get_interval_filtering_div().append(create_filters_for_week_month_or_year(interval));
     } else {
-        throw 'unrecognized interval';
+        throw UNRECOGNIZED_INTERVAL;
     }
 }
 
