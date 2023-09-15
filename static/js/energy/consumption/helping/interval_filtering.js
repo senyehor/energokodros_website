@@ -55,10 +55,10 @@ function set_date_inputs_now() {
 }
 
 function set_default_hour_filtering_choices() {
-    __get_hour_filtering_start_select()
+    get_hour_filters_select(START)
         .val(DEFAULT_START_HOUR_FILTER_OPTION)
         .attr('selected', true);
-    __get_hour_filtering_end_select()
+    get_hour_filters_select(END)
         .val(DEFAULT_END_HOUR_FILTER_OPTION)
         .attr('selected', true);
 }
