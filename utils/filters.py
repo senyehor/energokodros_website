@@ -7,26 +7,29 @@ from django.views.generic import ListView
 
 class QuerySetFieldsIcontainsFilterPkOrderedMixin:
     """this mixin is supposed to be used with ListViews"""
-    filter_fields = None
+    filter_fields: set[str] = None
+    fields_order_by_before_pk: set[str] = set()
 
     def get_queryset(self) -> QuerySet:
         self.__check_used_properly()
         if search_value := self.__get_search_value():
-            return QuerySetFieldsIcontainsFilter(
+            qs = QuerySetFieldsIcontainsFilter(
                 self.queryset,  # noqa
                 self.filter_fields,
-            ).filter(search_value).order_by('-pk')
-        return self.queryset.order_by('-pk')  # noqa
+            ).filter(search_value)
+        else:
+            qs = self.queryset  # noqa
+        return qs.order_by(*self.fields_order_by_before_pk, '-pk')
 
     def __check_used_properly(self):
         if not isinstance(self, ListView):
             raise ValueError('this mixin must be used with a ListView')
         if self.filter_fields is None:  # noqa
-            raise ValueError('you must set filter_fields for queryset')
+            raise ValueError('you must set filter_fields for a model')
         return True
 
-    def __get_search_value(self) -> str:
-        return self.request.GET.get('search_value', None)  # noqa
+    def __get_search_value(self: ListView) -> str:
+        return self.request.GET.get('search_value', None)
 
 
 class QuerySetFieldsIcontainsFilter:
