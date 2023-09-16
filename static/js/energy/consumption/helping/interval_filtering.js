@@ -23,6 +23,43 @@ function on_interval_select_change() {
     update_interval_filters(CURRENT_INTERVAL_CHOSEN);
 }
 
+function get_period_start_or_end_for_hour_or_day_or_week(start_or_end) {
+    return get_data_input_epoch_value_seconds_by_id(
+        get_hour_or_day_or_week_period_input(start_or_end)
+    );
+}
+
+function get_period_start_for_year() {
+    let year = get_selected_option_for_select(__get_year_select(START));
+    let date = new Date(year, 1, 1);
+    return convert_date_to_epoch_seconds(date);
+}
+
+function get_period_end_for_year() {
+    let year = get_selected_option_for_select(__get_year_select(END));
+    // Date returns previous day of previous month if month = 0 and date = 0,
+    // so previous day of the next year is the last day of given year
+    let date = new Date(year + 1, 0, 0);
+    return convert_date_to_epoch_seconds(date);
+}
+
+function get_period_start_for_month() {
+    let year = get_selected_option_for_select(__get_year_select(START));
+    let month = get_selected_option_for_select(__get_month_select(START));
+    let date = new Date(year, month, 1);
+    return convert_date_to_epoch_seconds(date);
+}
+
+function get_period_end_for_month() {
+    let year = get_selected_option_for_select(__get_year_select(END));
+    let month = get_selected_option_for_select(__get_month_select(END));
+    // Date returns previous day if and date = 0, so previous day
+    // of the next moth is the last day of given month
+    let date = new Date(year, month + 1, 0);
+    return convert_date_to_epoch_seconds(date);
+}
+
+
 function update_interval_filters(interval) {
     __get_interval_filtering_div().empty();
     if (check_interval_is_hour_or_day_or_week(interval)) {
@@ -66,6 +103,10 @@ function check_interval_is_hour_or_day_or_week(interval) {
 function check_interval_is_month_or_year(interval) {
     return (interval === ONE_MONTH_IN_SECONDS)
         || (interval === ONE_YEAR_IN_SECONDS)
+}
+
+function convert_date_to_epoch_seconds(date) {
+    return date.getTime() / 1000;
 }
 
 function __get_current_interval() {
