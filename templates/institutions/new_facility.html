@@ -1,0 +1,24 @@
+{% extends 'common/form_in_center.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Новий об'єкт{% endblock %}
+{% block form_header %}
+    Уведіть дані об'єкту
+{% endblock %}
+{% block padding_top_class %}
+    pt-5
+{% endblock %}
+{% block width_class %}
+    w-50
+{% endblock %}
+{% block form %}
+    <form method="post">
+        {% crispy form %}
+    </form>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/institutions/new_facility.js' %}"></script>
+{% endblock %}
+{% block display_none %}
+    <p id="get_institution_facilities_url">{% url 'get-institution-facilities' %}</p>
+{% endblock %}
