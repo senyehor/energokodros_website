@@ -23,6 +23,32 @@ function on_interval_select_change() {
     update_interval_filters(CURRENT_INTERVAL_CHOSEN);
 }
 
+function get_period_start_time_epoch_seconds() {
+    if (check_interval_is_hour_or_day_or_week(CURRENT_INTERVAL_CHOSEN)) {
+        return get_period_start_or_end_for_hour_or_day_or_week(START)
+    }
+    if (CURRENT_INTERVAL_CHOSEN === ONE_MONTH_IN_SECONDS) {
+        return get_period_start_for_month();
+    }
+    if (CURRENT_INTERVAL_CHOSEN === ONE_YEAR_IN_SECONDS) {
+        return get_period_start_for_year();
+    }
+    throw UNRECOGNIZED_INTERVAL;
+}
+
+function get_period_end_time_epoch_seconds() {
+    if (check_interval_is_hour_or_day_or_week(CURRENT_INTERVAL_CHOSEN)) {
+        return get_period_start_or_end_for_hour_or_day_or_week(END)
+    }
+    if (CURRENT_INTERVAL_CHOSEN === ONE_MONTH_IN_SECONDS) {
+        return get_period_end_for_month();
+    }
+    if (CURRENT_INTERVAL_CHOSEN === ONE_YEAR_IN_SECONDS) {
+        return get_period_end_for_year();
+    }
+    throw UNRECOGNIZED_INTERVAL;
+}
+
 function get_period_start_or_end_for_hour_or_day_or_week(start_or_end) {
     return get_data_input_epoch_value_seconds_by_id(
         get_hour_or_day_or_week_period_input(start_or_end)
