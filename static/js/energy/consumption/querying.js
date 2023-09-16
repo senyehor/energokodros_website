@@ -43,8 +43,8 @@ function __compose_aggregation_query_parameters() {
     let _ = get_selected_option_for_select;
     let facility_pk = _(__get_facility_select());
     let aggregation_interval_seconds = _(__get_aggregation_interval_select());
-    let period_start_epoch_seconds = __get_period_start_epoch_seconds();
-    let period_end_epoch_seconds = __get_period_end_epoch_seconds();
+    let period_start_epoch_seconds = get_period_start_time_epoch_seconds();
+    let period_end_epoch_seconds = get_period_end_time_epoch_seconds();
     let role_pk = _(__get_role_select());
     let include_forecast = __get_forecast_checkbox_value();
     let base_parameters = {
