@@ -6,7 +6,7 @@ from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
 
 
-class CreatingInstitutionTest(TestCase):
+class InstitutionCreationTest(TestCase):
     def setUp(self):
         self.client = create_admin_client()
         self.creation_url = reverse('new-institution')
