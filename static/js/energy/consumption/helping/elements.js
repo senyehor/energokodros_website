@@ -15,10 +15,15 @@ function __get_aggregation_interval_select() {
     return $('#id_aggregation_interval_seconds');
 }
 
-function __get_year_select(start_or_end) {
-    return $(`#${INTERVAL_TO_INTERVAL_NAME.get(ONE_YEAR_IN_SECONDS)}_select_${start_or_end}_id`);
+function __get_month_select(start_or_end) {
+    return __get_year_or_month_select(ONE_MONTH_IN_SECONDS, start_or_end);
 }
 
-function __get_month_select(start_or_end) {
-    return $(`#${INTERVAL_TO_INTERVAL_NAME.get(ONE_MONTH_IN_SECONDS)}_${start_or_end}_id`);
+function __get_year_select(start_or_end) {
+    return __get_year_or_month_select(ONE_YEAR_IN_SECONDS, start_or_end)
+}
+
+function __get_year_or_month_select(year_or_month_interval, start_or_end) {
+    let interval_name = INTERVAL_TO_INTERVAL_NAME.get(year_or_month_interval);
+    return $(`#${interval_name}_select_${start_or_end}_id`);
 }
