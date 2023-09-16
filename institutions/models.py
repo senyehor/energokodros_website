@@ -48,7 +48,9 @@ class Facility(NS_Node):
         super().move(target, pos.value)
 
     def __str__(self):
-        return _(f'{self.name}')
+        if self.is_root():
+            return _(f'Заклад {self.name}')
+        return _(f"Об'єкт {self.name} із {self.get_root().name}")
 
     # methods below are not implemented for nested set in django_treebeard, so
     # currently they are just 'stubbed'
