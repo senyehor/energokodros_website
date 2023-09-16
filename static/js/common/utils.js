@@ -2,6 +2,10 @@ function get_selected_option_for_select(select) {
     return select.find('option:selected').val();
 }
 
+function get_int_selected_option_for_select(select) {
+    return parseInt(get_selected_option_for_select(select))
+}
+
 function reverse_url(url_name) {
     // url name should be included in d-none block with id same as url name
     let url = $(`#${url_name}`).text();
