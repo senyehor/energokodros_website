@@ -56,13 +56,13 @@ function get_period_start_or_end_for_hour_or_day_or_week(start_or_end) {
 }
 
 function get_period_start_for_year() {
-    let year = get_selected_option_for_select(__get_year_select(START));
+    let year = get_int_selected_option_for_select(__get_year_select(START));
     let date = new Date(year, 1, 1);
     return convert_date_to_epoch_seconds(date);
 }
 
 function get_period_end_for_year() {
-    let year = get_selected_option_for_select(__get_year_select(END));
+    let year = get_int_selected_option_for_select(__get_year_select(END));
     // Date returns previous day of previous month if month = 0 and date = 0,
     // so previous day of the next year is the last day of given year
     let date = new Date(year + 1, 0, 0);
@@ -70,15 +70,15 @@ function get_period_end_for_year() {
 }
 
 function get_period_start_for_month() {
-    let year = get_selected_option_for_select(__get_year_select(START));
-    let month = get_selected_option_for_select(__get_month_select(START));
-    let date = new Date(year, month, 1);
+    let year = get_int_selected_option_for_select(__get_year_select(START));
+    let month_from_zero = get_int_selected_option_for_select(__get_month_select(START));
+    let date = new Date(year, month_from_zero, 1);
     return convert_date_to_epoch_seconds(date);
 }
 
 function get_period_end_for_month() {
-    let year = get_selected_option_for_select(__get_year_select(END));
-    let month = get_selected_option_for_select(__get_month_select(END));
+    let year = get_int_selected_option_for_select(__get_year_select(END));
+    let month = get_int_selected_option_for_select(__get_month_select(END));
     // Date returns previous day if and date = 0, so previous day
     // of the next moth is the last day of given month
     let date = new Date(year, month + 1, 0);
@@ -136,9 +136,7 @@ function convert_date_to_epoch_seconds(date) {
 }
 
 function __get_current_interval() {
-    return parseInt(
-        get_selected_option_for_select(__get_aggregation_interval_select())
-    );
+    return get_int_selected_option_for_select(__get_aggregation_interval_select());
 }
 
 function get_data_input_epoch_value_seconds_by_id(date_input) {
