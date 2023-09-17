@@ -78,10 +78,10 @@ function get_period_start_for_month() {
 
 function get_period_end_for_month() {
     let year = get_int_selected_option_for_select(__get_year_select(END));
-    let month = get_int_selected_option_for_select(__get_month_select(END));
+    let month_from_zero = get_int_selected_option_for_select(__get_month_select(END));
     // Date returns previous day if and date = 0, so previous day
     // of the next moth is the last day of given month
-    let date = new Date(year, month + 1, 0);
+    let date = new Date(year, month_from_zero + 1, 0);
     return convert_date_to_epoch_seconds(date);
 }
 
