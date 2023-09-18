@@ -78,7 +78,7 @@ function _get_current_date_for_date_input() {
 }
 
 function __get_hours_filtering_reset_button() {
-    return $('#reset_hours_filters_btn');
+    return $('#reset_hour_filters_btn_id');
 }
 
 function __get_hours_filtering_div() {
