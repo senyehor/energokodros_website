@@ -169,7 +169,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         return ' '.join(
             (
                 self._compose_interval_where(),
-                self.__compose_where_boxes_sets()
+                self.__compose_boxes_sets_where_()
             )
         )
 
@@ -184,7 +184,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
             aggregation_interval_end=period_end_one_day_forward_shifted,
         )
 
-    def __compose_where_boxes_sets(self) -> str:
+    def __compose_boxes_sets_where_(self) -> str:
         return self.__QUERY_WHERE_BOXES_SETS.format(
             box_set_ids=self.__get_boxes_set_ids()
         )
