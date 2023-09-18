@@ -1,6 +1,6 @@
 import time
 from dataclasses import fields
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Any, Callable, Iterable, Type, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
@@ -36,8 +36,8 @@ class ParameterParser:
         return parser(
             aggregation_interval=aggregation_interval,
             facility_pk_to_get_consumption_for_or_all_descendants_if_any=_.pop('facility_pk'),
-            period_end_epoch_seconds=_.pop('period_end_epoch_seconds'),
-            period_start_epoch_seconds=_.pop('period_start_epoch_seconds'),
+            period_end_epoch_seconds_utc=_.pop('period_end_epoch_seconds_utc'),
+            period_start_epoch_seconds_utc=_.pop('period_start_epoch_seconds_utc'),
             include_forecast=_.pop('include_forecast'),
             **_
         ).get_parameters()
@@ -59,14 +59,14 @@ class _CommonQueryParametersParser:
             self, *,
             aggregation_interval: AggregationIntervalSeconds,
             facility_pk_to_get_consumption_for_or_all_descendants_if_any: str,
-            period_start_epoch_seconds: str,
-            period_end_epoch_seconds: str,
+            period_start_epoch_seconds_utc: str,
+            period_end_epoch_seconds_utc: str,
             include_forecast: str
     ):
         self.__facility_to_get_consumption_for_or_all_descendants_if_any = \
             self.__parse_facility(facility_pk_to_get_consumption_for_or_all_descendants_if_any)
         self.__aggregation_interval = aggregation_interval
-        self.__set_period_boundaries(period_start_epoch_seconds, period_end_epoch_seconds)
+        self.__set_period_boundaries(period_start_epoch_seconds_utc, period_end_epoch_seconds_utc)
         self.__include_forecast = self.__parse_include_forecast(include_forecast)
         self._validate()
 
@@ -84,13 +84,13 @@ class _CommonQueryParametersParser:
         self.__check_period_is_valid()
         self._check_period_contains_at_least_one_aggregation_interval()
 
-    def __set_period_boundaries(self, period_start_epoch_seconds: str,
-                                period_end_epoch_seconds: str):
+    def __set_period_boundaries(self, period_start_epoch_seconds_utc: str,
+                                period_end_epoch_seconds_utc: str):
         _ = parse_str_parameter_to_int_with_correct_exception
-        period_start_epoch_seconds = _(period_start_epoch_seconds)
-        period_end_epoch_seconds = _(period_end_epoch_seconds)
-        self._period_start = self.__convert_epoch_seconds_to_date(period_start_epoch_seconds)
-        self._period_end = self.__convert_epoch_seconds_to_date(period_end_epoch_seconds)
+        period_start_epoch_seconds_utc = _(period_start_epoch_seconds_utc)
+        period_end_epoch_seconds_utc = _(period_end_epoch_seconds_utc)
+        self._period_start = self.__convert_epoch_seconds_to_date(period_start_epoch_seconds_utc)
+        self._period_end = self.__convert_epoch_seconds_to_date(period_end_epoch_seconds_utc)
 
     def __check_period_is_valid(self):
         if self._period_start > self._period_end:
@@ -101,13 +101,13 @@ class _CommonQueryParametersParser:
         if period_length_seconds < self.__aggregation_interval:
             raise AggregationIntervalDoesNotFitPeriod
 
-    def __convert_epoch_seconds_to_date(self, epoch_seconds: int) -> date:
-        if epoch_seconds < 0:
+    def __convert_epoch_seconds_to_date(self, epoch_seconds_utc: int) -> date:
+        if epoch_seconds_utc < 0:
             raise QueryParametersInvalid
-        if int(time.time()) < epoch_seconds:
+        if int(time.time()) < epoch_seconds_utc:
             # future timestamp (senseless filtering for future dates)
             raise FutureFilteringDate
-        return datetime.fromtimestamp(epoch_seconds).date()
+        return datetime.fromtimestamp(epoch_seconds_utc, timezone.utc).date()
 
     def __parse_facility(self, facility_pk: str) -> Facility:
         # noinspection PyTypeChecker

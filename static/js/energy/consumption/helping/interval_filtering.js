@@ -23,7 +23,7 @@ function on_interval_select_change() {
     update_interval_filters(CURRENT_INTERVAL_CHOSEN);
 }
 
-function get_period_start_time_epoch_seconds() {
+function get_period_start_time_epoch_seconds_utc() {
     if (check_interval_is_hour_or_day_or_week(CURRENT_INTERVAL_CHOSEN)) {
         return get_period_start_or_end_for_hour_or_day_or_week(START);
     }
@@ -36,7 +36,7 @@ function get_period_start_time_epoch_seconds() {
     throw UNRECOGNIZED_INTERVAL;
 }
 
-function get_period_end_time_epoch_seconds() {
+function get_period_end_time_epoch_seconds_utc() {
     if (check_interval_is_hour_or_day_or_week(CURRENT_INTERVAL_CHOSEN)) {
         return get_period_start_or_end_for_hour_or_day_or_week(END)
     }

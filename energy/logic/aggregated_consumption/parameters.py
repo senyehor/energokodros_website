@@ -13,8 +13,8 @@ AnyQueryParameters: TypeAlias = 'CommonQueryParameters'
 class EnergyConsumptionQueryRawParameters(TypedDict, total=False):
     facility_pk: str
     aggregation_interval_seconds: str
-    period_start_epoch_seconds: str
-    period_end_epoch_seconds: str
+    period_start_epoch_seconds_utc: str
+    period_end_epoch_seconds_utc: str
     include_forecast: str
     # one hour interval specific filters
     hour_filtering_start_hour: str
