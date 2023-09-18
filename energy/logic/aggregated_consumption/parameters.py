@@ -72,3 +72,7 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
 
     def __hour_filtering_method_whole_interval(self) -> bool:
         return self.hour_filtering_method == self.HourFilteringMethods.WHOLE_INTERVAL
+
+    def __check_hour_filters_set(self) -> bool:
+        return self.hour_filtering_start_hour is not None \
+            and self.hour_filtering_end_hour is not None
