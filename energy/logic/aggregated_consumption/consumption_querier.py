@@ -152,7 +152,10 @@ class _AggregatedConsumptionQuerierBase(ABC):
             (
                 self.__CONSUMPTION_CTE_START,
                 self.__compose_select(),
-                self._compose_where(),
+                self._compose_where(
+                    period_start=self._make_period_start_00_00(),
+                    period_end=self._make_period_end_shifted_one_day_forward_00_00()
+                ),
                 self.__compose_group_by_and_order_by(),
                 self.__CONSUMPTION_CTE_END,
                 self.__TOTAL_CONSUMPTION_CTE,
@@ -165,30 +168,35 @@ class _AggregatedConsumptionQuerierBase(ABC):
             select=self.SELECT_PART
         )
 
-    def _compose_where(self) -> str:
+    def _compose_where(self, period_start: datetime.datetime, period_end: datetime.datetime) -> str:
         return ' '.join(
             (
-                self._compose_interval_where(),
+                self.__compose_interval_where(period_start=period_start, period_end=period_end),
                 self.__compose_boxes_sets_where_()
             )
         )
 
-    def _compose_interval_where(self) -> str:
+    def _make_period_start_00_00(self) -> datetime.datetime:
+        return datetime.datetime.combine(
+            self.parameters.period_start,
+            datetime.time(hour=00)
+        )
+
+    def _make_period_end_shifted_one_day_forward_00_00(self) -> datetime.datetime:
         # in order to filter aggregation interval end correctly, period end must be shifted
         # one day forward, as we want to include 23 - 00 interval, where 00 is already a part
         # of the following day
-        time_00_00 = datetime.time(hour=00)
-        period_start_datetime_00_00 = datetime.datetime.combine(
-            self.parameters.period_start,
-            time_00_00
-        )
-        period_end_one_day_forward_shifted_00_00 = datetime.datetime.combine(
+        return datetime.datetime.combine(
             self.parameters.period_end + datetime.timedelta(days=1),
-            time_00_00
+            datetime.time(hour=00)
         )
+
+    def __compose_interval_where(
+            self, period_start: datetime.datetime, period_end: datetime.datetime
+    ) -> str:
         return self.__QUERY_WHERE_INTERVAL.format(
-            aggregation_interval_start=period_start_datetime_00_00,
-            aggregation_interval_end=period_end_one_day_forward_shifted_00_00,
+            aggregation_interval_start=period_start,
+            aggregation_interval_end=period_end,
         )
 
     def __compose_boxes_sets_where_(self) -> str:
