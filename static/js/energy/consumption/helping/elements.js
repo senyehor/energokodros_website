@@ -3,11 +3,11 @@ function __get_interval_filtering_div() {
 }
 
 function get_hour_or_day_or_week_period_input(start_or_end) {
-    return $(`#hour_or_day_or_week_period_${start_or_end}_id`)
+    return $(`#hour_or_day_or_week_period_${start_or_end}_id`);
 }
 
 function get_hour_filters_select(start_or_end) {
-    return $(`#id_hour_filter_${start_or_end}`)
+    return $(`#id_hour_filter_${start_or_end}`);
 }
 
 
@@ -20,7 +20,7 @@ function __get_month_select(start_or_end) {
 }
 
 function __get_year_select(start_or_end) {
-    return __get_year_or_month_select(ONE_YEAR_IN_SECONDS, start_or_end)
+    return __get_year_or_month_select(ONE_YEAR_IN_SECONDS, start_or_end);
 }
 
 function __get_year_or_month_select(year_or_month_interval, start_or_end) {
