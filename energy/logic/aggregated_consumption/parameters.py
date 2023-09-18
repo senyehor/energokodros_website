@@ -68,6 +68,7 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     def __hour_filtering_method_every_day(self) -> bool:
         return self.hour_filtering_method == self.HourFilteringMethods.EVERY_DAY
 
+    @property
     def __hour_filtering_method_whole_interval(self) -> bool:
         return self.hour_filtering_method == self.HourFilteringMethods.WHOLE_INTERVAL
 
