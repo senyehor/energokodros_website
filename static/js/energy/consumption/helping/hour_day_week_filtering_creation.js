@@ -42,7 +42,7 @@ function _make_hour_filters() {
     let start_hour_filter_select = __make_hour_filter_select_div('Від', START);
     let end_hour_filter_select = __make_hour_filter_select_div('До', END);
     let reset_button = __make_reset_hour_filters_button(
-        'reset_hour_filters_btn_id', 'Скинути'
+        'reset_hour_filters_btn_id', 'Скинути', set_default_hour_filtering_choices
     );
     return `
         <div class="d-flex align-items-center">
@@ -53,12 +53,14 @@ function _make_hour_filters() {
             <div class="d-inline ms-2">
                 ${reset_button}
             </div>
-        </div>           
+        </div>
     `
 }
 
-function __make_reset_hour_filters_button(id, text) {
-    return `<a class="btn btn btn-primary" id="${id}">${text}</a>`
+function __make_reset_hour_filters_button(id, text, reset_hour_filters_function) {
+    return `<a class="btn btn btn-primary"
+            onclick="${reset_hour_filters_function.name}()" id="${id}">${text}
+            </a>`
 }
 
 function __make_hour_filter_select_div(text, start_or_end) {
