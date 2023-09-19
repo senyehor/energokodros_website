@@ -12,6 +12,10 @@ const ONE_HOUR_IN_SECONDS = 60 * 60,
 const DEFAULT_START_HOUR_FILTER_OPTION = '0', DEFAULT_END_HOUR_FILTER_OPTION = '23';
 
 const UNRECOGNIZED_INTERVAL = new Error('Unrecognized interval');
+const TOOLTIP_FOR_WEEK_INTERVAL =
+    "Фільтрація відбувається потижнево з понеділка по неділю, " +
+    "тож рекомендовано обирати рядки із календаря, де кожен рядок " +
+    "(обрати можна будь-який із днів) відповідає за цілий тиждень";
 
 let CURRENT_INTERVAL_CHOSEN = null;
 
@@ -85,10 +89,14 @@ function get_period_end_for_month() {
 
 function update_interval_filters(interval) {
     __get_interval_filtering_div().empty();
+    remove_week_querying_info_circle();
     if (check_interval_is_hour_or_day_or_week(interval)) {
         if (interval === ONE_HOUR_IN_SECONDS) {
             __get_interval_filtering_div().append(make_hour_filters());
             set_default_hour_filtering_choices();
+        }
+        if (interval === ONE_WEEK_IN_SECONDS) {
+            add_week_querying_info_circle();
         }
         __get_interval_filtering_div().append(
             make_date_filtration_for_hour_or_day_or_week_intervals
@@ -105,6 +113,17 @@ function set_date_inputs_now() {
     let now = _get_current_date_for_date_input();
     get_hour_or_day_or_week_period_input(START).val(now);
     get_hour_or_day_or_week_period_input(END).val(now);
+}
+
+function add_week_querying_info_circle() {
+    __get_aggregation_interval_select_label().after(
+        make_week_filtration_info_circle(TOOLTIP_FOR_WEEK_INTERVAL)
+    );
+    $("body").tooltip({selector: '[data-toggle=tooltip]'});
+}
+
+function remove_week_querying_info_circle() {
+    __get_week_querying_info_circle().remove();
 }
 
 function set_default_hour_filtering_choices() {

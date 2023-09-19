@@ -17,6 +17,15 @@ function make_date_filtration_for_hour_or_day_or_week_intervals() {
     return start + end;
 }
 
+function make_week_filtration_info_circle(tooltip_text) {
+    return `
+        <div id="week_querying_info_circle_id" class="d-inline"
+            data-toggle="tooltip" data-placement="right" title="${tooltip_text}">
+            <i class="bi bi-info-circle text-warning"></i>
+        </div>
+    `
+}
+
 function _make_interval_filter_options() {
     let text = '<div class="d-inline">Фільтрація інтервалу агрегації</div>';
     let filter_every_day_button = `

@@ -27,3 +27,11 @@ function __get_year_or_month_select(year_or_month_interval, start_or_end) {
     let interval_name = INTERVAL_TO_INTERVAL_NAME.get(year_or_month_interval);
     return $(`#${interval_name}_select_${start_or_end}_id`);
 }
+
+function __get_week_querying_info_circle() {
+    return $('#week_querying_info_circle_id')
+}
+
+function __get_aggregation_interval_select_label() {
+    return $('label[for=id_aggregation_interval_seconds]')
+}
