@@ -65,24 +65,11 @@ function add_hour_filtering_filter_day_or_interval_buttons() {
     })
 }
 
-
-function __remove_error_from_hours_select() {
-    $(this).removeClass('is-invalid');
-}
-
 function _get_current_date_for_date_input() {
     let now = new Date();
     let month = String(now.getMonth() + 1).padStart(2, '0');
     let day = String(now.getDate()).padStart(2, '0');
     return now.getFullYear() + '-' + month + '-' + day;
-}
-
-function __get_hours_filtering_reset_button() {
-    return $('#reset_hour_filters_btn_id');
-}
-
-function __get_hours_filtering_div() {
-    return $('#id_hours_filtering');
 }
 
 function __get_facility_select() {
@@ -97,9 +84,6 @@ function __get_roles_select() {
     return $('#id_role');
 }
 
-function __get_control_form() {
-    return $('#id_control_form');
-}
 
 function __get_set_view_mode_to_table_button() {
     return $('#set_table_button')
