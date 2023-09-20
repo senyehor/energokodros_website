@@ -1,20 +1,22 @@
 {% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
-    <div class="d-flex align-items-center justify-content-center {% block padding_top_class %}{% endblock %}"
-         style="height: 100%;" id="form-container">
-        <div class="card p-0 {% block width_class %}{% endblock %}" id="form-card">
-            <div class="card-header">
-                {% block form_header %}
-                {% endblock %}
-            </div>
-            <div class="card-body">
-                {% block form %}
-                {% endblock %}
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-center {% block padding_top_class %}{% endblock %}"
+             style="height: 100%;" id="form-container">
+            <div class="card p-0 {% block width_class %}{% endblock %}" id="form-card">
+                <div class="card-header">
+                    {% block form_header %}
+                    {% endblock %}
+                </div>
+                <div class="card-body">
+                    {% block form %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
+        {% block scripts %}
+        {% endblock %}
+        <script src="{% static 'js/common/form_in_center.js' %}"></script>
     </div>
-    {% block scripts %}
-    {% endblock %}
-    <script src="{% static 'js/common/form_in_center.js' %}"></script>
 {% endblock %}
