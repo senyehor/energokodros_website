@@ -263,7 +263,7 @@ class _OneMonthAggregationIntervalQueryParametersParser(
         except FutureFilteringDate:
             # allow querying for current month even though period end date is in the future
             if self._period_end.month == datetime.now(UTC).month:
-                return
+                pass
 
 
 class _OneYearAggregationIntervalQueryParametersParser(
