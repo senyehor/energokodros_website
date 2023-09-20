@@ -23,3 +23,11 @@ class PeriodStartDoesNotBeginWithFirstMonthDay(EnergyConsumptionLogicException):
 
 class PeriodEndDoesNotEndWithLastMonthDay(EnergyConsumptionLogicException):
     pass
+
+
+class PeriodStartDoesNotBeginWithFirstMonth(EnergyConsumptionLogicException):
+    pass
+
+
+class PeriodEndDoesNotEndWithLastMonth(EnergyConsumptionLogicException):
+    pass
