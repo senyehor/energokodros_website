@@ -35,8 +35,8 @@ COPY . .
 # setting stub env variables to allow collectstatic
 RUN /bin/bash -c "export $(grep -v '^#' env_template | xargs) && \
      python -m manage collectstatic --noinput"
+# removing redundant folders
 RUN rm pyproject.toml && rm env_template && rm -rf static
-# collecting static and removing develepment staticfiles folder
 RUN adduser --system --group --no-create-home app_user
 RUN chown -R app_user:app_user $APP_DIR
 RUN chmod -R 500 $APP_DIR
