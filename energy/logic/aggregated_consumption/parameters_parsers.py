@@ -1,6 +1,6 @@
 from calendar import monthrange
 from dataclasses import fields
-from datetime import date, datetime, timezone
+from datetime import date, datetime, UTC
 from typing import Any, Callable, Iterable, Type, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
@@ -115,7 +115,7 @@ class _CommonQueryParametersParser:
             raise AggregationIntervalDoesNotFitPeriod
 
     def __convert_epoch_seconds_to_date(self, epoch_seconds_utc: int) -> date:
-        return datetime.fromtimestamp(epoch_seconds_utc, timezone.utc).date()
+        return datetime.fromtimestamp(epoch_seconds_utc, UTC).date()
 
     def __parse_facility(self, facility_pk: str) -> Facility:
         # noinspection PyTypeChecker
