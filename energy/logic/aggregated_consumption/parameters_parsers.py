@@ -102,11 +102,11 @@ class _CommonQueryParametersParser:
             raise PeriodStartGreaterThanEnd
 
     def _validate_period_start(self):
-        if self._period_start > datetime.now():
+        if self._period_start > datetime.now().date():
             raise FutureFilteringDate
 
     def _validate_period_end(self):
-        if self._period_end > datetime.now():
+        if self._period_end > datetime.now().date():
             raise FutureFilteringDate
 
     def _check_period_contains_at_least_one_aggregation_interval(self):
