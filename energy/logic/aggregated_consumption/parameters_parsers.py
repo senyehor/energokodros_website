@@ -256,7 +256,14 @@ class __PeriodStartBeginsWithFirstDayAndPeriodEndEndsWithLastDay(_CommonQueryPar
 class _OneMonthAggregationIntervalQueryParametersParser(
     __PeriodStartBeginsWithFirstDayAndPeriodEndEndsWithLastDay
 ):
-    pass
+
+    def _validate_period_end(self):
+        try:
+            super()._validate_period_end()
+        except FutureFilteringDate:
+            # allow querying for current month even though period end date is in the future
+            if self._period_end.month == datetime.now(UTC).month:
+                return
 
 
 class _OneYearAggregationIntervalQueryParametersParser(
