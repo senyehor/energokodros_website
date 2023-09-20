@@ -234,8 +234,6 @@ class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
 
 
 class __PeriodStartBeginsWithFirstDayAndPeriodEndEndsWithLastDay(_CommonQueryParametersParser):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def _validate(self):
         super()._validate()
