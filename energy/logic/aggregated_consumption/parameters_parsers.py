@@ -7,7 +7,7 @@ from typing import Any, Callable, Iterable, Type, TypeAlias
 from energy.logic.aggregated_consumption.exceptions import (
     IncompleteHourFiltersSet,
     InvalidHourFilteringValue, InvalidIncludeForecastValue,
-    MonthPeriodStartDoesNotBeginWithFirstMonthDay,
+    MonthPeriodEndDoesNotEndWithLastMonthDay, MonthPeriodStartDoesNotBeginWithFirstMonthDay,
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
@@ -249,7 +249,7 @@ class __PeriodStartBeginsWithFirstDayAndPeriodEndEndsWithLastDay(_CommonQueryPar
     def __check_period_end_ends_with_last_month_day(self):
         _, last_day = monthrange(self._period_end.year, self._period_end.month)
         if self._period_end.day != last_day:
-            raise MonthPeriodStartDoesNotBeginWithFirstMonthDay
+            raise MonthPeriodEndDoesNotEndWithLastMonthDay
 
 
 class _OneMonthAggregationIntervalQueryParametersParser(

@@ -19,3 +19,7 @@ class IncompleteHourFiltersSet(EnergyConsumptionLogicException):
 
 class MonthPeriodStartDoesNotBeginWithFirstMonthDay(EnergyConsumptionLogicException):
     pass
+
+
+class MonthPeriodEndDoesNotEndWithLastMonthDay(EnergyConsumptionLogicException):
+    pass
