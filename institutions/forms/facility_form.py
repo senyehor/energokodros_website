@@ -31,7 +31,9 @@ class NewFacilityForm(ModelForm, CrispyFormsMixin):
         widgets = {
             'description': Textarea(attrs={'rows': 3}),
         }
+        fields_order = ('institution', 'parent_facility') + fields
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.order_fields(self.Meta.fields_order)
         self.add_submit_button_at_the_end(_("Додати об'єкт"))
