@@ -11,7 +11,7 @@ class NewFacilityForm(ModelForm, CrispyFormsMixin):
     institution = SecureModelChoiceField(
         queryset=Facility.objects.get_institutions(),
         required=False,
-        label=_("Оберіть заклад, якій буде належати об'єкт"),
+        label=_("Оберіть заклад, якому буде належати об'єкт"),
         empty_label=None
     )
     # this field should be populated based on institution choice by js
