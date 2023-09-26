@@ -2,6 +2,8 @@ from django import forms
 from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
+from institutions.logic.facility_formatting_and_ajax_related import \
+    SecureModelChoiceFieldWithVerboseFacilityLabeling
 from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
@@ -10,15 +12,18 @@ from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin):
     """This form must be created from a user role application"""
     # object_has_access_to and user are prepopulated in create_from_role_application method but
-    # set to SecureModelChoiceField to be correctly converted to python object on submission
-    object_has_access_to = SecureModelChoiceField(
-        queryset=Facility.objects.all()
+    # set here to corresponding fields to be correctly converted to python object on submission
+    object_has_access_to = SecureModelChoiceFieldWithVerboseFacilityLabeling(
+        label=_("Оберіть об'єкт до якого користувач матиме доступ"),
+        queryset=Facility.objects.all(),
+        required=True,
+        empty_label=None
     )
     user = SecureModelChoiceField(
         queryset=User.objects.all(),
     )
     position = forms.CharField(
-        label=_('Уведіть позицію'),
+        label=_('Уведіть назву позиції'),
         max_length=255,
         required=True,
     )
@@ -43,9 +48,11 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
 
     @classonlymethod
     def create_from_role_application(cls, application_request: UserRoleApplication):
-        obj = cls(initial={
-            'user': application_request.user,
-        })
+        obj = cls(
+            initial={
+                'user': application_request.user,
+            }
+        )
         obj.__additionally_setup_form(application_request)
         return obj
 
@@ -58,11 +65,8 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         self.hide_fields()
 
     def __add_object_has_access_to_field(self, institution: Facility):
-        self.fields['object_has_access_to'] = SecureModelChoiceField(
-            label=_("Оберіть об'єкт"),
-            queryset=Facility.objects.get_all_institution_objects(institution),
-            required=True
-        )
+        self.fields['object_has_access_to'].queryset = \
+            Facility.objects.get_all_institution_objects(institution)
 
     def __add_readonly_prepopulated_fields(self, application_request: UserRoleApplication):
         # these fields will not be used in UserRole creation, so required = False
@@ -91,9 +95,11 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
     def __order_fields(self):
         unordered_fields = self.helper.layout.fields
         # using map to 'reveal' field names if they are wrapped in a div
-        field_names = list(map(
-            self.get_field_name, unordered_fields
-        ))
+        field_names = list(
+            map(
+                self.get_field_name, unordered_fields
+            )
+        )
         ordered_fields = []
         for field in self.Meta.fields_order:
             ordered_fields.append(self.helper.layout.fields[field_names.index(field)])
