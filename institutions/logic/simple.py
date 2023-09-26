@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 
 from institutions.models import Facility
-from utils.forms import SecureModelChoiceField
+from utils.forms import _reveal_id, SecureModelChoiceField  # noqa
 
 
 def compose_formatted_institution_facilities_choices(institution: Facility) -> dict[str, str]:
@@ -23,5 +23,5 @@ class __FormattedSecureModelChoiceField(SecureModelChoiceField):
 def get_institution_by_hashed_id(hashed_institution_id: str) -> Facility:
     return get_object_or_404(
         Facility,
-        pk=SecureModelChoiceField._reveal_id(hashed_institution_id)  # noqa pylint: disable=W0212
+        pk=_reveal_id(hashed_institution_id)
     )
