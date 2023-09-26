@@ -7,17 +7,11 @@ from utils.forms import _reveal_id, SecureModelChoiceField  # noqa
 def compose_formatted_institution_facilities_choices(institution: Facility) -> dict[str, str]:
     if not institution.is_root():
         raise ValueError('provided objects is a facility, not institution')
-    choices = __FormattedSecureModelChoiceField(
+    choices = SecureModelChoiceFieldWithVerboseFacilityLabeling(
         queryset=Facility.objects.get_all_institution_objects(institution),
         empty_label=None
     ).choices
     return {str(value): label for value, label in choices}
-
-
-class __FormattedSecureModelChoiceField(SecureModelChoiceField):
-    def label_from_instance(self, obj: Facility):
-        # &nbsp; is one space equivalent that is correctly rendered in html form
-        return '&nbsp;&nbsp;' * (obj.depth - 1) + str(obj)
 
 
 def get_institution_by_hashed_id(hashed_institution_id: str) -> Facility:
@@ -25,3 +19,11 @@ def get_institution_by_hashed_id(hashed_institution_id: str) -> Facility:
         Facility,
         pk=_reveal_id(hashed_institution_id)
     )
+
+
+class SecureModelChoiceFieldWithVerboseFacilityLabeling(SecureModelChoiceField):
+    def label_from_instance(self, obj: Facility):
+        if not isinstance(obj, Facility):
+            raise ValueError('provided object is not a facility')
+        # &nbsp; is one space equivalent that is correctly rendered in html form
+        return '&nbsp;&nbsp;' * (obj.depth - 1) + str(obj)
