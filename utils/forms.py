@@ -9,40 +9,40 @@ from utils.common import generate_submit_type_button
 from utils.crypto import hide_int, reveal_int
 
 
-class IncorrectSecureModelFieldValue(Exception):
-    pass
-
-
 class SecureModelChoiceField(models.ModelChoiceField):
+    __int_hider = staticmethod(hide_int)
+    __int_revealer = staticmethod(reveal_int)
 
     def prepare_value(self, value: db_models.Model | None | Literal['']) -> str:
         if isinstance(value, db_models.Model):
-            return hide_int(value.pk)
+            return self.__int_hider(value.pk)
         return super().prepare_value(value)
 
     def to_python(self, value: str | None) -> db_models.Model | None:
         if not value:
             return super().to_python(value)
         try:
-            return super().to_python(reveal_int(value))
+            return super().to_python(self.__int_revealer(value))
         except ValueError as e:
             raise IncorrectSecureModelFieldValue from e
 
-    @staticmethod
-    def _reveal_id(hashed_id: str) -> int:
-        """
-        think twice before using this method, a form almost always
-        should handle this by itself
-        """
-        return reveal_int(hashed_id)
 
-    @staticmethod
-    def _hide_id(_id: int) -> str:
-        """
-        think twice before using this method, a form almost always
-        should handle this by itself
-        """
-        return hide_int(_id)
+def _reveal_id(hashed_id: str) -> int:
+    """
+    think twice before using, this function is supposed to be used when
+    SecureModelChoiceField can not be used
+    """
+    _ = SecureModelChoiceField
+    return _._SecureModelChoiceField__int_revealer(hashed_id)  # noqa pylint: disable=W0212
+
+
+def _hide_id(_id: int) -> str:
+    """
+    think twice before using, this function is supposed to be used when
+    SecureModelChoiceField can not be used
+    """
+    _ = SecureModelChoiceField
+    return _._SecureModelChoiceField__int_hider(_id)  # noqa pylint: disable=W0212
 
 
 class CrispyFormsMixin:
@@ -84,3 +84,7 @@ class CrispyFormsMixin:
         if len(_field.fields) != 1:
             raise ValueError('only one wrapped field expected')
         return _field.fields[0]
+
+
+class IncorrectSecureModelFieldValue(Exception):
+    pass
