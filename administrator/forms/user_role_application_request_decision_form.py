@@ -38,7 +38,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         model = UserRole
         # user is added in custom creation method
         fields_to_hide = ('user',)
-        fields = ('position', 'object_has_access_to') + fields_to_hide
+        fields = ('position', 'facility_has_access_to') + fields_to_hide
         info_readonly_fields = (
             'user_with_email',
             'institution_verbose',
@@ -65,7 +65,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         self.hide_fields()
 
     def __add_object_has_access_to_field(self, institution: Facility):
-        self.fields['object_has_access_to'].queryset = \
+        self.fields['facility_has_access_to'].queryset = \
             Facility.objects.get_all_institution_objects(institution)
 
     def __add_readonly_prepopulated_fields(self, application_request: UserRoleApplication):

@@ -66,7 +66,7 @@ class UserRole(models.Model):
         blank=False,
         related_name='roles'
     )
-    object_has_access_to = models.ForeignKey(
+    facility_has_access_to = models.ForeignKey(
         Facility,
         on_delete=models.CASCADE,
         null=False,
@@ -86,8 +86,10 @@ class UserRole(models.Model):
         verbose_name_plural = _('Ролі користувача')
 
     def __str__(self):
-        return _(f'{self.position} {self.user.full_name} із '
-                 f'{self.object_has_access_to.get_institution()}')
+        return _(
+            f'{self.position} {self.user.full_name} із '
+            f'{self.facility_has_access_to.get_institution()}'
+            )
 
 
 class UserRoleApplication(models.Model):
