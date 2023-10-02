@@ -5,14 +5,14 @@ from institutions.models import Facility
 from utils.forms import _reveal_id, SecureModelChoiceField  # noqa
 
 
-def compose_formatted_institution_facilities_choices(institution: Facility) -> dict[str, str]:
+def compose_formatted_institution_facilities_choices(institution: Facility) -> list[dict[str, str]]:
     if not institution.is_root():
         raise ValueError('provided objects is a facility, not institution')
     choices = SecureModelChoiceFieldWithVerboseFacilityLabeling(
         queryset=Facility.objects.get_all_institution_objects(institution),
         empty_label=None
     ).choices
-    return {str(value): label for value, label in choices}
+    return [{str(value): label} for value, label in choices]
 
 
 def get_institution_by_hashed_id(hashed_institution_id: str) -> Facility:

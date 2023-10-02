@@ -19,10 +19,13 @@ function update_parent_facility_select() {
             let parent_facility_select = __get_parent_facility_select();
             parent_facility_select.prop('disabled', false);
             parent_facility_select.empty();
-            for (const [key, value] of Object.entries(ids_and_labels)) {
-                parent_facility_select.append(
-                    `<option value="${key}">${value}</option>`
-                )
+            for (const id_label_object_index in (ids_and_labels)) {
+                for (const [key, value] of Object.entries(ids_and_labels[id_label_object_index]))
+                    // each object is a key:value pair, but in order to access property
+                    // not knowing it`s name beforehand, iteration is used
+                    parent_facility_select.append(
+                        `<option value="${key}">${value}</option>`
+                    )
             }
         },
         error: (error) => {

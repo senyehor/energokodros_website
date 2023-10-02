@@ -18,7 +18,7 @@ def get_institution_facilities_choices(request) -> JsonResponse:
     hashed_institution_id = request.POST.get('institution_id')
     institution = get_institution_by_hashed_id(hashed_institution_id)
     formatted_choices_ordered = compose_formatted_institution_facilities_choices(institution)
-    return JsonResponse(formatted_choices_ordered)
+    return JsonResponse(formatted_choices_ordered, safe=False)
 
 
 @admin_rights_required
