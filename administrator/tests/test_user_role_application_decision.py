@@ -22,27 +22,27 @@ class UserRoleApplicationDetailTest(TestCase):
     _user_role_application_decision_data_dict = TypedDict(
         '_user_role_application_decision_data_dict',
         {
-            'decision':             _DECISIONS,  # noqa
-            'message_for_user':     str,
-            'position':             str,
-            'user':                 str,
-            'institution':          str,
-            'object_has_access_to': str
+            'decision':               _DECISIONS,  # noqa
+            'message_for_user':       str,
+            'position':               str,
+            'user':                   str,
+            'institution':            str,
+            'facility_has_access_to': str
         }
     )
 
     def setUp(self):
         self.admin_client = create_admin_client()
         self.user_role_application = UserRoleApplicationFactory()
-        self.object_has_access_to = self.user_role_application.institution
+        self.facility_has_access_to = self.user_role_application.institution
         fake = Faker()
         self.position_to_grant_user: str = fake.text(max_nb_chars=20)
 
     def test_accepting_application(self):
         resp = self.send_decision(
             decision=self._DECISIONS.ACCEPT,
-            object_has_access_to=self.user_role_application.institution,
-            position=self.position_to_grant_user
+            facility_has_access_to=self.user_role_application.institution,
+            position=self.position_to_grant_user,
         )
         self.assertEqual(
             200,
@@ -56,7 +56,7 @@ class UserRoleApplicationDetailTest(TestCase):
         try:
             UserRole.objects.get(
                 user=self.user_role_application.user,
-                object_has_access_to=self.user_role_application.institution,
+                facility_has_access_to=self.user_role_application.institution,
                 position=self.position_to_grant_user
             )
         except ObjectDoesNotExist:
@@ -80,7 +80,7 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def send_decision(
             self, decision: _DECISIONS,
-            object_has_access_to: Facility = None, position: str = None) -> HttpResponse:
+            facility_has_access_to: Facility = None, position: str = None) -> HttpResponse:
         return self.admin_client.post(
             reverse(
                 'user-role-application-decision',
@@ -90,7 +90,7 @@ class UserRoleApplicationDetailTest(TestCase):
                 **self.__complete_data(
                     decision.value,
                     position,
-                    object_has_access_to
+                    facility_has_access_to
                 )
             },
             follow=True
@@ -98,18 +98,18 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def __complete_data(
             self, decision: str,
-            position: str | None, object_has_access_to: Facility | None):
+            position: str | None, facility_has_access_to: Facility | None):
         complete_data = self.__get_form_data()
         complete_data['decision'] = decision
-        # when declining application neither position nor object_has_access_to
+        # when declining application neither position nor facility_has_access_to
         # have to be filled in form, so they are just ''
         complete_data['position'] = position if position else ''
         hashed_id_or_empty_string = (
-            _hide_id(object_has_access_to.pk)
-            if object_has_access_to
+            _hide_id(facility_has_access_to.pk)
+            if facility_has_access_to
             else ''
         )
-        complete_data['object_has_access_to'] = hashed_id_or_empty_string
+        complete_data['facility_has_access_to'] = hashed_id_or_empty_string
         return complete_data
 
     def __get_form_data(self) -> _user_role_application_decision_data_dict:
