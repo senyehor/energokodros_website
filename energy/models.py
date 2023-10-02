@@ -5,6 +5,7 @@ from institutions.models import Facility
 
 class Box(models.Model):
     box_id = models.AutoField(primary_key=True)
+    # todo box_number unique? ask
     box_number = models.CharField(max_length=256, blank=False, null=False)
     box_description = models.TextField(blank=False, null=False)
 
