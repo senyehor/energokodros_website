@@ -20,17 +20,17 @@ function update_parent_facility_select() {
             parent_facility_select.prop('disabled', false);
             parent_facility_select.empty();
             for (const id_label_object_index in (ids_and_labels)) {
-                for (const [key, value] of Object.entries(ids_and_labels[id_label_object_index]))
-                    // each object is a key:value pair, but in order to access property
-                    // not knowing it`s name beforehand, iteration is used
-                    parent_facility_select.append(
-                        `<option value="${key}">${value}</option>`
-                    )
+                let hashed_id = ids_and_labels[id_label_object_index][0];
+                let label = ids_and_labels[id_label_object_index][1];
+                parent_facility_select.append(
+                    `<option value="${hashed_id}">${label}</option>`
+                )
             }
         },
         error: (error) => {
             window.alert('Під час оновлення даних виникла помилка. ' +
-                'Якщо після перезавантаження сторінки вона не зникне, зверніться до адміністратора')
+                'Якщо після перезавантаження сторінки вона не зникне, ' +
+                'зверніться до адміністратора')
         }
     });
 }
