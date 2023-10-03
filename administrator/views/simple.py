@@ -1,7 +1,9 @@
 from django.views.generic import ListView, TemplateView
 
-from administrator.decorators import admin_rights_required
-from administrator.logic import get_applications_from_users_who_confirmed_email
+from administrator.logic import (
+    admin_rights_required,
+    get_applications_from_users_who_confirmed_email,
+)
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from utils.filters import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
