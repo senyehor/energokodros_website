@@ -22,7 +22,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
     user = SecureModelChoiceField(
         queryset=User.objects.all(),
     )
-    position = forms.CharField(
+    position_name = forms.CharField(
         label=_('Уведіть назву позиції'),
         max_length=255,
         required=True,
@@ -38,7 +38,7 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         model = UserRole
         # user is added in custom creation method
         fields_to_hide = ('user',)
-        fields = ('position', 'facility_has_access_to') + fields_to_hide
+        fields = ('position_name', 'facility_has_access_to') + fields_to_hide
         info_readonly_fields = (
             'user_with_email',
             'institution_verbose',
