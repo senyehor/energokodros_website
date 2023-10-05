@@ -22,6 +22,7 @@ from energy.logic.aggregated_consumption.types import (
 from energy.logic.aggregated_consumption.verbose_exceptions_for_user import \
     FacilityAndDescendantsHaveNoSensors
 from energy.models import BoxSensorSet
+from institutions.logic import get_all_descendants_of_facility_with_self
 
 AnyQuerier: TypeAlias = '_AggregatedConsumptionQuerierBase'
 
@@ -217,7 +218,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
 
     def __get_box_set_ids_for_facility(self) -> Iterable[int]:
         facility = self.__parameters.facility_to_get_consumption_for_or_all_descendants_if_any
-        facility_and_descendants = facility.get_tree(facility)
+        facility_and_descendants = get_all_descendants_of_facility_with_self(facility)
         ids = BoxSensorSet.objects. \
             only('pk'). \
             filter(facility__in=facility_and_descendants). \
