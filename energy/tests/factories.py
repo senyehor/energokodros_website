@@ -50,7 +50,7 @@ class BoxSensorsSetManualFactory:
                 sensor=sensor,
                 facility=facility,
                 line_name=f'line number {i + 1}',
-                sensor_number=i + 1
+                sensor_number_in_set=i + 1
             ).save()
             data.sensors.append(sensor)
         return data
