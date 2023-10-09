@@ -4,7 +4,6 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
-from institutions.models import Facility
 
 
 class Box(models.Model):
@@ -63,7 +62,7 @@ class BoxSensorSet(models.Model):
         related_name='set'
     )
     facility = models.ForeignKey(
-        Facility,
+        'institutions.Facility',
         models.CASCADE,
         null=False,
         blank=False,
