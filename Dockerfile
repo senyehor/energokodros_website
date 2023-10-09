@@ -25,8 +25,9 @@ RUN pip install --disable-pip-version-check --prefix=/dependencies --no-cache-di
 FROM dependencies-builder as runtime
 
 ENV APP_DIR /app
+ENV APP_STATICFILES_DIR $APP_DIR/staticfiles
 RUN mkdir $APP_DIR
-RUN mkdir $APP_DIR/staticfiles
+RUN mkdir $APP_STATICFILES_DIR
 WORKDIR $APP_DIR
 # copying copliled libs to folder where python expects them to be
 COPY --from=dependencies-builder /dependencies /usr/local
