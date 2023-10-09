@@ -1,7 +1,11 @@
 from django.db import models
+from django.db.transaction import atomic
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from treebeard.ns_tree import NS_Node, NS_NodeManager
+
+from energy.models import Box, BoxSensorSet, Sensor
 
 
 class FacilityManager(NS_NodeManager):
@@ -27,6 +31,28 @@ class Facility(NS_Node):
     )
 
     objects = FacilityManager()
+
+    @method_decorator(atomic)
+    def delete(self, *args, **kwargs):
+        facility_with_all_descendants = self.get_tree(self)
+        box_sensor_sets_for_facility_with_all_descendants = BoxSensorSet.objects.filter(
+            facility__in=facility_with_all_descendants
+        ).all()
+        boxes = Box.objects.filter(
+            sensor_sets__in=box_sensor_sets_for_facility_with_all_descendants
+        )
+        sensors = Sensor.objects.filter(
+            set__in=box_sensor_sets_for_facility_with_all_descendants
+        ).only('sensor_id')
+        # trick to force evaluation of qs, as box_sensor_sets are going to be deleted,
+        # and qs will be empty in such case
+        sensors = list(sensors)
+        deleted_boxes_data = boxes.delete()
+        deleted_sensors_data = Sensor.objects.filter(
+            pk__in=[sensor.pk for sensor in sensors]
+        ).delete()
+        super_deletion_results = super().delete(*args, **kwargs)
+        return super_deletion_results, deleted_boxes_data, deleted_sensors_data
 
     class Meta:
         db_table = 'facilities'
