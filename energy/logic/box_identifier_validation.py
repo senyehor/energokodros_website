@@ -1,57 +1,25 @@
-from enum import Enum
+import re
 
-REGEX_GROUPS_SEPARATOR = '-'
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
+__CITY_REGEX_PART = '[A-Za-z]{2}'
+__INSTITUTION_NAME_REGEX_PART = '[A-Za-z]{2}'
+__INSTITUTION_NUMBER_REGEX_PART = r'\d{2}'
+__BOX_NUMBER_REGEX_PART = r'\d{3}'
+__BOX_ACTUAL_SENSOR_COUNT_REGEX_PART = r'\d{2}'
 
-class CharactersCountForBoxIdentifierParts:
-    CHARACTERS_PER_BOX_ORDINAL_NUMBER_FOR_BOX_IDENTIFIER = 2
-    CHARACTERS_PER_CITY_FOR_BOX_IDENTIFIER = 2
-    CHARACTERS_PER_INSTITUTION_FOR_BOX_IDENTIFIER = 2
-    CHARACTERS_PER_INSTITUTION_NUMBER_FOR_BOX_IDENTIFIER = 2
-    CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER = 2
-
-
-class BoxIdentifierRegexGroups(str, Enum):
-    CITY = 'city'
-    INSTITUTION = 'institution'
-    INSTITUTION_NUMBER = 'institution_number'
-    BOX_ORDINAL_NUMBER = 'box_ordinal_number'
-    SENSORS_COUNT = 'sensors_count'
-
-
-def create_regex_for_letter_count(group_name: str, count: int) -> str:
-    return f'(?P<{group_name}>[A-Za-z]{{{count}}})'
+__COMPOSED_REGEX = re.compile(
+    fr'^{__CITY_REGEX_PART}' +
+    fr'{__INSTITUTION_NUMBER_REGEX_PART}' +
+    fr'{__INSTITUTION_NUMBER_REGEX_PART}' +
+    fr'{__BOX_NUMBER_REGEX_PART}' +
+    fr'{__BOX_ACTUAL_SENSOR_COUNT_REGEX_PART}$'
+)
 
 
-def create_regex_for_number_count(group_name: str, count: int) -> str:
-    return f'(?P<{group_name}>[0-9]{{{count}}})'
-
-
-def compose_regex() -> str:
-    groups = BoxIdentifierRegexGroups
-    _ = CharactersCountForBoxIdentifierParts
-    city = create_regex_for_letter_count(
-        groups.CITY,
-        _.CHARACTERS_PER_CITY_FOR_BOX_IDENTIFIER
-    )
-    institution = create_regex_for_letter_count(
-        groups.INSTITUTION,
-        _.CHARACTERS_PER_INSTITUTION_FOR_BOX_IDENTIFIER
-    )
-    institution_number = create_regex_for_number_count(
-        groups.INSTITUTION_NUMBER,
-        _.CHARACTERS_PER_INSTITUTION_NUMBER_FOR_BOX_IDENTIFIER
-    )
-    box_ordinal_number = create_regex_for_number_count(
-        groups.BOX_ORDINAL_NUMBER,
-        _.CHARACTERS_PER_BOX_ORDINAL_NUMBER_FOR_BOX_IDENTIFIER
-    )
-    sensors_count = create_regex_for_number_count(
-        groups.SENSORS_COUNT,
-        _.CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER
-    )
-    return REGEX_GROUPS_SEPARATOR.join(
-        (
-            city, institution, institution_number, box_ordinal_number, sensors_count
+def validate_box_identifier(identifier: str):
+    if not __COMPOSED_REGEX.match(identifier):
+        raise ValidationError(
+            _('Ідентифікатор не відповідає заданому формату')
         )
-    )
