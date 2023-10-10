@@ -1,7 +1,9 @@
+from django.db.transaction import atomic
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 
 from users.forms import NewUserForm, UserRoleApplicationFormForRegistration
 from users.models import User
@@ -18,6 +20,7 @@ class UserRegistrationController:
         self.__user_form = user_form
         self.__role_application_without_user_form = role_application_without_user_form
 
+    @method_decorator(atomic)
     def save_user_along_with_registration_request_return_user(self) -> User:
         self.__user = self.__user_form.save(commit=False)
         self.__user.save()
