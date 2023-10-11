@@ -3,15 +3,10 @@ from smtplib import SMTPException
 
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
-from django.db.models import Manager, Model, QuerySet
-from django.db.models.base import ModelBase
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-
-from utils.forms import INT_HIDER, INT_REVEALER
 
 logger = logging.getLogger(__name__)
 
@@ -50,11 +45,3 @@ def send_html_email(email: str, subject: str, html: str) -> bool:
         )
         return False
     return True
-
-
-def get_object_by_hashed_id_or_404(klass: ModelBase | Manager | QuerySet, hashed_id: str) -> Model:
-    return get_object_or_404(klass, pk=INT_REVEALER(hashed_id))
-
-
-def hash_id(model_object: Model) -> str:
-    return INT_HIDER(model_object.pk)
