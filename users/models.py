@@ -74,7 +74,7 @@ class UserRole(models.Model):
         related_name='users_roles'
     )
     position_name = models.CharField(
-        _('посада'),
+        _('Назва посади'),
         max_length=255,
         null=False,
         blank=False
@@ -86,10 +86,7 @@ class UserRole(models.Model):
         verbose_name_plural = _('Ролі користувача')
 
     def __str__(self):
-        return _(
-            f'{self.position_name} {self.user.full_name} із '
-            f'{self.facility_has_access_to.get_institution()}'
-            )
+        return _(f'{self.position_name}')
 
 
 class UserRoleApplication(models.Model):
