@@ -7,6 +7,6 @@ from .generic import (
     SensorListView,
 )
 from .simple import (
-    get_aggregation_status_and_last_time_run, get_facilities_choices_for_role,
+    get_aggregation_status_and_last_time_run,
     run_aggregation,
 )
