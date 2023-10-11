@@ -9,8 +9,10 @@
             <hr>
             {% include 'common/page_items_with_paginator.html' %}
         {% else %}
-            {% block no_items_heading %}
-            {% endblock %}
+            <div class="container px-0 d-flex align-items-center flex-md-wrap">
+                {% block no_items_heading %}
+                {% endblock %}
+            </div>
         {% endif %}
     </div>
 {% endblock %}
