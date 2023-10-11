@@ -1,5 +1,5 @@
-from .ajax import (get_facilities_formatted_choices_for_user_role)
 from .facility_formatting_and_ajax_related import (
+    get_facilities_formatted_choices_for_user_role,
     get_facility_name_space_padded_according_to_nesting,
     make_facility_and_descendants_choices_with_padding_according_to_nesting,
     make_institution_facilities_choices_with_padding_according_to_nesting,

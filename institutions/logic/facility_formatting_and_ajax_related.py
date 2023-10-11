@@ -1,6 +1,7 @@
 from django.utils.safestring import mark_safe
 
 from institutions.models import Facility
+from users.models import UserRole
 from utils.common import compose_secure_choices_for_queryset
 from utils.common.model_objects_crypto_related import Choices
 
@@ -21,4 +22,10 @@ def make_facility_and_descendants_choices_with_padding_according_to_nesting(faci
     return compose_secure_choices_for_queryset(
         facility.get_tree(facility),
         get_facility_name_space_padded_according_to_nesting
+    )
+
+
+def get_facilities_formatted_choices_for_user_role(role: UserRole) -> Choices:
+    return make_facility_and_descendants_choices_with_padding_according_to_nesting(
+        role.facility_has_access_to
     )
