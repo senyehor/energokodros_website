@@ -19,8 +19,9 @@ def get_institution_facilities_choices(request) -> JsonResponse:
         Facility,
         request.POST.get('institution_id')
     )
-    formatted_choices_ordered = make_institution_facilities_choices_with_padding_according_to_nesting(
-        institution
+    formatted_choices_ordered = \
+        make_institution_facilities_choices_with_padding_according_to_nesting(
+            institution
         )
     return JsonResponse(formatted_choices_ordered, safe=False)
 
