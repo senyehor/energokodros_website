@@ -35,7 +35,7 @@ class CreateUserRegistrationRequestView(CreateView):
         self.object = controller.save_user_along_with_registration_request_return_user()
         if controller.send_email_confirmation_message(self.request):
             return redirect(reverse('successfully-created-registration-request'))
-        transaction.rollback()
+        transaction.set_rollback(True)
         return HttpResponse(status=500)
 
     def form_invalid(  # noqa pylint: disable=W0221
