@@ -4,7 +4,7 @@ from factory import django
 from institutions.models import Facility
 
 
-class FacilityFactory(django.DjangoModelFactory):
+class InstitutionFactory(django.DjangoModelFactory):
     """by default creates root node"""
     name = factory.Sequence(lambda n: f'institution {n}')
     description = factory.Sequence(lambda n: f'institution {n} description')

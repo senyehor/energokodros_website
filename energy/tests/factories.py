@@ -6,7 +6,7 @@ from factory import django
 
 from energy.models import Box, BoxSensorsSet, Sensor
 from institutions.models import Facility
-from institutions.tests.factories import FacilityFactory
+from institutions.tests.factories import InstitutionFactory
 
 
 class BoxFactory(django.DjangoModelFactory):
@@ -41,7 +41,7 @@ class BoxSensorsSetManualFactory:
                  initial_number_for_subfactories_sequences: int = 1) -> BoxSensorsSetData:
         box = BoxFactory(__sequence=initial_number_for_subfactories_sequences)
         if not facility:
-            facility = FacilityFactory(__sequence=initial_number_for_subfactories_sequences)
+            facility = InstitutionFactory(__sequence=initial_number_for_subfactories_sequences)
         data = BoxSensorsSetData(facility, box)
         for i in range(cls.__SENSORS_PER_BOX):
             sensor = SensorFactory()
