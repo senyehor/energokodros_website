@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
-from energy.logic.box_with_sensors.box_identifier_validation import validate_box_identifier
+from energy.logic.box_identifier_validation import validate_box_identifier
 
 
 class Box(models.Model):
