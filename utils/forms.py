@@ -3,10 +3,8 @@ from typing import Literal
 from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div
-from django.db.models import Manager, Model, QuerySet
-from django.db.models.base import ModelBase
+from django.db.models import Model
 from django.forms import models
-from django.shortcuts import get_object_or_404
 
 from utils.crypto import IntHasher
 
@@ -27,14 +25,6 @@ class SecureModelChoiceField(models.ModelChoiceField):
         if value:
             return super().to_python(self.__int_revealer(value))
         return super().to_python(value)
-
-
-def get_object_by_hashed_id_or_404(klass: ModelBase | Manager | QuerySet, hashed_id: str) -> Model:
-    return get_object_or_404(klass, pk=INT_REVEALER(hashed_id))
-
-
-def hash_id(model_object: Model) -> str:
-    return INT_HIDER(model_object.pk)
 
 
 class CrispyFormsMixin:

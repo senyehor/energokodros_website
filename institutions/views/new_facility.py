@@ -10,7 +10,7 @@ from institutions.logic import (
     compose_formatted_institution_facilities_choices,
 )
 from institutions.models import Facility
-from utils.forms import get_object_by_hashed_id_or_404
+from utils.common import get_object_by_hashed_id_or_404
 
 
 @admin_rights_required

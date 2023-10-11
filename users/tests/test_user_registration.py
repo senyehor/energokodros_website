@@ -11,7 +11,7 @@ from institutions.tests.factories import InstitutionFactory
 from users.logic.user_registration_controller import _EmailConfirmationController  # noqa
 from users.models import UserRoleApplication
 from users.tests.factories import UserFactory
-from utils.forms import hash_id
+from utils.common import hash_id
 
 User = get_user_model()
 
