@@ -17,42 +17,42 @@ _REGEX = f'[{__ALPHABET}]' + '{%i,}' % MIN_HASH_LENGTH  # noqa pylint: disable=C
 class IntHasher:
     regex = _REGEX
 
+    @classmethod
+    def hide_int(cls, val: int) -> str:
+        if val < 0:
+            raise ValueError('only positive integers are allowed')
+        return _HASHER.encode(val)
+
+    @classmethod
+    def reveal_int(cls, val: str) -> int:
+        res = _HASHER.decode(val)
+        if len(res) != 1:
+            raise ValueError('one integer return expected, probably wrong input')
+        return res[0]
+
     def to_python(self, value: str) -> int:  # noqa
-        return reveal_int(value)
+        return self.reveal_int(value)
 
     def to_url(self, value: int) -> str:  # noqa
-        return hide_int(value)
+        return self.hide_int(value)
 
 
 class StringHasher:
     regex = _REGEX
 
+    @classmethod
+    def hide_str(cls, val: str) -> str:
+        return _HASHER.encode(*(ord(c) for c in val))
+
+    @classmethod
+    def reveal_str(cls, val: str) -> str:
+        try:
+            return ''.join(chr(c) for c in _HASHER.decode(val))
+        except ValueError as e:
+            raise ValueError('can not transform to char, probably wrong input') from e
+
     def to_python(self, value: str) -> str:  # noqa
-        return reveal_str(value)
+        return self.reveal_str(value)
 
     def to_url(self, value: str) -> str:  # noqa
-        return hide_str(value)
-
-
-def hide_int(val: int) -> str:
-    if val < 0:
-        raise ValueError('only positive integers are allowed')
-    return _HASHER.encode(val)
-
-
-def reveal_int(val: str) -> int:
-    res = _HASHER.decode(val)
-    if len(res) != 1:
-        raise ValueError('one integer return expected, probably wrong input')
-    return res[0]
-
-
-def hide_str(val: str) -> str:
-    return _HASHER.encode(*(ord(c) for c in val))
-
-
-def reveal_str(val: str) -> str:
-    try:
-        return ''.join(chr(c) for c in _HASHER.decode(val))
-    except ValueError as e:
-        raise ValueError('can not transform to char, probably wrong input') from e
+        return self.hide_str(value)
