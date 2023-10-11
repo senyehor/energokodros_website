@@ -3,22 +3,27 @@ from typing import Literal
 from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div
-from django.db import models as db_models
+from django.db.models import Manager, Model, QuerySet
+from django.db.models.base import ModelBase
 from django.forms import models
+from django.shortcuts import get_object_or_404
 
-from utils.crypto import hide_int, reveal_int
+from utils.crypto import IntHasher
+
+INT_HIDER = IntHasher.hide_int
+INT_REVEALER = IntHasher.reveal_int
 
 
 class SecureModelChoiceField(models.ModelChoiceField):
-    __int_hider = staticmethod(hide_int)
-    __int_revealer = staticmethod(reveal_int)
+    __int_hider = staticmethod(INT_HIDER)
+    __int_revealer = staticmethod(INT_REVEALER)
 
-    def prepare_value(self, value: db_models.Model | None | Literal['']) -> str:
-        if isinstance(value, db_models.Model):
+    def prepare_value(self, value: Model | None | Literal['']) -> str:
+        if isinstance(value, Model):
             return self.__int_hider(value.pk)
         return super().prepare_value(value)
 
-    def to_python(self, value: str | None) -> db_models.Model | None:
+    def to_python(self, value: str | None) -> Model | None:
         if value:
             return super().to_python(self.__int_revealer(value))
         return super().to_python(value)
@@ -33,13 +38,8 @@ def _reveal_id(hashed_id: str) -> int:
     return _._SecureModelChoiceField__int_revealer(hashed_id)  # noqa pylint: disable=W0212
 
 
-def _hide_id(_id: int) -> str:
-    """
-    think twice before using, this function is supposed to be used when
-    SecureModelChoiceField can not be used
-    """
-    _ = SecureModelChoiceField
-    return _._SecureModelChoiceField__int_hider(_id)  # noqa pylint: disable=W0212
+def hash_id(model_object: Model) -> str:
+    return INT_HIDER(model_object.pk)
 
 
 class CrispyFormsMixin:

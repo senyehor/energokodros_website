@@ -4,7 +4,7 @@ from faker import Faker
 
 from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
-from utils.forms import _hide_id  # noqa
+from utils.forms import hash_id
 
 
 class FacilityCreationTest(TestCase):
@@ -19,7 +19,7 @@ class FacilityCreationTest(TestCase):
         self.facility_description = fake.text(max_nb_chars=200)
 
     def test_creating_facility(self):
-        parent_facility_id = _hide_id(
+        parent_facility_id = hash_id(
             self.parent_facility.pk
         )
         response = self.client.post(
