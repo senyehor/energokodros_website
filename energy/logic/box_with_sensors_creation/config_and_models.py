@@ -16,9 +16,9 @@ FORMS = (
 )
 
 BOX_WITH_SENSORS_CREATION_TEMPLATES = {
-    STEPS.BOX:             'energy/box_with_sensors/box.html',
-    STEPS.SENSORS:         'energy/box_with_sensors/sensors.html',
-    STEPS.BOX_SENSORS_SET: 'energy/box_with_sensors/box_sensors_set.html',
+    STEPS.BOX:             'energy/box_with_sensors_creation/box.html',
+    STEPS.SENSORS:         'energy/box_with_sensors_creation/sensors.html',
+    STEPS.BOX_SENSORS_SET: 'energy/box_with_sensors_creation/box_sensors_set.html',
 }
 
 FORMS_ORDER_FROM_ZERO = {
