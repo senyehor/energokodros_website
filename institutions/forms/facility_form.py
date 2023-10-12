@@ -19,7 +19,6 @@ class NewFacilityForm(ModelForm, CrispyFormsMixin):
         queryset=Facility.objects.all(),
         required=True,
         label=_("Оберіть батьківський об'єкт"),
-        # todo deal with width
         widget=Select(attrs={'size': 7})
     )
 
