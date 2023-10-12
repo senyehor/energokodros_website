@@ -105,7 +105,7 @@ class UserRoleApplicationDetailTest(TestCase):
         # have to be filled in form, so they are just ''
         complete_data['position_name'] = position_name if position_name else ''
         hashed_id_or_empty_string = (
-            hash_id(facility_has_access_to.pk)
+            hash_id(facility_has_access_to)
             if facility_has_access_to
             else ''
         )
@@ -114,7 +114,7 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def __get_form_data(self) -> _user_role_application_decision_data_dict:
         # here we set data as if it was pre-populated by form
-        user_id_hashed = hash_id(self.user_role_application.user.pk)
+        user_id_hashed = hash_id(self.user_role_application.user)
         data = {
             'message_for_user': '',
             'user':             user_id_hashed
