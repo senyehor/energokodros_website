@@ -15,9 +15,9 @@
                 </a>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
-                        <a href="{% url 'profiles' %}"
-                           class="nav-link px-2 text-dark {% active_link 'profiles' %}">
-                            Ваші ролі
+                        <a href="{% url 'aggregated-consumption' %}"
+                           class="nav-link px-2 text-dark {% active_link 'aggregated-consumption' %}">
+                            Енергоспоживання
                         </a>
                     </li>
                     {% if user.is_admin %}
