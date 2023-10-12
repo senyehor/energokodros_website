@@ -19,14 +19,8 @@ function get_consumption_data_and_update() {
         dataType: 'json',
         data: __compose_aggregation_query_parameters(),
         headers: get_headers_for_ajax_object(),
-        success: (data) => {
-            CONSUMPTION_WITH_OPTIONAL_FORECAST = data.consumption_with_optional_forecast;
-            if (CONSUMPTION_WITH_OPTIONAL_FORECAST === null) {
-                add_warning_alert(NO_DATA_FOR_PARAMETERS_MESSAGE);
-                return;
-            }
-            TOTAL_CONSUMPTION = data.total_consumption;
-            draw_content();
+        success: (response) => {
+            process_consumption_data_response(response);
         },
         error: (error) => {
             if (error.responseJSON) {
@@ -38,6 +32,21 @@ function get_consumption_data_and_update() {
     });
 }
 
+function process_consumption_data_response(response) {
+    CONSUMPTION_WITH_OPTIONAL_FORECAST = response.consumption_with_optional_forecast;
+    if (CONSUMPTION_WITH_OPTIONAL_FORECAST === null) {
+        add_warning_alert(NO_DATA_FOR_PARAMETERS_MESSAGE);
+        return;
+    }
+    TOTAL_CONSUMPTION = response.total_consumption;
+    let metadata = response.metadata;
+    LABEL_INDEX_IN_RAW_DATA = metadata.indexes.label_index;
+    CONSUMPTION_INDEX_IN_RAW_DATA = metadata.indexes.value_index;
+    if (metadata.forecast_included === 'true') {
+        CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA = metadata.indexes.forecast_index;
+    }
+    draw_content();
+}
 
 function __compose_aggregation_query_parameters() {
     let _ = get_selected_option_for_select;

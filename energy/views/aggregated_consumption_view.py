@@ -30,10 +30,12 @@ def get_consumption_with_total_consumption(request: HttpRequest) -> JsonResponse
         )
         consumption_with_optional_forecast = controller.get_consumption_with_optional_forecast()
         total_consumption = controller.get_total_consumption()
+        metadata = controller.get_response_metadata()
     except EnergyConsumptionExceptionWithMessage as e:
         return JsonResponse(e.message, status=400, safe=False)
     return JsonResponse(
         {
+            'metadata':                           metadata,
             'consumption_with_optional_forecast': consumption_with_optional_forecast,
             'total_consumption':                  total_consumption
         },

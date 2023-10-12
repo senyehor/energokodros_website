@@ -1,3 +1,5 @@
+from enum import IntEnum
+
 from energy.logic.aggregated_consumption.consumption_queriers import AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
 from energy.logic.aggregated_consumption.parameters import CommonQueryParameters
@@ -13,6 +15,10 @@ from utils.types import StrStrDict
 
 
 class ConsumptionWithOptionalForecastQuerierFromRawParameter:
+    class __DataIndexes(IntEnum):
+        LABEL = 0
+        VALUE = 1
+        FORECAST = 3
 
     def __init__(self, user: User, parameters: StrStrDict):
         role = self.__extract_role(parameters)
@@ -49,6 +55,18 @@ class ConsumptionWithOptionalForecastQuerierFromRawParameter:
 
     def get_total_consumption(self) -> TotalConsumption | None:
         return self.__querier.get_formatted_total_consumption()
+
+    def get_response_metadata(self) -> dict:
+        meta = {}
+        indexes = {
+            'label_index': self.__DataIndexes.LABEL,
+            'value_index': self.__DataIndexes.VALUE,
+        }
+        if self.__parameters.include_forecast:
+            indexes['forecast_index'] = self.__DataIndexes.FORECAST
+            meta['forecast_included'] = 'true'
+        meta['indexes'] = indexes
+        return meta
 
     def __make_forecast_for_actual_consumption(
             self, raw_consumption: ConsumptionRawAndFormatted
