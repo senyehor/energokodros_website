@@ -11,6 +11,8 @@ const AVAILABLE_BUTTON_CLASS = 'btn-outline-primary';
 
 let CHOSEN_DISPLAYING_OPTION = DRAW_TABLE;
 
+let FORECAST_INCLUDED = null;
+
 let CONSUMPTION_WITH_OPTIONAL_FORECAST = null, TOTAL_CONSUMPTION = null;
 
 let CONSUMPTION_INDEX_IN_RAW_DATA = 1,
@@ -83,7 +85,7 @@ function __generate_chart_data(raw_consumption_data) {
     let labels = [];
     let consumption = [];
     let consumption_forecast = [];
-    if (_check_consumption_forecast_is_present(raw_consumption_data)) {
+    if (FORECAST_INCLUDED) {
         for (const line of raw_consumption_data) {
             labels.push(line[LABEL_INDEX_IN_RAW_DATA]);
             consumption.push(parseFloat(line[CONSUMPTION_INDEX_IN_RAW_DATA]));
