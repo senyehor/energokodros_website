@@ -1,20 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as LogView
 from django.http import HttpRequest
-from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.shortcuts import render
 from django.views import View
 
-from administrator.logic import is_admin
 from users.forms import LoginForm
 from users.logic import remember_user_for_two_week, UserRegistrationController
-
-
-@login_required
-def index_view(request: HttpRequest):
-    if is_admin(request):
-        return redirect(reverse('admin-page'))
-    return render(request, 'index.html')
 
 
 def successfully_created_registration_request(request):
