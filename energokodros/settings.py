@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'utils',
 
     'crispy_forms',
-    'django_extensions',
     'active_link',
     'treebeard'
 ]
