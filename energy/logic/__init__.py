@@ -1,1 +1,4 @@
-from .aggregated_energy_consumption_controller import AggregatedEnergyConsumptionController
+from .aggregated_consumption import (
+    AggregatedEnergyConsumptionController,
+    EnergyConsumptionExceptionWithMessage,
+)
