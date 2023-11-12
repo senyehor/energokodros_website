@@ -9,9 +9,8 @@ env = environ.Env(
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(BASE_DIR.joinpath('.env'))
 
-DEBUG = env('DEBUG')
+DEBUG = env('DEBUG', default=False)
 
 SECRET_KEY = env('SECRET_KEY')
 
@@ -106,7 +105,9 @@ USE_I18N = True
 USE_TZ = True
 # enable using timedelta objects to set session expiration time
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, STATIC_URL)]
 
@@ -127,7 +128,6 @@ EMAIL_USE_TLS = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIN_HASH_LENGTH = env.int('MIN_HASH_LENGTH')
+DEFAULT_PAGINATE_BY = env.int('DEFAULT_PAGINATE_BY')
 
 ACTIVE_LINK_STRICT = True
-
-DEFAULT_PAGINATE_BY = env.int('DEFAULT_PAGINATE_BY')
