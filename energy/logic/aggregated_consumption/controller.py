@@ -1,7 +1,7 @@
 from energy.logic.aggregated_consumption. \
-    aggregation_interval_to_parameters_parser_and_querier_mapping import \
-    (
-    AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING, ParserAndQuerier,
+    aggregation_interval_to_parameters_parser_and_querier_mapping import (
+    AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING,
+    ParserAndQuerier,
 )
 from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters,
