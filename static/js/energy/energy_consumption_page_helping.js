@@ -26,9 +26,13 @@ function update_facilities_list_for_role() {
             update_select_with_options(__get_facility_select(), ids_and_labels);
         },
         error: (error) => {
-            window.alert('Під час оновлення даних виникла помилка. ' +
+            let message = 'Під час оновлення даних виникла помилка. ' +
                 'Якщо після перезавантаження сторінки вона не зникне, ' +
-                'зверніться до адміністратора')
+                'зверніться до адміністратора'
+            if (error.message) {
+                message = error.message
+            }
+            window.alert(message)
         }
     });
 }
