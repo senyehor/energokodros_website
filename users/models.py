@@ -118,5 +118,5 @@ class UserRoleApplication(models.Model):
     def __str__(self):
         return _(f'Запит на реєстрацію від {self.user.full_name} в {self.institution}')
 
-    def on_click_link(self):
+    def get_absolute_url(self):
         return reverse('user-role-application-decision', kwargs={'pk': self.pk})
