@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Callable, Literal
 
 from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
@@ -25,6 +25,22 @@ class SecureModelChoiceField(models.ModelChoiceField):
         if value:
             return super().to_python(self.__int_revealer(value))
         return super().to_python(value)
+
+    def __init__(
+            self, queryset, *, empty_label="---------", required=True, widget=None, label=None,
+            initial=None, help_text="", to_field_name=None, limit_choices_to=None, blank=False,
+            label_from_instance_function: Callable[[Any], str] = None, **kwargs):
+        super().__init__(
+            queryset, empty_label=empty_label, required=required, widget=widget, label=label,
+            initial=initial, help_text=help_text, to_field_name=to_field_name,
+            limit_choices_to=limit_choices_to, blank=blank, **kwargs
+        )
+        self.label_from_instance_function = label_from_instance_function
+
+    def label_from_instance(self, obj):
+        if self.label_from_instance_function:
+            return self.label_from_instance_function(obj)
+        return super().label_from_instance(obj)
 
 
 class CrispyFormsMixin:

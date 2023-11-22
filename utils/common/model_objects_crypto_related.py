@@ -1,19 +1,22 @@
-from typing import TypeAlias
+from typing import Any, Callable
 
 from django.db.models import Manager, Model, QuerySet
 from django.db.models.base import ModelBase
-from django.forms import ChoiceField
 from django.shortcuts import get_object_or_404
 
 from utils.forms import INT_HIDER, INT_REVEALER, SecureModelChoiceField
 
-Choices: TypeAlias = list[tuple[str, str]]
+Choices = list[tuple[str, str]]
 
 
-def compose_choices_for_queryset(
+def compose_secure_choices_for_queryset(
         qs: QuerySet,
-        choice_field_class: type(ChoiceField) = SecureModelChoiceField) -> Choices:
-    choices = choice_field_class(queryset=qs, empty_label=None).choices
+        label_from_instance_function: Callable[[Any], str] = None
+) -> Choices:
+    choices = SecureModelChoiceField(
+        queryset=qs, empty_label=None,
+        label_from_instance_function=label_from_instance_function
+    ).choices
     return [(str(value), label) for value, label in choices]
 
 
