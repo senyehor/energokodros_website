@@ -1,8 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from institutions.models import Facility
 from institutions.logic import common_facility_choices_format_function
+from institutions.models import Facility
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField
 
 
@@ -66,7 +66,7 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
             'institution': forms.Textarea(attrs={'rows': 1})
         }
 
-    def fill_initial_from_facility(self, facility: Facility):
+    def fill_initial(self, facility: Facility):
         self.fields['name'].initial = facility.name
         self.fields['description'].initial = facility.description
         self.fields['descendants'].queryset = facility.get_descendants()

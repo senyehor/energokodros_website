@@ -47,7 +47,7 @@ class UpdateFacilityView(UpdateView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         facility = get_object_or_404(Facility, pk=self.kwargs.get('pk'))
-        data['form'].fill_initial_from_facility(facility)
+        data['form'].fill_initial(facility)
         return data
 
     def form_valid(self, form):
