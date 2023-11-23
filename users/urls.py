@@ -23,7 +23,6 @@ urlpatterns = [  # noqa
         'profiles/',
         views.ProfilesView.as_view(),
         name='profiles'
-    )
+    ),
+    path('', include('django.contrib.auth.urls'))
 ]
-
-urlpatterns.append(path('', include('django.contrib.auth.urls')))
