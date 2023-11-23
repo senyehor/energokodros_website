@@ -2,7 +2,7 @@ from django.urls import path
 
 from institutions.views import (
     CreateFacilityView, CreateInstitutionView, FacilitiesListView,
-    get_institution_facilities_choices,
+    get_institution_facilities_choices, redirect_to_edit_facility_by_post_pk, UpdateFacilityView
 )
 
 urlpatterns = [
@@ -25,5 +25,20 @@ urlpatterns = [
         'get-institution-facilities/',
         get_institution_facilities_choices,
         name='get-institution-facilities'
+    ),
+    path(
+        'edit-facility/<hashed_int:pk>',
+        UpdateFacilityView.as_view(),
+        name='edit-facility'
     )
 ]
+
+helper_urls = [
+    path(
+        'edit-facility-link-pk-in-post-redirect/',
+        redirect_to_edit_facility_by_post_pk,
+        name='edit-facility-link-by-pk-in-post-redirect'
+    )
+]
+
+urlpatterns += helper_urls

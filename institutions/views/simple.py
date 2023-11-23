@@ -1,11 +1,13 @@
 from django.contrib import messages
+from django.http import HttpRequest
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, ListView, UpdateView
 
 from administrator.logic import admin_rights_required
 from energokodros.settings import DEFAULT_PAGINATE_BY
-from institutions.forms import InstitutionForm
+from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
 from utils.filters import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
@@ -32,3 +34,31 @@ class CreateInstitutionView(FormView):
             _('Установу успішно додано')
         )
         return super().form_valid(form)
+
+
+@admin_rights_required
+class UpdateFacilityView(UpdateView):
+    model = Facility
+    form_class = FacilityEditForm
+    template_name = 'institutions/edit_facility.html'
+    success_url = reverse_lazy('facilities-list')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        facility = get_object_or_404(Facility, pk=self.kwargs.get('pk'))
+        data['form'].fill_initial_from_facility(facility)
+        return data
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            _('Установу успішно відредаговано')
+        )
+        return super().form_valid(form)
+
+
+@admin_rights_required
+def redirect_to_edit_facility_by_post_pk(request: HttpRequest):
+    return redirect(
+        reverse_lazy('edit-facility', kwargs={'pk': request.POST.get('pk')})
+    )
