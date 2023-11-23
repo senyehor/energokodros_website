@@ -50,6 +50,7 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
         required=False,
         disabled=True,
         widget=forms.Select(attrs={'size': 7}),
+        # todo fix indents
         label_from_instance_function=common_facility_choices_format_function
     )
 
