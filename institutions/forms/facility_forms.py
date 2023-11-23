@@ -66,9 +66,7 @@ class FacilityEditForm(forms.ModelForm, CrispyFormsMixin):
             'institution': forms.Textarea(attrs={'rows': 1})
         }
 
-    def fill_initial(self, facility: Facility):
-        self.fields['name'].initial = facility.name
-        self.fields['description'].initial = facility.description
+    def fill_querysets(self, facility: Facility):
         self.fields['descendants'].queryset = facility.get_descendants()
 
     def __init__(self, *args, **kwargs):
