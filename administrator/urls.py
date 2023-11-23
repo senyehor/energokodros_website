@@ -1,6 +1,7 @@
 from django.urls import include, path
 
 from administrator import views
+from users import views as users_views
 
 urlpatterns = [
     path(
@@ -22,6 +23,12 @@ urlpatterns = [
         'users-list/',
         views.UserListView.as_view(),
         name='users-list'
+    ),
+    # todo organize
+    path(
+        'edit-user/<hashed_int:pk>/',
+        users_views.EditUserView.as_view(),
+        name='edit-user'
     ),
     path('', include('institutions.urls')),
 ]

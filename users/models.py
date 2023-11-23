@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from institutions.models import Facility
@@ -48,6 +48,9 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
+
+    def get_absolute_url(self):
+        return reverse_lazy('edit-user', kwargs={'pk': self.pk})
 
     class Meta:
         db_table = 'users'
