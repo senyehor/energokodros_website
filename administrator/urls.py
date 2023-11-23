@@ -18,5 +18,10 @@ urlpatterns = [
         views.UserRoleApplicationDecisionView.as_view(),
         name='user-role-application-decision'
     ),
+    path(
+        'users-list/',
+        views.UserListView.as_view(),
+        name='users-list'
+    ),
     path('', include('institutions.urls')),
 ]
