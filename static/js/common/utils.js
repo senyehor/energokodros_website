@@ -22,6 +22,12 @@ function remove_disable_set_width_100(elem) {
     elem.addClass('w-100');
 }
 
+function generate_muted_p(text) {
+    return '<p class="fw-light text-muted">' +
+        `${text}` +
+        '</p>'
+}
+
 function add_success_alert(message) {
     __get_alerts_container_create_if_not_exists().append(__create_alert_div('success', message));
 }
