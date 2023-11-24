@@ -21,8 +21,8 @@ def __admin_right_required_class_decorator(_class: View):
 def __admin_right_required_function_decorator(function: FunctionType):
     @functools.wraps(function)
     def _wrapper(request, *args, **kwargs):
-        return function(request, *args, **kwargs) \
-            if request.user.is_authenticated and request.user.is_admin \
-            else HttpResponse(status=403)
+        if request.user.is_authenticated and request.user.is_admin:
+            return function(request, *args, **kwargs)
+        return HttpResponse(status=403)
 
     return _wrapper
