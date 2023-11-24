@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+import utils.common.admin_rights
+
 User = get_user_model()
 
 
@@ -66,4 +68,4 @@ class UserTest(TestCase):
             password=self.some_password,
             is_admin=True
         )
-        self.assertTrue(admin.is_admin)
+        self.assertTrue(utils.common.admin_rights.is_admin)

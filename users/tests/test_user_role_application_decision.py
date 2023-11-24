@@ -7,10 +7,9 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from faker import Faker
 
-from administrator.tests.factories import create_admin_client
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
-from users.tests.factories import UserRoleApplicationFactory
+from users.tests.factories import create_admin_client, UserRoleApplicationFactory
 from utils.common import hash_id
 
 
