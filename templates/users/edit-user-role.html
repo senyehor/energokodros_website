@@ -1,0 +1,25 @@
+{% extends 'common/form_in_center.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Роль користувача{% endblock %}
+{% block form_header %}
+    Роль користувача
+{% endblock %}
+{% block padding_top_class %}
+    pt-2
+{% endblock %}
+{% block width_class %}
+    w-50
+{% endblock %}
+{% block form %}
+    <form method="post">
+        {% crispy form %}
+    </form>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/users/edit_user_role.js' %}"></script>
+{% endblock %}
+{% block display_none %}
+    {#    todo add facility on click link #}
+{#    <p id='edit-facility-link-by-pk-in-post-redirect'>{% url 'edit-facility-link-by-pk-in-post-redirect' %}</p>#}
+{% endblock %}

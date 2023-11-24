@@ -83,13 +83,16 @@ class UserRole(models.Model):
         blank=False
     )
 
+    def get_absolute_url(self):
+        return reverse_lazy('edit-user-role', kwargs={'pk': self.pk})
+
     class Meta:
         db_table = 'users_roles'
         verbose_name = _('Роль користувача')
         verbose_name_plural = _('Ролі користувача')
 
     def __str__(self):
-        return _(f'{self.position_name}')
+        return _(f'{self.position_name}, {self.facility_has_access_to}')
 
 
 class UserRoleApplication(models.Model):

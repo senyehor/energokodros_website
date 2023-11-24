@@ -1,0 +1,15 @@
+{% extends 'common/__items_list_with_paginator_base.html' %}
+{% block title %}
+    Ролі
+{% endblock %}
+{% block heading %}
+    <div>
+        <h2>Список ролей</h2>
+    </div>
+    <div class="ms-auto ms-3">
+        {% include 'common/search_form.html' with filter_fields_verbose="назва установи, ім'я користувача чи назва ролі" %}
+    </div>
+{% endblock %}
+{% block no_items_heading %}
+    <h2>Ролі відсутні</h2>
+{% endblock %}

@@ -7,13 +7,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView, UpdateView
 
 from energokodros.settings import DEFAULT_PAGINATE_BY
-from users.forms import EditUserForm, LoginForm
+from users.forms import EditUserForm, EditUserRole, LoginForm
 from users.logic import remember_user_for_two_week, UserRegistrationController
 from users.logic.simple import (
     get_applications_from_users_who_confirmed_email,
     get_users_with_confirmed_email,
 )
-from users.models import User
+from users.models import User, UserRole
 from utils.common.admin_rights import admin_rights_required
 from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
@@ -36,6 +36,7 @@ class LoginView(LogView):
         return super().form_valid(form)
 
 
+@admin_rights_required
 class EditUserView(UpdateView):
     model = User
     form_class = EditUserForm
@@ -59,6 +60,27 @@ class EditUserView(UpdateView):
 
 
 @admin_rights_required
+class EditUserRoleView(UpdateView):
+    model = UserRole
+    form_class = EditUserRole
+    success_url = reverse_lazy('users-roles-list')
+    template_name = 'users/edit-user-role.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        role = get_object_or_404(UserRole, pk=self.kwargs.get('pk'))
+        data['form'].fill_initial_not_populated_automatically(role)
+        return data
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            _('Роль користувача успішно відредаговано')
+        )
+        return super().form_valid(form)
+
+
+@admin_rights_required
 class UserRoleApplicationsListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     queryset = get_applications_from_users_who_confirmed_email()
     filter_fields = ('user__full_name', 'user__email', 'institution__name')
@@ -72,3 +94,11 @@ class UserListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     filter_fields = ('full_name', 'email')
     paginate_by = DEFAULT_PAGINATE_BY
     template_name = 'users/users_list.html'
+
+
+@admin_rights_required
+class UserRoleListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+    queryset = UserRole.objects.all()
+    filter_fields = ('facility_has_access_to__name', 'user__full_name', 'position_name')
+    paginate_by = DEFAULT_PAGINATE_BY
+    template_name = 'users/users_roles_list.html'

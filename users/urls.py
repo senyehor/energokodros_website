@@ -1,5 +1,6 @@
 from django.urls import include, path
 
+from institutions.urls import helper_urls
 from users import views
 
 urlpatterns = [
@@ -43,6 +44,17 @@ admin_urls = [
         views.EditUserView.as_view(),
         name='edit-user'
     ),
+    path(
+        'users-roles-list/',
+        views.UserRoleListView.as_view(),
+        name='users-roles-list'
+    ),
+    path(
+        'edit-user-role/<hashed_int:pk>/',
+        views.EditUserRoleView.as_view(),
+        name='edit-user-role'
+    )
 ]
 
 urlpatterns += admin_urls
+

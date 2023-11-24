@@ -5,6 +5,8 @@ from .simple import (
     successfully_created_registration_request,
     EditUserView,
     UserListView,
-    UserRoleApplicationsListView
+    UserRoleApplicationsListView,
+    UserRoleListView,
+    EditUserRoleView
 )
 from .user_role_application_decision import UserRoleApplicationDecisionView
