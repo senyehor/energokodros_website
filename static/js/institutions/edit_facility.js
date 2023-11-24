@@ -7,8 +7,7 @@ $(document).ready(function () {
 function style_and_setup_descendants_select() {
     // disabled is included in django field to ignore possible input
     // but user can move to facility page by clicking a descendant
-    __get_descendants_select().removeAttr('disabled');
-    __get_descendants_select().addClass('w-100');
+    remove_disable_set_width_100(__get_descendants_select());
 }
 
 function redirect_on_descendant_click() {
