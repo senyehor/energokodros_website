@@ -41,7 +41,7 @@ class EditUserView(UpdateView):
     model = User
     form_class = EditUserForm
     success_url = reverse_lazy('users-list')
-    template_name = 'administrator/edit-user.html'
+    template_name = 'users/edit-user.html'
     # overriden due to 'user' taken by client user variable
     context_object_name = 'user_obj'
 
@@ -65,7 +65,7 @@ class UserRoleApplicationsListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, 
     queryset = get_applications_from_users_who_confirmed_email()
     filter_fields = ('user__full_name', 'user__email', 'institution__name')
     paginate_by = DEFAULT_PAGINATE_BY
-    template_name = 'administrator/users_roles_applications.html'
+    template_name = 'administrator/../../templates/users/users_roles_applications.html'
 
 
 @admin_rights_required
@@ -73,4 +73,4 @@ class UserListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     queryset = get_users_with_confirmed_email()
     filter_fields = ('full_name', 'email')
     paginate_by = DEFAULT_PAGINATE_BY
-    template_name = 'administrator/users_list.html'
+    template_name = 'administrator/../../templates/users/users_list.html'
