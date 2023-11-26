@@ -1,6 +1,5 @@
 from django.urls import include, path
 
-from institutions.urls import helper_urls
 from users import views
 
 urlpatterns = [
@@ -20,10 +19,6 @@ urlpatterns = [
         views.confirm_email,
         name='confirm-email'
     ),
-    path('', include('django.contrib.auth.urls'))
-]
-
-admin_urls = [
     path(
         'users-roles-applications/',
         views.UserRoleApplicationsListView.as_view(),
@@ -53,8 +48,16 @@ admin_urls = [
         'edit-user-role/<hashed_int:pk>/',
         views.EditUserRoleView.as_view(),
         name='edit-user-role'
-    )
+    ),
+    path('', include('django.contrib.auth.urls')),
 ]
 
-urlpatterns += admin_urls
+ajax_urls = [
+    path(
+        'edit-user-role-pk-in-post',
+        views.redirect_to_edit_role_by_post_pk,
+        name='edit-user-role-pk-in-post'
+    ),
+]
 
+urlpatterns += ajax_urls
