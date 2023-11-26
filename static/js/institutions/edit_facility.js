@@ -30,10 +30,7 @@ function redirect_on_descendant_click() {
             window.open(data.url, '_self');
         },
         error: (data) => {
-          add_error_alert('При спробі переходу сталася помилка, ' +
-              'якщо після перезавантаження сторінки проблема не зникне, ' +
-              'зверніться до адміністратора.'
-          );
+          add_error_alert(DEFAULT_UNEXPECTED_ERROR_MESSAGE);
         }
     })
 }
