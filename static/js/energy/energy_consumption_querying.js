@@ -36,9 +36,7 @@ function get_consumption_data_and_update() {
                 add_error_alert(error.message);
                 return
             }
-            add_error_alert('Під час оновлення даних виникла помилка. ' +
-                'Якщо після перезавантаження сторінки вона не зникне, ' +
-                'зверніться до адміністратора')
+            add_error_alert(DEFAULT_UNEXPECTED_ERROR_MESSAGE);
         }
     });
 }
