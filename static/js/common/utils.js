@@ -14,13 +14,13 @@ function reverse_url(url_name) {
 
 function update_select_with_options(select, options) {
     select.empty();
+    let options_html = '';
     for (const id_label_object_index in (options)) {
         let value = options[id_label_object_index][0];
         let label = options[id_label_object_index][1];
-        select.append(
-            `<option value="${value}">${label}</option>`
-        )
+        options_html += `<option value="${value}">${label}</option>`;
     }
+    select.append(options_html);
 }
 
 function remove_disable_set_width_100(elem) {
