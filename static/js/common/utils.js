@@ -1,3 +1,8 @@
+const DEFAULT_UNEXPECTED_ERROR_MESSAGE = '' +
+    'Сталася непередбачена помилка, ' +
+    'якщо після перезавантаження сторінки проблема не зникне, ' +
+    'зверніться до адміністратора.'
+
 function get_selected_option_for_select(select) {
     return select.find('option:selected').val();
 }
