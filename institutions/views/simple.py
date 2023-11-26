@@ -57,7 +57,6 @@ class UpdateFacilityView(UpdateView):
         return super().form_valid(form)
 
 
-@admin_rights_required
 def redirect_to_edit_facility_by_post_pk(request: HttpRequest):
     facility = get_object_by_hashed_id_or_404(Facility, request.POST.get('pk'))
     return JsonResponse(
