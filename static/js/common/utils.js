@@ -28,7 +28,12 @@ function remove_disabled_set_width_100(elem) {
     elem.addClass('w-100');
 }
 
-function generate_muted_p(text) {
+function add_muted_text_after_div_label(div, text) {
+    div.find('label').after(__generate_muted_p(text));
+}
+
+
+function __generate_muted_p(text) {
     return '<p class="fw-light text-muted">' +
         `${text}` +
         '</p>'
