@@ -1,8 +1,3 @@
-const DEFAULT_UNEXPECTED_ERROR_MESSAGE = '' +
-    'Сталася непередбачена помилка, ' +
-    'якщо після перезавантаження сторінки проблема не зникне, ' +
-    'зверніться до адміністратора.'
-
 function get_selected_option_for_select(select) {
     return select.find('option:selected').val();
 }
@@ -66,3 +61,10 @@ function __get_alerts_container_create_if_not_exists() {
     }
     return $("#alerts");
 }
+
+const DEFAULT_UNEXPECTED_ERROR_MESSAGE = '' +
+    'Сталася непередбачена помилка, ' +
+    'якщо після перезавантаження сторінки проблема не зникне, ' +
+    'зверніться до адміністратора.'
+
+const ON_CLICK_REDIRECTS_TEXT = 'При натисканні вас перенаправить на її сторінку'

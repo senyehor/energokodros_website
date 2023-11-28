@@ -23,14 +23,14 @@ function style_and_setup_selects() {
 function add_descendants_select_on_click_label() {
     add_muted_text_after_div_label(
         __get_descendants_div(),
-        'При натисканні на об‘єкт вас перенаправить на його сторінку'
+        ON_CLICK_REDIRECTS_TEXT
     );
 }
 
 function add_roles_on_click_label() {
     add_muted_text_after_div_label(
         __get_roles_for_facility_select_div(),
-        'При натисканні на роль вас перенаправить на її сторінку'
+        ON_CLICK_REDIRECTS_TEXT
     );
 }
 
