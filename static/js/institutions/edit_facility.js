@@ -10,47 +10,32 @@ function style_and_setup_selects() {
 
     add_descendants_select_on_click_label();
     add_roles_on_click_label();
-    
-    __get_descendants_select().change(redirect_on_descendant_click);
+
+    __get_descendants_select().change(
+        redirect_from_selected_option_and_clear_selected_on_click('edit-facility-pk-in-post')
+    );
+    __get_roles_for_facility_select().change(
+        redirect_from_selected_option_and_clear_selected_on_click('edit-user-role-pk-in-post')
+    );
 }
 
-function redirect_on_descendant_click() {
-    let descendant_id = get_selected_option_for_select(__get_descendants_select());
-    $.ajax({
-        url: reverse_url('edit-facility-pk-in-post'),
-        type: 'POST',
-        dataType:'json',
-        headers: {
-            'X-CSRFToken': $.cookie('csrftoken')
-        },
-        data: {
-            'pk': descendant_id
-        },
-        success: (data) => {
-            window.open(data.url, '_self');
-        },
-        error: (data) => {
-          add_error_alert(DEFAULT_UNEXPECTED_ERROR_MESSAGE);
-        }
-    })
-}
 
 function add_descendants_select_on_click_label() {
-    const on_click_redirects = generate_muted_p(
+    add_muted_text_after_div_label(
+        __get_descendants_div(),
         'При натисканні на об‘єкт вас перенаправить на його сторінку'
     );
-    __get_descendants_label().after(on_click_redirects);
 }
 
 function add_roles_on_click_label() {
-    const on_click_redirects = generate_muted_p(
+    add_muted_text_after_div_label(
+        __get_roles_for_facility_select_div(),
         'При натисканні на роль вас перенаправить на її сторінку'
     );
-    __get_roles_for_facility_select_label().after(on_click_redirects);
 }
 
-function __get_descendants_label() {
-    return $('#div_id_descendants label');
+function __get_descendants_div() {
+    return $('#div_id_descendants');
 }
 
 
@@ -58,8 +43,8 @@ function __get_descendants_select() {
     return $('#id_descendants')
 }
 
-function __get_roles_for_facility_select_label() {
-    return $('#div_id_roles_that_have_access_to_this_facility label');
+function __get_roles_for_facility_select_div() {
+    return $('#div_id_roles_that_have_access_to_this_facility');
 }
 
 function __get_roles_for_facility_select() {
