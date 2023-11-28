@@ -1,6 +1,8 @@
 from django.urls import include, path
 
 from users import views
+from users.models import UserRole
+from utils.common import redirect_to_object_pk_in_post
 
 urlpatterns = [
     path('login/', views.LoginView.as_view()),
@@ -55,7 +57,7 @@ urlpatterns = [
 ajax_urls = [
     path(
         'edit-user-role-pk-in-post',
-        views.redirect_to_edit_role_by_post_pk,
+        redirect_to_object_pk_in_post(UserRole, 'edit-user-role'),
         name='edit-user-role-pk-in-post'
     ),
 ]
