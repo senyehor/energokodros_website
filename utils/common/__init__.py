@@ -3,3 +3,4 @@ from .model_objects_crypto_related import (
     Choices, compose_secure_choices_for_queryset, get_object_by_hashed_id_or_404, hash_id,
 )
 from .admin_rights import admin_rights_required, is_admin
+from .ajax import redirect_to_object_pk_in_post
