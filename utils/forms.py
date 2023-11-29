@@ -4,7 +4,7 @@ from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div
 from django.db.models import Model
-from django.forms import models
+from django.forms import models, Select
 
 from utils.crypto import IntHasher
 
@@ -51,7 +51,7 @@ class CrispyFormsMixin:
             raise AttributeError('your did not provide Meta class or fields_to_hide in it') from e
 
     @property
-    def helper(self):
+    def helper(self) -> FormHelper:
         if not hasattr(self, '_helper'):
             self.helper = FormHelper(self)
         return self._helper
@@ -77,3 +77,15 @@ class CrispyFormsMixin:
             css_class='btn btn-primary mt-4',
             type='submit'
         )
+
+
+class SelectWithFormControlClass(Select):
+    """
+    when rendering with {% crispy %} form select widget has no form-control,
+    so this class adds it
+    """
+
+    def get_context(self, name, value, attrs):
+        ctx = super().get_context(name, value, attrs)
+        ctx['widget']['attrs']['class'] = 'form-control'
+        return ctx
