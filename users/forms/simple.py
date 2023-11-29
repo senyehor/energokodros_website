@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
-from django.forms import ChoiceField
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
@@ -32,6 +31,7 @@ class UserRoleApplicationForm(forms.ModelForm, CrispyFormsMixin):
     institution = SecureModelChoiceField(
         label=_('Оберіть заклад'),
         queryset=Facility.objects.get_institutions(),
+        widget=SelectWithFormControlClass({'size': 4}),
         required=True
     )
     message = forms.CharField(
@@ -64,7 +64,7 @@ class EditUserForm(forms.ModelForm, CrispyFormsMixin):
         empty_label=None,
         required=False,
         disabled=True,
-        widget=forms.Select(attrs={'size': 4}),
+        widget=SelectWithFormControlClass(attrs={'size': 4}),
         label_from_instance_function=format_user_role
     )
     full_name = forms.CharField(
