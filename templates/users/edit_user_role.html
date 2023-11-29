@@ -12,14 +12,13 @@
     w-50
 {% endblock %}
 {% block form %}
-    <form method="post">
-        {% crispy form %}
-    </form>
+    {% crispy form %}
 {% endblock %}
 {% block scripts %}
     <script src="{% static 'js/users/edit_user_role.js' %}"></script>
+    <script src="{% static 'js/common/ajax.js' %}"></script>
 {% endblock %}
 {% block display_none %}
-    {#    todo add facility on click link #}
-{#    <p id='edit-facility-pk-in-post'>{% url 'edit-facility-pk-in-post' %}</p>#}
+    <p id='edit-user-pk-in-post'>{% url 'edit-user-pk-in-post' %}</p>
+    <p id='edit-facility-pk-in-post'>{% url 'edit-facility-pk-in-post' %}</p>
 {% endblock %}

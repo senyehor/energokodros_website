@@ -1,11 +1,13 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
+from django.forms import ChoiceField
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
 from users.logic.simple import format_user_role
 from users.models import User, UserRole, UserRoleApplication
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField
+from utils.common import object_to_queryset
+from utils.forms import CrispyFormsMixin, SecureModelChoiceField, SelectWithFormControlClass
 
 
 class LoginForm(auth_forms.AuthenticationForm):
@@ -91,15 +93,23 @@ class EditUserForm(forms.ModelForm, CrispyFormsMixin):
 
 
 class EditUserRole(forms.ModelForm, CrispyFormsMixin):
-    user_info = forms.CharField(
+    # should be prepopulated in corresponding method
+    user_info = SecureModelChoiceField(
+        queryset=User.objects.none(),
         label=_("Користувач"),
         required=False,
         disabled=True,
+        empty_label=None,
+        widget=SelectWithFormControlClass(attrs={'size': 1}),
     )
-    facility_has_access_to_info = forms.CharField(
+    # should be prepopulated in corresponding method
+    facility_has_access_to_info = SecureModelChoiceField(
+        queryset=Facility.objects.none(),
         label=_("Об'єкт"),
         required=False,
         disabled=True,
+        empty_label=None,
+        widget=SelectWithFormControlClass(attrs={'size': 1}),
     )
 
     class Meta:
@@ -107,8 +117,9 @@ class EditUserRole(forms.ModelForm, CrispyFormsMixin):
         fields = ('position_name',)
 
     def fill_initial_not_populated_automatically(self, role: UserRole):
-        self.fields['user_info'].initial = str(role.user)
-        self.fields['facility_has_access_to_info'].initial = str(role.facility_has_access_to)
+        self.fields['user_info'].queryset = object_to_queryset(role.user)
+        self.fields['facility_has_access_to_info'].queryset = \
+            object_to_queryset(role.facility_has_access_to)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
