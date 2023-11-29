@@ -9,6 +9,7 @@ from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
 from utils.common import admin_rights_required, get_object_by_hashed_id_or_404
+from utils.forms import EditObjectUpdateViewMixin
 from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
@@ -43,15 +44,4 @@ class EditFacilityView(EditObjectUpdateViewMixin, UpdateView):
     template_name = 'institutions/edit_facility.html'
     success_url = reverse_lazy('facilities-list')
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        facility = get_object_or_404(Facility, pk=self.kwargs.get('pk'))
-        data['form'].fill_initial_not_populated_automatically(facility)
-        return data
-
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            _('Установу успішно відредаговано')
-        )
-        return super().form_valid(form)
+    edit_success_message = _('Установу успішно відредаговано')

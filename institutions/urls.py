@@ -3,7 +3,7 @@ from django.urls import path
 from institutions.models import Facility
 from institutions.views import (
     CreateFacilityView, CreateInstitutionView, FacilitiesListView,
-    get_institution_facilities_choices, UpdateFacilityView,
+    get_institution_facilities_choices, EditFacilityView,
 )
 from utils.common import redirect_to_object_pk_in_post
 
@@ -30,7 +30,7 @@ urlpatterns = [
     ),
     path(
         'edit-facility/<hashed_int:pk>',
-        UpdateFacilityView.as_view(),
+        EditFacilityView.as_view(),
         name='edit-facility'
     )
 ]
