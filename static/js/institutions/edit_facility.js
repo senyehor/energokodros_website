@@ -5,8 +5,8 @@ $(document).ready(function () {
 function style_and_setup_selects() {
     // disabled is included in django field to ignore possible input
     // but user can move to facility or role page by clicking a descendant
-    remove_disabled_set_width_100(__get_descendants_select());
-    remove_disabled_set_width_100(__get_roles_for_facility_select());
+    __get_descendants_select().removeAttr('disabled');
+    __get_roles_for_facility_select().removeAttr('disabled');
 
     add_descendants_select_on_click_label();
     add_roles_on_click_label();

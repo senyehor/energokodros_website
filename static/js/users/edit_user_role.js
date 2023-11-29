@@ -14,8 +14,8 @@ $(document).ready(function () {
 })
 
 function style_selects() {
-    remove_disabled_set_width_100(__get_user_role_owner_select());
-    remove_disabled_set_width_100(__get_facility_role_has_access_to_select());
+    __get_user_role_owner_select().removeAttr('disabled');
+    __get_facility_role_has_access_to_select().removeAttr('disabled');
     // removing arrows as select is used to provide id to redirect on click
     __get_user_role_owner_select().css('appearance', 'none');
     __get_facility_role_has_access_to_select().css('appearance', 'none');

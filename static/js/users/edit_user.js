@@ -8,7 +8,7 @@ $(document).ready(function () {
 })
 
 function style_roles_select() {
-    remove_disabled_set_width_100(__get_roles_select());
+    __get_roles_select().removeAttr('disabled');
 }
 
 function __get_roles_select() {
