@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from users.forms import UserRoleApplicationRequestsDecisionForm
-from users.models import UserRoleApplication
+from users.models import UserRole, UserRoleApplication
 from utils.common import try_send_email_add_warning_if_failed
 
 
@@ -36,7 +36,9 @@ class UserRoleApplicationReviewController:
         messages.success(self.request, message)
 
     def __create_user_role(self):
-        self.application_decision_form.save()
+        user_role_without_user: UserRole = self.application_decision_form.instance
+        user_role_without_user.user = self.application.user
+        user_role_without_user.save()
 
     def __notify_on_role_application_decision(self):
         if self.is_approved:
@@ -54,11 +56,4 @@ class UserRoleApplicationReviewController:
             self.application.user.email,
             subject,
             message
-        )
-
-    @staticmethod
-    def get_application_decision_form_for_application(application: UserRoleApplication) \
-            -> UserRoleApplicationRequestsDecisionForm:
-        return UserRoleApplicationRequestsDecisionForm.create_from_role_application(
-            application
         )
