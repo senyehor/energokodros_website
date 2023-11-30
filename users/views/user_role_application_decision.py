@@ -1,12 +1,20 @@
+from enum import Enum
+
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from users.forms import UserRoleApplicationRequestsDecisionForm
 from users.logic import check_user_has_no_roles, UserRoleApplicationReviewController
 from users.models import UserRoleApplication
 from utils.common import admin_rights_required
+
+
+class DECISIONS(str, Enum):
+    DECISION_ARGUMENT = 'decision'
+    ACCEPT = 'accept'
+    DECLINE = 'decline'
 
 
 @admin_rights_required
@@ -29,29 +37,30 @@ class UserRoleApplicationDecisionView(FormView):
         form = self.form_class(request.POST or None)
         if self.__application_approved_but_form_invalid(form):
             return self.form_invalid(form)
+        # noinspection PyAttributeOutsideInit
         self.controller = UserRoleApplicationReviewController(
             form,
             self.__get_application_request(),
             self.request,
-            self.application_approved
+            self.is_application_approved
         )
-        return self.form_valid()
+        return self.form_valid(form)
 
-    def form_valid(self):  # noqa pylint: disable=W0221
+    def form_valid(self, form):
         self.controller.process_depending_on_decision()
-        return redirect(reverse('users-roles-applications'))
+        return super().form_valid(form)
 
     def __get_application_request(self):
         return get_object_or_404(UserRoleApplication, pk=self.kwargs['pk'])
 
     def __application_approved_but_form_invalid(
             self, form: UserRoleApplicationRequestsDecisionForm):
-        return self.application_approved and not form.is_valid()
+        return self.is_application_approved and not form.is_valid()
 
     @property
-    def application_approved(self):
-        return self.request.POST['decision'] == 'accept'
+    def is_application_approved(self):
+        return self.request.POST[DECISIONS.DECISION_ARGUMENT] == DECISIONS.ACCEPT
 
     @property
-    def application_declined(self):
-        return not self.application_approved
+    def is_application_declined(self):
+        return not self.is_application_approved

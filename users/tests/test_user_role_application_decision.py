@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import TypedDict
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,18 +9,15 @@ from faker import Faker
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
 from users.tests.factories import create_admin_client, UserRoleApplicationFactory
+from users.views.user_role_application_decision import DECISIONS
 from utils.common import hash_id
 
 
 class UserRoleApplicationDetailTest(TestCase):
-    class _DECISIONS(Enum):
-        ACCEPT = 'accept'
-        DECLINE = 'decline'
-
     _user_role_application_decision_data_dict = TypedDict(
         '_user_role_application_decision_data_dict',
         {
-            'decision':               _DECISIONS,  # noqa
+            'decision':               str,
             'message_for_user':       str,
             'position_name':          str,
             'user':                   str,
@@ -39,7 +35,7 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def test_accepting_application(self):
         resp = self.send_decision(
-            decision=self._DECISIONS.ACCEPT,
+            decision=DECISIONS.ACCEPT,
             facility_has_access_to=self.user_role_application.institution,
             position_name=self.position_to_grant_user,
         )
@@ -64,7 +60,7 @@ class UserRoleApplicationDetailTest(TestCase):
 
     def test_declining_application(self):
         resp = self.send_decision(
-            self._DECISIONS.DECLINE
+            DECISIONS.DECLINE
         )
         self.assertEqual(
             200,
@@ -78,7 +74,7 @@ class UserRoleApplicationDetailTest(TestCase):
         self.__check_user_application_is_deleted()
 
     def send_decision(
-            self, decision: _DECISIONS,
+            self, decision: DECISIONS,
             facility_has_access_to: Facility = None, position_name: str = None) -> HttpResponse:
         return self.admin_client.post(
             reverse(
@@ -87,7 +83,7 @@ class UserRoleApplicationDetailTest(TestCase):
             ),
             {
                 **self.__complete_data(
-                    decision.value,
+                    decision,
                     position_name,
                     facility_has_access_to
                 )
@@ -96,10 +92,12 @@ class UserRoleApplicationDetailTest(TestCase):
         )
 
     def __complete_data(
-            self, decision: str,
+            self, decision: DECISIONS,
             position_name: str | None, facility_has_access_to: Facility | None):
         complete_data = self.__get_form_data()
-        complete_data['decision'] = decision
+        # due to using enum pycharm thinks that .value is a method,
+        # but at runtime it is a property
+        complete_data['decision'] = decision.value  # noqa
         # when declining application neither position nor facility_has_access_to
         # have to be filled in form, so they are just ''
         complete_data['position_name'] = position_name if position_name else ''
