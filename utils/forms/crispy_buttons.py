@@ -1,14 +1,13 @@
-from typing import Tuple
-
 from crispy_forms.bootstrap import StrictButton
 from django.utils.translation import gettext as _
+
+from utils.types import StrTuple
 
 COMMON_CSS_CLASSES = 'btn mt-4'
 DEFAULT_BUTTON_VALUE = 'submit'
 DEFAULT_BUTTON_NAME = 'submit'
 DEFAULT_BUTTON_TYPE = 'submit'
 DEFAULT_DELETE_VALUE = 'delete'
-StrTuple = Tuple[str, ...]
 
 
 def create_button(
