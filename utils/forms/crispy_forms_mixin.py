@@ -32,3 +32,6 @@ class CrispyFormsMixin:
             self.order_fields(self.Meta.fields_order)
         except AttributeError:
             return
+
+    def add_button(self, button: StrictButton):
+        self.helper.layout.append(button)
