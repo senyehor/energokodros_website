@@ -19,6 +19,7 @@ class CreateUserRegistrationRequestView(CreateView):
         return ctx
 
     def post(self, request, *args, **kwargs):
+        # noinspection PyAttributeOutsideInit
         self.object = None
         user_form = self.form_class(self.request.POST or None)
         role_application_without_user = UserRoleApplicationForm(
@@ -32,6 +33,7 @@ class CreateUserRegistrationRequestView(CreateView):
     def form_valid(self, user_form: NewUserForm,  # noqa pylint: disable=W0221
                    role_application_without_user_form: UserRoleApplicationForm):
         controller = UserRegistrationController(user_form, role_application_without_user_form)
+        # noinspection PyAttributeOutsideInit
         self.object = controller.save_user_along_with_registration_request_return_user()
         if controller.send_email_confirmation_message(self.request):
             return redirect(reverse('successfully-created-registration-request'))
