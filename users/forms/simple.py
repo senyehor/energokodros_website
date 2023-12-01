@@ -8,7 +8,7 @@ from users.logic import format_user_role
 from users.models import User, UserRole, UserRoleApplication
 from utils.common import object_to_queryset
 from utils.forms import (
-    CrispyFormsMixin, SecureModelChoiceField,
+    create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
     SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
 )
 
@@ -48,6 +48,7 @@ class UserRoleApplicationForm(CrispyFormsMixin, forms.ModelForm):
     class Meta:
         model = UserRoleApplication
         fields = ('institution', 'message')
+        buttons = (create_primary_button(_('Відправити заявку на ролі')),)
 
     def set_application_request_user(self, user: User):
         self.instance.user = user
