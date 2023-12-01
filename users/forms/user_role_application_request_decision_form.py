@@ -13,8 +13,8 @@ from utils.forms import (
 
 class UserRoleApplicationRequestsDecisionForm(CrispyFormsMixin, forms.ModelForm):
     """This form must be created from a user role application"""
-    # facility_has_access_to and user are prepopulated in create_from_role_application method but
-    # set here to corresponding fields to be correctly converted to python object on submission
+    # qs set to all to allow any facility to be chosen
+    # correct qs for institution is set in custom creating method
     facility_has_access_to = SecureModelChoiceField(
         label=_("Оберіть об'єкт до якого користувач матиме доступ"),
         queryset=Facility.objects.all(),
@@ -33,6 +33,25 @@ class UserRoleApplicationRequestsDecisionForm(CrispyFormsMixin, forms.ModelForm)
         max_length=255,
         required=False,
         widget=forms.Textarea({'rows': 2})
+    )
+    # info readonly fields
+    user_with_email = forms.CharField(
+        label=_('Користувач та пошта'),
+        max_length=255,
+        widget=forms.TextInput({'readonly': 'readonly'}),
+        required=False
+    )
+    institution_verbose = forms.CharField(
+        label=_('Установа'),
+        max_length=255,
+        widget=forms.TextInput({'readonly': 'readonly'}),
+        required=False
+    )
+    message_from_user = forms.CharField(
+        label=_('Повідомлення від користувача'),
+        max_length=255,
+        widget=forms.Textarea({'rows': 2, 'readonly': 'readonly'}),
+        required=False
     )
 
     class Meta:
@@ -65,36 +84,18 @@ class UserRoleApplicationRequestsDecisionForm(CrispyFormsMixin, forms.ModelForm)
 
     # pylint bug so have to be disabled pylint: disable-next=W0238
     def __additionally_setup_form(self, application_request: UserRoleApplication):
-        self.__add_facility_has_access_to_field(application_request.institution)
-        self.__add_readonly_prepopulated_fields(application_request)
+        self.__set_correct_queryset_for_facility_has_access_to(application_request.institution)
+        self.__populate_info_fields(application_request)
 
-    def __add_facility_has_access_to_field(self, institution: Facility):
+    def __set_correct_queryset_for_facility_has_access_to(self, institution: Facility):
         self.fields['facility_has_access_to'].queryset = \
             Facility.objects.get_all_institution_objects(institution)
 
-    def __add_readonly_prepopulated_fields(self, application_request: UserRoleApplication):
-        # these fields will not be used in UserRole creation, so required = False
-        self.fields['user_with_email'] = forms.CharField(
-            label=_('Користувач та пошта'),
-            max_length=255,
-            initial=_(f'{application_request.user} {application_request.user.email}'),
-            widget=forms.TextInput({'readonly': 'readonly'}),
-            required=False
-        )
-        self.fields['institution_verbose'] = forms.CharField(
-            label=_('Установа'),
-            max_length=255,
-            initial=_(str(application_request.institution)),
-            widget=forms.TextInput({'readonly': 'readonly'}),
-            required=False
-        )
-        self.fields['message_from_user'] = forms.CharField(
-            label=_('Повідомлення від користувача'),
-            max_length=255,
-            initial=_(application_request.message),
-            widget=forms.Textarea({'rows': 2, 'readonly': 'readonly'}),
-            required=False
-        )
+    def __populate_info_fields(self, application_request: UserRoleApplication):
+        self.fields['institution_verbose'].initial = _(str(application_request.institution))
+        self.fields['user_with_email'].initial = \
+            _(f'{application_request.user} {application_request.user.email}')
+        self.fields['message_from_user'].initial = _(application_request.message)
 
     def get_message_for_user(self) -> str:
         return self.data['message_for_user']
