@@ -1,5 +1,8 @@
+from typing import Iterable
+
 from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
+from django.forms import Form
 
 
 class CrispyFormsMixin:
@@ -8,31 +11,24 @@ class CrispyFormsMixin:
     by corresponding crispy tag
     """
 
-    @property
-    def helper(self) -> FormHelper:
-        if not hasattr(self, '_helper'):
-            self.helper = FormHelper(self)
-        return self._helper
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__order_fields_if_present()
+        self.helper = FormHelper(self)
+        self.__add_buttons()
 
-    @helper.setter
-    def helper(self, value):
-        # noinspection PyAttributeOutsideInit
-        self._helper = value
+    def __add_buttons(self):
+        try:
+            # noinspection PyUnresolvedReferences
+            buttons: Iterable[StrictButton] = self.Meta.buttons
+        except AttributeError:
+            return
+        for button in buttons:
+            self.helper.layout.append(button)
 
-    def add_submit_button_at_the_end(self, text: str, value: str = 'submit', name: str = 'submit'):
-        self.helper.layout.append(
-            self.__generate_submit_type_button(
-                text,
-                value,
-                name
-            )
-        )
-
-    def __generate_submit_type_button(self, text: str, value: str, name: str) -> StrictButton:
-        return StrictButton(
-            text,
-            name=name,
-            value=value,
-            css_class='btn btn-primary mt-4',
-            type='submit'
-        )
+    def __order_fields_if_present(self: Form):
+        try:
+            # noinspection PyUnresolvedReferences
+            self.order_fields(self.Meta.fields_order)
+        except AttributeError:
+            return
