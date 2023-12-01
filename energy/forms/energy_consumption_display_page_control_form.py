@@ -15,7 +15,7 @@ AGGREGATION_INTERVAL_CHOICES = (
 )
 
 
-class EnergyConsumptionDisplayPageControlForm(Form, CrispyFormsMixin):
+class EnergyConsumptionDisplayPageControlForm(CrispyFormsMixin, Form):
     """must be created for user using corresponding method,
     and some fields are added in the template"""
     # correct qs for role is set in __init__

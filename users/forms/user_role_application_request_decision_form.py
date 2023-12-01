@@ -4,11 +4,14 @@ from django.utils.translation import gettext_lazy as _
 
 from institutions.logic import common_facility_choices_format_function
 from institutions.models import Facility
-from users.models import User, UserRole, UserRoleApplication
-from utils.forms import CrispyFormsMixin, SecureModelChoiceField, SelectWithFormControlClass
+from users.models import UserRole, UserRoleApplication
+from utils.forms import (
+    create_danger_button, create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
+    SelectWithFormControlClass,
+)
 
 
-class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin):
+class UserRoleApplicationRequestsDecisionForm(CrispyFormsMixin, forms.ModelForm):
     """This form must be created from a user role application"""
     # facility_has_access_to and user are prepopulated in create_from_role_application method but
     # set here to corresponding fields to be correctly converted to python object on submission
@@ -41,6 +44,18 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
             'message_from_user',
         )
         fields_order = info_readonly_fields + fields + ('message_for_user',)
+        buttons = (
+            create_primary_button(
+                _('Підтвердити'),
+                name='decision',
+                value='accept'
+            ),
+            create_danger_button(
+                _('Відхилити'),
+                name='decision',
+                value='decline'
+            )
+        )
 
     @classonlymethod
     def create_from_role_application(cls, application_request: UserRoleApplication):
@@ -50,12 +65,10 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
 
     # pylint bug so have to be disabled pylint: disable-next=W0238
     def __additionally_setup_form(self, application_request: UserRoleApplication):
-        self.__add_object_has_access_to_field(application_request.institution)
+        self.__add_facility_has_access_to_field(application_request.institution)
         self.__add_readonly_prepopulated_fields(application_request)
-        self.order_fields(self.Meta.fields_order)
-        self.__add_decision_buttons()
 
-    def __add_object_has_access_to_field(self, institution: Facility):
+    def __add_facility_has_access_to_field(self, institution: Facility):
         self.fields['facility_has_access_to'].queryset = \
             Facility.objects.get_all_institution_objects(institution)
 
@@ -81,19 +94,6 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
             initial=_(application_request.message),
             widget=forms.Textarea({'rows': 2, 'readonly': 'readonly'}),
             required=False
-        )
-
-    def __add_decision_buttons(self):
-        button_name = 'decision'
-        self.add_submit_button_at_the_end(
-            _('Підтвердити'),
-            'accept',
-            button_name
-        )
-        self.add_submit_button_at_the_end(
-            _('Відхилити'),
-            'decline',
-            button_name
         )
 
     def get_message_for_user(self) -> str:
