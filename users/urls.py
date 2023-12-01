@@ -27,7 +27,7 @@ urlpatterns = [
         name='users-roles-applications'
     ),
     path(
-        'user-role-application-decision/<hashed_int:pk>',
+        'user-role-application-decision/<hashed_int:pk>/',
         views.UserRoleApplicationDecisionView.as_view(),
         name='user-role-application-decision'
     ),
