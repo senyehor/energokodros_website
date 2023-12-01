@@ -20,9 +20,6 @@ class UserRoleApplicationRequestsDecisionForm(forms.ModelForm, CrispyFormsMixin)
         label_from_instance_function=common_facility_choices_format_function,
         widget=SelectWithFormControlClass({'size': 6})
     )
-    user = SecureModelChoiceField(
-        queryset=User.objects.all(),
-    )
     position_name = forms.CharField(
         label=_('Уведіть назву позиції'),
         max_length=255,
