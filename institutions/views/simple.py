@@ -7,8 +7,7 @@ from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
 from utils.common import admin_rights_required
-from utils.forms import EditObjectUpdateViewMixin
-from utils.list_view_filtering import QuerySetFieldsIcontainsFilterPkOrderedMixin
+from utils.forms import EditObjectUpdateViewMixin, QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
 @admin_rights_required
