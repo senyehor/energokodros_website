@@ -2,14 +2,9 @@
 {% block title %}
     Ролі
 {% endblock %}
-{% block heading %}
-    <div>
-        <h2>Список ролей</h2>
-    </div>
-    <div class="ms-auto ms-3">
-        {% include 'common/search_form.html' with filter_fields_verbose="назва установи, ім'я користувача чи назва ролі" %}
-    </div>
+{% block heading_text %}
+    Список ролей
 {% endblock %}
-{% block no_items_heading %}
-    <h2>Ролі відсутні</h2>
+{% block search_form %}
+    {% include 'common/search_form.html' with filter_fields_verbose="назва установи, ім'я користувача чи назва ролі" %}
 {% endblock %}

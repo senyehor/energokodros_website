@@ -1,18 +1,21 @@
 {% extends 'common/base.html' %}
 {% block content %}
     <div class="container" id="id_main_container">
-        {% if page_obj.object_list %}
-            <div class="container px-0 d-flex align-items-center flex-md-wrap">
-                {% block heading %}
+        <div class="container px-0 d-flex align-items-center flex-md-wrap">
+            <div>
+                <h2>
+                    {% block heading_text %}
+                    {% endblock %}
+                </h2>
+            </div>
+            {% block heading_buttons %}
+            {% endblock %}
+            <div class="ms-auto ms-3">
+                {% block search_form %}
                 {% endblock %}
             </div>
-            <hr>
-            {% include 'common/page_items_with_paginator.html' %}
-        {% else %}
-            <div class="container px-0 d-flex align-items-center flex-md-wrap">
-                {% block no_items_heading %}
-                {% endblock %}
-            </div>
-        {% endif %}
+        </div>
+        <hr>
+        {% include 'common/page_items_with_paginator.html' %}
     </div>
 {% endblock %}
