@@ -5,6 +5,9 @@ from typing import TypeAlias, TypedDict
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from institutions.models import Facility
 
+AnyQueryParameters: TypeAlias = 'CommonQueryParameters'
+HOUR: TypeAlias = int
+
 
 class EnergyConsumptionQueryRawParameters(TypedDict):
     role: str
@@ -25,9 +28,6 @@ class CommonQueryParameters:
     period_end: date
 
 
-HOUR: TypeAlias = int
-
-
 @dataclass(frozen=True, kw_only=True)
 class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     aggregation_interval = AggregationIntervalSeconds.ONE_HOUR
@@ -36,8 +36,3 @@ class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
 
     def is_hours_filtering_set(self):
         return bool(self.hours_filtering_start_hour and self.hours_filtering_end_hour)
-
-
-AnyQueryParameters: TypeAlias = \
-    CommonQueryParameters | \
-    OneHourAggregationIntervalQueryParameters

@@ -1,4 +1,4 @@
-from typing import TypeAlias
+from typing import Type
 
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters_parsers import (
@@ -12,12 +12,13 @@ from energy.logic.aggregated_consumption.queriers import (
 
 __DEFAULT_QUERY_PARAMETERS_PARSER = CommonPostQueryParametersParser
 
-ParserAndQuerier: TypeAlias = tuple[AnyParametersParser, AnyQuerier]
+ParserAndQuerier = tuple[AnyParametersParser, AnyQuerier]
+ParserAndQuerierTypes = tuple[Type[AnyParametersParser], Type[AnyQuerier]]
 
 AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING: \
     dict[
         AggregationIntervalSeconds,
-        ParserAndQuerier
+        ParserAndQuerierTypes
     ] = \
     {
         AggregationIntervalSeconds.ONE_HOUR:  (
