@@ -38,8 +38,8 @@ class Facility(NS_Node):
 
     def __str__(self):
         if self.is_root():
-            return _(f'Заклад {self.name}')
-        return _(f"Об'єкт {self.name} із {self.get_root().name}")
+            return _(f'заклад {self.name}')
+        return _(f"об'єкт {self.name} із {self.get_root().name}")
 
     def get_absolute_url(self):
         return reverse_lazy('edit-facility', kwargs={'pk': self.pk})
