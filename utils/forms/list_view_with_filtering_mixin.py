@@ -28,7 +28,7 @@ class QuerySetFieldsIcontainsFilterPkOrderedMixin:
     def __check_used_properly(
             self: Union[ListView, 'QuerySetFieldsIcontainsFilterPkOrderedMixin']
     ):
-        if issubclass(self.__class__, ListView):
+        if not issubclass(self.__class__, ListView):
             raise ValueError('this mixin must be used with a ListView')
         if self.filter_fields is None:
             raise ValueError('you must set filter_fields for a model')
