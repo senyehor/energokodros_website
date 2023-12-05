@@ -119,20 +119,21 @@ class AggregatedConsumptionQuerierBase(ABC):
 
 
 class OneHourQuerier(AggregatedConsumptionQuerierBase):
-    SELECT_PART = 'aggregation_interval_end:: TIMESTAMP WITHOUT TIME ZONE AS time'
+    SELECT_PART = 'aggregation_interval_start:: TIMESTAMP WITHOUT TIME ZONE AS time'
     GROUP_BY_PART = 'time'
     ORDER_BY_PART = GROUP_BY_PART
 
     CUSTOM_FORMATTING = True
 
     __ADDITIONAL_HOURS_WHERE_FILTERS = """
-        AND EXTRACT(HOUR FROM aggregation_interval_end) >= {hours_filtering_start_hour}
-        AND EXTRACT(HOUR FROM aggregation_interval_end) <= {hours_filtering_end_hour}
+        AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
+        AND EXTRACT(HOUR FROM aggregation_interval_start) < {hours_filtering_end_hour}
     """
 
     def _format_time_related_row_part(self, to_format: datetime | str) -> str:
-        previous_hour = str(to_format.hour - 1)
-        return to_format.strftime(f'%Y-%m-%d {previous_hour.zfill(2)}:%M-%H:%M')
+        # to_format contains start hour as we use aggregation_interval_start in select
+        end_hour = str(to_format.hour + 1)
+        return to_format.strftime(f'%d-%m-%Y %H:%M - {end_hour.zfill(2)}:%M')
 
     def _compose_where(self) -> str:
         base_where = super()._compose_where()
