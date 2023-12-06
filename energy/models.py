@@ -1,5 +1,7 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from energokodros.settings import MAX_SENSORS_COUNT_PER_BOX, MIN_SENSORS_COUNT_PER_BOX
 from institutions.models import Facility
 
 
@@ -22,7 +24,6 @@ class Sensor(models.Model):
 
 
 class BoxSensorsSet(models.Model):
-    # todo think of better interface
     boxes_set_id = models.AutoField(primary_key=True)
     box = models.ForeignKey(
         Box,
@@ -32,7 +33,7 @@ class BoxSensorsSet(models.Model):
     )
     sensor = models.OneToOneField(
         Sensor,
-        models.RESTRICT,
+        models.CASCADE,
         null=False,
         related_name='+'
     )
@@ -52,8 +53,14 @@ class BoxSensorsSet(models.Model):
         auto_now_add=True,
         null=False
     )
-    # todo finish sensor_number
-    sensor_number = models.IntegerField(null=False)
+    sensor_number = models.IntegerField(
+        null=False,
+        blank=False,
+        validators=(
+            MinValueValidator(MIN_SENSORS_COUNT_PER_BOX),
+            MaxValueValidator(MAX_SENSORS_COUNT_PER_BOX)
+        )
+    )
 
     class Meta:
         db_table = 'boxes_sets'
