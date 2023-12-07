@@ -19,10 +19,9 @@ function make_input_fit_placeholder() {
 }
 
 function setup_clear_filter_button(search_form) {
-    let input = __get_form_input()
     $('#clearFilter').click(
         function () {
-            input.value = '';
+            __get_form_input().val('');
             search_form.submit();
         }
     )
