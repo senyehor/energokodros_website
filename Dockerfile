@@ -1,4 +1,4 @@
-FROM python:3.10.8-slim as dependencies-builder
+FROM --platform=linux/amd64 python:3.10.8-slim as dependencies-builder
 # python:
 ENV PYTHONFAULTHANDLER 1
 ENV PYTHONUNBUFFERED 1
@@ -32,8 +32,8 @@ WORKDIR $APP_DIR
 
 # copying copliled libs to folder where python expects them to be
 COPY --from=dependencies-builder /dependencies /usr/local
+# copying app files
 COPY . .
-
 RUN rm pyproject.toml
 
 RUN adduser --system --group --no-create-home app_user
@@ -43,5 +43,3 @@ RUN chmod -R 500 $APP_DIR
 USER app_user
 
 CMD ["./docker-entrypoint.sh"]
-
-
