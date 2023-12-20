@@ -12,7 +12,7 @@ from utils.forms import (
 )
 
 
-class LoginForm(auth_forms.AuthenticationForm):
+class LoginForm(CrispyFormsMixin, auth_forms.AuthenticationForm):
     remember_me = forms.BooleanField(
         label=_("Запам'ятати мене на два тижні"),
         required=False
@@ -22,6 +22,9 @@ class LoginForm(auth_forms.AuthenticationForm):
         'invalid_login': _('Уведіть правильну електронну пошту та пароль або зареєструйтесь'),
         'inactive':      _('Електронна пошта ще не підтверджена'),
     }
+
+    class Meta:
+        buttons = (create_primary_button(_('Увійти')),)
 
 
 class NewUserForm(CrispyFormsMixin, auth_forms.UserCreationForm):
