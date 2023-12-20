@@ -33,7 +33,8 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'active_link',
-    'treebeard'
+    'treebeard',
+    'formtools',
 ]
 
 MIDDLEWARE = [
