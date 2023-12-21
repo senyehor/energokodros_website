@@ -1,7 +1,7 @@
 {% extends 'common/__bare_base.html' %}
 {% load show_messages_if_any %}
 {% block body %}
-    {% include 'common/../header_and_footer/header.html' %}
+    {% include 'header_and_footer/header.html' %}
     {% if messages %}
         <div class="container">
             {% show_messages %}
@@ -13,5 +13,5 @@
         {% block display_none %}
         {% endblock %}
     </div>
-    {% include 'common/../header_and_footer/footer.html' %}
+    {% include 'header_and_footer/footer.html' %}
 {% endblock %}
