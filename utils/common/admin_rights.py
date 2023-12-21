@@ -2,9 +2,13 @@ import functools
 import inspect
 from typing import Callable
 
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views import View
+
+from energokodros.settings import LOGIN_URL
+from users.models import User
 
 
 def admin_rights_required(obj_to_decorate: Callable | View) -> Callable | View:
@@ -21,12 +25,14 @@ def __admin_right_required_class_decorator(_class: View) -> View:
 def __admin_right_required_function_decorator(function: Callable) -> Callable:
     @functools.wraps(function)
     def _wrapper(request, *args, **kwargs):
-        if request.user.is_authenticated and is_admin:
+        if not request.user.is_authenticated:
+            return redirect(LOGIN_URL)
+        if request.user.is_admin:
             return function(request, *args, **kwargs)
         return HttpResponse(status=403)
 
     return _wrapper
 
 
-def is_admin(request: HttpRequest) -> bool:
-    return request.user.is_authenticated and request.user.is_admin  # noqa
+def is_admin_non_authenticated_safe(user: User) -> bool:
+    return user.is_authenticated and user.is_admin
