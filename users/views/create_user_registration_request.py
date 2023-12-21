@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.db import transaction
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView
 
 from users.forms import NewUserForm, UserRoleApplicationFormForRegistration
@@ -37,8 +38,12 @@ class CreateUserRegistrationRequestView(CreateView):
         self.object = controller.save_user_along_with_registration_request_return_user()
         if controller.send_email_confirmation_message(self.request):
             return redirect(reverse('successfully-created-registration-request'))
+        messages.error(
+            self.request,
+            _('Не вдалося відправити повідомлення на пошту, перевірте дані та спробуйте ще раз')
+        )
         transaction.set_rollback(True)
-        return HttpResponse(status=500)
+        return redirect(reverse('register'))
 
     def form_invalid(  # noqa pylint: disable=W0221
             self, user_form: NewUserForm,
