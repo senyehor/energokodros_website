@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
 
-from users.forms.simple import NewUserForm, UserRoleApplicationFormForRegistration
+from users.forms import NewUserForm, UserRoleApplicationFormForRegistration
 from users.logic import UserRegistrationController
 
 
