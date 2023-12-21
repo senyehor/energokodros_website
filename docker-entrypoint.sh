@@ -3,4 +3,4 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-exec gunicorn --bind "[::]:${APP_PORT}" --worker-tmp-dir /dev/shm --workers 3 energokodros.wsgi:application
+exec gunicorn energokodros.wsgi:application -c "${APP_DIR}/gunicorn.conf.py"
