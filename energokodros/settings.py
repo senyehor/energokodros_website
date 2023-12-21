@@ -4,8 +4,6 @@ from pathlib import Path
 import environ
 from django.urls import reverse_lazy
 
-from energokodros.utils import append_http_and_https_for_hosts
-
 env = environ.Env(
     DEBUG=(bool, False),
 )
@@ -16,7 +14,7 @@ DEBUG = env('DEBUG', default=False)
 
 SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = [] if DEBUG else append_http_and_https_for_hosts(env('ALLOWED_HOSTS').split(' '))
+ALLOWED_HOSTS = [] if DEBUG else env('ALLOWED_HOSTS').split(',')
 CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 
 INSTALLED_APPS = [
