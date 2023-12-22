@@ -20,9 +20,7 @@ function get_consumption_data_and_update() {
         type: 'POST',
         dataType: 'json',
         data: __compose_aggregation_query_parameters(),
-        headers: {
-            'X-CSRFToken': $.cookie('csrftoken')
-        },
+        headers: get_headers_for_ajax_object(),
         success: (data) => {
             if (data === null) {
                 add_error_alert('За заданими фільтрами дані відсутні');

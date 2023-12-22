@@ -3,9 +3,7 @@ function redirect_to_object(redirect_url, id) {
         url: reverse_url(redirect_url),
         type: 'POST',
         dataType: 'json',
-        headers: {
-            'X-CSRFToken': $.cookie('csrftoken')
-        },
+        headers: get_headers_for_ajax_object(),
         data: {id: id},
         success: (data) => {
             window.open(data.url, '_self');

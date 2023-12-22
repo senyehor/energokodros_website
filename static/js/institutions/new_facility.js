@@ -9,9 +9,7 @@ function update_parent_facility_select() {
         url: reverse_url('get-institution-facilities'),
         type: 'POST',
         dataType: 'json',
-        headers: {
-            'X-CSRFToken': $.cookie('csrftoken')
-        },
+        headers: get_headers_for_ajax_object(),
         data: {
             institution_id: __get_selected_institution_id()
         },
