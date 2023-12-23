@@ -12,6 +12,7 @@
 {% endblock %}
 {% block scripts %}
     <script src="{% static 'js/institutions/new_facility.js' %}"></script>
+    <script src="{% static 'js/institutions/dynamic_facility_choices_for_institution.js' %}"></script>
 {% endblock %}
 {% block display_none %}
     <p id='get-institution-facilities'>{% url 'get-institution-facilities' %}</p>
