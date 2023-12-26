@@ -31,20 +31,20 @@ class CommonPostQueryParametersParser:
             facility_to_get_consumption_for_or_all_descendants_if_any
         self.__aggregation_interval = aggregation_interval
         self.__set_period_boundaries(period_start_epoch_seconds, period_end_epoch_seconds)
-        self.__validate()
+        self._validate()
 
     def get_parameters(self) -> CommonQueryParameters:
         return CommonQueryParameters(
             facility_to_get_consumption_for_or_all_descendants_if_any=
             self.__facility_to_get_consumption_for_or_all_descendants_if_any,
             aggregation_interval=self.__aggregation_interval,
-            period_start=self.__period_start,
-            period_end=self.__period_end
+            period_start=self._period_start,
+            period_end=self._period_end
         )
 
-    def __validate(self):
+    def _validate(self):
         self.__check_period_is_valid()
-        self.__check_period_contains_at_least_one_aggregation_interval()
+        self._check_period_contains_at_least_one_aggregation_interval()
 
     def __set_period_boundaries(self, period_start_epoch_seconds: str,
                                 period_end_epoch_seconds: str):
@@ -54,17 +54,17 @@ class CommonPostQueryParametersParser:
         period_end_epoch_seconds = parse_str_parameter_to_int_with_correct_exception(
             period_end_epoch_seconds
         )
-        self.__period_start = self.__convert_epoch_seconds_to_date(
+        self._period_start = self.__convert_epoch_seconds_to_date(
             period_start_epoch_seconds
         )
-        self.__period_end = self.__convert_epoch_seconds_to_date(period_end_epoch_seconds)
+        self._period_end = self.__convert_epoch_seconds_to_date(period_end_epoch_seconds)
 
     def __check_period_is_valid(self):
-        if self.__period_start > self.__period_end:
+        if self._period_start > self._period_end:
             raise PeriodStartGreaterThanEnd
 
-    def __check_period_contains_at_least_one_aggregation_interval(self):
-        period_length_seconds = int((self.__period_end - self.__period_start).total_seconds())
+    def _check_period_contains_at_least_one_aggregation_interval(self):
+        period_length_seconds = int((self._period_end - self._period_start).total_seconds())
         if period_length_seconds < self.__aggregation_interval:
             raise AggregationIntervalDoesNotFitPeriod
 
@@ -77,7 +77,15 @@ class CommonPostQueryParametersParser:
         return datetime.fromtimestamp(epoch_seconds).date()
 
 
-class OneHourAggregationIntervalPostQueryParametersParser(CommonPostQueryParametersParser):
+class __AllowQueryingForCurrentDayParser(CommonPostQueryParametersParser):
+    def _check_period_contains_at_least_one_aggregation_interval(
+            self: CommonPostQueryParametersParser):
+        if self._period_start == self._period_end:
+            return
+        super()._check_period_contains_at_least_one_aggregation_interval()
+
+
+class OneHourAggregationIntervalPostQueryParametersParser(__AllowQueryingForCurrentDayParser):
     """one hour aggregation interval has additional parameters"""
     __HOURS = range(24)
 
@@ -91,11 +99,7 @@ class OneHourAggregationIntervalPostQueryParametersParser(CommonPostQueryParamet
         self.__hours_filtering_end_hour = hours_filtering_end_hour
         if hours_filtering_start_hour and hours_filtering_end_hour:
             self.__set_hours_filtering_range(hours_filtering_start_hour, hours_filtering_end_hour)
-            self.__validate()
-
-    def __check_aggregation_interval_is_on_hour(self, aggregation_interval: Any):
-        if aggregation_interval is not AggregationIntervalSeconds.ONE_HOUR:
-            raise ValueError('this class should work only with one hour aggregation interval')
+            self._validate()
 
     def get_parameters(self) -> OneHourAggregationIntervalQueryParameters:
         _ = super().get_parameters()
@@ -106,8 +110,13 @@ class OneHourAggregationIntervalPostQueryParametersParser(CommonPostQueryParamet
             hours_filtering_end_hour=self.__hours_filtering_end_hour
         )
 
-    def __validate(self):
+    def _validate(self):
+        super()._validate()
         self.__check_hours_filtering_range_is_correct()
+
+    def __check_aggregation_interval_is_on_hour(self, aggregation_interval: Any):
+        if aggregation_interval is not AggregationIntervalSeconds.ONE_HOUR:
+            raise ValueError('this class should work only with one hour aggregation interval')
 
     def __check_hours_filtering_range_is_correct(self):
         if self.__hours_filtering_start_hour not in self.__HOURS:
@@ -125,3 +134,7 @@ class OneHourAggregationIntervalPostQueryParametersParser(CommonPostQueryParamet
         self.__hours_filtering_end_hour = parse_str_parameter_to_int_with_correct_exception(
             hours_filtering_end_hour
         )
+
+
+class OneDayAggregationIntervalPostQueryParametersParser(__AllowQueryingForCurrentDayParser):
+    pass
