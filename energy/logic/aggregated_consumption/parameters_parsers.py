@@ -16,10 +16,10 @@ from energy.logic.aggregated_consumption.simple import \
     parse_str_parameter_to_int_with_correct_exception
 from institutions.models import Facility
 
-AnyParametersParser: TypeAlias = 'CommonPostQueryParametersParser'
+AnyParametersParser: TypeAlias = 'CommonQueryParametersParser'
 
 
-class CommonPostQueryParametersParser:
+class CommonQueryParametersParser:
     def __init__(
             self, *,
             facility_to_get_consumption_for_or_all_descendants_if_any: Facility,
@@ -77,15 +77,15 @@ class CommonPostQueryParametersParser:
         return datetime.fromtimestamp(epoch_seconds).date()
 
 
-class __AllowQueryingForCurrentDayParser(CommonPostQueryParametersParser):
+class __AllowQueryingForCurrentDayParser(CommonQueryParametersParser):
     def _check_period_contains_at_least_one_aggregation_interval(
-            self: CommonPostQueryParametersParser):
+            self: CommonQueryParametersParser):
         if self._period_start == self._period_end:
             return
         super()._check_period_contains_at_least_one_aggregation_interval()
 
 
-class OneHourAggregationIntervalPostQueryParametersParser(__AllowQueryingForCurrentDayParser):
+class OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
     """one hour aggregation interval has additional parameters"""
     __HOURS = range(24)
 
@@ -136,5 +136,5 @@ class OneHourAggregationIntervalPostQueryParametersParser(__AllowQueryingForCurr
         )
 
 
-class OneDayAggregationIntervalPostQueryParametersParser(__AllowQueryingForCurrentDayParser):
+class OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
     pass
