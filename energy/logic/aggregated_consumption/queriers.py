@@ -131,7 +131,7 @@ class OneHourQuerier(AggregatedConsumptionQuerierBase):
 
     __ADDITIONAL_HOURS_WHERE_FILTERS = """
         AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
-        AND EXTRACT(HOUR FROM aggregation_interval_start) < {hours_filtering_end_hour}
+        AND EXTRACT(HOUR FROM aggregation_interval_start) <= {hours_filtering_end_hour}
     """
 
     def _format_time_related_row_part(self, to_format: datetime | str) -> str:
