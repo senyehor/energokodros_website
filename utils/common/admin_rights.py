@@ -13,16 +13,16 @@ from utils.types import FuncView, View
 
 def admin_rights_required(obj_to_decorate: View) -> View:
     if inspect.isfunction(obj_to_decorate):
-        return __admin_right_required_function_decorator(obj_to_decorate)
-    return __admin_right_required_class_decorator(obj_to_decorate)
+        return _admin_right_required_function_decorator(obj_to_decorate)
+    return _admin_right_required_class_decorator(obj_to_decorate)
 
 
-def __admin_right_required_class_decorator(_class: View) -> View:
-    _class.dispatch = method_decorator(__admin_right_required_function_decorator)(_class.dispatch)
+def _admin_right_required_class_decorator(_class: View) -> View:
+    _class.dispatch = method_decorator(_admin_right_required_function_decorator)(_class.dispatch)
     return _class
 
 
-def __admin_right_required_function_decorator(function: FuncView) -> Type[FuncView]:
+def _admin_right_required_function_decorator(function: FuncView) -> Type[FuncView]:
     @functools.wraps(function)
     def _wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
