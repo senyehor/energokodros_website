@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
-from utils.common import object_to_queryset
+from utils.common.object_to_queryset import object_to_queryset
 from utils.forms import (
     create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
     SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
