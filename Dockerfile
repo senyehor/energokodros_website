@@ -36,6 +36,8 @@ COPY --from=dependencies-builder /dependencies /usr/local
 # copying app files
 COPY . .
 RUN rm pyproject.toml
+# collecting static and removing develepment staticfiles folder
+RUN python -m manage collectstatic --noinput && rm -rf static
 
 RUN adduser --system --group --no-create-home app_user
 RUN chown -R app_user:app_user $APP_DIR
