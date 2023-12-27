@@ -4,9 +4,7 @@ from hashids import Hashids
 
 from energokodros.settings import MIN_HASH_LENGTH, SECRET_KEY
 
-# here we are setting custom alphabet to exclude url-unsafe unnecessary symbols (/,% etc)
-# and to simplify checking by regex, as by default __HASHER._alphabet does not return
-# correct alphabet for regex (do not know why)
+# custom alphabet to exclude url-unsafe symbols (/,% etc)
 __ALPHABET = string.ascii_lowercase + string.digits
 
 _HASHER = Hashids(salt=SECRET_KEY, min_length=MIN_HASH_LENGTH, alphabet=__ALPHABET)
@@ -27,13 +25,13 @@ class IntHasher:
     def reveal_int(cls, val: str) -> int:
         res = _HASHER.decode(val)
         if len(res) != 1:
-            raise ValueError('one integer return expected, probably wrong input')
+            raise ValueError(f'one integer return expected, probably wrong input, got {res}')
         return res[0]
 
-    def to_python(self, value: str) -> int:  # noqa
+    def to_python(self, value: str) -> int:
         return self.reveal_int(value)
 
-    def to_url(self, value: int) -> str:  # noqa
+    def to_url(self, value: int) -> str:
         return self.hide_int(value)
 
 
@@ -51,8 +49,8 @@ class StringHasher:
         except ValueError as e:
             raise ValueError('can not transform to char, probably wrong input') from e
 
-    def to_python(self, value: str) -> str:  # noqa
+    def to_python(self, value: str) -> str:
         return self.reveal_str(value)
 
-    def to_url(self, value: str) -> str:  # noqa
+    def to_url(self, value: str) -> str:
         return self.hide_str(value)
