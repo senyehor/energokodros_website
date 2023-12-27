@@ -18,6 +18,7 @@ RUN apt-get update \
 RUN pip install --upgrade pip
 RUN pip install poetry==$POETRY_VERSION
 COPY pyproject.toml ./
+# poetry export may take quite a while due to a bug
 RUN poetry export --with prod --without-hashes --no-interaction \
     --no-ansi -f requirements.txt -o requirements.txt
 RUN pip install --disable-pip-version-check --prefix=/dependencies --no-cache-dir \
