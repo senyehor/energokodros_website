@@ -1,0 +1,12 @@
+{% extends 'common/some_text_in_center_base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "У вас ще немає жодної ролі" %}
+{% endblock %}
+{% block header %}
+    {% trans "У вас ще немає жодної ролі" %}
+{% endblock %}
+{% block text %}
+    {% trans "Адміністратор ще не встиг підтвердити ваш запит на роль, чи відхилив його. " %}
+    {% trans "Ви отримаете листа про будь-яку з цих дій." %}
+{% endblock %}
