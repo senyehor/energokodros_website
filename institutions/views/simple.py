@@ -6,11 +6,11 @@ from django.views.generic import FormView, ListView, UpdateView
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
-from utils.common import admin_rights_required
+from utils.common import admin_rights_and_login_required
 from utils.forms import EditObjectUpdateViewMixin, QuerySetFieldsIcontainsFilterPkOrderedMixin
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 class FacilitiesListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     queryset = Facility.objects.all()
     fields_order_by_before_pk = ('depth',)
@@ -19,7 +19,7 @@ class FacilitiesListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     template_name = 'institutions/facilities_list.html'
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 class CreateInstitutionView(FormView):
     form_class = InstitutionForm
     template_name = 'institutions/new_institution.html'
@@ -34,7 +34,7 @@ class CreateInstitutionView(FormView):
         return super().form_valid(form)
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 class EditFacilityView(EditObjectUpdateViewMixin, UpdateView):
     model = Facility
     form_class = FacilityEditForm

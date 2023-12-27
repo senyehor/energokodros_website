@@ -8,7 +8,7 @@ from django.views.generic import FormView
 from users.forms import UserRoleApplicationRequestsDecisionForm
 from users.logic import check_user_has_no_roles, UserRoleApplicationReviewController
 from users.models import UserRoleApplication
-from utils.common import admin_rights_required
+from utils.common import admin_rights_and_login_required
 
 
 class DECISIONS(str, Enum):
@@ -17,7 +17,7 @@ class DECISIONS(str, Enum):
     DECLINE = 'decline'
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 class UserRoleApplicationDecisionView(FormView):
     template_name = 'users/user_role_application_decision.html'
     form_class = UserRoleApplicationRequestsDecisionForm

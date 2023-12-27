@@ -4,11 +4,11 @@ from django.views.generic import UpdateView
 
 from users.forms import EditUserForm, EditUserRole
 from users.models import User, UserRole
-from utils.common import admin_rights_required
+from utils.common import admin_rights_and_login_required
 from utils.forms import EditObjectUpdateViewMixin
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 class EditUserRoleView(EditObjectUpdateViewMixin, UpdateView):
     model = UserRole
     form_class = EditUserRole
@@ -18,7 +18,7 @@ class EditUserRoleView(EditObjectUpdateViewMixin, UpdateView):
     edit_success_message = _('Роль користувача успішно відредаговано')
 
 
-@admin_rights_required
+@admin_rights_and_login_required
 class EditUserView(EditObjectUpdateViewMixin, UpdateView):
     model = User
     form_class = EditUserForm
