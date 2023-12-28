@@ -66,16 +66,16 @@ function __get_aggregated_consumption_data_div() {
 }
 
 function __get_period_start_epoch_seconds() {
-    return __get_data_input_epoch_value_seconds_by_id('#period_start');
+    return __get_data_input_epoch_value_seconds_by_id(__get_period_start_input());
 }
 
-function __get_data_input_epoch_value_seconds_by_id(id) {
+function __get_data_input_epoch_value_seconds_by_id(date_input) {
     // converting to seconds from milliseconds
-    return Date.parse($(`${id}`).val()) / 1000;
+    return Date.parse(date_input.val()) / 1000;
 }
 
 function __get_period_end_epoch_seconds() {
-    return __get_data_input_epoch_value_seconds_by_id('#period_end');
+    return __get_data_input_epoch_value_seconds_by_id(__get_period_end_input());
 }
 
 function __get_aggregation_interval_select() {
