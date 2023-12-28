@@ -1,10 +1,13 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as LogView
 from django.http import HttpRequest
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
-from users.forms import LoginForm, ProfileForm
+from users.forms import LoginForm, ProfileForm, UserRoleApplicationForm
 from users.logic import remember_user_for_two_week, UserRegistrationController
 from utils.common.decoration import decorate_class_or_function_view
 
@@ -34,3 +37,19 @@ class ProfileView(FormView):
 
     def get_form(self, form_class=None):
         return self.form_class(user=self.request.user)
+
+
+@decorate_class_or_function_view(login_required)
+class RoleApplicationView(FormView):
+    form_class = UserRoleApplicationForm
+    template_name = 'users/role_application.html'
+    success_url = reverse_lazy('my-profile')
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            _('Успішно подано заяву на роль')
+        )
+        form.set_application_request_user(self.request.user)
+        form.save()
+        return super().form_valid(form)
