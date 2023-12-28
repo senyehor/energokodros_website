@@ -38,7 +38,7 @@ urlpatterns = [
     ),
     path(
         'edit-user/<hashed_int:pk>/',
-        views.UserView.as_view(),
+        views.simple.UserView.as_view(),
         name='edit-user'
     ),
     path(
@@ -48,7 +48,7 @@ urlpatterns = [
     ),
     path(
         'edit-user-role/<hashed_int:pk>/',
-        views.UserRoleView.as_view(),
+        views.simple.UserRoleView.as_view(),
         name='edit-user-role'
     ),
     path(

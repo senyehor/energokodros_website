@@ -6,6 +6,7 @@ from django.http import HttpRequest
 
 from institutions.models import Facility
 from users.models import User, UserRole, UserRoleApplication
+from utils.common import is_admin_non_authenticated_safe
 
 
 def check_role_belongs_to_user(user: User, user_role: UserRole):
@@ -25,8 +26,13 @@ def remember_user_for_two_week(request: HttpRequest):
     __remember_user_for_timedelta(request, timedelta(weeks=2))
 
 
-def __remember_user_for_timedelta(request: HttpRequest, td: timedelta):
-    request.session.set_expiry(td)
+def readonly_if_role_owner_full_access_if_admin(request: HttpRequest, role: UserRole):
+    user = request.user
+    if is_admin_non_authenticated_safe(user):
+        return
+    if request.method == 'GET' and check_role_belongs_to_user(user, role):
+        return
+    raise PermissionDenied
 
 
 def check_user_has_no_roles(user: User) -> bool:
@@ -39,3 +45,7 @@ def get_applications_from_users_who_confirmed_email() -> QuerySet:
 
 def get_users_with_confirmed_email() -> QuerySet:
     return User.objects.filter(is_active=True)
+
+
+def __remember_user_for_timedelta(request: HttpRequest, td: timedelta):
+    request.session.set_expiry(td)
