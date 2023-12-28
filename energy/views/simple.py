@@ -13,7 +13,5 @@ def get_facilities_choices_for_role(request: HttpRequest) -> JsonResponse:
         request.POST.get('role_id')
     )
     check_role_belongs_to_user(request.user, role)
-    choices = get_facilities_formatted_choices_for_user_role(
-        role
-    )
+    choices = get_facilities_formatted_choices_for_user_role(role)
     return JsonResponse(choices, safe=False)
