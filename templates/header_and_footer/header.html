@@ -20,6 +20,12 @@
                             Енергоспоживання
                         </a>
                     </li>
+                    <li>
+                        <a href="{% url 'my-profile' %}"
+                           class="nav-link px-2 text-dark {% active_link 'my-profile' %}">
+                            Мій профіль
+                        </a>
+                    </li>
                     {% if user.is_admin %}
                         {% include 'header_and_footer/admin_items.html' %}
                     {% endif %}

@@ -51,6 +51,11 @@ urlpatterns = [
         views.EditUserRoleView.as_view(),
         name='edit-user-role'
     ),
+    path(
+        'my-profile/',
+        views.ProfileView.as_view(),
+        name='my-profile'
+    ),
     path('', include('django.contrib.auth.urls')),
 ]
 

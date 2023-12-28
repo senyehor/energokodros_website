@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
 from django.db.models import Model
+from django.forms import Form
 from django.utils.translation import gettext_lazy as _
 
 from institutions.models import Facility
@@ -127,3 +128,20 @@ class EditUserRole(CrispyFormsMixin, forms.ModelForm):
         self.fields['user_info'].queryset = object_to_queryset(role.user)
         self.fields['facility_has_access_to_info'].queryset = \
             object_to_queryset(role.facility_has_access_to)
+
+
+class ProfileForm(Form):
+    # must be set dynamically for user
+    roles = SecureModelChoiceField(
+        label=_('Мої ролі'),
+        queryset=UserRole.objects.none(),
+        widget=SelectWithFormControlClass({'size': 6}),
+        empty_label=None
+    )
+
+    def __init__(self, *args, user: User, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__set_roles_for_user(user)
+
+    def __set_roles_for_user(self, user: User):
+        self.fields['roles'].queryset = user.roles.all()
