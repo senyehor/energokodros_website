@@ -11,6 +11,7 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters,
     CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
+from energy.logic.aggregated_consumption.simple import get_box_set_ids_for_facility
 
 AggregatedConsumptionQueryRows = list[tuple[datetime | str, Decimal]] | None
 
@@ -34,7 +35,7 @@ class AggregatedConsumptionQuerierBase(ABC):
         AND aggregation_interval_end <= '{aggregation_interval_end}'
     """
     __QUERY_WHERE_BOXES_SETS = """
-        AND boxes_set_id IN ({boxes_set_id_subquery})
+        AND boxes_set_id IN ({box_set_ids})
     """
     __QUERY_GROUP_BY_AND_ORDER_BY = """
         GROUP BY {group_by}
@@ -98,7 +99,7 @@ class AggregatedConsumptionQuerierBase(ABC):
 
     def __compose_where_boxes_sets(self) -> str:
         return self.__QUERY_WHERE_BOXES_SETS.format(
-            boxes_set_id_subquery=self.__get_boxes_set_id_subquery()
+            box_set_ids=self.__get_boxes_set_ids()
         )
 
     def __compose_group_by_and_order_by(self) -> str:
@@ -107,25 +108,16 @@ class AggregatedConsumptionQuerierBase(ABC):
             order_by=self.ORDER_BY_PART
         )
 
-    def __get_boxes_set_id_subquery(self) -> str:
-        facility = self.parameters.facility_to_get_consumption_for_or_all_descendants_if_any
-        if facility.get_descendants().exists():
-            descendants_ids_queryset = facility.get_descendants().only('id')
-            id_or_ids_to_filter = ','.join(
-                str(facility.id) for facility in descendants_ids_queryset
-            )
-        else:
-            id_or_ids_to_filter = facility.id
-        return f"""
-            SELECT boxes_set_id FROM boxes_sets
-            WHERE facility_id IN ({id_or_ids_to_filter})
-            """
+    def __get_boxes_set_ids(self) -> str:
+        ids = get_box_set_ids_for_facility(
+            self.parameters.facility_to_get_consumption_for_or_all_descendants_if_any
+        )
+        ids = (str(_id) for _id in ids)
+        return ', '.join(ids)
 
     def __get_rows(self) -> AggregatedConsumptionQueryRows:
         with connection.cursor() as cursor:
-            cursor.execute(
-                self.__compose_query()
-            )
+            cursor.execute(self.__compose_query())
             return cursor.fetchall() or None
 
     # pylint: disable-next=unused-argument
@@ -163,9 +155,8 @@ class OneHourQuerier(__QueryingForCurrentDayMixin, AggregatedConsumptionQuerierB
 
     CUSTOM_FORMATTING = True
 
-    CURRENT_DAY_WHERE = """ WHERE
+    CURRENT_DAY_WHERE = """WHERE
         aggregation_interval_start = '{current_date}'
-        AND aggregation_interval_end = '{current_date}'
     """
 
     __ADDITIONAL_HOURS_WHERE_FILTERS = """
