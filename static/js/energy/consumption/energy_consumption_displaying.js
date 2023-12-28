@@ -56,7 +56,7 @@ function __generate_chart_data(data) {
     return {
         labels: labels,
         datasets: [{
-            label: 'Споживання',
+            label: 'Кіловат години',
             backgroundColor: 'rgb(255, 99, 132)',
             borderColor: 'rgb(255, 99, 132)',
             data: consumption,
@@ -83,7 +83,7 @@ function __generate_table(data) {
         '<thead>' +
         '<tr>' +
         '<th scope="col">Час</th>' +
-        '<th scope="col">Дані</th>' +
+        '<th scope="col">Кіловат години</th>' +
         '</tr>' +
         '</thead>' +
         '<tbody>' +
