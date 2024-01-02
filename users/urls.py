@@ -48,7 +48,7 @@ urlpatterns = [
     ),
     path(
         'edit-user-role/<hashed_int:pk>/',
-        views.simple.UserRoleView.as_view(),
+        views.UserRoleView.as_view(),
         name='edit-user-role'
     ),
     path(
