@@ -10,7 +10,6 @@ from energy.logic.aggregated_consumption.parameters import EnergyConsumptionQuer
 from energy.models import BoxSensorsSet
 from institutions.models import Facility
 from users.logic import check_user_has_no_roles
-from utils.common.object_to_queryset import object_to_queryset
 from utils.types import FuncView
 
 
@@ -47,8 +46,8 @@ def show_no_roles_page_if_user_has_no_roles(view: FuncView) -> FuncView:
 
 
 def get_box_set_ids_for_facility(facility: Facility) -> Iterable[int]:
-    if descendants := facility.get_descendants().only('id'):
-        qs = descendants
-    else:
-        qs = object_to_queryset(facility)
-    return BoxSensorsSet.objects.only('pk').filter(facility__in=qs).values_list('pk', flat=True)
+    facility_and_descendants = facility.get_tree(facility)
+    return BoxSensorsSet.objects. \
+        only('pk'). \
+        filter(facility__in=facility_and_descendants). \
+        values_list('pk', flat=True)
