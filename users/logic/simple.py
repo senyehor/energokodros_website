@@ -26,15 +26,6 @@ def remember_user_for_two_week(request: HttpRequest):
     __remember_user_for_timedelta(request, timedelta(weeks=2))
 
 
-def readonly_if_role_owner_full_access_if_admin(request: HttpRequest, role: UserRole):
-    user = request.user
-    if is_admin_non_authenticated_safe(user):
-        return
-    if request.method == 'GET' and check_role_belongs_to_user(user, role):
-        return
-    raise PermissionDenied
-
-
 def check_user_has_no_roles(user: User) -> bool:
     return not user.roles.exists()
 
