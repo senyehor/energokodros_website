@@ -16,7 +16,7 @@ DEBUG = env('DEBUG', default=False)
 SECRET_KEY = env('SECRET_KEY', default=get_random_secret_key())
 
 ALLOWED_HOSTS = [] if DEBUG else env('ALLOWED_HOSTS', default='').split(',')
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+CSRF_TRUSTED_ORIGINS = ['https://' + host for host in ALLOWED_HOSTS]
 
 INSTALLED_APPS = [
     'django.contrib.auth',
