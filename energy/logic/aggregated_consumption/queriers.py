@@ -25,9 +25,9 @@ class AggregatedConsumptionQuerierBase(ABC):
 
     CUSTOM_FORMATTING: bool = False
 
-    __QUERY_SELECT_WITH_FROM = 'SELECT ' + """
-        {select}, 
-        ROUND(SUM(sensor_value), 2) AS total_consumption
+    __TOTAL_CONSUMPTION_EXPRESSION = 'TRUNC(SUM(sensor_value), 7)'
+    __QUERY_SELECT_WITH_FROM = 'SELECT {select}, ' + f"""
+        {__TOTAL_CONSUMPTION_EXPRESSION} AS total_consumption
         FROM sensor_values_h
     """
     __QUERY_WHERE_INTERVAL = """
