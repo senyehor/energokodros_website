@@ -21,7 +21,7 @@ from utils.common.decoration import decorate_class_or_function_view
 from utils.forms import EditObjectUpdateViewMixin
 
 
-def successfully_created_registration_request(request):
+def successfully_created_registration_request(request: HttpRequest):
     return render(request, 'registration/successfully_created_registration_request.html')
 
 
