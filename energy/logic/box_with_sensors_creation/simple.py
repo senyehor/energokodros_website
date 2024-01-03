@@ -2,7 +2,7 @@ from typing import TypeAlias
 
 from django.utils.translation import gettext_lazy as _
 
-from energokodros.settings import MAX_SENSORS_COUNT_PER_BOX, MIN_SENSORS_COUNT_PER_BOX
+from energokodros.settings import MAX_SENSOR_COUNT_PER_BOX, MIN_SENSOR_COUNT_PER_BOX
 from utils.types import StrKeyDict
 
 
@@ -41,5 +41,5 @@ def _create_sensor_number_in_sensor_count_range_list_of_dicts(
 
 
 def validate_sensors_count(count: int):
-    if MAX_SENSORS_COUNT_PER_BOX < count < MIN_SENSORS_COUNT_PER_BOX:
+    if MAX_SENSOR_COUNT_PER_BOX < count < MIN_SENSOR_COUNT_PER_BOX:
         raise ValueError("invalid sensors count number")

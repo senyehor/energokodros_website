@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from energokodros.settings import MAX_SENSORS_COUNT_PER_BOX, MIN_SENSORS_COUNT_PER_BOX
+from energokodros.settings import MAX_SENSOR_COUNT_PER_BOX, MIN_SENSOR_COUNT_PER_BOX
 from institutions.models import Facility
 
 
@@ -57,8 +57,8 @@ class BoxSensorsSet(models.Model):
         null=False,
         blank=False,
         validators=(
-            MinValueValidator(MIN_SENSORS_COUNT_PER_BOX),
-            MaxValueValidator(MAX_SENSORS_COUNT_PER_BOX)
+            MinValueValidator(MIN_SENSOR_COUNT_PER_BOX),
+            MaxValueValidator(MAX_SENSOR_COUNT_PER_BOX)
         ),
         db_column='sensor_number'
     )
