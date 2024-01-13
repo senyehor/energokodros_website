@@ -1,6 +1,7 @@
+{% load i18n %}
 <div id="div_id_hour_filter_{{ start_or_end }}" class="d-inline form-group w-auto">
     <label for="id_hour_filter_{{ start_or_end }}">
-        {{ text }}
+        {% trans text %}
         <span class="asteriskField">*</span>
     </label>
     <div class="d-inline-block">
