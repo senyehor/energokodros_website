@@ -2,7 +2,7 @@ from typing import TypeAlias
 
 from django.utils.translation import gettext_lazy as _
 
-from energokodros.settings import MAX_SENSOR_COUNT_PER_BOX
+from energokodros.settings import SENSOR_COUNT_PER_BOX
 from utils.types import StrKeyDict
 
 FormsetData: TypeAlias = list[StrKeyDict]
@@ -11,7 +11,7 @@ FormsetData: TypeAlias = list[StrKeyDict]
 def create_initial_sensor_numbers_for_sensors_formset() -> FormsetData:
     return [
         {'sensor_number': sensor_number}
-        for sensor_number in range(1, MAX_SENSOR_COUNT_PER_BOX + 1)
+        for sensor_number in range(1, SENSOR_COUNT_PER_BOX + 1)
     ]
 
 
