@@ -1,29 +1,20 @@
 {% load active_link_tags %}
+{% load i18n %}
 {% if user.is_authenticated %}
     <header class="p-3 text-white">
-        <div class="container">
+        <div class="container px-1">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="{% url 'home' %}"
-                   class="d-flex align-items-center pe-3 mb-2 mb-lg-0 text-decoration-none text-dark {% active_link 'home' %}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" fill="currentColor"
-                         class="bi bi-house" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                              d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"></path>
-                        <path fill-rule="evenodd"
-                              d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"></path>
-                    </svg>
-                </a>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
                         <a href="{% url 'aggregated-consumption' %}"
                            class="nav-link px-2 text-dark {% active_link 'aggregated-consumption' %}">
-                            Енергоспоживання
+                            {% trans "Енергоспоживання" %}
                         </a>
                     </li>
                     <li>
                         <a href="{% url 'my-profile' %}"
                            class="nav-link px-2 text-dark {% active_link 'my-profile' %}">
-                            Мій профіль
+                            {% trans "Мій профіль" %}
                         </a>
                     </li>
                     {% if user.is_admin %}
@@ -31,7 +22,10 @@
                     {% endif %}
                 </ul>
                 <div class="text-end ml-lg-auto">
-                    <a href="{% url 'logout' %}" class="py-1 btn btn-outline-secondary rounded-lg text-dark">Вихід</a>
+                    <a href="{% url 'logout' %}"
+                       class="py-1 btn btn-outline-secondary rounded-lg text-dark">
+                        {% trans "Вихід" %}
+                    </a>
                 </div>
             </div>
         </div>
