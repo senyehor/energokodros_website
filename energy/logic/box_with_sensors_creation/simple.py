@@ -19,11 +19,11 @@ def create_initial_sensor_numbers_in_set_for_box_sensor_set_formset(
         sensors_formset_cleaned_data: FormsetData) -> FormsetData:
     return [
         {
-            'sensor_number':        _dict['sensor_number'],
+            'sensor_number':        sensors_data['sensor_number'],
             'sensor_number_in_set': sensor_number_in_set,
             'line_name':            _(f'Лінія {sensor_number_in_set}')
         }
-        for sensor_number_in_set, _dict in enumerate(sensors_formset_cleaned_data, start=1)
+        for sensor_number_in_set, sensors_data in enumerate(sensors_formset_cleaned_data, start=1)
     ]
 
 
