@@ -29,7 +29,8 @@ class BoxSensorsSet(models.Model):
         Box,
         models.CASCADE,
         null=False,
-        blank=False
+        blank=False,
+        related_name='box_sensor_sets'
     )
     sensor = models.OneToOneField(
         Sensor,
