@@ -1,13 +1,14 @@
 from enum import Enum
 
-from energokodros.settings import (
-    CHARACTERS_PER_BOX_ORDINAL_NUMBER_FOR_BOX_IDENTIFIER, CHARACTERS_PER_CITY_FOR_BOX_IDENTIFIER,
-    CHARACTERS_PER_INSTITUTION_FOR_BOX_IDENTIFIER,
-    CHARACTERS_PER_INSTITUTION_NUMBER_FOR_BOX_IDENTIFIER,
-    CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER,
-)
-
 REGEX_GROUPS_SEPARATOR = '-'
+
+
+class CharactersCountForBoxIdentifierParts:
+    CHARACTERS_PER_BOX_ORDINAL_NUMBER_FOR_BOX_IDENTIFIER = 2
+    CHARACTERS_PER_CITY_FOR_BOX_IDENTIFIER = 2
+    CHARACTERS_PER_INSTITUTION_FOR_BOX_IDENTIFIER = 2
+    CHARACTERS_PER_INSTITUTION_NUMBER_FOR_BOX_IDENTIFIER = 2
+    CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER = 2
 
 
 class BoxIdentifierRegexGroups(str, Enum):
@@ -27,26 +28,27 @@ def create_regex_for_number_count(group_name: str, count: int) -> str:
 
 
 def compose_regex() -> str:
-    _ = BoxIdentifierRegexGroups
+    groups = BoxIdentifierRegexGroups
+    _ = CharactersCountForBoxIdentifierParts
     city = create_regex_for_letter_count(
-        _.CITY,
-        CHARACTERS_PER_CITY_FOR_BOX_IDENTIFIER
+        groups.CITY,
+        _.CHARACTERS_PER_CITY_FOR_BOX_IDENTIFIER
     )
     institution = create_regex_for_letter_count(
-        _.INSTITUTION,
-        CHARACTERS_PER_INSTITUTION_FOR_BOX_IDENTIFIER
+        groups.INSTITUTION,
+        _.CHARACTERS_PER_INSTITUTION_FOR_BOX_IDENTIFIER
     )
     institution_number = create_regex_for_number_count(
-        _.INSTITUTION_NUMBER,
-        CHARACTERS_PER_INSTITUTION_NUMBER_FOR_BOX_IDENTIFIER
+        groups.INSTITUTION_NUMBER,
+        _.CHARACTERS_PER_INSTITUTION_NUMBER_FOR_BOX_IDENTIFIER
     )
     box_ordinal_number = create_regex_for_number_count(
-        _.BOX_ORDINAL_NUMBER,
-        CHARACTERS_PER_BOX_ORDINAL_NUMBER_FOR_BOX_IDENTIFIER
+        groups.BOX_ORDINAL_NUMBER,
+        _.CHARACTERS_PER_BOX_ORDINAL_NUMBER_FOR_BOX_IDENTIFIER
     )
     sensors_count = create_regex_for_number_count(
-        _.SENSORS_COUNT,
-        CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER
+        groups.SENSORS_COUNT,
+        _.CHARACTERS_PER_SENSORS_COUNT_FOR_BOX_IDENTIFIER
     )
     return REGEX_GROUPS_SEPARATOR.join(
         (
