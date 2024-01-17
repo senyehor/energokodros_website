@@ -3,6 +3,7 @@
 .gitignore
 Dockerfile
 poetry.lock
+env.template
 
 .idea/
 .git/
