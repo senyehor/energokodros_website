@@ -11,11 +11,11 @@ env = environ.Env(
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = env('DEBUG', default=False)
+DEBUG = env('DEBUG')
 # random secret key to collect static during docker build
-SECRET_KEY = env('SECRET_KEY', default=get_random_secret_key())
+SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = [] if DEBUG else env('ALLOWED_HOSTS', default='').split(',')
+ALLOWED_HOSTS = [] if DEBUG else env('ALLOWED_HOSTS').split(',')
 CSRF_TRUSTED_ORIGINS = ['https://' + host for host in ALLOWED_HOSTS]
 
 INSTALLED_APPS = [
@@ -74,11 +74,11 @@ WSGI_APPLICATION = 'energokodros.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     env('DB_NAME', default=''),
-        'USER':     env('DB_USERNAME', default=''),
-        'PASSWORD': env('DB_PASSWORD', default=''),
-        'HOST':     env('DB_HOST', default=''),
-        'PORT':     env('DB_PORT', default=''),
+        'NAME':     env('DB_NAME'),
+        'USER':     env('DB_USERNAME'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST':     env('DB_HOST'),
+        'PORT':     env('DB_PORT'),
     }
 }
 
@@ -121,20 +121,20 @@ LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = env('EMAIL_HOST', default='')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
-EMAIL_PORT = env.int('EMAIL_PORT', default=0)
-DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='')
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = env.int('EMAIL_PORT')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 EMAIL_USE_TLS = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-MIN_HASH_LENGTH = env.int('MIN_HASH_LENGTH', default=0)
+MIN_HASH_LENGTH = env.int('MIN_HASH_LENGTH')
 
-DEFAULT_PAGINATE_BY = env.int('DEFAULT_PAGINATE_BY', default=0)
+DEFAULT_PAGINATE_BY = env.int('DEFAULT_PAGINATE_BY')
 
-SENSOR_COUNT_PER_BOX = env.int('SENSORS_COUNT_PER_BOX', default=0)
+SENSOR_COUNT_PER_BOX = env.int('SENSORS_COUNT_PER_BOX')
 
 ACTIVE_LINK_STRICT = True
 
