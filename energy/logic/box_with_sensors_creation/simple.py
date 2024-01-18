@@ -27,8 +27,8 @@ def create_box_sensor_sets_along_with_box_and_sensors(
 
 
 def create_box_sensor_set_form_and_sensor_form_match(
-        box_sensor_set_formset: BoxSensorSetFormset, sensors_formset: SensorsFormset) -> \
-        Iterable[Tuple[BoxSensorsSetForm, SensorForm]]:
+        box_sensor_set_formset: BoxSensorSetFormset, sensors_formset: SensorsFormset
+) -> Iterable[Tuple[BoxSensorsSetForm, SensorForm]]:
     return zip(box_sensor_set_formset.forms, sensors_formset.forms)
 
 
