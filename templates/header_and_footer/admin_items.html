@@ -1,8 +1,8 @@
 {% load i18n %}
 {% load active_link_tags %}
 <li>
-    <a href="{% url 'users-roles-applications' %}"
-       class="nav-link px-2 text-dark {% active_link 'users-roles-applications' %}">
+    <a href="{% url 'user-role-applications' %}"
+       class="nav-link px-2 text-dark {% active_link 'user-role-applications' %}">
         {% trans "Запити на ролі" %}
         {% if users_roles_applications_count %}
             <span class="badge bg-success">{{ users_roles_applications_count }}</span>
@@ -22,8 +22,8 @@
     </a>
 </li>
 <li>
-    <a href="{% url 'users-roles-list' %}"
-       class="nav-link px-2 text-dark {% active_link 'users-roles-list' %}">
+    <a href="{% url 'user-role-list' %}"
+       class="nav-link px-2 text-dark {% active_link 'user-role-list' %}">
         {% trans "Ролі користувачі" %}
     </a>
 </li>

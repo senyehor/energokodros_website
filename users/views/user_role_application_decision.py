@@ -21,7 +21,7 @@ class DECISIONS(str, Enum):
 class UserRoleApplicationDecisionView(FormView):
     template_name = 'users/user_role_application_decision.html'
     form_class = UserRoleApplicationRequestsDecisionForm
-    success_url = reverse_lazy('users-roles-applications')
+    success_url = reverse_lazy('user-role-applications')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

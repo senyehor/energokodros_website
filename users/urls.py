@@ -22,9 +22,9 @@ urlpatterns = [
         name='confirm-email'
     ),
     path(
-        'users-roles-applications/',
+        'user-role-application/',
         views.UserRoleApplicationsListView.as_view(),
-        name='users-roles-applications'
+        name='user-role-applications'
     ),
     path(
         'user-role-application-decision/<hashed_int:pk>/',
@@ -42,9 +42,9 @@ urlpatterns = [
         name='edit-user'
     ),
     path(
-        'users-roles-list/',
+        'user-role-list/',
         views.UserRoleListView.as_view(),
-        name='users-roles-list'
+        name='user-role-list'
     ),
     path(
         'edit-user-role/<hashed_int:pk>/',
