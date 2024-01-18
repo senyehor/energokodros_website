@@ -1,9 +1,10 @@
 {% extends 'common/__items_list_with_paginator_base.html' %}
+{% load i18n %}
 {% block title %}
-    Запити на ролі
+    {% trans "Запити на ролі" %}
 {% endblock %}
 {% block heading_text %}
-    Запити на отримання ролі від користувачів
+    {% trans "Запити на отримання ролі від користувачів" %}
 {% endblock %}
 {% block search_form %}
     {% include 'common/search_form.html' with filter_fields_verbose="ім'я, пошта користувача чи назва закладу" %}
