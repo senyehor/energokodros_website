@@ -1,0 +1,14 @@
+{% extends 'common/__items_list_with_paginator_base.html' %}
+{% load i18n %}
+{% block title %}
+    Ящики
+{% endblock %}
+{% block heading_text %}
+    Ящики
+{% endblock %}
+{% block heading_buttons %}
+    <a class="btn btn-primary d-block ms-3" href="{% url 'create-box-with-sensors' %}">{% trans "Новий ящик" %}</a>
+{% endblock %}
+{% block search_form %}
+    {% include 'common/search_form.html' with filter_fields_verbose='ідентифікатор чи опис' %}
+{% endblock %}
