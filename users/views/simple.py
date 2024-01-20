@@ -18,7 +18,7 @@ from users.logic import (
 from users.models import User, UserRole
 from utils.common import admin_rights_and_login_required
 from utils.common.decoration import decorate_class_or_function_view
-from utils.views.edit_object_update_view import EditObjectUpdateView
+from utils.views.edit_object_update_view import EditDeleteObjectUpdateView
 
 
 def successfully_created_registration_request(request: HttpRequest):
@@ -65,7 +65,7 @@ class RoleApplicationView(FormView):
 
 
 @admin_rights_and_login_required
-class UserRoleView(EditObjectUpdateView):
+class UserRoleView(EditDeleteObjectUpdateView):
     model = UserRole
     form_class = UserRoleForm
     success_url = reverse_lazy('user-role-list')
@@ -74,7 +74,7 @@ class UserRoleView(EditObjectUpdateView):
 
 
 @admin_rights_and_login_required
-class UserView(EditObjectUpdateView):
+class UserView(EditDeleteObjectUpdateView):
     model = User
     form_class = UserForm
     success_url = reverse_lazy('users-list')

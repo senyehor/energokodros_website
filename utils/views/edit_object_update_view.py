@@ -17,7 +17,7 @@ class NeedsAdditionalFilling(Protocol):
         ...
 
 
-class EditObjectUpdateViewMixin:
+class EditDeleteObjectUpdateViewMixin:
     """
     must be used as a mixin for UpdateView, needs to be first in superclass list
     to correctly override methods
@@ -27,7 +27,7 @@ class EditObjectUpdateViewMixin:
     no_changes_message: str = _('Ви не внесли жодних змін, тож були перенаправлені')
 
     def post(
-            self: Union[UpdateView, 'EditObjectUpdateViewMixin'],
+            self: Union[UpdateView, 'EditDeleteObjectUpdateViewMixin'],
             request: HttpRequest, *args, **kwargs
     ):
         if request.POST['submit'] == DEFAULT_DELETE_VALUE:
@@ -35,20 +35,20 @@ class EditObjectUpdateViewMixin:
         # noinspection PyUnresolvedReferences
         return super().post(request, *args, **kwargs)
 
-    def get_context_data(self: Union[UpdateView, 'EditObjectUpdateViewMixin'], **kwargs):
+    def get_context_data(self: Union[UpdateView, 'EditDeleteObjectUpdateViewMixin'], **kwargs):
         # noinspection PyUnresolvedReferences
         data = super().get_context_data(**kwargs)
         self.fill_from_object_if_needed(data)
         return data
 
     def fill_from_object_if_needed(
-            self: Union[UpdateView, 'EditObjectUpdateViewMixin'], data: dict
+            self: Union[UpdateView, 'EditDeleteObjectUpdateViewMixin'], data: dict
     ):
         form: Form = data['form']
         if isinstance(form, NeedsAdditionalFilling):
             form.additionally_fill(self.object)
 
-    def form_valid(self: Union[UpdateView, 'EditObjectUpdateViewMixin'], form: Form):
+    def form_valid(self: Union[UpdateView, 'EditDeleteObjectUpdateViewMixin'], form: Form):
         if form.has_changed():
             messages.success(
                 self.request,
@@ -61,7 +61,7 @@ class EditObjectUpdateViewMixin:
             )
         return super().form_valid(form)
 
-    def __delete_object(self: Union[UpdateView, 'EditObjectUpdateViewMixin']):
+    def __delete_object(self: Union[UpdateView, 'EditDeleteObjectUpdateViewMixin']):
         self.get_object().delete()
         messages.warning(
             self.request,
@@ -72,5 +72,5 @@ class EditObjectUpdateViewMixin:
         return redirect(self.success_url)
 
 
-class EditObjectUpdateView(UpdateView, EditObjectUpdateViewMixin):
+class EditDeleteObjectUpdateView(UpdateView, EditDeleteObjectUpdateViewMixin):
     pass
