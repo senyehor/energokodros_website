@@ -1,14 +1,14 @@
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView
 
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
 from utils.common import admin_rights_and_login_required
-from utils.forms import EditObjectUpdateViewMixin
 from utils.views import ListViewWithFiltering
+from utils.views.edit_object_update_view import EditObjectUpdateView
 
 
 @admin_rights_and_login_required
@@ -36,7 +36,7 @@ class CreateInstitutionView(FormView):
 
 
 @admin_rights_and_login_required
-class EditFacilityView(EditObjectUpdateViewMixin, UpdateView):
+class EditFacilityView(EditObjectUpdateView):
     model = Facility
     form_class = FacilityEditForm
     template_name = 'institutions/edit_facility.html'

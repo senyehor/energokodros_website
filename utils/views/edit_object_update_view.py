@@ -70,3 +70,7 @@ class EditObjectUpdateViewMixin:
         # default redirect goes to self.get_success_url(), but is uses self.object,
         # which has just been deleted, so redirect to .success_url
         return redirect(self.success_url)
+
+
+class EditObjectUpdateView(UpdateView, EditObjectUpdateViewMixin):
+    pass

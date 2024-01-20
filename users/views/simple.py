@@ -5,7 +5,7 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView
 
 from users.forms import (
     LoginForm, ProfileForm, UserForm,
@@ -18,7 +18,7 @@ from users.logic import (
 from users.models import User, UserRole
 from utils.common import admin_rights_and_login_required
 from utils.common.decoration import decorate_class_or_function_view
-from utils.forms import EditObjectUpdateViewMixin
+from utils.views.edit_object_update_view import EditObjectUpdateView
 
 
 def successfully_created_registration_request(request: HttpRequest):
@@ -65,7 +65,7 @@ class RoleApplicationView(FormView):
 
 
 @admin_rights_and_login_required
-class UserRoleView(EditObjectUpdateViewMixin, UpdateView):
+class UserRoleView(EditObjectUpdateView):
     model = UserRole
     form_class = UserRoleForm
     success_url = reverse_lazy('user-role-list')
@@ -74,7 +74,7 @@ class UserRoleView(EditObjectUpdateViewMixin, UpdateView):
 
 
 @admin_rights_and_login_required
-class UserView(EditObjectUpdateViewMixin, UpdateView):
+class UserView(EditObjectUpdateView):
     model = User
     form_class = UserForm
     success_url = reverse_lazy('users-list')
