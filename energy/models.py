@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.translation import gettext as _
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
 from institutions.models import Facility
@@ -13,6 +14,9 @@ class Box(models.Model):
     class Meta:
         db_table = 'boxes'
 
+    def __str__(self):
+        return _(f'Ящик {self.box_identifier}')
+
 
 class Sensor(models.Model):
     sensor_id = models.AutoField(primary_key=True)
@@ -21,6 +25,9 @@ class Sensor(models.Model):
 
     class Meta:
         db_table = 'sensors'
+
+    def __str__(self):
+        return _(f'Сенсор {self.sensor_number}')
 
 
 class BoxSensorsSet(models.Model):
@@ -67,3 +74,6 @@ class BoxSensorsSet(models.Model):
 
     class Meta:
         db_table = 'boxes_sets'
+
+    def __str__(self):
+        return _(f'{self.sensor} із {self.box}')
