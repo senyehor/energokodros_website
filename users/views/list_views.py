@@ -4,7 +4,8 @@ from users.logic.simple import (
     get_users_with_confirmed_email,
 )
 from users.models import UserRole
-from utils.common import admin_rights_and_login_required, ListViewWithFiltering
+from utils.common import admin_rights_and_login_required
+from utils.views import ListViewWithFiltering
 
 
 @admin_rights_and_login_required

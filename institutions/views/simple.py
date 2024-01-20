@@ -6,8 +6,9 @@ from django.views.generic import FormView, UpdateView
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
-from utils.common import admin_rights_and_login_required, ListViewWithFiltering
+from utils.common import admin_rights_and_login_required
 from utils.forms import EditObjectUpdateViewMixin
+from utils.views import ListViewWithFiltering
 
 
 @admin_rights_and_login_required
