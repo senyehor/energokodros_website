@@ -15,7 +15,7 @@ class FacilitiesListView(ListViewWithFiltering):
     queryset = Facility.objects.all()
     fields_order_by_before_pk = ('depth',)
     filter_fields = ('name', 'description')
-    template_name = 'institutions/facilities_list.html'
+    template_name = 'institutions/facility_list.html'
 
 
 @admin_rights_and_login_required
