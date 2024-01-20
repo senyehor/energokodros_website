@@ -17,7 +17,7 @@ class NeedsAdditionalFilling(Protocol):
         ...
 
 
-EditDeleteObjectView: TypeAlias = Union[UpdateView, 'EditDeleteObjectUpdateViewMixin']
+_EditDeleteObjectViewWithMixinType: TypeAlias = Union[UpdateView, 'EditDeleteObjectUpdateViewMixin']
 
 
 class EditDeleteObjectUpdateViewMixin:
@@ -29,24 +29,24 @@ class EditDeleteObjectUpdateViewMixin:
     DELETE_SUCCESS_MESSAGE: str = _('Успішно видалено')
     NO_CHANGES_MESSAGE: str = _('Ви не внесли жодних змін, тож були перенаправлені')
 
-    def post(self: EditDeleteObjectView, request: HttpRequest, *args, **kwargs):
+    def post(self: _EditDeleteObjectViewWithMixinType, request: HttpRequest, *args, **kwargs):
         if request.POST['submit'] == DEFAULT_DELETE_VALUE:
             return self.__delete_object()
         # noinspection PyUnresolvedReferences
         return super().post(request, *args, **kwargs)
 
-    def get_context_data(self: EditDeleteObjectView, **kwargs):
+    def get_context_data(self: _EditDeleteObjectViewWithMixinType, **kwargs):
         # noinspection PyUnresolvedReferences
         data = super().get_context_data(**kwargs)
         self.fill_from_object_if_needed(data)
         return data
 
-    def fill_from_object_if_needed(self: EditDeleteObjectView, data: dict):
+    def fill_from_object_if_needed(self: _EditDeleteObjectViewWithMixinType, data: dict):
         form: Form = data['form']
         if isinstance(form, NeedsAdditionalFilling):
             form.additionally_fill(self.object)
 
-    def form_valid(self: EditDeleteObjectView, form: Form):
+    def form_valid(self: _EditDeleteObjectViewWithMixinType, form: Form):
         if form.has_changed():
             messages.success(
                 self.request,
@@ -59,7 +59,7 @@ class EditDeleteObjectUpdateViewMixin:
             )
         return super().form_valid(form)
 
-    def __delete_object(self: EditDeleteObjectView):
+    def __delete_object(self: _EditDeleteObjectViewWithMixinType):
         self.get_object().delete()
         messages.warning(
             self.request,
