@@ -70,7 +70,7 @@ class UserRoleView(EditDeleteObjectUpdateView):
     form_class = UserRoleForm
     success_url = reverse_lazy('user-role-list')
     template_name = 'users/edit_user_role.html'
-    edit_success_message = _('Роль користувача успішно відредаговано')
+    EDIT_SUCCESS_MESSAGE = _('Роль користувача успішно відредаговано')
 
 
 @admin_rights_and_login_required
@@ -81,4 +81,4 @@ class UserView(EditDeleteObjectUpdateView):
     template_name = 'users/edit_user.html'
     # overriden due to 'user' taken by client user variable
     context_object_name = 'user_obj'
-    edit_success_message = _('Користувача успішно відредаговано')
+    EDIT_SUCCESS_MESSAGE = _('Користувача успішно відредаговано')
