@@ -1,5 +1,6 @@
 from .energy_consumption_display_page_control_form import EnergyConsumptionDisplayPageControlForm
+from .formsets import BoxSensorSetFormset, SensorsFormset
 from .simple import (
-    BoxForm, BoxSensorSetFormset, BoxSensorsSetForm, ChooseInstitutionForm,
-    SensorForm, SensorsFormset,
+    BoxForm, BoxSensorsSetForm, ChooseInstitutionForm,
+    SensorForm,
 )
