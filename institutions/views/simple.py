@@ -1,17 +1,17 @@
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, ListView, UpdateView
+from django.views.generic import FormView, UpdateView
 
 from energokodros.settings import DEFAULT_PAGINATE_BY
 from institutions.forms import FacilityEditForm, InstitutionForm
 from institutions.models import Facility
-from utils.common import admin_rights_and_login_required
-from utils.forms import EditObjectUpdateViewMixin, QuerySetFieldsIcontainsFilterPkOrderedMixin
+from utils.common import admin_rights_and_login_required, ListViewWithFiltering
+from utils.forms import EditObjectUpdateViewMixin
 
 
 @admin_rights_and_login_required
-class FacilitiesListView(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+class FacilitiesListView(ListViewWithFiltering):
     queryset = Facility.objects.all()
     fields_order_by_before_pk = ('depth',)
     filter_fields = ('name', 'description')
