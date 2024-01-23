@@ -24,7 +24,7 @@ class BoxEditDeleteView(EditDeleteObjectUpdateView):
     model = Box
     form_class = EditBoxForm
     success_url = reverse_lazy('box-list')
-    template_name = 'users/edit_user_role.html'
+    template_name = 'energy/edit_box.html'
     EDIT_SUCCESS_MESSAGE = _('Ящик успішно відредаговано')
 
 
