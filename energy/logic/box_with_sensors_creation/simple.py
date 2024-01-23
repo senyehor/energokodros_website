@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.forms import Form
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
-from energy.forms import BoxForm, BoxSensorSetFormset, BoxSensorsSetForm, SensorForm, SensorsFormset
+from energy.forms import BoxForm, BoxSensorSetForm, BoxSensorSetFormset, SensorForm, SensorsFormset
 from energy.logic.box_with_sensors_creation.config_and_models import FORMS_ORDER_FROM_ZERO, STEPS
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
@@ -28,7 +28,7 @@ def create_box_sensor_sets_along_with_box_and_sensors(
 
 def create_box_sensor_set_form_and_sensor_form_match(
         box_sensor_set_formset: BoxSensorSetFormset, sensors_formset: SensorsFormset
-) -> Iterable[tuple[BoxSensorsSetForm, SensorForm]]:
+) -> Iterable[tuple[BoxSensorSetForm, SensorForm]]:
     return zip(box_sensor_set_formset.forms, sensors_formset.forms)
 
 

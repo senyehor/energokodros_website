@@ -1,7 +1,7 @@
 from django.forms import BaseFormSet, formset_factory
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
-from energy.forms.simple import BoxSensorsSetForm, SensorForm
+from energy.forms.simple import BoxSensorSetForm, SensorForm
 
 __SensorsFormsetBase = formset_factory(
     SensorForm,
@@ -12,7 +12,7 @@ __SensorsFormsetBase = formset_factory(
 )
 
 __BoxSensorSetFormset = formset_factory(
-    BoxSensorsSetForm,
+    BoxSensorSetForm,
     # setting extra to zero as actual forms count will depend on data or initial
     extra=0,
     min_num=SENSOR_COUNT_PER_BOX,
