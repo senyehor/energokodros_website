@@ -1,10 +1,10 @@
 {% extends 'common/__items_list_with_paginator_base.html' %}
 {% load i18n %}
 {% block title %}
-    Ящики
+    {% trans "Ящики" %}
 {% endblock %}
 {% block heading_text %}
-    Ящики
+    {% trans "Ящики" %}
 {% endblock %}
 {% block heading_buttons %}
     <a class="btn btn-primary d-block ms-3" href="{% url 'create-box-with-sensors' %}">{% trans "Новий ящик" %}</a>
