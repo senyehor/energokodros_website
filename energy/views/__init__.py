@@ -1,3 +1,3 @@
 from .aggregated_consumption_view import ConsumptionPageView, get_aggregated_consumption
 from .box_with_sensors_creation import BoxWithSensorsCreateView
-from .simple import BoxListView, get_facilities_choices_for_role
+from .simple import BoxEditDeleteView, BoxListView, get_facilities_choices_for_role
