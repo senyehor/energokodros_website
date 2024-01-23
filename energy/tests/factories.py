@@ -4,7 +4,7 @@ import factory
 from django.utils.decorators import classonlymethod
 from factory import django
 
-from energy.models import Box, BoxSensorsSet, Sensor
+from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 from institutions.tests.factories import InstitutionFactory
 
@@ -45,7 +45,7 @@ class BoxSensorsSetManualFactory:
         data = BoxSensorsSetData(facility, box)
         for i in range(cls.__SENSORS_PER_BOX):
             sensor = SensorFactory()
-            BoxSensorsSet(
+            BoxSensorSet(
                 box=box,
                 sensor=sensor,
                 facility=facility,

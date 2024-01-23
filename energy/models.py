@@ -37,7 +37,7 @@ class Sensor(models.Model):
         return reverse_lazy('edit-sensor', kwargs={'pk': self.pk})
 
 
-class BoxSensorsSet(models.Model):
+class BoxSensorSet(models.Model):
     _SENSOR_STARTING_NUMBER = 1
     boxes_set_id = models.AutoField(primary_key=True)
     box = models.ForeignKey(

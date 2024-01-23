@@ -4,7 +4,7 @@ from django.forms import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from energy.models import Box, BoxSensorsSet, Sensor
+from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 from utils.forms import CrispyFormsMixin, SecureModelChoiceField, UPDATE_DELETE_BUTTONS_SET
 
@@ -63,7 +63,7 @@ class BoxSensorsSetForm(CrispyFormsMixin, ModelForm):
     )
 
     class Meta:
-        model = BoxSensorsSet
+        model = BoxSensorSet
         fields = ('line_name', 'sensor_number_in_set')
         labels = {
             'line_name':            _('Назва лінії'),
