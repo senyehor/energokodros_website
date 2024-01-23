@@ -32,5 +32,15 @@ urlpatterns = [
         'edit-box/<hashed_int:pk>',
         views.BoxEditDeleteView.as_view(),
         name='edit-box'
+    ),
+    path(
+        'sensor-list',
+        views.SensorListView.as_view(),
+        name='sensor-list'
+    ),
+    path(
+        'edit-sensor/<hashed_int:pk>',
+        views.SensorEditDeleteView.as_view(),
+        name='edit-sensor'
     )
 ]

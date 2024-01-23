@@ -3,9 +3,9 @@ from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from energy.forms import EditBoxForm
+from energy.forms import EditBoxForm, EditSensorForm
 from energy.logic.ajax import get_facilities_formatted_choices_for_user_role
-from energy.models import Box
+from energy.models import Box, Sensor
 from users.logic.simple import check_role_belongs_to_user
 from users.models import UserRole
 from utils.common import admin_rights_and_login_required, get_object_by_hashed_id_or_404
@@ -26,6 +26,22 @@ class BoxEditDeleteView(EditDeleteObjectUpdateView):
     success_url = reverse_lazy('box-list')
     template_name = 'energy/edit_box.html'
     EDIT_SUCCESS_MESSAGE = _('Ящик успішно відредаговано')
+
+
+@admin_rights_and_login_required
+class SensorListView(ListViewWithFiltering):
+    queryset = Sensor.objects.all()
+    filter_fields = ('sensor_number', 'sensor_description')
+    template_name = 'energy/sensor_list.html'
+
+
+@admin_rights_and_login_required
+class SensorEditDeleteView(EditDeleteObjectUpdateView):
+    model = Sensor
+    form_class = EditSensorForm
+    success_url = reverse_lazy('sensor-list')
+    template_name = 'energy/edit_sensor.html'
+    EDIT_SUCCESS_MESSAGE = _('Сенсор успішно відредаговано')
 
 
 @login_required

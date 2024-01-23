@@ -75,3 +75,8 @@ class BoxSensorsSetForm(CrispyFormsMixin, ModelForm):
 class EditBoxForm(BoxForm):
     class Meta(BoxForm.Meta):
         buttons = UPDATE_DELETE_BUTTONS_SET
+
+
+class EditSensorForm(SensorForm):
+    class Meta(SensorForm.Meta):
+        buttons = UPDATE_DELETE_BUTTONS_SET

@@ -33,6 +33,9 @@ class Sensor(models.Model):
     def __str__(self):
         return _(f'Сенсор {self.sensor_number}')
 
+    def get_absolute_url(self):
+        return reverse_lazy('edit-sensor', kwargs={'pk': self.pk})
+
 
 class BoxSensorsSet(models.Model):
     _SENSOR_STARTING_NUMBER = 1
