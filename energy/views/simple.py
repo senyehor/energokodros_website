@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -27,6 +28,7 @@ class BoxEditDeleteView(EditDeleteObjectUpdateView):
     EDIT_SUCCESS_MESSAGE = _('Ящик успішно відредаговано')
 
 
+@login_required
 def get_facilities_choices_for_role(request: HttpRequest) -> JsonResponse:
     # noinspection PyTypeChecker
     role: UserRole = get_object_by_hashed_id_or_404(
