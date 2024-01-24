@@ -1,12 +1,12 @@
 from django.forms import (
-    CharField, Textarea, TextInput,
+    CharField, Form, Textarea, TextInput,
 )
 from django.utils.translation import gettext_lazy as _
 
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 from utils.forms import (
-    CrispyModelForm, SecureModelChoiceField, set_form_buttons_to_update_delete,
+    CrispyFormMixin, CrispyModelForm, SecureModelChoiceField, set_form_buttons_to_update_delete,
 )
 
 
@@ -25,7 +25,7 @@ class SensorForm(CrispyModelForm):
         }
 
 
-class ChooseInstitutionForm(CrispyModelForm):
+class ChooseInstitutionForm(CrispyFormMixin, Form):
     institution = SecureModelChoiceField(
         queryset=Facility.objects.get_institutions(),
         required=False,
