@@ -1,7 +1,10 @@
-from django.forms import BaseFormSet, formset_factory
+from django.forms import BaseFormSet, Form, formset_factory
+from django.utils.translation import gettext_lazy as _
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
 from energy.forms.simple import BoxSensorSetForm, SensorForm
+from institutions.models import Facility
+from utils.forms import CrispyFormMixin, SecureModelChoiceField
 
 __SensorsFormsetBase = formset_factory(
     SensorForm,
@@ -33,3 +36,12 @@ class SensorsFormset(__MustBeUsedWithInitialOrData, __SensorsFormsetBase):
 
 class BoxSensorSetFormset(__MustBeUsedWithInitialOrData, __BoxSensorSetFormset):
     pass
+
+
+class ChooseInstitutionForm(CrispyFormMixin, Form):
+    institution = SecureModelChoiceField(
+        queryset=Facility.objects.get_institutions(),
+        required=False,
+        label=_("Оберіть заклад якому буде належати ящик"),
+        empty_label=None,
+    )
