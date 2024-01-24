@@ -60,7 +60,8 @@ class BoxSensorSetForm(CrispyModelForm):
         # correct choices must be set via ajax for to chosen institution
         queryset=Facility.objects.all(),
         required=True,
-        empty_label=None
+        empty_label=None,
+        widget=SelectWithFormControlClass()
     )
 
     class Meta:
