@@ -47,11 +47,13 @@ function _draw_table(data) {
 }
 
 function __generate_chart_data(data) {
+    const time_index = 0;
+    const consumption_index = 1;
     let labels = [];
     let consumption = [];
-    for (const time_and_date of data) {
-        labels.push(time_and_date[0]);
-        consumption.push(parseFloat(time_and_date[1]));
+    for (const time_and_consumption of data) {
+        labels.push(time_and_consumption[time_index]);
+        consumption.push(parseFloat(time_and_consumption[consumption_index]));
     }
     return {
         labels: labels,
