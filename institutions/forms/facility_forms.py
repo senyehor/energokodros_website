@@ -12,6 +12,7 @@ from utils.forms import (
     create_primary_button, CrispyFormsMixin, SecureModelChoiceField,
     SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
 )
+from utils.views import AdditionalSetupRequiredFormMixin
 
 
 class NewFacilityForm(CrispyFormsMixin, forms.ModelForm):
@@ -47,7 +48,9 @@ class NewFacilityForm(CrispyFormsMixin, forms.ModelForm):
         buttons = (create_primary_button(_("Додати об'єкт")),)
 
 
-class FacilityEditForm(CrispyFormsMixin, forms.ModelForm):
+class FacilityEditForm(
+    CrispyFormsMixin, forms.ModelForm, AdditionalSetupRequiredFormMixin
+):
     # info only field, qs is filled in custom method
     descendants = SecureModelChoiceField(
         queryset=Facility.objects.none(),
@@ -82,8 +85,8 @@ class FacilityEditForm(CrispyFormsMixin, forms.ModelForm):
         }
         buttons = UPDATE_DELETE_BUTTONS_SET
 
-    def additionally_fill(self, operated_object: Model):
+    def additionally_setup(self, obj: Model):
         # noinspection PyTypeChecker
-        facility: Facility = operated_object
+        facility: Facility = obj
         self.fields['descendants'].queryset = facility.get_descendants()
         self.fields['roles_that_have_access_to_this_facility'].queryset = facility.users_roles
