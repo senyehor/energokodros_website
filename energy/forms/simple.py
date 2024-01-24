@@ -51,7 +51,7 @@ class BoxForm(CrispyModelForm):
 class BoxSensorSetForm(CrispyModelForm):
     # sensor number must be prepopulated from created sensors
     sensor_number = CharField(
-        label=_('Номер сенсора'),
+        label=_('Номер сенсора у наборі'),
         required=False,
         widget=TextInput(attrs={'readonly': 'readonly'})
     )
