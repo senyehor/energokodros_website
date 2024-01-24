@@ -42,5 +42,15 @@ urlpatterns = [
         'edit-sensor/<hashed_int:pk>',
         views.SensorEditDeleteView.as_view(),
         name='edit-sensor'
+    ),
+    path(
+        'box-sensor-set-list',
+        views.BoxSensorSetListView.as_view(),
+        name='box-sensor-set-list'
+    ),
+    path(
+        'edit-box-sensor-set/<hashed_int:pk>',
+        views.BoxSensorSetEditDeleteView.as_view(),
+        name='edit-box-sensor-set'
     )
 ]

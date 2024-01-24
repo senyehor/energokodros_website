@@ -93,3 +93,6 @@ class BoxSensorSet(models.Model):
 
     def __str__(self):
         return _(f'{self.sensor} із {self.box}')
+
+    def get_absolute_url(self):
+        return reverse_lazy('edit-box-sensor-set', kwargs={'pk': self.pk})

@@ -1,0 +1,11 @@
+{% extends 'common/__items_list_with_paginator_base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Набори сенсорів" %}
+{% endblock %}
+{% block heading_text %}
+    {% trans "Набори сенсорів" %}
+{% endblock %}
+{% block search_form %}
+    {% include 'common/search_form.html' with filter_fields_verbose='ідентифікатор ящику, назва установи чи лінії' %}
+{% endblock %}

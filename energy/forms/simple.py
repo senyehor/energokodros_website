@@ -6,7 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 from utils.forms import (
-    CrispyFormMixin, CrispyModelForm, SecureModelChoiceField, set_form_buttons_to_update_delete,
+    CrispyFormMixin, CrispyModelForm, SecureModelChoiceField, SelectWithFormControlClass,
+    set_form_buttons_to_update_delete,
 )
 
 
