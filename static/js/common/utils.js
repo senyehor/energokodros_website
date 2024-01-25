@@ -32,6 +32,9 @@ function add_muted_text_after_div_label(div, text) {
     div.find('label').after(__generate_muted_p(text));
 }
 
+function clear_alerts() {
+    __get_alerts_container().empty();
+}
 
 function __generate_muted_p(text) {
     return '<p class="fw-light text-muted m-0">' +
@@ -47,6 +50,10 @@ function add_error_alert(message) {
     __get_alerts_container_create_if_not_exists().append(__create_alert_div('danger', message));
 }
 
+function add_warning_alert(message) {
+    __get_alerts_container_create_if_not_exists().append(__create_alert_div('warning', message));
+}
+
 function __create_alert_div(level, message) {
     return '' +
         `<div class="alert alert-${level} alert-dismissible fade show" role="alert">` +
@@ -57,14 +64,18 @@ function __create_alert_div(level, message) {
 }
 
 function __get_alerts_container_create_if_not_exists() {
-    if (!$('#alerts').length) {
+    if (!__get_alerts_container().length) {
         $('header:first').after('' +
             '<div class="container">' +
             '   <div id="alerts">' +
             '   </div>' +
             '</div>');
     }
-    return $("#alerts");
+    return __get_alerts_container();
+}
+
+function __get_alerts_container() {
+    return $("#alerts")
 }
 
 const DEFAULT_UNEXPECTED_ERROR_MESSAGE = '' +
