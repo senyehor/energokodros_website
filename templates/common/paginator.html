@@ -1,7 +1,10 @@
+{% load paginator_button_onclick %}
+{% load static %}
 {% if paginator and page %}
-    <div class="btn-group" role="group" aria-label="Item pagination">
+    <div class="btn-group" role="group" aria-label="Item pagination" id="pagination_buttons">
         <a href="{% if page.has_previous %}?page={{ page.previous_page_number }}{% endif %}"
-           class="btn btn-outline-primary {% if not page.has_previous %}disabled{% endif %}">&laquo;</a>
+           class="btn btn-outline-primary {% if not page.has_previous %}disabled{% endif %}"
+           onclick="{% paginator_button_onclick %}">&laquo;</a>
         {% for page_number in paginator.page_range %}
             {% if page.number == page_number %}
                 <button class="btn btn-outline-primary active">
@@ -9,12 +12,15 @@
                 </button>
             {% else %}
                 <a href="?page={{ page_number }}"
-                   class="btn btn-outline-primary">
+                   class="btn btn-outline-primary"
+                   onclick="{% paginator_button_onclick %}">
                     {{ page_number }}
                 </a>
             {% endif %}
         {% endfor %}
-        <a href="{% if page.has_next %}?page={{ page.next_page_number }}{% endif %}"
-           class="btn btn-outline-primary {% if not page.has_next %}disabled{% endif %}">&raquo;</a>
+        <a href=" {% if page.has_next %}?page={{ page.next_page_number }}{% endif %}"
+           class="btn btn-outline-primary {% if not page.has_next %}disabled{% endif %}"
+           onclick="{% paginator_button_onclick %}">&raquo;</a>
     </div>
+    <script type="text/javascript" src="{% static "js/common/pagination.js" %}"></script>
 {% endif %}
