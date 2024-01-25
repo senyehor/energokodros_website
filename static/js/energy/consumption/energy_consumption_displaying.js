@@ -30,12 +30,21 @@ function _draw_chart(data) {
     __get_aggregated_consumption_data_div().append(
         '<canvas id="energy_chart" style="overflow-x: scroll;"></canvas>'
     );
-    let DATA = __generate_chart_data(data);
+    let datasets = __generate_chart_datasets(data);
     const config = {
         type: 'bar',
-        data: DATA,
-        options: {}
-    };
+        data: datasets,
+        options: {
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+    }
     const myChart = new Chart(
         $('#energy_chart'),
         config
@@ -46,23 +55,32 @@ function _draw_table(data) {
     __set_energy_html_content(__generate_table(data))
 }
 
-function __generate_chart_data(data) {
+function __generate_chart_datasets(data) {
     const time_index = 0;
     const consumption_index = 1;
+    const consumption_forecast_index = 2;
     let labels = [];
     let consumption = [];
-    for (const time_and_consumption of data) {
-        labels.push(time_and_consumption[time_index]);
-        consumption.push(parseFloat(time_and_consumption[consumption_index]));
+    let consumption_forecast = [];
+    for (const line of data) {
+        labels.push(line[time_index]);
+        consumption.push(parseFloat(line[consumption_index]));
+        consumption_forecast.push(parseFloat(line[consumption_forecast_index]))
     }
     return {
         labels: labels,
-        datasets: [{
-            label: 'Кіловат години',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: consumption,
-        }]
+        datasets: [
+            {
+                label: 'Споживання',
+                backgroundColor: 'rgb(255, 99, 132)',
+                data: consumption,
+            },
+            {
+                label: 'Прогнозоване споживання',
+                backgroundColor: 'rgb(97,97,97)',
+                data: consumption_forecast,
+            }
+        ]
     };
 }
 

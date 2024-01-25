@@ -1,12 +1,14 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import TypeAlias, TypedDict
+from typing import TypedDict
+
+from typing_extensions import TypeAlias
 
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
+from energy.logic.aggregated_consumption.types import HOUR
 from institutions.models import Facility
 
 AnyQueryParameters: TypeAlias = 'CommonQueryParameters'
-HOUR: TypeAlias = int
 
 
 class EnergyConsumptionQueryRawParameters(TypedDict):

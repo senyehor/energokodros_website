@@ -1,18 +1,20 @@
 from typing import Type
 
-from energy.logic.aggregated_consumption. \
-    aggregation_interval_to_parameters_parser_and_querier_mapping import \
-    (
-    AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING,
-    ParserAndQuerierTypes,
-)
+from energy.logic.aggregated_consumption.aggregated_consumption_queriers import AnyQuerier
+from energy.logic.aggregated_consumption.aggregation_interval_to_parameters_parser_and_querier_mapping import \
+    get_parser_and_querier_for_interval
+from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
 from energy.logic.aggregated_consumption.parameters import (
-    AnyQueryParameters,
-    EnergyConsumptionQueryRawParameters,
+    AnyQueryParameters, EnergyConsumptionQueryRawParameters,
 )
-from energy.logic.aggregated_consumption.parameters_parsers import AnyParametersParser
-from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionData
-from energy.logic.aggregated_consumption.simple import parse_aggregation_interval
+from energy.logic.aggregated_consumption.parameters_builder_from_raw import ParametersBuilder
+from energy.logic.aggregated_consumption.simple import (
+    parse_aggregation_interval,
+)
+from energy.logic.aggregated_consumption.types import (
+    AggregatedConsumptionData,
+    RawAggregatedConsumptionData,
+)
 from institutions.models import Facility
 from users.logic import check_role_belongs_to_user, check_role_has_access_for_facility
 from users.models import User, UserRole
@@ -20,17 +22,16 @@ from utils.common import get_object_by_hashed_id_or_404
 
 
 class AggregatedEnergyConsumptionController:
-    __PARAMETERS_PASSED_MANUALLY = ('role', 'facility', 'aggregation_interval_seconds')
 
     def __init__(self, user: User, parameters: EnergyConsumptionQueryRawParameters):
-        self.__query_parameters = parameters
+        _ = self.__raw_parameters = parameters
         role = get_object_by_hashed_id_or_404(
             UserRole,
-            self.__query_parameters.get('role', None)
+            _.get('role', None)
         )
         # noinspection PyTypeChecker
         self.__facility: Facility = get_object_by_hashed_id_or_404(
-            Facility, self.__query_parameters.get('facility', None)
+            Facility, _.get('facility', None)
         )
         # noinspection PyTypeChecker
         self.__check_user_is_role_owner_and_role_has_access_to_facility(
@@ -38,13 +39,33 @@ class AggregatedEnergyConsumptionController:
             role
         )
         self.__aggregation_interval = parse_aggregation_interval(
-            self.__query_parameters.get('aggregation_interval_seconds', None)
+            _.get('aggregation_interval_seconds', None)
         )
 
     def get_consumption(self) -> AggregatedConsumptionData:
-        parser, querier = self.__get_parser_and_querier()
-        params = self.__compose_params_for_querier(parser)
-        return querier(params).get_consumption()
+        querier = self.__create_querier()
+        forecaster = self.__create_forecaster(
+            ConsumptionForecaster,
+            querier.parameters,
+            querier.get_consumption()
+        )
+        return querier.formatter.format(forecaster.get_consumption_forecast())
+
+    def __get_parameters_builder(self) -> ParametersBuilder:
+        return ParametersBuilder(
+            self.__facility, self.__aggregation_interval, self.__raw_parameters
+        )
+
+    def __create_forecaster(
+            self, forecaster_class: Type[ConsumptionForecaster],
+            parameters: AnyQueryParameters,
+            raw_aggregated_consumption_data: RawAggregatedConsumptionData) -> ConsumptionForecaster:
+        return forecaster_class(parameters, raw_aggregated_consumption_data)
+
+    def __create_querier(self) -> AnyQuerier:
+        parser_type, querier_type = get_parser_and_querier_for_interval(self.__aggregation_interval)
+        parameters = self.__get_parameters_builder().compose_parameters(parser_type)
+        return querier_type(parameters)
 
     def __check_user_is_role_owner_and_role_has_access_to_facility(
             self, user: User, role: UserRole):
@@ -52,23 +73,3 @@ class AggregatedEnergyConsumptionController:
         check_role_belongs_to_user(user, role)
         # noinspection PyTypeChecker
         check_role_has_access_for_facility(role, self.__facility)
-
-    def __compose_params_for_querier(
-            self, parser: Type[AnyParametersParser]) -> AnyQueryParameters:
-        dynamic_parameters = self.__exclude_already_parsed_parameters()
-        return parser(
-            facility_to_get_consumption_for_or_all_descendants_if_any=self.__facility,
-            aggregation_interval=self.__aggregation_interval,
-            **dynamic_parameters
-        ).get_parameters()
-
-    def __exclude_already_parsed_parameters(self) -> dict[str, str]:
-        return {
-            key: value for key, value in self.__query_parameters.items()
-            if key not in self.__PARAMETERS_PASSED_MANUALLY
-        }
-
-    def __get_parser_and_querier(self) -> ParserAndQuerierTypes:
-        return AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_AND_QUERIER_MAPPING[
-            self.__aggregation_interval
-        ]
