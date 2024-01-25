@@ -54,6 +54,11 @@ function add_warning_alert(message) {
     __get_alerts_container_create_if_not_exists().append(__create_alert_div('warning', message));
 }
 
+
+function get_current_url() {
+    return new URL(window.location.href);
+}
+
 function __create_alert_div(level, message) {
     return '' +
         `<div class="alert alert-${level} alert-dismissible fade show" role="alert">` +

@@ -15,12 +15,9 @@ function add_search_parameter_to_url(url_string, search_value) {
 }
 
 function __get_search_parameter() {
-    return __get_current_url().searchParams.get('search_value');
+    return get_current_url().searchParams.get('search_value');
 }
 
-function __get_current_url() {
-    return new URL(window.location.href);
-}
 
 function __get_paginator_buttons_div() {
     return $('#pagination_buttons');
