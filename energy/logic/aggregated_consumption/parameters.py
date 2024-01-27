@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import TypedDict
-
-from typing_extensions import TypeAlias
+from typing import TypeAlias, TypedDict
 
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.types import HOUR

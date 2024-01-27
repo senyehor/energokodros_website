@@ -1,10 +1,9 @@
 from abc import ABC
 from datetime import date, timedelta
 from enum import IntEnum
-from typing import TypedDict
+from typing import TypeAlias, TypedDict
 
 from django.db import connection
-from typing_extensions import TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import NoConsumptionData
 from energy.logic.aggregated_consumption.formatters import (

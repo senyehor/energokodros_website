@@ -1,8 +1,8 @@
 import calendar
 from datetime import datetime
+from typing import TypeAlias
 
 from django.utils.translation import gettext as _
-from typing_extensions import TypeAlias
 
 from energy.logic.aggregated_consumption.types import (
     AggregatedConsumptionData, ConsumptionForecast, ConsumptionTime, ConsumptionValue,

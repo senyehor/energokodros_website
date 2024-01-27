@@ -1,7 +1,7 @@
 from _decimal import Decimal
 from datetime import datetime
 
-from typing_extensions import TypeAlias
+from typing import TypeAlias
 
 ConsumptionForecast: TypeAlias = float
 ConsumptionTime: TypeAlias = datetime | str
