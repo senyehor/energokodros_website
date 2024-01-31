@@ -1,5 +1,6 @@
+import datetime
 from dataclasses import dataclass
-from datetime import date
+from datetime import datetime, time
 from typing import TypeAlias, TypedDict
 
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
@@ -20,15 +21,27 @@ class EnergyConsumptionQueryRawParameters(TypedDict):
     hours_filtering_end_hour: str | None
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True)
 class CommonQueryParameters:
     facility_to_get_consumption_for_or_all_descendants_if_any: Facility
     aggregation_interval: AggregationIntervalSeconds
-    period_start: date
-    period_end: date
+    period_start: datetime
+    period_end: datetime
+
+    @property
+    def period_end(self) -> datetime:
+        return datetime.combine(self.__period_end, self.__create_one_second_to_midnight_time())
+
+    @period_end.setter
+    def period_end(self, value: datetime):
+        # noinspection PyAttributeOutsideInit
+        self.__period_end = value
+
+    def __create_one_second_to_midnight_time(self) -> time:
+        return time(23, 59, 29)
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True)
 class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     aggregation_interval = AggregationIntervalSeconds.ONE_HOUR
     hours_filtering_start_hour: HOUR | None = None
