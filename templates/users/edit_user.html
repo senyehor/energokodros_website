@@ -1,4 +1,5 @@
 {% extends 'common/form_in_center_with_default_padding_and_width.html' %}
+{% load js_reverse %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block title %}Користувач{% endblock %}
@@ -15,5 +16,5 @@
     <script src="{% static 'js/common/ajax.js' %}"></script>
 {% endblock %}
 {% block display_none %}
-    <p id='edit-user-role-pk-in-post'>{% url 'edit-user-role-pk-in-post' %}</p>
+    {% create_url_name_id_p_tag_with_link_content 'edit-user-role-pk-in-post' %}
 {% endblock %}
