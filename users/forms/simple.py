@@ -99,19 +99,15 @@ class UserForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
 
 
 class UserRoleForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
-    # should be prepopulated in corresponding method
     user_info = SecureModelChoiceField(
         queryset=User.objects.none(),
         label=_("Користувач"),
-        required=False,
         disabled=True,
         empty_label=None
     )
-    # should be prepopulated in corresponding method
     facility_has_access_to_info = SecureModelChoiceField(
         queryset=Facility.objects.none(),
         label=_("Об'єкт"),
-        required=False,
         disabled=True,
         empty_label=None,
     )
