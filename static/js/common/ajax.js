@@ -14,7 +14,7 @@ function redirect_to_object(redirect_url, id) {
     });
 }
 
-function redirect_from_selected_option_and_clear_selected_on_click(redirect_url) {
+function redirect_to_selected_object(redirect_url) {
     // clearing selected as when users go back to page option remains selected
     return function () {
         let select = $(this);

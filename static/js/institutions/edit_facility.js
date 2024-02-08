@@ -12,10 +12,10 @@ function style_and_setup_selects() {
     add_roles_on_click_label();
 
     __get_descendants_select().change(
-        redirect_from_selected_option_and_clear_selected_on_click('edit-facility-pk-in-post')
+        redirect_to_selected_object('edit-facility-pk-in-post')
     );
     __get_roles_for_facility_select().change(
-        redirect_from_selected_option_and_clear_selected_on_click('edit-user-role-pk-in-post')
+        redirect_to_selected_object('edit-user-role-pk-in-post')
     );
 }
 
