@@ -105,8 +105,7 @@ class UserRoleForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
         label=_("Користувач"),
         required=False,
         disabled=True,
-        empty_label=None,
-        widget=SelectWithFormControlClass(attrs={'size': 1}),
+        empty_label=None
     )
     # should be prepopulated in corresponding method
     facility_has_access_to_info = SecureModelChoiceField(
@@ -115,7 +114,6 @@ class UserRoleForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
         required=False,
         disabled=True,
         empty_label=None,
-        widget=SelectWithFormControlClass(attrs={'size': 1}),
     )
 
     class Meta:
