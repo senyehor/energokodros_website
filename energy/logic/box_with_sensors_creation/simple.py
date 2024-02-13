@@ -4,14 +4,17 @@ from django.db import IntegrityError
 from django.forms import Form
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
-from energy.forms import BoxForm, BoxSensorSetForm, BoxSensorSetFormset, SensorForm, SensorsFormset
+from energy.forms import (
+    BoxFormNoRelationFields, BoxSensorSetFormNoRelationFields,
+    BoxSensorSetFormset, SensorFormNoRelationFields, SensorsFormset,
+)
 from energy.logic.box_with_sensors_creation.config_and_models import FORMS_ORDER_FROM_ZERO, STEPS
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 
 
 def create_box_sensor_sets_along_with_box_and_sensors(
-        box_form: BoxForm, sensors_formset: SensorsFormset,
+        box_form: BoxFormNoRelationFields, sensors_formset: SensorsFormset,
         box_sensor_set_formset: BoxSensorSetFormset
 ):
     box = box_form.save()
@@ -28,7 +31,7 @@ def create_box_sensor_sets_along_with_box_and_sensors(
 
 def create_box_sensor_set_form_and_sensor_form_match(
         box_sensor_set_formset: BoxSensorSetFormset, sensors_formset: SensorsFormset
-) -> Iterable[tuple[BoxSensorSetForm, SensorForm]]:
+) -> Iterable[tuple[BoxSensorSetFormNoRelationFields, SensorFormNoRelationFields]]:
     return zip(box_sensor_set_formset.forms, sensors_formset.forms)
 
 
@@ -42,7 +45,7 @@ def fill_box_sensor_set_relations(
 
 
 def get_forms_from_from_list(forms: list[Form]) -> \
-        tuple[BoxForm, SensorsFormset, BoxSensorSetFormset]:
+        tuple[BoxFormNoRelationFields, SensorsFormset, BoxSensorSetFormset]:
     # noinspection PyTypeChecker
     return (
         forms[FORMS_ORDER_FROM_ZERO[STEPS.BOX]],
