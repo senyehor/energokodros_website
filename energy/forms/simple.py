@@ -1,7 +1,8 @@
 from django.db.models import Model
 from django.utils.translation import gettext as _
 
-from energy.forms import SensorFormNoRelationFields
+from energy.forms.without_relation_fields_for_box_sensor_set_creation import \
+    SensorFormNoRelationFields
 from energy.models import Box, BoxSensorSet, Sensor
 from utils.common.object_to_queryset import object_to_queryset
 from utils.forms import SecureModelChoiceField
