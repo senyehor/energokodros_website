@@ -3,3 +3,4 @@ from .energy_consumption_display_page_control_form import EnergyConsumptionDispl
 from .simple import (
     BoxForm, BoxSensorSetForm, SensorForm,
 )
+from .with_relation_readonly_fields import SensorFormWithBoxAndSetFields
