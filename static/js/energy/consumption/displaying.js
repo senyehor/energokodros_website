@@ -91,7 +91,7 @@ function __generate_chart_data(raw_consumption_data) {
             consumption.push(parseFloat(line[CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA]));
         }
     }
-    data = {
+    let data = {
         labels: labels,
         datasets: [
             {
