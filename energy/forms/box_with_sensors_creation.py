@@ -2,10 +2,7 @@ from django.forms import BaseFormSet, Form, formset_factory
 from django.utils.translation import gettext_lazy as _
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
-from energy.forms.without_relation_fields_for_box_sensor_set_creation import \
-    (
-    BoxSensorSetFormNoRelationFields, SensorFormNoRelationFields,
-)
+from energy.forms import BoxSensorSetFormNoRelationFields, SensorFormNoRelationFields
 from institutions.models import Facility
 from utils.forms import CrispyFormMixin, SecureModelChoiceField
 
