@@ -73,7 +73,7 @@ class BoxSensorSetForm(CrispyModelForm):
     facility = SecureModelChoiceField(
         label=_("Об'єкт сенсора"),
         # qs set to all to correctly process accept any facility,
-        # correct choices must be set via ajax for to chosen institution
+        # correct choices must be set via ajax
         queryset=Facility.objects.all(),
         required=True,
         empty_label=None
