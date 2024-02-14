@@ -5,7 +5,7 @@ from django.forms import Form
 
 from energokodros.settings import SENSOR_COUNT_PER_BOX
 from energy.forms import (
-    BoxFormNoRelationFields, BoxSensorSetFormNoRelationFields,
+    BoxFormNoRelationFields, BoxSensorSetForm,
     BoxSensorSetFormset, SensorFormNoRelationFields, SensorsFormset,
 )
 from energy.logic.box_with_sensors_creation.config_and_models import FORMS_ORDER_FROM_ZERO, STEPS
@@ -31,7 +31,7 @@ def create_box_sensor_sets_along_with_box_and_sensors(
 
 def create_box_sensor_set_form_and_sensor_form_match(
         box_sensor_set_formset: BoxSensorSetFormset, sensors_formset: SensorsFormset
-) -> Iterable[tuple[BoxSensorSetFormNoRelationFields, SensorFormNoRelationFields]]:
+) -> Iterable[tuple[BoxSensorSetForm, SensorFormNoRelationFields]]:
     return zip(box_sensor_set_formset.forms, sensors_formset.forms)
 
 
