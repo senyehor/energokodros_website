@@ -65,7 +65,7 @@ ajax_url = [
     ),
     path(
         'edit-box-sensor-set-pk-in-post',
-        redirect_to_object_pk_in_post(BoxSensorSet, 'edit-user'),
+        redirect_to_object_pk_in_post(BoxSensorSet, 'edit-box-sensor-set'),
         name='edit-box-sensor-set-pk-in-post'
     )
 ]
