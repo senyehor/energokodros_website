@@ -9,6 +9,7 @@
 {% endblock %}
 {% block form %}
     {% crispy form %}
+    <script src="{% static 'js/energy/edit_sensor.js' %}"></script>
 {% endblock %}
 {% block display_none %}
     {% create_url_name_id_p_tag_with_link_content 'edit-box-pk-in-post' %}
