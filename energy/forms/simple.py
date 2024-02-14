@@ -66,7 +66,7 @@ class BoxFormNoRelationFields(CrispyModelForm):
 class BoxSensorSetForm(CrispyModelForm):
     # sensor number must be prepopulated from created sensors
     sensor_number = CharField(
-        label=_('Номер сенсора у наборі'),
+        label=_('Номер сенсора'),
         required=False,
         widget=TextInput(attrs={'readonly': 'readonly'})
     )
@@ -84,7 +84,7 @@ class BoxSensorSetForm(CrispyModelForm):
         fields = ('line_name', 'sensor_number_in_set')
         labels = {
             'line_name':            _('Назва лінії'),
-            'sensor_number_in_set': _('Номер сенсора у ящику'),
+            'sensor_number_in_set': _('Номер сенсора наборі'),
         }
         fields_order = ('sensor_number',) + fields + ('facility',)
         buttons = UPDATE_DELETE_BUTTONS_SET
