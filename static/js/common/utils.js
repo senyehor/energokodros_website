@@ -94,9 +94,9 @@ const DEFAULT_UNEXPECTED_ERROR_MESSAGE = '' +
 
 const ON_CLICK_REDIRECTS_TEXT = 'При натисканні вас перенаправить на сторінку'
 
-function redirect_to_object(redirect_url, id) {
+function redirect_to_object(url_name, id) {
     $.ajax({
-        url: reverse_url(redirect_url),
+        url: reverse_url(url_name),
         type: 'POST',
         dataType: 'json',
         headers: get_headers_for_ajax_object(),
@@ -110,17 +110,17 @@ function redirect_to_object(redirect_url, id) {
     });
 }
 
-function redirect_to_selected_object(redirect_url) {
+function redirect_to_selected_object(url_name) {
     return function () {
         let select = $(this);
         let id = get_selected_option_for_select(select);
-        redirect_to_object(redirect_url, id);
+        redirect_to_object(url_name, id);
     }
 }
 
-function redirect_to_selected_object_with_get_id_callback(redirect_url, get_id_callback) {
+function redirect_to_selected_object_with_get_id_callback(url_name, get_id_callback) {
     return function () {
         let id = get_id_callback();
-        redirect_to_object(redirect_url, id);
+        redirect_to_object(url_name, id);
     }
 }
