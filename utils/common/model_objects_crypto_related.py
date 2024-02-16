@@ -2,6 +2,7 @@ from typing import Any, Callable
 
 from django.db.models import Manager, Model, QuerySet
 from django.db.models.base import ModelBase
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from utils.forms import INT_HIDER, INT_REVEALER, SecureModelChoiceField
