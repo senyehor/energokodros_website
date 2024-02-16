@@ -57,7 +57,7 @@ class BoxSensorSetListView(ListViewWithFiltering):
 @admin_rights_and_login_required
 class BoxSensorSetEditDeleteView(EditDeleteObjectUpdateView):
     model = BoxSensorSet
-    form_class = BoxSensorSetForBoxWithSensorsCreationForm
+    form_class = BoxSensorSetForm
     success_url = reverse_lazy('box-sensor-set-list')
     template_name = 'energy/edit_box_sensor_set.html'
     EDIT_SUCCESS_MESSAGE = _('Набір успішно відредаговано')
