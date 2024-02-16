@@ -4,10 +4,9 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from energy.forms import (
-    BoxForm, BoxSensorSetForBoxWithSensorsCreationForm,
-    SensorForm,
+    BoxForm, BoxSensorSetForm, SensorForm,
 )
-from energy.logic.ajax import get_facilities_formatted_choices_for_user_role
+from energy.logic import get_facilities_formatted_choices_for_user_role
 from energy.models import Box, BoxSensorSet, Sensor
 from users.logic.simple import check_role_belongs_to_user
 from users.models import UserRole
@@ -67,8 +66,7 @@ class BoxSensorSetEditDeleteView(EditDeleteObjectUpdateView):
 def get_facilities_choices_for_role(request: HttpRequest) -> JsonResponse:
     # noinspection PyTypeChecker
     role: UserRole = get_object_by_hashed_id_or_404(
-        UserRole,
-        request.POST.get('role_id')
+        UserRole, request.POST.get('role_id')
     )
     check_role_belongs_to_user(request.user, role)
     choices = get_facilities_formatted_choices_for_user_role(role)
