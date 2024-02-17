@@ -4,8 +4,8 @@ from datetime import datetime
 from django.utils.translation import gettext as _
 
 from energy.logic.aggregated_consumption.types import (
-    ConsumptionForecast, FormattedConsumptionForecast, FormattedConsumptionTime,
-    FormattedConsumptionValue, RawConsumptionTime, RawConsumptionValue,
+    FormattedConsumptionForecast, FormattedConsumptionTime, FormattedConsumptionValue,
+    RawConsumptionForecast, RawConsumptionTime, RawConsumptionValue,
 )
 
 
@@ -19,7 +19,7 @@ class CommonFormatter:
         return f'{consumption:.10f}'
 
     @staticmethod
-    def format_forecast(forecast: ConsumptionForecast) -> FormattedConsumptionForecast:
+    def format_forecast(forecast: RawConsumptionForecast) -> FormattedConsumptionForecast:
         return f'{forecast:.10f}'
 
 
