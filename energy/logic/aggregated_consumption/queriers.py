@@ -27,9 +27,13 @@ class AggregatedConsumptionQuerier:
     def __init__(self, parameters: AnyQueryParameters):
         self.__parameters = parameters
 
-    def get_consumption(self) -> AggregatedConsumptionData:
+    def get_formatted_consumption(self) -> AggregatedConsumptionData:
         querier = self.__get_querier_for_parameters()
-        return querier(self.__parameters).get_consumption()
+        return querier(self.__parameters).get_formatted_consumption()
+
+    def get_raw_consumption(self) -> RawAggregatedConsumptionData:
+        querier = self.__get_querier_for_parameters()
+        return querier(self.__parameters).get_raw_consumption()
 
     def __get_querier_for_parameters(self) -> Type[AnyQuerier]:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
@@ -76,13 +80,17 @@ class _AggregatedConsumptionQuerierBase(ABC):
             raise NotImplementedError('this class must be subclassed')
         self.__parameters = parameters
 
-    def get_consumption(self) -> AggregatedConsumptionData | None:
+    def get_formatted_consumption(self) -> AggregatedConsumptionData | None:
+        raw_data = self.get_raw_consumption()
+        if raw_data:
+            return self.__format_consumption(raw_data)
+        return None
+
+    def get_raw_consumption(self) -> RawAggregatedConsumptionData | None:
         with connection.cursor() as cursor:
             cursor.execute(self.__compose_query())
             consumption = cursor.fetchall()
-            if consumption:
-                return self.__format_consumption(consumption)
-            return None
+            return consumption or None
 
     def __compose_query(self) -> str:
         return ' '.join(
