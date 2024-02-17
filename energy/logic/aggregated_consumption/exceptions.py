@@ -29,3 +29,7 @@ class StartHourGreaterThanEndHour(EnergyConsumptionExceptionWithMessage):
 
 class NoConsumptionData(EnergyConsumptionExceptionWithMessage):
     message = _('За заданими параметрами дані відсутні')
+
+
+class ForecastForParametersDoesNotExist(EnergyConsumptionExceptionWithMessage):
+    message = _('Для заданих параметрів прогноз відсутній')
