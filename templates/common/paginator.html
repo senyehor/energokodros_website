@@ -1,26 +1,49 @@
-{% load paginator_button_onclick %}
 {% load static %}
 {% if paginator and page %}
+    {% load pagination %}
+    {% load url_replace %}
     <div class="btn-group" role="group" aria-label="Item pagination" id="pagination_buttons">
-        <a href="{% if page.has_previous %}?page={{ page.previous_page_number }}{% endif %}"
-           class="btn btn-outline-primary {% if not page.has_previous %}disabled{% endif %}"
-           onclick="{% paginator_button_onclick %}">&laquo;</a>
-        {% for page_number in paginator.page_range %}
-            {% if page.number == page_number %}
-                <button class="btn btn-outline-primary active">
-                    <span>{{ page_number }}</span>
-                </button>
+        {% if page_obj.number == 1 %}
+            <a class="btn btn-outline-secondary">
+                ⇤
+            </a>
+        {% else %}
+            <a class="btn btn-outline-primary"
+               href="?{% previous_invisible_page_number_if_exists_else_min_available_link request page.number %}">
+                ⇤
+            </a>
+        {% endif %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-primary" href="?{% url_replace request 'page' page_obj.previous_page_number %}">
+                &laquo;
+            </a>
+        {% else %}
+            <a class="btn btn-outline-secondary">
+                &laquo;
+            </a>
+        {% endif %}
+
+        {% for i in paginator|paginate_with_items_per_page_limit:page_obj.number %}
+            {% if page_obj.number == i %}
+                <a class="btn btn-outline-secondary">{{ i }}</a>
             {% else %}
-                <a href="?page={{ page_number }}"
-                   class="btn btn-outline-primary"
-                   onclick="{% paginator_button_onclick %}">
-                    {{ page_number }}
-                </a>
+                <a class="btn btn-outline-primary" href="?{% url_replace request 'page' i %}">{{ i }}</a>
             {% endif %}
         {% endfor %}
-        <a href=" {% if page.has_next %}?page={{ page.next_page_number }}{% endif %}"
-           class="btn btn-outline-primary {% if not page.has_next %}disabled{% endif %}"
-           onclick="{% paginator_button_onclick %}">&raquo;</a>
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary"
+               href="?{% url_replace request 'page' page_obj.next_page_number %}">&raquo;</a>
+        {% else %}
+            <a class="btn btn-outline-secondary">&raquo;</a>
+        {% endif %}
+        {% if page_obj.number == paginator.num_pages %}
+            <a class="btn btn-outline-secondary">⇥</a>
+        {% else %}
+            <a class="btn btn-outline-primary"
+               href="?{% next_invisible_page_number_if_exists_else_max_available_link request page_obj.number paginator.num_pages %}">
+                ⇥
+            </a>
+        {% endif %}
     </div>
-    <script type="text/javascript" src="{% static "js/common/pagination.js" %}"></script>
 {% endif %}

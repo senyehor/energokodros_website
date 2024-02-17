@@ -28,7 +28,11 @@ function get_headers_for_ajax_object() {
     }
 }
 
-function add_muted_text_after_div_label(div, text) {
+function add_on_click_redirects_text_after_div_first_label(div) {
+    __add_muted_text_after_div_label(div, ON_CLICK_REDIRECTS_TEXT)
+}
+
+function __add_muted_text_after_div_label(div, text) {
     div.find('label').after(__generate_muted_p(text));
 }
 
@@ -89,3 +93,34 @@ const DEFAULT_UNEXPECTED_ERROR_MESSAGE = '' +
     'зверніться до адміністратора.'
 
 const ON_CLICK_REDIRECTS_TEXT = 'При натисканні вас перенаправить на сторінку'
+
+function redirect_to_object(url_name, id) {
+    $.ajax({
+        url: reverse_url(url_name),
+        type: 'POST',
+        dataType: 'json',
+        headers: get_headers_for_ajax_object(),
+        data: {id: id},
+        success: (data) => {
+            window.open(data.url, '_self');
+        },
+        error: (data) => {
+            add_error_alert(DEFAULT_UNEXPECTED_ERROR_MESSAGE);
+        }
+    });
+}
+
+function redirect_to_selected_object(url_name) {
+    return function () {
+        let select = $(this);
+        let id = get_selected_option_for_select(select);
+        redirect_to_object(url_name, id);
+    }
+}
+
+function redirect_to_selected_object_with_get_id_callback(url_name, get_id_callback) {
+    return function () {
+        let id = get_id_callback();
+        redirect_to_object(url_name, id);
+    }
+}

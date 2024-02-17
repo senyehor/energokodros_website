@@ -2,10 +2,16 @@
 {% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load js_reverse %}
 {% block title %}{% trans "Редагування набору" %}{% endblock %}
 {% block form_header %}
     {% trans "Редагування набору" %}
 {% endblock %}
 {% block form %}
     {% crispy form %}
+    <script src="{% static 'js/energy/edit_box_sensor_set.js' %}"></script>
+{% endblock %}
+{% block display_none %}
+    {% create_url_name_id_p_tag_with_link_content 'edit-sensor-pk-in-post' %}
+    {% create_url_name_id_p_tag_with_link_content 'edit-facility-pk-in-post' %}
 {% endblock %}

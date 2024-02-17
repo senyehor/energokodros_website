@@ -19,15 +19,8 @@ function style_selects() {
     // removing arrows as select is used to provide id to redirect on click
     __get_user_role_owner_select().css('appearance', 'none');
     __get_facility_role_has_access_to_select().css('appearance', 'none');
-
-    add_muted_text_after_div_label(
-        __get_user_role_owner_div(),
-        ON_CLICK_REDIRECTS_TEXT
-    );
-    add_muted_text_after_div_label(
-        __get_facility_role_has_access_to_div(),
-        ON_CLICK_REDIRECTS_TEXT
-    );
+    add_on_click_redirects_text_after_div_first_label(__get_user_role_owner_div());
+    add_on_click_redirects_text_after_div_first_label(__get_facility_role_has_access_to_div());
 }
 
 

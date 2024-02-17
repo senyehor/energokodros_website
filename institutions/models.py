@@ -10,9 +10,6 @@ class FacilityManager(NS_NodeManager):
         # and institutions, that are on top of hierarchy
         return self.model.get_root_nodes()
 
-    def get_all_institution_objects(self, facility: 'Facility'):
-        return self.model.get_tree(facility.get_root())
-
 
 class Facility(NS_Node):
     name = models.CharField(
@@ -39,10 +36,13 @@ class Facility(NS_Node):
     def __str__(self):
         if self.is_root():
             return _(f'заклад {self.name}')
-        return _(f"об'єкт {self.name} із {self.get_root().name}")
+        return _(f"об'єкт {self.name} із {self.get_institution().name}")
 
     def get_absolute_url(self):
         return reverse_lazy('edit-facility', kwargs={'pk': self.pk})
+
+    def get_institution(self) -> 'Facility':
+        return self.get_root()
 
     # methods below are not implemented for nested set in django_treebeard, so
     # currently they are just 'stubbed'

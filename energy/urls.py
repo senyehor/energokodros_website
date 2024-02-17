@@ -1,7 +1,7 @@
 from django.urls import path
 
 from energy import views
-from energy.models import Box, BoxSensorSet
+from energy.models import Box, BoxSensorSet, Sensor
 from utils.common import redirect_to_object_pk_in_post
 
 urlpatterns = [
@@ -59,13 +59,18 @@ urlpatterns = [
 
 ajax_url = [
     path(
+        'edit-sensor-pk-in-post',
+        redirect_to_object_pk_in_post(Sensor, 'edit-sensor'),
+        name='edit-sensor-pk-in-post',
+    ),
+    path(
         'edit-box-pk-in-post',
         redirect_to_object_pk_in_post(Box, 'edit-box'),
         name='edit-box-pk-in-post'
     ),
     path(
         'edit-box-sensor-set-pk-in-post',
-        redirect_to_object_pk_in_post(BoxSensorSet, 'edit-user'),
+        redirect_to_object_pk_in_post(BoxSensorSet, 'edit-box-sensor-set'),
         name='edit-box-sensor-set-pk-in-post'
     )
 ]
