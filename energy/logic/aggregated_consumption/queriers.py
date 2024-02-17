@@ -58,9 +58,10 @@ class _AggregatedConsumptionQuerierBase(ABC):
     """
 
     _format_time: Callable[
-        [RawConsumptionTime], FormattedConsumptionTime] = CommonFormatter.format_time
+        [RawConsumptionTime], FormattedConsumptionTime] = staticmethod(CommonFormatter.format_time)
     _format_consumption: Callable[
-        [RawConsumptionValue], FormattedConsumptionValue] = CommonFormatter.format_consumption
+        [RawConsumptionValue], FormattedConsumptionValue] = \
+        staticmethod(CommonFormatter.format_consumption)
 
     class __RawAggregatedConsumptionDataIndexes(IntEnum):
         TIME_PART = 0
@@ -190,7 +191,7 @@ class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerie
         AND EXTRACT(HOUR FROM aggregation_interval_start) >= {hours_filtering_start_hour}
         AND EXTRACT(HOUR FROM aggregation_interval_start) <= {hours_filtering_end_hour}
     """
-    _format_time = OneHourFormatter.format_time
+    _format_time = staticmethod(OneHourFormatter.format_time)
 
     def _compose_where(self) -> str:
         base_where = super()._compose_where()
@@ -244,7 +245,8 @@ class _OneMonthQuerier(_AggregatedConsumptionQuerierBase):
         EXTRACT(MONTH FROM aggregation_interval_start)
     """
     ORDER_BY_PART = GROUP_BY_PART
-    _format_time = OneMonthFormatter.format_time
+
+    _format_time = staticmethod(OneMonthFormatter.format_time)
 
 
 class _OneYearQuerier(_AggregatedConsumptionQuerierBase):
