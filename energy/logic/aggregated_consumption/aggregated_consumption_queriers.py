@@ -1,7 +1,7 @@
 from abc import ABC
 from datetime import date, timedelta
 from enum import IntEnum
-from typing import TypeAlias, TypedDict
+from typing import Type, TypeAlias, TypedDict
 
 from django.db import connection
 
@@ -10,16 +10,31 @@ from energy.logic.aggregated_consumption.formatters import (
     AnyFormatter, CommonFormatter, OneHourFormatter,
     OneMonthFormatter,
 )
+from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.simple import get_box_set_ids_for_facility
 from energy.logic.aggregated_consumption.types import (
-    RawAggregatedConsumptionData,
+    AggregatedConsumptionData, RawAggregatedConsumptionData,
 )
 
+AnyQuerier: TypeAlias = '_AggregatedConsumptionQuerierBase'
 
-class AggregatedConsumptionQuerierBase(ABC):
+
+class AggregatedConsumptionQuerier:
+    def __init__(self, parameters: AnyQueryParameters):
+        self.__parameters = parameters
+
+    def get_consumption(self) -> AggregatedConsumptionData:
+        querier = self.__get_querier_for_parameters()
+        return querier(self.__parameters).get_consumption()
+
+    def __get_querier_for_parameters(self) -> Type[AnyQuerier]:
+        return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
+
+
+class _AggregatedConsumptionQuerierBase(ABC):
     SELECT_PART: str = None
     GROUP_BY_PART: str = None
     ORDER_BY_PART: str = None
@@ -52,7 +67,7 @@ class AggregatedConsumptionQuerierBase(ABC):
         id_or_ids_to_filter: str | int
 
     def __init__(self, parameters: AnyQueryParameters):
-        if self.__class__ == AggregatedConsumptionQuerierBase:
+        if self.__class__ == _AggregatedConsumptionQuerierBase:
             raise NotImplementedError('this class must be subclassed')
         self.__parameters = parameters
 
@@ -115,7 +130,7 @@ class AggregatedConsumptionQuerierBase(ABC):
         return self.__parameters
 
 
-class __QueryingForCurrentDayMixin(AggregatedConsumptionQuerierBase):
+class __QueryingForCurrentDayMixin(_AggregatedConsumptionQuerierBase):
     __CURRENT_DAY_WHERE = """
     WHERE
         aggregation_interval_start >= '{current_date}'
@@ -142,7 +157,7 @@ class __QueryingForCurrentDayMixin(AggregatedConsumptionQuerierBase):
         return False
 
 
-class OneHourQuerier(__QueryingForCurrentDayMixin, AggregatedConsumptionQuerierBase):
+class _OneHourQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerierBase):
     SELECT_PART = 'aggregation_interval_start:: TIMESTAMP WITHOUT TIME ZONE AS time'
     GROUP_BY_PART = 'time'
     ORDER_BY_PART = GROUP_BY_PART
@@ -180,13 +195,13 @@ class OneHourQuerier(__QueryingForCurrentDayMixin, AggregatedConsumptionQuerierB
         return super().parameters
 
 
-class OneDayQuerier(__QueryingForCurrentDayMixin, AggregatedConsumptionQuerierBase):
+class _OneDayQuerier(__QueryingForCurrentDayMixin, _AggregatedConsumptionQuerierBase):
     SELECT_PART = 'aggregation_interval_start::date AS date'
     GROUP_BY_PART = 'date'
     ORDER_BY_PART = GROUP_BY_PART
 
 
-class OneWeekQuerier(AggregatedConsumptionQuerierBase):
+class _OneWeekQuerier(_AggregatedConsumptionQuerierBase):
     SELECT_PART = """
         DATE_TRUNC('week', aggregation_interval_start)::DATE || ' - ' ||
         (DATE_TRUNC('week', aggregation_interval_start) + '6 days')::DATE AS week
@@ -195,7 +210,7 @@ class OneWeekQuerier(AggregatedConsumptionQuerierBase):
     ORDER_BY_PART = GROUP_BY_PART
 
 
-class OneMonthQuerier(AggregatedConsumptionQuerierBase):
+class _OneMonthQuerier(_AggregatedConsumptionQuerierBase):
     SELECT_PART = """
         EXTRACT(YEAR FROM aggregation_interval_start) || '-' ||
         EXTRACT(MONTH FROM aggregation_interval_start) AS month
@@ -208,10 +223,17 @@ class OneMonthQuerier(AggregatedConsumptionQuerierBase):
     formatter = OneMonthFormatter()
 
 
-class OneYearQuerier(AggregatedConsumptionQuerierBase):
+class _OneYearQuerier(_AggregatedConsumptionQuerierBase):
     SELECT_PART = 'EXTRACT(YEAR FROM aggregation_interval_start) AS year'
     GROUP_BY_PART = 'year'
     ORDER_BY_PART = GROUP_BY_PART
 
 
-AnyQuerier: TypeAlias = 'AggregatedConsumptionQuerierBase'
+_AGGREGATION_INTERVAL_TO_QUERIER_MAPPING: dict[AggregationIntervalSeconds, Type[AnyQuerier]] = \
+    {
+        AggregationIntervalSeconds.ONE_HOUR:  _OneHourQuerier,
+        AggregationIntervalSeconds.ONE_DAY:   _OneDayQuerier,
+        AggregationIntervalSeconds.ONE_WEEK:  _OneWeekQuerier,
+        AggregationIntervalSeconds.ONE_MONTH: _OneMonthQuerier,
+        AggregationIntervalSeconds.ONE_YEAR:  _OneYearQuerier
+    }
