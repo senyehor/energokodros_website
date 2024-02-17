@@ -3,7 +3,7 @@ from datetime import datetime
 
 from typing import TypeAlias
 
-ConsumptionForecast: TypeAlias = float
+RawConsumptionForecast: TypeAlias = float
 RawConsumptionTime: TypeAlias = datetime | str
 RawConsumptionValue: TypeAlias = Decimal
 
@@ -16,7 +16,7 @@ AggregatedConsumptionData: TypeAlias = \
     list[
         tuple[FormattedConsumptionTime, FormattedConsumptionValue]
     ]
-RawAggregatedConsumptionDataWithForecast: TypeAlias = \
-    list[tuple[RawConsumptionTime, RawConsumptionValue, ConsumptionForecast]]
+AggregatedConsumptionDataWithForecast: TypeAlias = \
+    list[tuple[FormattedConsumptionTime, FormattedConsumptionValue, FormattedConsumptionForecast]]
 
 HOUR: TypeAlias = int
