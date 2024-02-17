@@ -5,27 +5,14 @@ from django.http import HttpRequest, QueryDict
 from django.shortcuts import render
 
 from energy.logic.aggregated_consumption.exceptions import QueryParametersInvalid
-from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
-from energy.logic.aggregated_consumption.parameters import EnergyConsumptionQueryRawParameters
 from energy.models import BoxSensorSet
 from institutions.models import Facility
 from users.logic import check_user_has_no_roles
-from utils.types import FuncView
+from utils.types import FuncView, StrStrDict
 
 
-def convert_request_post_dict_to_raw_parameters(
-        post_dict: QueryDict) -> EnergyConsumptionQueryRawParameters:
-    return EnergyConsumptionQueryRawParameters(**post_dict.dict())
-
-
-def parse_aggregation_interval(aggregation_interval: str) -> AggregationIntervalSeconds:
-    try:
-        aggregation_interval_seconds = parse_str_parameter_to_int_with_correct_exception(
-            aggregation_interval
-        )
-        return AggregationIntervalSeconds(aggregation_interval_seconds)
-    except ValueError as e:
-        raise QueryParametersInvalid from e
+def convert_request_post_dict_to_regular_dict(post_dict: QueryDict) -> StrStrDict:
+    return post_dict.dict()
 
 
 def parse_str_parameter_to_int_with_correct_exception(value: str) -> int:
