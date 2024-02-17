@@ -1,10 +1,11 @@
 from abc import ABC
 from datetime import date, timedelta
 from enum import IntEnum
-from typing import Callable, Type, TypeAlias, TypedDict
+from typing import Callable, Iterable, Type, TypeAlias, TypedDict
 
 from django.db import connection
 
+from energy.logic.aggregated_consumption.exceptions import FacilityAndDescendantsHaveNoSensors
 from energy.logic.aggregated_consumption.formatters import (
     CommonFormatter, OneHourFormatter,
     OneMonthFormatter,
@@ -13,11 +14,11 @@ from energy.logic.aggregated_consumption.models import AggregationIntervalSecond
 from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
-from energy.logic.aggregated_consumption.simple import get_box_set_ids_for_facility
 from energy.logic.aggregated_consumption.types import (
     AggregatedConsumptionData, FormattedConsumptionTime, FormattedConsumptionValue,
     RawAggregatedConsumptionData, RawConsumptionTime, RawConsumptionValue,
 )
+from energy.models import BoxSensorSet
 
 AnyQuerier: TypeAlias = '_AggregatedConsumptionQuerierBase'
 
@@ -122,11 +123,20 @@ class _AggregatedConsumptionQuerierBase(ABC):
         )
 
     def __get_boxes_set_ids(self) -> str:
-        ids = get_box_set_ids_for_facility(
-            self.parameters.facility_to_get_consumption_for_or_all_descendants_if_any
-        )
+        ids = self.__get_box_set_ids_for_facility()
         ids = (str(_id) for _id in ids)
         return ', '.join(ids)
+
+    def __get_box_set_ids_for_facility(self) -> Iterable[int]:
+        facility = self.__parameters.facility_to_get_consumption_for_or_all_descendants_if_any
+        facility_and_descendants = facility.get_tree(facility)
+        ids = BoxSensorSet.objects. \
+            only('pk'). \
+            filter(facility__in=facility_and_descendants). \
+            values_list('pk', flat=True)
+        if ids:
+            return ids
+        raise FacilityAndDescendantsHaveNoSensors
 
     def __format_consumption(self, raw_consumption: RawAggregatedConsumptionData) \
             -> AggregatedConsumptionData:
