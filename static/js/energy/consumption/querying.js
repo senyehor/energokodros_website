@@ -57,7 +57,8 @@ function __compose_aggregation_query_parameters() {
         facility_pk: facility_pk,
         period_start_epoch_seconds: period_start_epoch_seconds,
         period_end_epoch_seconds: period_end_epoch_seconds,
-        aggregation_interval_seconds: aggregation_interval_seconds
+        aggregation_interval_seconds: aggregation_interval_seconds,
+        include_forecast: include_forecast
     };
     if (INCLUDE_HOURS_FILTER) {
         base_parameters.hours_filtering_start_hour = _(__get_hours_filtering_start_select());

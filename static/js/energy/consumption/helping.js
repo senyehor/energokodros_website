@@ -162,3 +162,11 @@ function __get_period_start_input() {
 function __get_period_end_input() {
     return $('#period_end')
 }
+
+function __get_include_forecast_checkbox() {
+    return $('#id_include_forecast');
+}
+
+function __get_forecast_checkbox_value() {
+    return __get_include_forecast_checkbox().is(':checked');
+}
