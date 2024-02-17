@@ -174,8 +174,7 @@ class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
 _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING: \
     dict[
         AggregationIntervalSeconds,
-        Type[AnyQueryParametersParser]
-    ] = \
+        Type[AnyQueryParametersParser]] = \
     {
         AggregationIntervalSeconds.ONE_HOUR:  _OneHourAggregationIntervalQueryParametersParser,
         AggregationIntervalSeconds.ONE_DAY:   _OneDayAggregationIntervalQueryParametersParser,
