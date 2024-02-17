@@ -1,7 +1,7 @@
-from energy.logic.aggregated_consumption.aggregated_consumption_queriers import \
-    AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
 from energy.logic.aggregated_consumption.parameters_parsers import ParameterParser
+from energy.logic.aggregated_consumption.queriers import \
+    AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.simple import parse_include_forecast_parameter
 from energy.logic.aggregated_consumption.types import (
     AggregatedConsumptionData, AggregatedConsumptionDataWithForecast,
