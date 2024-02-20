@@ -9,7 +9,7 @@ from energy.logic.aggregated_consumption.types import (
 )
 
 
-class CommonFormatter:
+class RawAggregatedDataFormatter:
     @staticmethod
     def format_time(time: RawConsumptionTime) -> FormattedConsumptionTime:
         return time
@@ -18,12 +18,8 @@ class CommonFormatter:
     def format_consumption(consumption: RawConsumptionValue) -> FormattedConsumptionValue:
         return f'{consumption:.10f}'
 
-    @staticmethod
-    def format_forecast(forecast: RawConsumptionForecast) -> FormattedConsumptionForecast:
-        return f'{forecast:.10f}'
 
-
-class OneHourFormatter(CommonFormatter):
+class OneHourFormatter(RawAggregatedDataFormatter):
     @staticmethod
     def format_time(time: datetime) -> FormattedConsumptionTime:
         # time contains start hour as we use aggregation_interval_start in select
@@ -31,7 +27,7 @@ class OneHourFormatter(CommonFormatter):
         return time.strftime(f'%d-%m-%Y %H:%M - {end_hour.zfill(2)}:%M')
 
 
-class OneMonthFormatter(CommonFormatter):
+class OneMonthFormatter(RawAggregatedDataFormatter):
     @staticmethod
     def format_time(time: str) -> FormattedConsumptionTime:
         def __get_year_and_month_from_time(_time: str) -> tuple[str, str]:
@@ -44,3 +40,7 @@ class OneMonthFormatter(CommonFormatter):
         year, month = __get_year_and_month_from_time(time)
         month_name = __get_month_name(int(month))
         return f'{year} {month_name}'
+
+
+def format_forecast(forecast: RawConsumptionForecast) -> FormattedConsumptionForecast:
+    return f'{forecast:.10f}'
