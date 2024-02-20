@@ -5,7 +5,7 @@ from utils.common import compose_secure_choices_for_queryset
 from utils.common.model_objects_crypto_related import Choices
 
 
-def common_facility_choices_format_function(facility: Facility):
+def common_facility_choices_format_function(facility: Facility) -> str:
     return mark_safe('&nbsp;&nbsp;' * (facility.depth - 1) + facility.name)
 
 
