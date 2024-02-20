@@ -6,7 +6,7 @@ from django.views.generic import FormView
 
 from institutions.forms import NewFacilityForm
 from institutions.logic import (
-    compose_formatted_institution_facilities_choices,
+    make_institution_facilities_choices_with_padding_according_to_nesting,
 )
 from institutions.models import Facility
 from utils.common import get_object_by_hashed_id_or_404
@@ -19,7 +19,9 @@ def get_institution_facilities_choices(request) -> JsonResponse:
         Facility,
         request.POST.get('institution_id')
     )
-    formatted_choices_ordered = compose_formatted_institution_facilities_choices(institution)
+    formatted_choices_ordered = make_institution_facilities_choices_with_padding_according_to_nesting(
+        institution
+        )
     return JsonResponse(formatted_choices_ordered, safe=False)
 
 

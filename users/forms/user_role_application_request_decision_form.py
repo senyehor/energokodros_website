@@ -3,8 +3,7 @@ from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
 from institutions.logic import (
-    common_facility_choices_format_function,
-    get_all_descendants_of_facility_with_self,
+    get_all_descendants_of_facility_with_self, get_facility_name_space_padded_according_to_nesting,
 )
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
@@ -24,7 +23,7 @@ class UserRoleApplicationRequestsDecisionForm(CrispyModelForm):
         queryset=Facility.objects.all(),
         required=True,
         empty_label=None,
-        label_from_instance_function=common_facility_choices_format_function,
+        label_from_instance_function=get_facility_name_space_padded_according_to_nesting,
         widget=SelectWithFormControlClass({'size': 6})
     )
     position_name = forms.CharField(
