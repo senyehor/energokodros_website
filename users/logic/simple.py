@@ -15,9 +15,9 @@ def check_role_belongs_to_user(user: User, user_role: UserRole):
 
 
 def check_role_has_access_for_facility(user_role: UserRole, facility: Facility):
-    if facility.is_descendant_of(user_role.facility_has_access_to):
-        return
     if user_role.facility_has_access_to == facility:
+        return
+    if facility.is_descendant_of(user_role.facility_has_access_to):
         return
     raise PermissionDenied
 
