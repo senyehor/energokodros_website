@@ -1,5 +1,6 @@
 from energy.logic.aggregated_consumption.exceptions import QueryParametersInvalid
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
+from energy.logic.aggregated_consumption.formatters import RawAggregatedDataFormatter
 from energy.logic.aggregated_consumption.parameters_parsers import ParameterParser
 from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.types import (
@@ -28,13 +29,16 @@ class AggregatedEnergyConsumptionController:
         querier = self.__create_consumption_querier()
         if self.__include_forecast:
             raw_consumption = querier.get_raw_consumption()
-            forecaster = self.__create_forecaster(raw_consumption)
+            forecaster = self.__create_forecaster(raw_consumption, querier.formatter)
             return forecaster.get_consumption_with_forecast()
         return querier.get_formatted_consumption()
 
-    def __create_forecaster(self, raw_consumption: RawAggregatedConsumptionData) \
-            -> ConsumptionForecaster:
-        return ConsumptionForecaster(self.__parameters, raw_consumption)
+    def __create_forecaster(
+            self, raw_consumption: RawAggregatedConsumptionData,
+            raw_aggregation_data_formatter: RawAggregatedDataFormatter) -> ConsumptionForecaster:
+        return ConsumptionForecaster(
+            self.__parameters, raw_consumption, raw_aggregation_data_formatter
+        )
 
     def __create_consumption_querier(self) -> AggregatedConsumptionQuerier:
         return AggregatedConsumptionQuerier(self.__parameters)

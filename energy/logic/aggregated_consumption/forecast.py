@@ -3,14 +3,15 @@ from datetime import datetime
 from typing import Callable
 
 from energy.logic.aggregated_consumption.exceptions import ForecastForParametersDoesNotExist
-from energy.logic.aggregated_consumption.formatters import CommonFormatter, OneHourFormatter
+from energy.logic.aggregated_consumption.formatters import (
+    format_forecast, RawAggregatedDataFormatter,
+)
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.types import (
     AggregatedConsumptionDataWithForecast, FormattedConsumptionForecast,
-    FormattedConsumptionTime, FormattedConsumptionValue, RawAggregatedConsumptionData,
+    RawAggregatedConsumptionData,
     RawConsumptionForecast, RawConsumptionTime,
-    RawConsumptionValue,
 )
 from institutions.models import Facility
 
@@ -20,26 +21,23 @@ class ConsumptionForecaster:
     currently this is just a stub returning hardcoded data,
     but will be a forecasting AI
     """
-    _format_forecast: Callable[[RawConsumptionForecast], FormattedConsumptionForecast] = \
-        staticmethod(CommonFormatter.format_forecast)
-    # these are hardcoded to OneHourFormatter as currently it is the only use case
-    _format_time: Callable[
-        [RawConsumptionTime], FormattedConsumptionTime] = \
-        staticmethod(OneHourFormatter.format_time)
-    _format_consumption: Callable[
-        [RawConsumptionValue], FormattedConsumptionValue] = \
-        staticmethod(OneHourFormatter.format_consumption)
+    format_forecast: Callable[[RawConsumptionForecast], FormattedConsumptionForecast] = \
+        format_forecast
 
-    def __init__(self, parameters: AnyQueryParameters, consumption: RawAggregatedConsumptionData):
+    def __init__(
+            self, parameters: AnyQueryParameters, consumption: RawAggregatedConsumptionData,
+            raw_aggregation_data_formatter: RawAggregatedDataFormatter):
         self.__parameters = parameters
         self.__consumption = consumption
+        self.__raw_aggregation_data_formatter = raw_aggregation_data_formatter
 
     def get_consumption_with_forecast(self) -> AggregatedConsumptionDataWithForecast:
+        _ = self.__raw_aggregation_data_formatter
         return [
             (
-                self._format_time(date),
-                self._format_consumption(consumption),
-                self._format_forecast(self.__get_forecast_for_date(date))
+                _.format_time(date),
+                _.format_consumption(consumption),
+                self.format_forecast(self.__get_forecast_for_date(date))
             )
             for date, consumption in self.__consumption
         ]
