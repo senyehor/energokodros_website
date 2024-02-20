@@ -2,7 +2,10 @@ from django import forms
 from django.utils.decorators import classonlymethod
 from django.utils.translation import gettext_lazy as _
 
-from institutions.logic import common_facility_choices_format_function
+from institutions.logic import (
+    common_facility_choices_format_function,
+    get_all_descendants_of_facility_with_self,
+)
 from institutions.models import Facility
 from users.models import UserRole, UserRoleApplication
 from utils.forms import (
@@ -89,8 +92,9 @@ class UserRoleApplicationRequestsDecisionForm(CrispyModelForm):
         self.__populate_info_fields(application_request)
 
     def __set_correct_queryset_for_facility_has_access_to(self, institution: Facility):
-        self.fields['facility_has_access_to'].queryset = \
-            Facility.objects.get_all_institution_objects(institution)
+        self.fields['facility_has_access_to'].queryset = get_all_descendants_of_facility_with_self(
+            institution
+        )
 
     def __populate_info_fields(self, application_request: UserRoleApplication):
         self.fields['institution_verbose'].initial = _(str(application_request.institution))
