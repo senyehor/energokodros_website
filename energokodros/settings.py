@@ -12,7 +12,6 @@ env = environ.Env(
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = env('DEBUG')
-# random secret key to collect static during docker build
 SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = [] if DEBUG else env('ALLOWED_HOSTS').split(',')
