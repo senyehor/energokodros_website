@@ -167,7 +167,8 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
 
     def __check_hours_filtering_set(self):
         return self.__hours_filtering_start_hour is not None \
-            and self.__hours_filtering_end_hour is not None
+            and self.__hours_filtering_end_hour is not None \
+            and self.__hour_filtering_method is not None
 
 
 class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
