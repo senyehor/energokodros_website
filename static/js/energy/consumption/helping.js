@@ -4,7 +4,8 @@ $(document).ready(function () {
     __get_aggregation_interval_select().change(
         add_or_remove_hours_filtering_for_aggregation_interval_select
     );
-    __get_hours_filtering_reset_button().click(reset_hours_filters);
+    set_default_hour_filtering_choices();
+    __get_hours_filtering_reset_button().click(set_default_hour_filtering_choices);
     __get_hours_filtering_start_select().change(__remove_error_from_hours_select);
     __get_hours_filtering_end_select().change(__remove_error_from_hours_select);
     set_date_inputs_now();
@@ -12,9 +13,12 @@ $(document).ready(function () {
 })
 
 let INCLUDE_HOURS_FILTER = false;
+
 let FILTER_EVERY_DAY_VALUE = 'filter-every-day', FILTER_WHOLE_INTERVAL_VALUE = 'filter-whole-interval';
 let CHOSEN_HOUR_FILTERING_OPTION = FILTER_EVERY_DAY_VALUE;
 let FILTER_EVERY_DAY_BUTTON = null, FILTER_WHOLE_INTERVAL_BUTTON = null;
+
+const DEFAULT_START_HOUR_FILTER_OPTION = 0, DEFAULT_END_HOUR_FILTER_OPTION = 23;
 
 function update_facilities_list_for_role() {
     $.ajax({
@@ -59,28 +63,29 @@ function check_control_form_required_fields_are_filled(event) {
     })
 }
 
+function set_default_hour_filtering_choices() {
+    __get_hours_filtering_start_select()
+        .val(DEFAULT_START_HOUR_FILTER_OPTION)
+        .attr('selected', true);
+    __get_hours_filtering_end_select()
+        .val(DEFAULT_END_HOUR_FILTER_OPTION)
+        .attr('selected', true);
+}
+
 function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
-    // both should be selected, or none if aggregation interval is one hour
     INCLUDE_HOURS_FILTER = false;
-    if (!_check_one_hour_interval_is_selected()) {
-        return;
-    }
-    const EMPTY_VALUE = '';
     let start_value = get_selected_option_for_select(__get_hours_filtering_start_select());
     let end_value = get_selected_option_for_select(__get_hours_filtering_end_select());
-    if (start_value === EMPTY_VALUE && end_value === EMPTY_VALUE) {
-        return;
-    }
-    if (start_value === EMPTY_VALUE) {
-        __add_error_for_hours_filtering_select(__get_hours_filtering_start_select());
-        return;
-    }
-    if (end_value === EMPTY_VALUE) {
-        __add_error_for_hours_filtering_select(__get_hours_filtering_end_select());
-        return;
+    // default values cover everything, so there is no point to pass them
+    if (
+        start_value === DEFAULT_START_HOUR_FILTER_OPTION
+        && end_value === DEFAULT_END_HOUR_FILTER_OPTION
+    ) {
+        return
     }
     INCLUDE_HOURS_FILTER = true;
 }
+
 
 function add_hour_filtering_filter_day_or_interval_buttons() {
     let filter_every_day_button = `
