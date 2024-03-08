@@ -126,6 +126,7 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
         self.__hours_filtering_start_hour = hours_filtering_start_hour
         self.__hours_filtering_end_hour = hours_filtering_end_hour
         self.__hour_filtering_method = hour_filtering_method
+        if self.__check_hour_filtering_options_are_set():
             self.__set_hours_filtering_range(hours_filtering_start_hour, hours_filtering_end_hour)
         super().__init__(**kwargs)
         self._validate()
@@ -141,7 +142,7 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
 
     def _validate(self):
         super()._validate()
-        if self.__check_hours_filtering_set():
+        if self.__check_hour_filtering_options_are_set():
             self.__check_hours_filtering_range_is_correct()
 
     def __check_aggregation_interval_is_on_hour(self, aggregation_interval: Any):
@@ -165,7 +166,7 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
             hours_filtering_end_hour
         )
 
-    def __check_hours_filtering_set(self):
+    def __check_hour_filtering_options_are_set(self):
         return self.__hours_filtering_start_hour is not None \
             and self.__hours_filtering_end_hour is not None \
             and self.__hour_filtering_method is not None
