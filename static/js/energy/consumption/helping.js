@@ -8,9 +8,13 @@ $(document).ready(function () {
     __get_hours_filtering_start_select().change(__remove_error_from_hours_select);
     __get_hours_filtering_end_select().change(__remove_error_from_hours_select);
     set_date_inputs_now();
+    add_hour_filtering_filter_day_or_interval_buttons()
 })
 
 let INCLUDE_HOURS_FILTER = false;
+let FILTER_EVERY_DAY_VALUE = 'filter-every-day', FILTER_WHOLE_INTERVAL_VALUE = 'filter-whole-interval';
+let CHOSEN_HOUR_FILTERING_OPTION = FILTER_EVERY_DAY_VALUE;
+let FILTER_EVERY_DAY_BUTTON = null, FILTER_WHOLE_INTERVAL_BUTTON = null;
 
 function update_facilities_list_for_role() {
     $.ajax({
@@ -81,6 +85,31 @@ function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
         return;
     }
     INCLUDE_HOURS_FILTER = true;
+}
+
+function add_hour_filtering_filter_day_or_interval_buttons() {
+    let filter_every_day_button = `
+        <a class="btn ${CHOSEN_BUTTON_CLASS}" id="filter_every_day_button_id">
+            Кожен день
+        </a>`;
+    let filter_whole_interval_button = `
+        <a class="btn ${AVAILABLE_BUTTON_CLASS}" id="filter_whole_interval_button_id">
+            Увесь інтервал
+        </a>`;
+    __get_hour_filtering_options_buttons_container().append(filter_every_day_button);
+    __get_hour_filtering_options_buttons_container().append(filter_whole_interval_button);
+    FILTER_EVERY_DAY_BUTTON = $('#filter_every_day_button_id');
+    FILTER_WHOLE_INTERVAL_BUTTON = $('#filter_whole_interval_button_id');
+    FILTER_EVERY_DAY_BUTTON.click(() => {
+        __set_button_to_chosen(FILTER_EVERY_DAY_BUTTON);
+        CHOSEN_HOUR_FILTERING_OPTION = FILTER_EVERY_DAY_VALUE;
+        __set_button_to_can_be_chosen(FILTER_WHOLE_INTERVAL_BUTTON);
+    });
+    FILTER_WHOLE_INTERVAL_BUTTON.click(() => {
+        __set_button_to_chosen(FILTER_WHOLE_INTERVAL_BUTTON);
+        CHOSEN_HOUR_FILTERING_OPTION = FILTER_WHOLE_INTERVAL_VALUE;
+        __set_button_to_can_be_chosen(FILTER_EVERY_DAY_BUTTON);
+    })
 }
 
 function set_date_inputs_now() {
@@ -169,4 +198,8 @@ function __get_include_forecast_checkbox() {
 
 function __get_forecast_checkbox_value() {
     return __get_include_forecast_checkbox().is(':checked');
+}
+
+function __get_hour_filtering_options_buttons_container() {
+    return $('#hour_filtering_option_buttons_container_id');
 }
