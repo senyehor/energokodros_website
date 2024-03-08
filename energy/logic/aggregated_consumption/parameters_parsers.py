@@ -30,9 +30,10 @@ class ParameterParser:
         _ = self.__raw_parameters
         return parser(
             aggregation_interval=aggregation_interval,
-            facility_pk_to_get_consumption_for_or_all_descendants_if_any=_['facility_pk'],
-            period_end_epoch_seconds=_['period_end_epoch_seconds'],
-            period_start_epoch_seconds=_['period_start_epoch_seconds']
+            facility_pk_to_get_consumption_for_or_all_descendants_if_any=_.pop('facility_pk'),
+            period_end_epoch_seconds=_.pop('period_end_epoch_seconds'),
+            period_start_epoch_seconds=_.pop('period_start_epoch_seconds'),
+            **_
         ).get_parameters()
 
     def __extract_aggregation_interval(self) -> AggregationIntervalSeconds:
@@ -43,7 +44,7 @@ class ParameterParser:
 
     def __get_parser_for_aggregation_interval(
             self, aggregation_interval: AggregationIntervalSeconds) \
-            -> Type[AnyQueryParametersParser]:
+            -> Type[AnyQueryParametersParser] | Callable:
         return _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING[aggregation_interval]
 
 
