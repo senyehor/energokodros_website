@@ -1,7 +1,7 @@
 import time
 from dataclasses import fields
 from datetime import date, datetime
-from typing import Any, Iterable, Type, TypeAlias
+from typing import Any, Callable, Iterable, Type, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
     AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, PeriodStartGreaterThanEnd,
@@ -124,7 +124,7 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
         self.__check_aggregation_interval_is_on_hour(kwargs.get('aggregation_interval'))
         self.__hours_filtering_start_hour = hours_filtering_start_hour
         self.__hours_filtering_end_hour = hours_filtering_end_hour
-        if hours_filtering_start_hour and hours_filtering_end_hour:
+        if hours_filtering_start_hour is not None and hours_filtering_end_hour is not None:
             self.__set_hours_filtering_range(hours_filtering_start_hour, hours_filtering_end_hour)
         super().__init__(**kwargs)
         self._validate()
@@ -165,7 +165,8 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
         )
 
     def __check_hours_filtering_set(self):
-        return self.__hours_filtering_start_hour and self.__hours_filtering_end_hour
+        return self.__hours_filtering_start_hour is not None \
+            and self.__hours_filtering_end_hour is not None
 
 
 class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
