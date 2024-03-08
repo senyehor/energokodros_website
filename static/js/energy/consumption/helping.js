@@ -47,11 +47,6 @@ function add_or_remove_hours_filtering_for_aggregation_interval_select() {
     }
 }
 
-function reset_hours_filters() {
-    $('#id_hour_filter_start_none_option').prop('selected', true);
-    $('#id_hour_filter_end_none_option').prop('selected', true);
-}
-
 function check_control_form_required_fields_are_filled(event) {
     let form = __get_control_form();
     let fields = form.find('input:required, select:required').serializeArray();
