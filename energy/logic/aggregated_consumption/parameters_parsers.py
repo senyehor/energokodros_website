@@ -55,7 +55,7 @@ class _CommonQueryParametersParser:
             aggregation_interval: AggregationIntervalSeconds,
             facility_pk_to_get_consumption_for_or_all_descendants_if_any: str,
             period_start_epoch_seconds: str,
-            period_end_epoch_seconds: str
+            period_end_epoch_seconds: str, **kwargs
     ):
         self.__facility_to_get_consumption_for_or_all_descendants_if_any = \
             self.__parse_facility(facility_pk_to_get_consumption_for_or_all_descendants_if_any)
