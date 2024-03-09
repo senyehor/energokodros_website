@@ -7,6 +7,10 @@ class EnergyConsumptionExceptionWithMessage(ExceptionWithMessage):
     pass
 
 
+class InvalidHourFilteringMethod(EnergyConsumptionExceptionWithMessage):
+    message = _('Такого методу погодинної фільтрації не існує')
+
+
 class QueryParametersInvalid(EnergyConsumptionExceptionWithMessage):
     message = _('Сталася помилка при опрацюванні параметрів')
 
