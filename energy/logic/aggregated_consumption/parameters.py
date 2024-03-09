@@ -60,16 +60,15 @@ class CommonQueryParameters:
         return time(0, 0, 0)
 
 
-class HourFilteringMethods(StrEnum):
-    EVERY_DAY = 'filter-every-day'
-    WHOLE_INTERVAL = 'filter-whole-interval'
-
-
 @dataclass(kw_only=True)
 class OneHourAggregationIntervalQueryParameters(CommonQueryParameters):
     aggregation_interval = AggregationIntervalSeconds.ONE_HOUR
     hours_filtering_start_hour: HOUR | None = None
     hours_filtering_end_hour: HOUR | None = None
+
+    class HourFilteringMethods(StrEnum):
+        EVERY_DAY = 'filter-every-day'
+        WHOLE_INTERVAL = 'filter-whole-interval'
 
     def is_hours_filtering_set(self):
         return self.hours_filtering_start_hour is not None \
