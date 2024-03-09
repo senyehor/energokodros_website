@@ -32,26 +32,26 @@ class CommonQueryParameters:
     @property
     def period_end(self) -> datetime:
         return datetime.combine(
-            self.__period_end,
+            self._period_end,
             self.__create_one_second_to_midnight_time()
         )
 
     @period_end.setter
     def period_end(self, value: datetime):
         # noinspection PyAttributeOutsideInit
-        self.__period_end = value
+        self._period_end = value
 
     @property
     def period_start(self) -> datetime:
         return datetime.combine(
-            self.__period_start,
+            self._period_start,
             self.__create_all_zeros_time()
         )
 
     @period_start.setter
     def period_start(self, value: date):
         # noinspection PyAttributeOutsideInit
-        self.__period_start = value
+        self._period_start = value
 
     def __create_one_second_to_midnight_time(self) -> time:
         return time(23, 59, 59)
