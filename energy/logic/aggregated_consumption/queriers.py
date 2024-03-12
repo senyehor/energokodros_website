@@ -68,6 +68,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
     class __RawAggregatedConsumptionDataIndexes(IntEnum):
         TIME_PART = 0
         CONSUMPTION_PART = 1
+        TOTAL_CONSUMPTION_PART = 2
 
     class __BoxesSetIdSubqueryParameters(TypedDict):
         boxes_set_id_subquery: str
