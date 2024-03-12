@@ -5,7 +5,8 @@ from django.utils.translation import gettext as _
 
 from energy.logic.aggregated_consumption.types import (
     FormattedConsumptionForecast, FormattedConsumptionTime, FormattedConsumptionValue,
-    RawConsumptionForecast, RawConsumptionTime, RawConsumptionValue,
+    FormattedTotalConsumption, RawConsumptionForecast, RawConsumptionTime, RawConsumptionValue,
+    RawTotalConsumption,
 )
 
 
@@ -17,6 +18,11 @@ class RawAggregatedDataFormatter:
     @staticmethod
     def format_consumption(consumption: RawConsumptionValue) -> FormattedConsumptionValue:
         return f'{consumption:.10f}'
+
+    @staticmethod
+    def format_total_consumption(total_consumption: RawTotalConsumption) \
+            -> FormattedTotalConsumption:
+        return f'{total_consumption:.10f}'
 
 
 class OneHourFormatter(RawAggregatedDataFormatter):
