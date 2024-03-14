@@ -6,7 +6,7 @@ from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionQu
 from energy.logic.aggregated_consumption.types import (
     ConsumptionWithConsumptionForecast,
     ConsumptionWIthConsumptionForecastWithTotalConsumption,
-    ConsumptionWithTotalConsumption, RawConsumptionData,
+    ConsumptionWithTotalConsumption, RawConsumption,
 )
 from users.logic import check_role_belongs_to_user, check_role_has_access_for_facility
 from users.models import User, UserRole
@@ -45,14 +45,14 @@ class AggregatedEnergyConsumptionController:
         return consumption, total_consumption
 
     def __get_consumption_with_forecast(
-            self, raw_consumption: RawConsumptionData,
+            self, raw_consumption: RawConsumption,
             raw_consumption_formatter: RawAggregatedDataFormatter
     ) -> ConsumptionWithConsumptionForecast:
         forecaster = self.__create_forecaster(raw_consumption, raw_consumption_formatter)
         return forecaster.get_consumption_with_forecast()
 
     def __create_forecaster(
-            self, raw_consumption: RawConsumptionData,
+            self, raw_consumption: RawConsumption,
             raw_aggregation_data_formatter: RawAggregatedDataFormatter) -> ConsumptionForecaster:
         return ConsumptionForecaster(
             self.__parameters, raw_consumption, raw_aggregation_data_formatter

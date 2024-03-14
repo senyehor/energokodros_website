@@ -15,9 +15,9 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    Consumption, ConsumptionWithTotalConsumption, RawConsumptionData,
-    RawConsumptionDataWIthRawTotalConsumption, RawConsumptionTime, RawConsumptionValue,
-    RawTotalConsumption, TotalConsumption,
+    Consumption, ConsumptionWithTotalConsumption, RawConsumption, RawConsumptionTime,
+    RawConsumptionValue, RawConsumptionWithRawTotalConsumption, RawTotalConsumption,
+    TotalConsumption,
 )
 from energy.models import BoxSensorSet
 
@@ -39,7 +39,7 @@ class AggregatedConsumptionQuerier:
             )
         return None
 
-    def get_raw_consumption(self) -> RawConsumptionData | None:
+    def get_raw_consumption(self) -> RawConsumption | None:
         return self.__raw_consumption
 
     def get_total_consumption(self) -> TotalConsumption | None:
@@ -119,7 +119,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         return None
 
     def get_raw_consumption_with_total_consumption(self) \
-            -> RawConsumptionDataWIthRawTotalConsumption | None:
+            -> RawConsumptionWithRawTotalConsumption | None:
         with connection.cursor() as cursor:
             cursor.execute(self.__compose_query())
             rows = cursor.fetchall()
@@ -129,7 +129,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
 
     def __split_rows_into_raw_consumption_and_total_consumption(
             self, rows: list[RawConsumptionTime, RawConsumptionValue, RawTotalConsumption]
-    ) -> RawConsumptionDataWIthRawTotalConsumption:
+    ) -> RawConsumptionWithRawTotalConsumption:
         _ = self.__ConsumptionWithTotalConsumptionRawsIndexes
         raw_aggregated_consumption = (
             (
@@ -201,7 +201,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
             return ids
         raise FacilityAndDescendantsHaveNoSensors
 
-    def format_consumption(self, raw_consumption: RawConsumptionData) \
+    def format_consumption(self, raw_consumption: RawConsumption) \
             -> Consumption:
         _ = self.__RawAggregatedConsumptionDataIndexes
         return [
