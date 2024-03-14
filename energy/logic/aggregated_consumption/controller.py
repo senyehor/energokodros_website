@@ -29,13 +29,13 @@ class AggregatedEnergyConsumptionController:
     def get_consumption_with_optional_forecast_and_total_consumption(self) -> \
             ConsumptionWithTotalConsumption \
             | ConsumptionWIthConsumptionForecastWithTotalConsumption \
-            | None:
+            | tuple[None, None]:
         querier = self.__create_consumption_querier()
         total_consumption = querier.get_total_consumption()
         if self.__include_forecast:
             raw_consumption = querier.get_raw_consumption()
             if not raw_consumption:
-                return None
+                return None, total_consumption
             consumption_with_forecast = self.__get_consumption_with_forecast(
                 raw_consumption,
                 querier.formatter
