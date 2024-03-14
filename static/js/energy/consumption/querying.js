@@ -30,7 +30,8 @@ function get_consumption_data_and_update() {
                 add_warning_alert('За заданими фільтрами дані відсутні');
                 return;
             }
-            LATEST_RECEIVED_DATA = data;
+            CONSUMPTION = data.consumption;
+            TOTAL_CONSUMPTION = data.total_consumption;
             draw_content(data);
         },
         error: (error) => {
