@@ -60,6 +60,10 @@ class AggregatedConsumptionQuerier:
     def __get_querier_type(self) -> Type[AnyQuerier]:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
 
+    @property
+    def formatter(self) -> RawAggregatedDataFormatter:
+        return self.__querier.formatter
+
 
 class _AggregatedConsumptionQuerierBase(ABC):
     SELECT_PART: str = None
