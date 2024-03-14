@@ -15,14 +15,17 @@ let CONSUMPTION = null, TOTAL_CONSUMPTION = null;
 
 let CONSUMPTION_INDEX_IN_RAW_DATA = 1, LABEL_INDEX_IN_RAW_DATA = 0, CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA = 2;
 
-function draw_content(data) {
-    if (CHOSEN_DISPLAYING_OPTION === DRAW_TABLE) {
-        _draw_table(data);
-        return;
+function draw_content() {
+    if (CONSUMPTION) {
+        if (CHOSEN_DISPLAYING_OPTION === DRAW_TABLE) {
+            _draw_table(CONSUMPTION);
+            return;
+        }
+        if (CHOSEN_DISPLAYING_OPTION === DRAW_CHART) {
+            _draw_chart(CONSUMPTION);
+        }
     }
-    if (CHOSEN_DISPLAYING_OPTION === DRAW_CHART) {
-        _draw_chart(data);
-    }
+    throw new Error('consumption is not set')
 }
 
 function _draw_chart(data) {
