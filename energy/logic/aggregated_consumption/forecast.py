@@ -9,8 +9,7 @@ from energy.logic.aggregated_consumption.formatters import (
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.types import (
-    AggregatedConsumptionDataWithForecast, FormattedConsumptionForecast,
-    RawAggregatedConsumptionData,
+    ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumptionData,
     RawConsumptionForecast, RawConsumptionTime,
 )
 from institutions.models import Facility
@@ -21,17 +20,17 @@ class ConsumptionForecaster:
     currently this is just a stub returning hardcoded data,
     but will be a forecasting AI
     """
-    format_forecast: Callable[[RawConsumptionForecast], FormattedConsumptionForecast] = \
+    format_forecast: Callable[[RawConsumptionForecast], ConsumptionForecast] = \
         staticmethod(format_forecast)
 
     def __init__(
-            self, parameters: AnyQueryParameters, consumption: RawAggregatedConsumptionData,
+            self, parameters: AnyQueryParameters, consumption: RawConsumptionData,
             raw_aggregation_data_formatter: RawAggregatedDataFormatter):
         self.__parameters = parameters
         self.__consumption = consumption
         self.__raw_aggregation_data_formatter = raw_aggregation_data_formatter
 
-    def get_consumption_with_forecast(self) -> AggregatedConsumptionDataWithForecast:
+    def get_consumption_with_forecast(self) -> ConsumptionWithConsumptionForecast:
         _ = self.__raw_aggregation_data_formatter
         return [
             (
