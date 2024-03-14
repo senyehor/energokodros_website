@@ -34,12 +34,13 @@ class AggregatedEnergyConsumptionController:
         total_consumption = querier.get_total_consumption()
         if self.__include_forecast:
             raw_consumption = querier.get_raw_consumption()
-            if not raw_consumption:
-                return None, total_consumption
-            consumption_with_forecast = self.__get_consumption_with_forecast(
-                raw_consumption,
-                querier.formatter
-            )
+            if raw_consumption:
+                consumption_with_forecast = self.__get_consumption_with_forecast(
+                    raw_consumption,
+                    querier.formatter
+                )
+            else:
+                consumption_with_forecast = None
             return consumption_with_forecast, total_consumption
         consumption = querier.get_consumption()
         return consumption, total_consumption
