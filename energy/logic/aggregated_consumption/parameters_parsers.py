@@ -156,8 +156,10 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
             raise QueryParametersInvalid
         if self.__hours_filtering_end_hour not in self.__HOURS:
             raise QueryParametersInvalid
-        if self.__hours_filtering_start_hour > self.__hours_filtering_end_hour:
-            raise StartHourGreaterThanEndHour
+        if self.__hour_filtering_method == \
+                OneHourAggregationIntervalQueryParameters.HourFilteringMethods.EVERY_DAY:
+            if self.__hours_filtering_start_hour > self.__hours_filtering_end_hour:
+                raise StartHourGreaterThanEndHour
 
     def __set_hours_filtering_range(self, hours_filtering_start_hour: str,
                                     hours_filtering_end_hour: str):
