@@ -43,7 +43,9 @@ class AggregatedConsumptionQuerier:
         return self.__raw_consumption
 
     def get_total_consumption(self) -> TotalConsumption | None:
-        return self.formatter.format_total_consumption(self.__total_consumption)
+        if self.__total_consumption:
+            return self.formatter.format_total_consumption(self.__total_consumption)
+        return None
 
     def __query(self):
         _ = self.__querier.get_raw_consumption_with_total_consumption()
