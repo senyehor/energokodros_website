@@ -27,7 +27,7 @@ function get_consumption_data_and_update() {
         headers: get_headers_for_ajax_object(),
         success: (data) => {
             CONSUMPTION_WITH_OPTIONAL_FORECAST = data.consumption_with_optional_forecast;
-            if (CONSUMPTION === null) {
+            if (CONSUMPTION_WITH_OPTIONAL_FORECAST === null) {
                 add_warning_alert('За заданими фільтрами дані відсутні');
                 return;
             }
