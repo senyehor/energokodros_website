@@ -103,8 +103,6 @@ LANGUAGE_CODE = 'uk'
 TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
-
-USE_TZ = True
 # enable using timedelta objects to set session expiration time
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
