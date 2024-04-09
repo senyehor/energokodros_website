@@ -74,7 +74,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
     """
     __QUERY_WHERE_INTERVAL = """
         WHERE aggregation_interval_start >= '{aggregation_interval_start}'
-        AND aggregation_interval_end <= '{aggregation_interval_end}'
+        AND aggregation_interval_end < '{aggregation_interval_end}'
     """
     __QUERY_WHERE_BOXES_SETS = """
         AND boxes_set_id IN ({box_set_ids})
@@ -227,7 +227,7 @@ class __QueryingForCurrentDayMixin(_AggregatedConsumptionQuerierBase):
     __CURRENT_DAY_WHERE = """
     WHERE
         aggregation_interval_start >= '{current_date}'
-    AND aggregation_interval_start <= '{next_day_date}'
+    AND aggregation_interval_start < '{next_day_date}'
     """
     __current_date: date = None
 
