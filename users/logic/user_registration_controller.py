@@ -1,5 +1,3 @@
-import logging
-
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -8,8 +6,6 @@ from django.urls import reverse
 from users.forms import NewUserForm, UserRoleApplicationFormForRegistration
 from users.models import User
 from utils.common.email import send_html_email
-
-logger = logging.getLogger(__name__)
 
 
 class UserRegistrationController:
