@@ -7,6 +7,6 @@ LAST_TIME_AGGREGATION_WAS_RUN_FORMAT = 'TODO'
 MAX_AGGREGATION_START_TIME = timedelta(seconds=10)
 
 
-class AggregationStates(Enum, str):
+class AggregationStates(str, Enum):
     IDLE = 'idle'
     RUNNING = 'running'
