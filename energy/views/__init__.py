@@ -5,4 +5,4 @@ from .generic import (
     SensorEditDeleteView,
     SensorListView,
 )
-from .simple import get_facilities_choices_for_role
+from .simple import get_facilities_choices_for_role, run_aggregation
