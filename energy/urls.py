@@ -54,6 +54,11 @@ urlpatterns = [
         'edit-box-sensor-set/<hashed_int:pk>',
         views.BoxSensorSetEditDeleteView.as_view(),
         name='edit-box-sensor-set'
+    ),
+    path(
+        'run-aggregation/',
+        views.run_aggregation,
+        name='run-aggregation'
     )
 ]
 
