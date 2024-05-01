@@ -46,8 +46,9 @@ class RedisAggregationRunner(AggregationRunner):
         max_aggregation_start_time_past_now = now + MAX_AGGREGATION_START_TIME
         while datetime.now() < max_aggregation_start_time_past_now:
             state = self.__state_retriever.get_state()
-            if state != AggregationStates.RUNNING:
-                raise AggregationDidNotStartWithinMaxStartTime
+            if state == AggregationStates.RUNNING:
+                return
+        raise AggregationDidNotStartWithinMaxStartTime
 
     def __ensure_start_aggregation_message_receiver_count_is_correct(self, receiver_count: int):
         if receiver_count != self.__EXPECTED_START_AGGREGATION_REQUEST_RECEIVER_COUNT:
