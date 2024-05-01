@@ -31,7 +31,7 @@ def run_aggregation(request: HttpRequest) -> JsonResponse:
     except RunAggregationExceptionBase as e:
         logger.error(e)
         return JsonResponse(
-            'unexpected error happened',
+            {'message': 'unexpected error happened'},
             status=400
         )
-    return JsonResponse('aggregation started successfully')
+    return JsonResponse([{'message': 'aggregation started successfully'}])
