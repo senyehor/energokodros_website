@@ -1,5 +1,6 @@
 $(document).ready(function () {
     update_facilities_list_for_role();
+    __get_run_aggregation_button().click(send_start_aggregation_request);
     __get_roles_select().change(update_facilities_list_for_role);
     __get_aggregation_interval_select().change(
         add_or_remove_hours_filtering_for_aggregation_interval_select
@@ -118,6 +119,21 @@ function set_date_inputs_now() {
     __get_period_end_input().val(now);
 }
 
+function send_start_aggregation_request() {
+    $.ajax({
+        url: reverse_url('run-aggregation'),
+        type: 'POST',
+        dataType: 'json',
+        headers: get_headers_for_ajax_object(),
+        success: (response) => {
+            add_success_alert('Агрегацію було успішно запущено');
+        },
+        error: (response) => {
+            add_error_alert('Виникла помилка при запуску агрегації');
+        }
+    });
+}
+
 function _check_one_hour_interval_is_selected() {
     let value = parseInt(get_selected_option_for_select(__get_aggregation_interval_select()));
     let seconds_in_hour = 60 * 60;
@@ -142,6 +158,10 @@ function _get_current_date_for_date_input() {
     if (day < 10)
         day = "0" + day;
     return now.getFullYear() + '-' + month + '-' + day;
+}
+
+function __get_run_aggregation_button() {
+    return $('#run_aggregation_button')
 }
 
 function __get_hours_filtering_start_select() {
