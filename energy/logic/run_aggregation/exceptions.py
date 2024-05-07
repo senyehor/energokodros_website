@@ -8,3 +8,7 @@ class InvalidAggregatorState(RunAggregationExceptionBase):
 
 class AggregationAlreadyRunning(RunAggregationExceptionBase):
     ...
+
+
+class AggregationDidNotStart(RunAggregationExceptionBase):
+    ...
