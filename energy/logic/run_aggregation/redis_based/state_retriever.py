@@ -2,7 +2,7 @@ from datetime import datetime
 
 from redis.client import Redis
 
-from energy.logic.run_aggregation.bases import AggregationStateRetriever
+from energy.logic.run_aggregation.bases import AggregationStateRetrieverBase
 from energy.logic.run_aggregation.exceptions import InvalidAggregatorState
 from energy.logic.run_aggregation.models_and_constants import (
     AggregationStates,
@@ -12,7 +12,7 @@ from energy.logic.run_aggregation.redis_based.exceptions import ValueWasNotFound
 from energy.logic.run_aggregation.redis_based.utils import get_value_from_redis_as_str
 
 
-class RedisAggregationStateRetriever(AggregationStateRetriever):
+class RedisAggregationStateRetriever(AggregationStateRetrieverBase):
     def __init__(self, r: Redis, state_key: str, aggregation_last_time_run_key: str):
         self.__r = r
         self.__state_key = state_key
