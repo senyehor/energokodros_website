@@ -12,3 +12,7 @@ class InvalidStartAggregationRequestReceiverCount(RunAggregationExceptionBase):
 
 class ValueWasNotFound(RunAggregationExceptionBase):
     ...
+
+
+class AggregationStartedConfirmationMessageInvalid(RunAggregationExceptionBase):
+    ...
