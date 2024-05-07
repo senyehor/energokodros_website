@@ -2,7 +2,7 @@ class RunAggregationExceptionBase(Exception):
     ...
 
 
-class InvalidAggregationState(RunAggregationExceptionBase):
+class InvalidAggregatorState(RunAggregationExceptionBase):
     ...
 
 
