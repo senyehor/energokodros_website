@@ -78,6 +78,11 @@ ajax_url = [
         views.run_aggregation,
         name='run-aggregation'
     ),
+    path(
+        'get-aggregation-status-and-last-time-run/',
+        views.get_aggregation_status_and_last_time_run,
+        name='get-aggregation-status-and-last-time-run'
+    )
 ]
 
 urlpatterns += ajax_url
