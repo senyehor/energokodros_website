@@ -28,11 +28,14 @@ AGGREGATION_STATE_RETRIEVER = RedisAggregationStateRetriever(
 )
 
 __aggregation_started_checker = AggregationStartedChecker(
-    aggregation_started_confirmation_channel=env(
-        'AGGREGATION_STARTED_CONFIRMATION_CHANNEL'
+    aggregation_start_results_channel=env(
+        'AGGREGATION_START_RESULTS_CHANNEL'
     ),
-    aggregation_started_confirmation_message=env(
-        'AGGREGATION_STARTED_CONFIRMATION_MESSAGE'
+    aggregation_started_successfully_message=env(
+        'AGGREGATION_STARTED_SUCCESSFULLY_MESSAGE'
+    ),
+    aggregation_failed_message=env(
+        'AGGREGATION_FAILED_TO_START_MESSAGE'
     ),
     r=__REDIS,
     max_start_time=MAX_AGGREGATION_START_TIME
