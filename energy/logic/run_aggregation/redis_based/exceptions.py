@@ -16,3 +16,6 @@ class ValueWasNotFound(RunAggregationExceptionBase):
 
 class AggregationStartedConfirmationMessageInvalid(RunAggregationExceptionBase):
     ...
+
+class SubOrUnsubMessageTypeExpected(RunAggregationExceptionBase):
+    ...
