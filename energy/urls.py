@@ -54,11 +54,6 @@ urlpatterns = [
         'edit-box-sensor-set/<hashed_int:pk>',
         views.BoxSensorSetEditDeleteView.as_view(),
         name='edit-box-sensor-set'
-    ),
-    path(
-        'run-aggregation/',
-        views.run_aggregation,
-        name='run-aggregation'
     )
 ]
 
@@ -77,7 +72,12 @@ ajax_url = [
         'edit-box-sensor-set-pk-in-post',
         redirect_to_object_pk_in_post(BoxSensorSet, 'edit-box-sensor-set'),
         name='edit-box-sensor-set-pk-in-post'
-    )
+    ),
+    path(
+        'run-aggregation/',
+        views.run_aggregation,
+        name='run-aggregation'
+    ),
 ]
 
 urlpatterns += ajax_url
