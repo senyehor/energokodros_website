@@ -28,7 +28,7 @@ class RedisAggregationStateRetriever(AggregationStateRetrieverBase):
         except ValueError as e:
             raise InvalidAggregatorState from e
 
-    def get_last_time_aggregation_was_run(self) -> datetime | None:
+    def get_last_time_aggregation_was_run(self, formatted=False) -> datetime | str | None:
         try:
             raw_last_time_aggregation_was_run = get_value_from_redis_as_str(
                 self.__r,
@@ -36,7 +36,10 @@ class RedisAggregationStateRetriever(AggregationStateRetrieverBase):
             )
         except ValueWasNotFound:
             return None
-        return datetime.strptime(
+        last_time_run = datetime.strptime(
             raw_last_time_aggregation_was_run,
             LAST_TIME_AGGREGATION_WAS_RUN_FORMAT
         )
+        if formatted:
+            return last_time_run.strftime('%H:%M %d-%m-%Y')
+        return last_time_run
