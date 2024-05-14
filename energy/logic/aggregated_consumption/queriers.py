@@ -95,7 +95,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         TIME_PART = 0
         CONSUMPTION_PART = 1
 
-    class __ConsumptionWithTotalConsumptionRawsIndexes(IntEnum):
+    class __ConsumptionWithTotalConsumptionRowsIndexes(IntEnum):
         TIME_PART = 0
         CONSUMPTION_PART = 1
         TOTAL_CONSUMPTION_PART = 2
@@ -132,7 +132,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
     def __split_rows_into_raw_consumption_and_total_consumption(
             self, rows: RawQueryRows
     ) -> RawConsumptionWithRawTotalConsumption:
-        _ = self.__ConsumptionWithTotalConsumptionRawsIndexes
+        _ = self.__ConsumptionWithTotalConsumptionRowsIndexes
         raw_aggregated_consumption = (
             (
                 row[_.TIME_PART],
@@ -146,7 +146,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
         return raw_aggregated_consumption, raw_total_consumption
 
     def __extract_raw_total_consumption(self, rows: RawQueryRows) -> RawTotalConsumption:
-        _ = self.__ConsumptionWithTotalConsumptionRawsIndexes
+        _ = self.__ConsumptionWithTotalConsumptionRowsIndexes
         # take any row, as total consumption is the same in every row
         return rows[0][_.TOTAL_CONSUMPTION_PART]
 
