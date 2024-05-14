@@ -1,5 +1,6 @@
 $(document).ready(function () {
     __get_run_aggregation_button().click(send_start_aggregation_request);
+    __get_run_aggregation_button().click(clear_alerts);
     update_aggregation_status_and_last_time_run();
 })
 
@@ -8,15 +9,18 @@ const IDLE = 'idle', RUNNING = 'running';
 
 
 function send_start_aggregation_request() {
+    _set_run_aggregation_button_loading();
     $.ajax({
         url: reverse_url('run-aggregation'),
         type: 'POST',
         dataType: 'json',
         headers: get_headers_for_ajax_object(),
         success: (response) => {
+            _set_run_aggregation_button_active();
             add_success_alert('Агрегацію було успішно запущено');
         },
         error: (response) => {
+            _set_run_aggregation_button_active();
             add_error_alert('Виникла помилка при запуску агрегації');
         }
     });
@@ -29,12 +33,14 @@ function update_aggregation_status_and_last_time_run() {
         dataType: 'json',
         headers: get_headers_for_ajax_object(),
         success: (response) => {
+            _set_run_aggregation_button_active();
             set_aggregation_last_time_run(response.aggregation_last_rime_run);
             set_aggregation_status_adjust_start_aggregation_button_accordingly(
                 response.aggregation_status
             );
         },
         error: (response) => {
+            _set_run_aggregation_button_active();
             set_aggregation_last_time_run(null)
             set_aggregation_status_adjust_start_aggregation_button_accordingly(null)
         }
@@ -58,6 +64,17 @@ function set_aggregation_last_time_run(value) {
     __get_aggregation_last_time_run_p().text(display_value)
 }
 
+function _set_run_aggregation_button_active() {
+    __get_start_aggregation_button_spinner_span().addClass('d-none');
+    __get_start_aggregation_button_text_span().removeClass('d-none');
+}
+
+function _set_run_aggregation_button_loading() {
+    __get_start_aggregation_button_text_span().addClass('d-none');
+    __get_start_aggregation_button_spinner_span().removeClass('d-none');
+}
+
+
 function _set_start_aggregation_button_disabled() {
     __get_run_aggregation_button().removeClass('btn-primary');
     __get_run_aggregation_button().addClass('btn-secondary');
@@ -66,6 +83,14 @@ function _set_start_aggregation_button_disabled() {
 function _set_start_aggregation_button_active() {
     __get_run_aggregation_button().removeClass('btn-secondary');
     __get_run_aggregation_button().addClass('btn-primary');
+}
+
+function __get_start_aggregation_button_text_span() {
+    return $('#run_aggregation_button_text')
+}
+
+function __get_start_aggregation_button_spinner_span() {
+    return $('#start_aggregation_request_processing_spinner')
 }
 
 function __get_aggregation_last_time_run_p() {
