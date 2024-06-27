@@ -1,6 +1,7 @@
 from energy.logic.aggregated_consumption.exceptions import QueryParametersInvalid
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
 from energy.logic.aggregated_consumption.formatters import RawAggregatedDataFormatter
+from energy.logic.aggregated_consumption.parameters import CommonQueryParameters
 from energy.logic.aggregated_consumption.parameters_parsers import ParameterParser
 from energy.logic.aggregated_consumption.queriers import AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.types import (
@@ -85,3 +86,6 @@ class AggregatedEnergyConsumptionController:
         if include_forecast == 'false':
             return False
         raise QueryParametersInvalid('include_forecast must be true or false')
+
+    def get_parameters(self) -> CommonQueryParameters:
+        return self.__parameters
