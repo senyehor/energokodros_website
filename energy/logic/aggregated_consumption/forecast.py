@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 from typing import Callable
 
@@ -8,11 +7,11 @@ from energy.logic.aggregated_consumption.formatters import (
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
+from energy.logic.aggregated_consumption.simple import check_institution_is_kindergarten_28
 from energy.logic.aggregated_consumption.types import (
     ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumption,
     RawConsumptionForecast, RawConsumptionTime,
 )
-from institutions.models import Facility
 
 
 class ConsumptionForecaster:
@@ -63,8 +62,9 @@ class ConsumptionForecaster:
         return self.__parameters.aggregation_interval == AggregationIntervalSeconds.ONE_HOUR
 
     def __check_facility_is_kindergarten(self) -> bool:
-        return self.__parameters.facility_to_get_consumption_for_or_all_descendants_if_any == \
-            Facility.objects.get(pk=os.getenv('KINDERGARTEN_ID'))
+        return check_institution_is_kindergarten_28(
+            self.__parameters.facility_to_get_consumption_for_or_all_descendants_if_any
+        )
 
     def __get_forecast_source_for_kindergarten(self, is_day_working: bool) \
             -> dict[int, RawConsumptionForecast]:
@@ -103,6 +103,10 @@ KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKING_DAY_BY_HOUR = {
     23: 1.57
 }
 
+KINDERGARTEN_CONSUMPTION_PER_WORKING_DAY = sum(
+    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKING_DAY_BY_HOUR.values()
+)
+
 KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR = {
     0:  1.57,
     1:  1.57,
@@ -129,3 +133,7 @@ KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR = {
     22: 1.57,
     23: 1.57
 }
+
+KINDERGARTEN_CONSUMPTION_PER_WEEKEND_DAY = sum(
+    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR.values()
+)
