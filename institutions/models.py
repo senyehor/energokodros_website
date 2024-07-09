@@ -44,6 +44,9 @@ class Facility(NS_Node):
     def get_institution(self) -> 'Facility':
         return self.get_root()
 
+    def is_institution(self) -> bool:
+        return self.is_root()
+
     # methods below are not implemented for nested set in django_treebeard, so
     # currently they are just 'stubbed'
     @classmethod
