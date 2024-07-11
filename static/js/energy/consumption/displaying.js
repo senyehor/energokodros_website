@@ -101,7 +101,7 @@ function __generate_chart_data(raw_consumption_data) {
         datasets: [
             {
                 label: 'Споживання в кіловат-годинах',
-                backgroundColor: 'rgb(255, 99, 132, 0.7)',
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
                 data: consumption,
             }
         ]
