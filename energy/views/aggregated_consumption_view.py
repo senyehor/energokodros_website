@@ -19,6 +19,7 @@ class ConsumptionPageView(FormView):
         return EnergyConsumptionDisplayPageControlForm(self.request.user)
 
 
+@decorate_class_or_function_view(login_required)
 def get_consumption_with_total_consumption(request: HttpRequest) -> JsonResponse:
     try:
         # noinspection PyTypeChecker
