@@ -6,7 +6,7 @@ from django.views.generic import ListView
 
 from utils.types import StrTuple
 
-_ListViewWithMixinType: TypeAlias = Union[ListView, 'QuerySetFieldsIcontainsFilterPkOrderedMixin']
+_ListViewWithMixinType: TypeAlias = Union[ListView, '_QuerySetFieldsIcontainsFilterPkOrderedMixin']
 DEFAULT_PAGINATE_BY = 7
 
 
@@ -24,14 +24,13 @@ class QuerySetFieldsIcontainsFilter:
         return self._qs.filter(_filter)
 
 
-class QuerySetFieldsIcontainsFilterPkOrderedMixin:
+class _QuerySetFieldsIcontainsFilterPkOrderedMixin:
     """this mixin is supposed to be used with ListViews"""
     filter_fields: StrTuple = None
     fields_order_by_before_pk: StrTuple = tuple()
     __filter = QuerySetFieldsIcontainsFilter
 
     def get_queryset(self: _ListViewWithMixinType) -> QuerySet:
-        self.__check_used_properly()
         if search_value := self.__get_search_value():
             qs = self.__filter_queryset_for_value(search_value)
         else:
@@ -44,17 +43,10 @@ class QuerySetFieldsIcontainsFilterPkOrderedMixin:
             self.filter_fields,
         ).filter(value)
 
-    def __check_used_properly(self: _ListViewWithMixinType):
-        if not issubclass(self.__class__, ListView):
-            raise ValueError('this mixin must be used with a ListView')
-        if self.filter_fields is None:
-            raise ValueError('you must set filter_fields for a model')
-        return True
-
     def __get_search_value(self: ListView) -> str:
         return self.request.GET.get('search_value', None)
 
 
-class ListViewWithFiltering(QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
+class ListViewWithFiltering(_QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     paginate_by = DEFAULT_PAGINATE_BY
     pass
