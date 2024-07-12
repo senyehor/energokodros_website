@@ -12,16 +12,16 @@ DEFAULT_PAGINATE_BY = 7
 
 class QuerySetFieldsIcontainsFilter:
     def __init__(self, qs: QuerySet, fields_to_filter: Iterable[str]):
-        self._qs = qs
-        self._fields_to_filter = [f'{field}__icontains' for field in fields_to_filter]
+        self.__qs = qs
+        self.__fields_to_filter = [f'{field}__icontains' for field in fields_to_filter]
 
     def filter(self, value: str) -> QuerySet:
         q_filters = reduce(
             lambda q, field: q | Q(**{field: value}),
-            self._fields_to_filter,
+            self.__fields_to_filter,
             Q()
         )
-        return self._qs.filter(q_filters)
+        return self.__qs.filter(q_filters)
 
 
 class _QuerySetFieldsIcontainsFilterPkOrderedMixin:
