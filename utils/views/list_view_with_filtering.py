@@ -16,12 +16,12 @@ class QuerySetFieldsIcontainsFilter:
         self._fields_to_filter = [f'{field}__icontains' for field in fields_to_filter]
 
     def filter(self, value: str) -> QuerySet:
-        _filter = reduce(
+        q_filters = reduce(
             lambda q, field: q | Q(**{field: value}),
             self._fields_to_filter,
             Q()
         )
-        return self._qs.filter(_filter)
+        return self._qs.filter(q_filters)
 
 
 class _QuerySetFieldsIcontainsFilterPkOrderedMixin:
