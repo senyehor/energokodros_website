@@ -1,4 +1,3 @@
-from functools import reduce
 from typing import Iterable, TypeAlias, Union
 
 from django.db.models import Q, QuerySet
@@ -16,11 +15,9 @@ class QuerySetFieldsIcontainsFilter:
         self.__fields_to_filter = [f'{field}__icontains' for field in fields_to_filter]
 
     def filter(self, value: str) -> QuerySet:
-        q_filters = reduce(
-            lambda q, field: q | Q(**{field: value}),
-            self.__fields_to_filter,
-            Q()
-        )
+        q_filters = Q()
+        for field in self.__fields_to_filter:
+            q_filters = q_filters | Q(**{field: value})
         return self.__qs.filter(q_filters)
 
 
