@@ -49,4 +49,3 @@ class _QuerySetFieldsIcontainsFilterPkOrderedMixin:
 
 class ListViewWithFiltering(_QuerySetFieldsIcontainsFilterPkOrderedMixin, ListView):
     paginate_by = DEFAULT_PAGINATE_BY
-    pass
