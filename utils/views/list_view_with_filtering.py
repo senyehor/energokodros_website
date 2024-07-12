@@ -13,7 +13,7 @@ DEFAULT_PAGINATE_BY = 7
 class QuerySetFieldsIcontainsFilterPkOrderedMixin:
     """this mixin is supposed to be used with ListViews"""
     filter_fields: StrTuple = None
-    fields_order_by_before_pk: StrTuple = set()
+    fields_order_by_before_pk: StrTuple = tuple()
 
     def get_queryset(self: _ListViewWithMixinType) -> QuerySet:
         self.__check_used_properly()
