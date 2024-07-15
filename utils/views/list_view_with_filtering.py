@@ -9,7 +9,7 @@ _ListViewWithMixinType: TypeAlias = Union[ListView, '_QuerySetFieldsIcontainsFil
 DEFAULT_PAGINATE_BY = 7
 
 
-class QuerySetFieldsIcontainsFilter:
+class _QuerySetFieldsIcontainsFilter:
     def __init__(self, qs: QuerySet, fields_to_filter: Iterable[str]):
         self.__qs = qs
         self.__fields_to_filter = [f'{field}__icontains' for field in fields_to_filter]
@@ -25,7 +25,7 @@ class _QuerySetFieldsIcontainsFilterPkOrderedMixin:
     """this mixin is supposed to be used with ListViews"""
     filter_fields: StrTuple = None
     fields_order_by_before_pk: StrTuple = tuple()
-    __filter = QuerySetFieldsIcontainsFilter
+    __filter = _QuerySetFieldsIcontainsFilter
 
     def get_queryset(self: _ListViewWithMixinType) -> QuerySet:
         if search_value := self.__get_search_value():
