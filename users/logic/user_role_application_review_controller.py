@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.db import transaction
+from django.db.transaction import atomic
 from django.http import HttpRequest
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
@@ -18,7 +18,7 @@ class UserRoleApplicationReviewController:
         self.request = request
         self.is_approved = is_approved
 
-    @method_decorator(transaction.atomic)
+    @method_decorator(atomic)
     def process_depending_on_decision(self):
         if self.is_approved:
             self.__create_user_role()
