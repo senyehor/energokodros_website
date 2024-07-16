@@ -8,12 +8,12 @@
     {% trans "Енергоспоживання" %}
 {% endblock %}
 {% block content %}
-    <div class="container" style="height: 80vh;">
+    <div class="container">
         <div class="row">
-            <div class="" style="width: 30%;">
+            <div style="width: 30%;">
                 {% include 'energy/consumption/control_form.html' %}
             </div>
-            <div class="d-inline w-auto flex-grow-1" style="max-height: 80vh;">
+            <div class="d-inline w-auto flex-grow-1" style="max-height: 70vh;">
                 {% include 'energy/consumption/consumption_data.html' %}
             </div>
         </div>
