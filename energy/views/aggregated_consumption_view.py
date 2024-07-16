@@ -25,12 +25,12 @@ def get_consumption_with_total_consumption(request: HttpRequest) -> JsonResponse
     try:
         # noinspection PyTypeChecker
         parameters = convert_request_post_dict_to_regular_dict(request.POST)
-        controller = ConsumptionWithOptionalForecastQuerierFromRawParameter(
+        querier = ConsumptionWithOptionalForecastQuerierFromRawParameter(
             request.user, parameters
         )
-        consumption_with_optional_forecast = controller.get_consumption_with_optional_forecast()
-        total_consumption = controller.get_total_consumption()
-        metadata = controller.get_response_metadata()
+        consumption_with_optional_forecast = querier.get_consumption_with_optional_forecast()
+        total_consumption = querier.get_total_consumption()
+        metadata = querier.get_response_metadata()
     except EnergyConsumptionExceptionWithMessage as e:
         return JsonResponse(e.message, status=400, safe=False)
     return JsonResponse(
