@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Callable
 
-from energy.logic.aggregated_consumption.exceptions import ForecastForParametersDoesNotExist
 from energy.logic.aggregated_consumption.formatters import (
     format_forecast, RawAggregatedDataFormatter,
 )
@@ -12,6 +11,8 @@ from energy.logic.aggregated_consumption.types import (
     ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumption,
     RawConsumptionForecast, RawConsumptionTime,
 )
+from energy.logic.aggregated_consumption.verbose_exceptions_for_user import \
+    ForecastForParametersDoesNotExist
 
 
 class ConsumptionForecaster:

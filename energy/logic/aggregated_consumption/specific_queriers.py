@@ -5,7 +5,6 @@ from typing import Iterable, Type, TypeAlias, TypedDict
 
 from django.db import connection
 
-from energy.logic.aggregated_consumption.exceptions import FacilityAndDescendantsHaveNoSensors
 from energy.logic.aggregated_consumption.formatters import (
     OneHourFormatter,
     OneMonthFormatter, RawAggregatedDataFormatter,
@@ -19,6 +18,8 @@ from energy.logic.aggregated_consumption.types import (
     RawConsumptionWithRawTotalConsumption, RawQueryRows, RawTotalConsumption,
     TotalConsumption,
 )
+from energy.logic.aggregated_consumption.verbose_exceptions_for_user import \
+    FacilityAndDescendantsHaveNoSensors
 from energy.models import BoxSensorSet
 
 AnyQuerier: TypeAlias = '_AggregatedConsumptionQuerierBase'

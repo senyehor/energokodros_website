@@ -4,7 +4,7 @@ import os
 from django.http import HttpRequest, QueryDict
 from django.shortcuts import render
 
-from energy.logic.aggregated_consumption.exceptions import QueryParametersInvalid
+from energy.logic.aggregated_consumption.verbose_exceptions_for_user import QueryParametersInvalid
 from institutions.models import Facility
 from users.logic import check_user_has_no_roles
 from utils.types import FuncView, StrStrDict
