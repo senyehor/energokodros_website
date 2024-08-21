@@ -35,15 +35,15 @@ class ParameterParser:
         _ = self.__raw_parameters
         return parser(
             aggregation_interval=aggregation_interval,
-            facility_pk_to_get_consumption_for_or_all_descendants_if_any=_.pop('facility_pk'),
-            period_end_epoch_seconds=_.pop('period_end_epoch_seconds'),
-            period_start_epoch_seconds=_.pop('period_start_epoch_seconds'),
+            facility_pk_to_get_consumption_for_or_all_descendants_if_any=_['facility_pk'],
+            period_end_epoch_seconds=_['period_end_epoch_seconds'],
+            period_start_epoch_seconds=_['period_start_epoch_seconds'],
             **_
         ).get_parameters()
 
     def __extract_aggregation_interval(self) -> AggregationIntervalSeconds:
         aggregation_interval_seconds = parse_str_parameter_to_int_with_correct_exception(
-            self.__raw_parameters.pop('aggregation_interval_seconds')
+            self.__raw_parameters['aggregation_interval_seconds']
         )
         return AggregationIntervalSeconds(aggregation_interval_seconds)
 
