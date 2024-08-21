@@ -137,9 +137,9 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
         base_kwargs = {field.name: getattr(_, field.name) for field in fields(_.__class__)}
         return OneHourAggregationIntervalQueryParameters(
             **base_kwargs,
-            hours_filtering_start_hour=self.__hours_filtering_start_hour,
-            hours_filtering_end_hour=self.__hours_filtering_end_hour,
-            hours_filtering_method=self.__hour_filtering_method
+            hour_filtering_start_hour=self.__hour_filtering_start_hour,
+            hour_filtering_end_hour=self.__hour_filtering_end_hour,
+            hour_filtering_method=self.__hour_filtering_method
         )
 
     def _validate(self):
