@@ -3,6 +3,10 @@ from dataclasses import fields
 from datetime import date, datetime
 from typing import Any, Callable, Iterable, Type, TypeAlias
 
+from energy.logic.aggregated_consumption.exceptions import (
+    IncompleteHourFiltersSet,
+    InvalidHourFilteringValue,
+)
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters,
@@ -12,7 +16,7 @@ from energy.logic.aggregated_consumption.simple import \
     parse_str_parameter_to_int_with_correct_exception
 from energy.logic.aggregated_consumption.verbose_exceptions_for_user import (
     AggregationIntervalDoesNotFitPeriod, FutureFilteringDate, InvalidHourFilteringMethod,
-    InvalidHourFilteringValue, PeriodStartGreaterThanEnd,
+    PeriodStartGreaterThanEnd,
     QueryParametersInvalid, StartHourGreaterThanEndHour,
 )
 from institutions.models import Facility
@@ -119,18 +123,45 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
     __HOURS: Iterable[int] = range(24)
 
     def __init__(
-            self, *, hours_filtering_start_hour: str = None,
-            hours_filtering_end_hour: str = None, hour_filtering_method: str = None,
+            self, *, hour_filtering_start_hour: str = None,
+            hour_filtering_end_hour: str = None, hour_filtering_method: str = None,
             **kwargs
     ):
-        self.__check_aggregation_interval_is_on_hour(kwargs.get('aggregation_interval'))
-        self.__hours_filtering_start_hour = hours_filtering_start_hour
-        self.__hours_filtering_end_hour = hours_filtering_end_hour
-        self.__hour_filtering_method = hour_filtering_method
-        if self.__check_hour_filtering_options_are_set():
-            self.__set_hours_filtering_range(hours_filtering_start_hour, hours_filtering_end_hour)
+        self.__check_aggregation_interval_is_one_hour(kwargs.get('aggregation_interval'))
+        self.__set_hour_filtering_options(
+            hour_filtering_start_hour=hour_filtering_start_hour,
+            hour_filtering_end_hour=hour_filtering_end_hour,
+            hour_filtering_method=hour_filtering_method
+        )
         super().__init__(**kwargs)
         self._validate()
+
+    def __set_hour_filtering_options(
+            self, *, hour_filtering_start_hour: str,
+            hour_filtering_end_hour: str, hour_filtering_method: str
+    ):
+        self.__hour_filtering_set = False
+        hour_filters = (hour_filtering_start_hour, hour_filtering_end_hour, hour_filtering_method)
+        if self.__check_all_is_not_none(hour_filters):
+            self.__set_hour_filtering_parameters(
+                hour_filtering_start_hour=hour_filtering_start_hour,
+                hour_filtering_end_hour=hour_filtering_end_hour,
+                hour_filtering_method=hour_filtering_method
+            )
+            return
+        if self.__check_all_is_none(hour_filters):
+            self.__hour_filtering_start_hour = None
+            self.__hour_filtering_end_hour = None
+            self.__hour_filtering_method = None
+            return
+        # some filter(s) is/are present while other(s) is/are not
+        raise IncompleteHourFiltersSet
+
+    def __check_all_is_not_none(self, items: Iterable) -> bool:
+        return all(map(lambda x: x is not None, items))
+
+    def __check_all_is_none(self, items: Iterable) -> bool:
+        return all(map(lambda x: x is None, items))
 
     def get_parameters(self) -> OneHourAggregationIntervalQueryParameters:
         _ = super().get_parameters()
@@ -144,45 +175,46 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
 
     def _validate(self):
         super()._validate()
-        if self.__check_hour_filtering_options_are_set():
-            self.__check_hours_filtering_range_is_correct()
+        if self.__hour_filtering_set:
+            self.__check_hour_filtering_range_is_correct()
 
-    def __check_aggregation_interval_is_on_hour(self, aggregation_interval: Any):
+    def __check_aggregation_interval_is_one_hour(self, aggregation_interval: Any):
         if aggregation_interval is not AggregationIntervalSeconds.ONE_HOUR:
             raise ValueError('this class should work only with one hour aggregation interval')
 
-    def __check_hours_filtering_range_is_correct(self):
-        if self.__hours_filtering_start_hour not in self.__HOURS:
+    def __check_hour_filtering_range_is_correct(self):
+        if self.__hour_filtering_start_hour not in self.__HOURS:
             raise QueryParametersInvalid
-        if self.__hours_filtering_end_hour not in self.__HOURS:
+        if self.__hour_filtering_end_hour not in self.__HOURS:
             raise QueryParametersInvalid
         if self.__hour_filtering_method == \
                 OneHourAggregationIntervalQueryParameters.HourFilteringMethods.EVERY_DAY:
-            if self.__hours_filtering_start_hour > self.__hours_filtering_end_hour:
+            if self.__hour_filtering_start_hour > self.__hour_filtering_end_hour:
                 raise StartHourGreaterThanEndHour
 
-    def __set_hours_filtering_range(self, hours_filtering_start_hour: str,
-                                    hours_filtering_end_hour: str):
-        self.__hours_filtering_start_hour = parse_str_parameter_to_int_with_correct_exception(
-            hours_filtering_start_hour
-        )
-        self.__hours_filtering_end_hour = parse_str_parameter_to_int_with_correct_exception(
-            hours_filtering_end_hour
-        )
+    def __set_hour_filtering_parameters(
+            self, hour_filtering_start_hour: str,
+            hour_filtering_end_hour: str, hour_filtering_method: str):
+        try:
+            self.__hour_filtering_start_hour = parse_str_parameter_to_int_with_correct_exception(
+                hour_filtering_start_hour
+            )
+            self.__hour_filtering_end_hour = parse_str_parameter_to_int_with_correct_exception(
+                hour_filtering_end_hour
+            )
+        except QueryParametersInvalid as e:
+            raise InvalidHourFilteringValue from e
+        self.__set_hour_filtering_method(hour_filtering_method)
+        self.__hour_filtering_set = True
 
-    def __set_hour_filtering_method(self):
+    def __set_hour_filtering_method(self, hour_filtering_method: str):
         try:
             self.__hour_filtering_method = \
                 OneHourAggregationIntervalQueryParameters.HourFilteringMethods(
-                    self.__hour_filtering_method
+                    hour_filtering_method
                 )
         except ValueError as e:
             raise InvalidHourFilteringMethod from e
-
-    def __check_hour_filtering_options_are_set(self):
-        return self.__hours_filtering_start_hour is not None \
-            and self.__hours_filtering_end_hour is not None \
-            and self.__hour_filtering_method is not None
 
 
 class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentDayParser):
