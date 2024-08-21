@@ -62,8 +62,8 @@ function __compose_aggregation_query_parameters() {
         include_forecast: include_forecast
     };
     if (INCLUDE_HOURS_FILTER) {
-        base_parameters.hours_filtering_start_hour = _(__get_hours_filtering_start_select());
-        base_parameters.hours_filtering_end_hour = _(__get_hours_filtering_end_select());
+        base_parameters.hour_filtering_start_hour = _(__get_hour_filtering_start_select());
+        base_parameters.hour_filtering_end_hour = _(__get_hour_filtering_end_select());
         base_parameters.hour_filtering_method = CHOSEN_HOUR_FILTERING_METHOD;
     }
     return base_parameters;
