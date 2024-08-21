@@ -55,6 +55,8 @@ function set_aggregation_status_adjust_start_aggregation_button_accordingly(aggr
         __get_aggregation_status_p().text('активна')
         _set_start_aggregation_button_disabled();
     } else {
+        __get_aggregation_status_p().text(FAILED_TO_RETRIEVE_DATA)
+        _set_start_aggregation_button_disabled();
         throw 'wrong aggregation status'
     }
 }
@@ -78,10 +80,12 @@ function _set_run_aggregation_button_loading() {
 function _set_start_aggregation_button_disabled() {
     __get_run_aggregation_button().removeClass('btn-primary');
     __get_run_aggregation_button().addClass('btn-secondary');
+    __get_run_aggregation_button().addClass('disabled');
 }
 
 function _set_start_aggregation_button_active() {
     __get_run_aggregation_button().removeClass('btn-secondary');
+    __get_run_aggregation_button().removeClass('disabled');
     __get_run_aggregation_button().addClass('btn-primary');
 }
 
