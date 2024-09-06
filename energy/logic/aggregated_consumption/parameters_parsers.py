@@ -5,7 +5,7 @@ from typing import Any, Callable, Iterable, Type, TypeAlias
 
 from energy.logic.aggregated_consumption.exceptions import (
     IncompleteHourFiltersSet,
-    InvalidHourFilteringValue,
+    InvalidHourFilteringValue, InvalidIncludeForecastValue,
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
@@ -60,11 +60,13 @@ class _CommonQueryParametersParser:
             facility_pk_to_get_consumption_for_or_all_descendants_if_any: str,
             period_start_epoch_seconds: str,
             period_end_epoch_seconds: str,
+            include_forecast: str
     ):
         self.__facility_to_get_consumption_for_or_all_descendants_if_any = \
             self.__parse_facility(facility_pk_to_get_consumption_for_or_all_descendants_if_any)
         self.__aggregation_interval = aggregation_interval
         self.__set_period_boundaries(period_start_epoch_seconds, period_end_epoch_seconds)
+        self.__include_forecast = self.__parse_include_forecast(include_forecast)
         self._validate()
 
     def get_parameters(self) -> CommonQueryParameters:
@@ -73,7 +75,8 @@ class _CommonQueryParametersParser:
             self.__facility_to_get_consumption_for_or_all_descendants_if_any,
             aggregation_interval=self.__aggregation_interval,
             period_start=self._period_start,
-            period_end=self._period_end
+            period_end=self._period_end,
+            include_forecast=self.__include_forecast
         )
 
     def _validate(self):
@@ -108,6 +111,13 @@ class _CommonQueryParametersParser:
     def __parse_facility(self, facility_pk: str) -> Facility:
         # noinspection PyTypeChecker
         return get_object_by_hashed_id_or_404(Facility, facility_pk)
+
+    def __parse_include_forecast(self, include_forecast: str) -> bool:
+        if include_forecast == 'true':
+            return True
+        if include_forecast == 'false':
+            return False
+        raise InvalidIncludeForecastValue
 
 
 class __AllowQueryingForCurrentDayParser(_CommonQueryParametersParser):

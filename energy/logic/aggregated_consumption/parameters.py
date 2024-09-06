@@ -28,6 +28,7 @@ class CommonQueryParameters:
     aggregation_interval: AggregationIntervalSeconds
     period_start: date
     period_end: date
+    include_forecast: bool
 
     @property
     def period_start(self) -> date:
