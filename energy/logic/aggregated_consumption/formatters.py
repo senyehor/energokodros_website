@@ -12,7 +12,7 @@ from energy.logic.aggregated_consumption.types import (
 class CommonFormatter:
     @staticmethod
     def format_time(time: RawConsumptionTime) -> ConsumptionTime:
-        return time
+        return str(time)
 
     @staticmethod
     def format_consumption(consumption: RawConsumptionValue) -> ConsumptionValue:
