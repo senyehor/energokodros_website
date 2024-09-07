@@ -96,7 +96,7 @@ class ReportCreator:
         header_row.cells[1].text = _('Показник електроспоживання, кВт/год')
 
         for record_number, consumption in enumerate(energy_records):
-            table.rows[record_number + 1].cells[0].text = str(consumption[0])
+            table.rows[record_number + 1].cells[0].text = consumption[0]
             table.rows[record_number + 1].cells[1].text = consumption[1]
 
         total_row = table.rows[-1]
