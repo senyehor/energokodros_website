@@ -25,7 +25,7 @@ class ReportCreator:
     # interval and corresponding consumption
     __CONSUMPTION_TABLE_COLUMNS_COUNT = 2
     # heading and total consumption
-    __CONSUMPTION_TABLE_ADDITIONAL_ROWS = 2
+    __CONSUMPTION_TABLE_ADDITIONAL_ROWS_COUNT = 2
 
     def __init__(
             self, energy_consumption: Consumption,
@@ -88,7 +88,7 @@ class ReportCreator:
         energy_records_count = len(energy_records)
         table = self.__report.add_table(
             cols=self.__CONSUMPTION_TABLE_COLUMNS_COUNT,
-            rows=energy_records_count + self.__CONSUMPTION_TABLE_ADDITIONAL_ROWS
+            rows=energy_records_count + self.__CONSUMPTION_TABLE_ADDITIONAL_ROWS_COUNT
         )
         table.style = 'Table Grid'
         header_row = table.rows[0]
