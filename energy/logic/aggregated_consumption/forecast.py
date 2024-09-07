@@ -1,9 +1,7 @@
 from datetime import datetime
 from typing import Callable
 
-from energy.logic.aggregated_consumption.formatters import (
-    format_forecast, RawAggregatedDataFormatter,
-)
+from energy.logic.aggregated_consumption.formatters import (CommonFormatter, format_forecast)
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.simple import check_institution_is_kindergarten_28
@@ -25,7 +23,7 @@ class ConsumptionForecaster:
 
     def __init__(
             self, parameters: AnyQueryParameters, consumption: RawConsumption,
-            raw_aggregation_data_formatter: RawAggregatedDataFormatter):
+            raw_aggregation_data_formatter: CommonFormatter):
         self.__parameters = parameters
         self.__consumption = consumption
         self.__raw_aggregation_data_formatter = raw_aggregation_data_formatter
