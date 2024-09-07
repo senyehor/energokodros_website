@@ -25,7 +25,7 @@ ConsumptionWithConsumptionForecast: TypeAlias = \
 ConsumptionWithTotalConsumption = tuple[
     Consumption, TotalConsumption
 ]
-ConsumptionWIthConsumptionForecastWithTotalConsumption = tuple[
+ConsumptionWithConsumptionForecastWithTotalConsumption = tuple[
     ConsumptionWithConsumptionForecast, TotalConsumption
 ]
 
