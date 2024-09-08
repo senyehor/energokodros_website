@@ -131,7 +131,8 @@ class _AggregatedConsumptionQuerierBase(ABC):
             for row in rows
         )
         raw_total_consumption = self.__extract_raw_total_consumption(rows)
-        # raw_aggregate_consumption types inside are recognized as Any, so disable type checker
+        # raw_aggregate_consumption types inside each row are
+        # recognized as Any, so disable type checker
         # noinspection PyTypeChecker
         return raw_aggregated_consumption, raw_total_consumption
 
