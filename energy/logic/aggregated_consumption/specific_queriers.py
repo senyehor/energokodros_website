@@ -13,7 +13,7 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    Consumption, RawConsumption,
+    Consumption, ConsumptionWithFormattedTimeAndRawValue, RawConsumption,
     RawConsumptionWithRawTotalConsumption, RawQueryRows, RawTotalConsumption,
     TotalConsumption,
 )
@@ -32,20 +32,42 @@ class _RawAggregatedConsumptionDataIndexes(IntEnum):
 class AggregatedConsumptionQuerier:
     def __init__(self, parameters: AnyQueryParameters):
         self.__parameters = parameters
-        self.__raw_consumption = None
-        self.__raw_total_consumption = None
+        # noinspection PyTypeChecker
+        self.__raw_consumption: RawConsumption = None
+        # noinspection PyTypeChecker
+        self.__raw_total_consumption: RawTotalConsumption = None
         self.__querier = self.__get_querier_type()(self.__parameters)
         self.__formatter = self.__querier.formatter
         self.__query()
 
-    def get_consumption(self) -> Consumption | None:
+    def get_formatted_consumption(self) -> Consumption | None:
         if self.__raw_consumption:
-            return self.__format_consumption()
+            _ = _RawAggregatedConsumptionDataIndexes
+            return [
+                (
+                    self.__formatter.format_time(row[_.TIME_PART]),
+                    self.__formatter.format_consumption(row[_.CONSUMPTION_PART])
+                )
+                for row in self.__raw_consumption
+            ]
         return None
 
-    def get_total_consumption(self) -> TotalConsumption | None:
+    def get_consumption_with_raw_value_and_formatted_time(self) -> \
+            ConsumptionWithFormattedTimeAndRawValue | None:
+        if self.__raw_consumption:
+            _ = _RawAggregatedConsumptionDataIndexes
+            return [
+                (
+                    self.__formatter.format_time(row[_.TIME_PART]),
+                    row[_.CONSUMPTION_PART]
+                )
+                for row in self.__raw_consumption
+            ]
+        return None
+
+    def get_formatted_total_consumption(self) -> TotalConsumption | None:
         if self.__raw_total_consumption:
-            return self.__format_total_consumption()
+            return self.__formatter.format_total_consumption(self.__raw_total_consumption)
         return None
 
     def get_raw_consumption(self) -> RawConsumption | None:
@@ -57,19 +79,6 @@ class AggregatedConsumptionQuerier:
         if not consumption_with_total_consumption:
             return
         self.__raw_consumption, self.__raw_total_consumption = consumption_with_total_consumption
-
-    def __format_consumption(self) -> Consumption:
-        _ = _RawAggregatedConsumptionDataIndexes
-        return [
-            (
-                self.__formatter.format_time(line[_.TIME_PART]),
-                self.__formatter.format_consumption(line[_.CONSUMPTION_PART])
-            )
-            for line in self.__raw_consumption
-        ]
-
-    def __format_total_consumption(self) -> TotalConsumption:
-        return self.__formatter.format_total_consumption(self.__raw_total_consumption)
 
     def __get_querier_type(self) -> Type[AnyQuerier]:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
