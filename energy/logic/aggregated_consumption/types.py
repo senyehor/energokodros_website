@@ -1,22 +1,29 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import TypeAlias
+from typing import Iterable, NamedTuple, TypeAlias
+
+RawConsumptionValue: TypeAlias = Decimal
+RawConsumptionTime: TypeAlias = datetime | str
+
+
+class RawConsumption(NamedTuple):
+    time: RawConsumptionTime
+    value: RawConsumptionValue
+
 
 RawConsumptionForecast: TypeAlias = float
-
-RawConsumptionTime: TypeAlias = datetime | str
-RawConsumptionValue: TypeAlias = Decimal
 RawTotalConsumption: TypeAlias = Decimal
-RawQueryRows = list[tuple[RawConsumptionTime, RawConsumptionValue, RawTotalConsumption]]
+RawQueryRows = Iterable[
+    tuple[type(RawConsumption.time), type(RawConsumption.value), RawTotalConsumption]
+]
 
 ConsumptionTime: TypeAlias = str
 ConsumptionValue: TypeAlias = str
 ConsumptionForecast: TypeAlias = str
 TotalConsumption: TypeAlias = str
 
-RawConsumption = list[tuple[RawConsumptionTime, RawConsumptionValue]]
 RawConsumptionWithRawTotalConsumption = tuple[
-    RawConsumption, RawTotalConsumption
+    Iterable[RawConsumption], RawTotalConsumption
 ]
 ConsumptionRow: TypeAlias = tuple[ConsumptionTime, ConsumptionValue]
 Consumption: TypeAlias = list[ConsumptionRow]
