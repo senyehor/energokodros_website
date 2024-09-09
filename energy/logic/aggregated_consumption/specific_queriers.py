@@ -13,7 +13,8 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    Consumption, ConsumptionRecord, ConsumptionWithFormattedTimeAndRawValue, RawConsumption,
+    Consumption, ConsumptionRawAndFormatted, ConsumptionRecord,
+    ConsumptionRecordRawAndFormatted, RawConsumption,
     RawConsumptionRecord,
     RawConsumptionWithRawTotalConsumption, RawQueryRows, RawTotalConsumption,
     TotalConsumption,
@@ -52,26 +53,25 @@ class AggregatedConsumptionQuerier:
             )
         return None
 
-    def get_consumption_with_raw_value_and_formatted_time(self) -> \
-            ConsumptionWithFormattedTimeAndRawValue | None:
+    def get_raw_and_formatted_consumption(self) -> ConsumptionRawAndFormatted | None:
         if self.__raw_consumption:
             _ = _RawAggregatedConsumptionDataIndexes
-            return [
-                (
-                    self.__formatter.format_time(row[_.TIME_PART]),
-                    row[_.CONSUMPTION_PART]
+            return (
+                ConsumptionRecordRawAndFormatted(
+                    raw=row,
+                    formatted=ConsumptionRecord(
+                        time=self.__formatter.format_time(row[_.TIME_PART]),
+                        value=self.__formatter.format_consumption(row[_.CONSUMPTION_PART])
+                    )
                 )
                 for row in self.__raw_consumption
-            ]
+            )
         return None
 
     def get_formatted_total_consumption(self) -> TotalConsumption | None:
         if self.__raw_total_consumption:
             return self.__formatter.format_total_consumption(self.__raw_total_consumption)
         return None
-
-    def get_raw_consumption(self) -> RawConsumptionRecord | None:
-        return self.__raw_consumption
 
     def __query(self):
         consumption_with_total_consumption = \
@@ -82,10 +82,6 @@ class AggregatedConsumptionQuerier:
 
     def __get_querier_type(self) -> Type[AnyQuerier]:
         return _AGGREGATION_INTERVAL_TO_QUERIER_MAPPING[self.__parameters.aggregation_interval]
-
-    @property
-    def formatter(self) -> CommonFormatter:
-        return self.__querier.formatter
 
 
 class _AggregatedConsumptionQuerierBase(ABC):
