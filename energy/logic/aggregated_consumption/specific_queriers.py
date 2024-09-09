@@ -13,7 +13,7 @@ from energy.logic.aggregated_consumption.parameters import (
     AnyQueryParameters, CommonQueryParameters, OneHourAggregationIntervalQueryParameters,
 )
 from energy.logic.aggregated_consumption.types import (
-    Consumption, ConsumptionWithFormattedTimeAndRawValue, RawConsumption,
+    Consumption, ConsumptionWithFormattedTimeAndRawValue, RawConsumptionRecord,
     RawConsumptionWithRawTotalConsumption, RawQueryRows, RawTotalConsumption,
     TotalConsumption,
 )
@@ -33,7 +33,7 @@ class AggregatedConsumptionQuerier:
     def __init__(self, parameters: AnyQueryParameters):
         self.__parameters = parameters
         # noinspection PyTypeChecker
-        self.__raw_consumption: RawConsumption = None
+        self.__raw_consumption: RawConsumptionRecord = None
         # noinspection PyTypeChecker
         self.__raw_total_consumption: RawTotalConsumption = None
         self.__querier = self.__get_querier_type()(self.__parameters)
@@ -70,7 +70,7 @@ class AggregatedConsumptionQuerier:
             return self.__formatter.format_total_consumption(self.__raw_total_consumption)
         return None
 
-    def get_raw_consumption(self) -> RawConsumption | None:
+    def get_raw_consumption(self) -> RawConsumptionRecord | None:
         return self.__raw_consumption
 
     def __query(self):

@@ -6,7 +6,7 @@ RawConsumptionValue: TypeAlias = Decimal
 RawConsumptionTime: TypeAlias = datetime | str
 
 
-class RawConsumption(NamedTuple):
+class RawConsumptionRecord(NamedTuple):
     time: RawConsumptionTime
     value: RawConsumptionValue
 
@@ -14,7 +14,7 @@ class RawConsumption(NamedTuple):
 RawConsumptionForecast: TypeAlias = float
 RawTotalConsumption: TypeAlias = Decimal
 RawQueryRows = Iterable[
-    tuple[type(RawConsumption.time), type(RawConsumption.value), RawTotalConsumption]
+    tuple[type(RawConsumptionRecord.time), type(RawConsumptionRecord.value), RawTotalConsumption]
 ]
 
 ConsumptionTime: TypeAlias = str
@@ -23,11 +23,11 @@ ConsumptionForecast: TypeAlias = str
 TotalConsumption: TypeAlias = str
 
 RawConsumptionWithRawTotalConsumption = tuple[
-    Iterable[RawConsumption], RawTotalConsumption
+    Iterable[RawConsumptionRecord], RawTotalConsumption
 ]
 ConsumptionRow: TypeAlias = tuple[ConsumptionTime, ConsumptionValue]
 Consumption: TypeAlias = list[ConsumptionRow]
-ConsumptionWithFormattedTimeAndRawValueRow = tuple[ConsumptionTime, RawConsumption]
+ConsumptionWithFormattedTimeAndRawValueRow = tuple[ConsumptionTime, RawConsumptionRecord]
 ConsumptionWithFormattedTimeAndRawValue: TypeAlias = list[
     ConsumptionWithFormattedTimeAndRawValueRow
 ]
