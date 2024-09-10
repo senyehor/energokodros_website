@@ -1,13 +1,15 @@
 from datetime import datetime
 from typing import Callable
 
-from energy.logic.aggregated_consumption.formatters import (CommonFormatter, format_forecast)
+from energy.logic.aggregated_consumption.formatters import format_forecast
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.simple import check_institution_is_kindergarten_28
 from energy.logic.aggregated_consumption.types import (
-    ConsumptionForecast, ConsumptionWithConsumptionForecast, RawConsumptionForecast,
-    RawConsumptionRecord, RawConsumptionTime,
+    ConsumptionForecast, ConsumptionRawAndFormatted, ConsumptionRecordWithForecastForIt,
+    ConsumptionWithConsumptionForecast,
+    RawConsumptionForecast,
+    RawConsumptionTime,
 )
 from energy.logic.aggregated_consumption.verbose_exceptions_for_user import \
     ForecastForParametersDoesNotExist
@@ -18,30 +20,29 @@ class ConsumptionForecaster:
     currently this is just a stub returning hardcoded data,
     but will be a forecasting AI
     """
-    format_forecast: Callable[[RawConsumptionForecast], ConsumptionForecast] = \
+    __format_forecast: Callable[[RawConsumptionForecast], ConsumptionForecast] = \
         staticmethod(format_forecast)
 
     def __init__(
-            self, parameters: AnyQueryParameters, consumption: RawConsumptionRecord,
-            raw_aggregation_data_formatter: CommonFormatter):
+            self, parameters: AnyQueryParameters,
+            raw_and_formatted_consumption: ConsumptionRawAndFormatted
+    ):
         self.__parameters = parameters
-        self.__consumption = consumption
-        self.__raw_aggregation_data_formatter = raw_aggregation_data_formatter
+        self.__raw_and_formatted_consumption = raw_and_formatted_consumption
 
     def get_consumption_with_forecast(self) -> ConsumptionWithConsumptionForecast:
         self.__check_forecast_is_available_for_parameters()
-        _ = self.__raw_aggregation_data_formatter
-        return [
-            (
-                _.format_time(date),
-                _.format_consumption(consumption),
-                self.format_forecast(self.__get_forecast_for_date(date))
+        return (
+            ConsumptionRecordWithForecastForIt(
+                time=record.formatted.time,
+                value=record.formatted.value,
+                forecast=self.__get_forecast_for_date(record.raw.time),
             )
-            for date, consumption in self.__consumption
-        ]
+            for record in self.__raw_and_formatted_consumption
+        )
 
-    def __get_forecast_for_date(self, date: RawConsumptionTime) -> RawConsumptionForecast:
-        return self.__get_forecast_for_kindergarten(date)
+    def __get_forecast_for_date(self, date: RawConsumptionTime) -> ConsumptionForecast:
+        return self.__format_forecast(self.__get_forecast_for_kindergarten(date))
 
     def __get_forecast_for_kindergarten(self, date: datetime) -> RawConsumptionForecast:
         is_workday = self.__check_day_is_workday(date.weekday())
