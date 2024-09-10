@@ -31,7 +31,7 @@ def get_consumption_with_total_consumption(request: HttpRequest) -> JsonResponse
         return JsonResponse(e.message, status=400, safe=False)
     return JsonResponse(
         {
-            'consumption_with_optional_forecast': consumption_with_optional_forecast,
+            'consumption_with_optional_forecast': list(consumption_with_optional_forecast),
             'total_consumption':                  total_consumption
         },
         safe=False
