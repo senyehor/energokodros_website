@@ -26,11 +26,6 @@ from energy.models import BoxSensorSet
 AnyQuerier: TypeAlias = '_AggregatedConsumptionQuerierBase'
 
 
-class _RawAggregatedConsumptionDataIndexes(IntEnum):
-    TIME_PART = 0
-    CONSUMPTION_PART = 1
-
-
 class AggregatedConsumptionQuerier:
     __raw_consumption: RawConsumption
     __raw_total_consumption: RawTotalConsumption
@@ -43,11 +38,10 @@ class AggregatedConsumptionQuerier:
 
     def get_formatted_consumption(self) -> Consumption | None:
         if self.__raw_consumption:
-            _ = _RawAggregatedConsumptionDataIndexes
             return (
                 ConsumptionRecord(
-                    time=self.__formatter.format_time(row[_.TIME_PART]),
-                    value=self.__formatter.format_consumption(row[_.CONSUMPTION_PART])
+                    time=self.__formatter.format_time(row.time),
+                    value=self.__formatter.format_consumption(row.value)
                 )
                 for row in self.__raw_consumption
             )
@@ -55,13 +49,12 @@ class AggregatedConsumptionQuerier:
 
     def get_raw_and_formatted_consumption(self) -> ConsumptionRawAndFormatted | None:
         if self.__raw_consumption:
-            _ = _RawAggregatedConsumptionDataIndexes
             return (
                 ConsumptionRecordRawAndFormatted(
                     raw=row,
                     formatted=ConsumptionRecord(
-                        time=self.__formatter.format_time(row[_.TIME_PART]),
-                        value=self.__formatter.format_consumption(row[_.CONSUMPTION_PART])
+                        time=self.__formatter.format_time(row.time),
+                        value=self.__formatter.format_consumption(row.value)
                     )
                 )
                 for row in self.__raw_consumption
@@ -76,8 +69,6 @@ class AggregatedConsumptionQuerier:
     def __query(self):
         consumption_with_total_consumption = \
             self.__querier.get_raw_consumption_with_raw_total_consumption()
-        if not consumption_with_total_consumption:
-            return
         self.__raw_consumption, self.__raw_total_consumption = consumption_with_total_consumption
 
     def __get_querier_type(self) -> Type[AnyQuerier]:
@@ -115,8 +106,8 @@ class _AggregatedConsumptionQuerierBase(ABC):
     formatter: CommonFormatter = CommonFormatter()
 
     class __ConsumptionWithTotalConsumptionRowsIndexes(IntEnum):
-        TIME_PART = _RawAggregatedConsumptionDataIndexes.TIME_PART
-        CONSUMPTION_PART = _RawAggregatedConsumptionDataIndexes.CONSUMPTION_PART
+        TIME_PART = 0
+        CONSUMPTION_PART = 1
         TOTAL_CONSUMPTION_PART = 2
 
     class __BoxesSetIdSubqueryParameters(TypedDict):
@@ -129,13 +120,13 @@ class _AggregatedConsumptionQuerierBase(ABC):
         self.__parameters = parameters
 
     def get_raw_consumption_with_raw_total_consumption(self) \
-            -> RawConsumptionWithRawTotalConsumption | None:
+            -> RawConsumptionWithRawTotalConsumption | tuple[None, None]:
         with connection.cursor() as cursor:
             cursor.execute(self.__compose_query())
             rows = cursor.fetchall()
         if rows:
             return self.__split_rows_into_raw_consumption_and_total_consumption(rows)
-        return None
+        return None, None
 
     def __split_rows_into_raw_consumption_and_total_consumption(
             self, rows: RawQueryRows
