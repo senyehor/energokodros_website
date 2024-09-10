@@ -6,7 +6,9 @@ from energy.logic.aggregated_consumption.models import AggregationIntervalSecond
 from energy.logic.aggregated_consumption.parameters import AnyQueryParameters
 from energy.logic.aggregated_consumption.simple import check_institution_is_kindergarten_28
 from energy.logic.aggregated_consumption.types import (
-    ConsumptionForecast, ConsumptionRawAndFormatted, ConsumptionRecordWithForecastForIt,
+    ConsumptionForecast, ConsumptionForecastRawAndFormatted, ConsumptionRawAndFormatted,
+    ConsumptionRawAndFormattedWithForecastRawAndFormatted,
+    ConsumptionRecordRawAndFormattedWithRawAndFormattedForecast, ConsumptionRecordWithForecastForIt,
     ConsumptionWithConsumptionForecast,
     RawConsumptionForecast,
     RawConsumptionTime,
@@ -36,13 +38,32 @@ class ConsumptionForecaster:
             ConsumptionRecordWithForecastForIt(
                 time=record.formatted.time,
                 value=record.formatted.value,
-                forecast=self.__get_forecast_for_date(record.raw.time),
+                forecast=self.__format_forecast(self.__get_forecast_for_date(record.raw.time)),
             )
             for record in self.__raw_and_formatted_consumption
         )
 
-    def __get_forecast_for_date(self, date: RawConsumptionTime) -> ConsumptionForecast:
-        return self.__format_forecast(self.__get_forecast_for_kindergarten(date))
+    def get_raw_and_formatted_consumption_with_raw_and_formatted_forecast(self) -> \
+            ConsumptionRawAndFormattedWithForecastRawAndFormatted:
+        self.__check_forecast_is_available_for_parameters()
+        return (
+            ConsumptionRecordRawAndFormattedWithRawAndFormattedForecast(
+                raw_consumption=record.raw,
+                formatted_consumption=record.formatted,
+                forecast_raw_and_formatted=ConsumptionForecastRawAndFormatted(
+                    raw=raw_forecast,
+                    formatted=self.__format_forecast(raw_forecast)
+                )
+            )
+            for record in self.__raw_and_formatted_consumption
+            # trick to avoid double raw forecast retrieval while creating
+            # forecast_raw_and_formatted, as "if" condition is always true,
+            # but creates raw_forecast
+            if (raw_forecast := self.__get_forecast_for_date(record.raw.time)) and record
+        )
+
+    def __get_forecast_for_date(self, date: RawConsumptionTime) -> RawConsumptionForecast:
+        return self.__get_forecast_for_kindergarten(date)
 
     def __get_forecast_for_kindergarten(self, date: datetime) -> RawConsumptionForecast:
         is_workday = self.__check_day_is_workday(date.weekday())
