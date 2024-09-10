@@ -74,19 +74,22 @@ class ConsumptionForecaster:
             self.__parameters.facility_to_get_consumption_for_or_all_descendants_if_any
         )
 
-    def __get_forecast_for_hour_for_kindergarten(self, is_workday: bool, hour_0_to_23: int) \
-            -> RawConsumptionForecast:
+    def __get_forecast_for_hour_for_kindergarten(
+            self, is_workday: bool, interval_start_hour_0_to_23: int
+    ) -> RawConsumptionForecast:
         if is_workday:
-            forecast_source = KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_HOUR
+            forecast_source = \
+                KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_START_HOUR
         else:
-            forecast_source = KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR
-        return forecast_source[hour_0_to_23]
+            forecast_source = \
+                KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_START_HOUR
+        return forecast_source[interval_start_hour_0_to_23]
 
     def __check_day_is_workday(self, day_number_from_zero: int) -> bool:
         return day_number_from_zero in range(5)
 
 
-KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_HOUR = {
+KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_START_HOUR = {
     0:  1.57,
     1:  1.57,
     2:  1.57,
@@ -114,10 +117,10 @@ KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_HOUR = {
 }
 
 KINDERGARTEN_CONSUMPTION_PER_WORKDAY = sum(
-    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_HOUR.values()
+    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WORKDAY_BY_START_HOUR.values()
 )
 
-KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR = {
+KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_START_HOUR = {
     0:  1.57,
     1:  1.57,
     2:  1.57,
@@ -145,5 +148,5 @@ KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR = {
 }
 
 KINDERGARTEN_CONSUMPTION_PER_WEEKEND_DAY = sum(
-    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_HOUR.values()
+    KINDERGARTEN_CONSUMPTION_FORECAST_KILOWATT_HOUR_FOR_WEEKEND_BY_START_HOUR.values()
 )
