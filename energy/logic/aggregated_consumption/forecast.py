@@ -61,8 +61,9 @@ class ConsumptionForecaster:
             # trick to avoid double raw forecast retrieval while creating
             # forecast_raw_and_formatted, as "if" condition is always true,
             # but creates raw_forecast
-            if (raw_forecast := self.__get_forecast_for_date(record.raw.time)) and record
-        )
+            if (raw_forecast := self.__get_forecast_for_date(record.raw_consumption_record.time))
+               or record
+        ]
 
     def __get_forecast_for_date(self, date: RawConsumptionTime) -> RawConsumptionForecast:
         return self.__get_forecast_for_kindergarten(date)
