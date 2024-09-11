@@ -29,14 +29,11 @@ class AggregatedEnergyWithOptionalForecastQuerier:
         if self.__parameters.include_forecast:
             raw_and_formatted_consumption = self.__querier.get_raw_and_formatted_consumption()
             if raw_and_formatted_consumption:
-                consumption_with_forecast = self.__make_forecast_for_actual_consumption(
+                return self.__make_forecast_for_actual_consumption(
                     raw_and_formatted_consumption
                 )
-            else:
-                return None
-            return consumption_with_forecast
-        consumption = self.__querier.get_formatted_consumption()
-        return consumption
+            return None
+        return self.__querier.get_formatted_consumption()
 
     def get_raw_and_formatted_consumption_with_raw_and_formatted_optional_forecast(self) -> \
             ConsumptionRawAndFormattedWithForecastRawAndFormatted | \
@@ -44,15 +41,11 @@ class AggregatedEnergyWithOptionalForecastQuerier:
         if self.__parameters.include_forecast:
             raw_and_formatted_consumption = self.__querier.get_raw_and_formatted_consumption()
             if raw_and_formatted_consumption:
-                consumption_with_forecast = \
-                    self.__make_all_raw_and_all_formatted_data_forecast_for_consumption(
-                        raw_and_formatted_consumption
-                    )
-            else:
-                return None
-            return consumption_with_forecast
-        consumption = self.__querier.get_raw_and_formatted_consumption()
-        return consumption
+                return self.__make_all_raw_and_all_formatted_data_forecast_for_consumption(
+                    raw_and_formatted_consumption
+                )
+            return None
+        return self.__querier.get_raw_and_formatted_consumption()
 
     def get_total_consumption(self) -> TotalConsumption | None:
         return self.__querier.get_formatted_total_consumption()
