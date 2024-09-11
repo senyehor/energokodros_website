@@ -8,8 +8,18 @@ function download_report() {
     $.ajax({
         url: reverse_url('get-energy-report'),
         type: 'POST',
-        xhrFields: {
-            responseType: 'blob'
+        xhr: () => {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 2) {
+                    if (xhr.status === 200) {
+                        xhr.responseType = "blob";
+                    } else {
+                        xhr.responseType = "json";
+                    }
+                }
+            };
+            return xhr;
         },
         data: __compose_aggregation_query_parameters(),
         headers: get_headers_for_ajax_object(),
@@ -24,8 +34,8 @@ function download_report() {
             window.URL.revokeObjectURL(url);
         },
         error: (error) => {
-            if (error.responseJSON) {
-                add_warning_alert(error.responseJSON);
+            if (error.responseText) {
+                add_warning_alert(error.responseText);
                 return
             }
             add_error_alert(DEFAULT_UNEXPECTED_ERROR_MESSAGE);
