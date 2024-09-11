@@ -34,7 +34,7 @@ class ConsumptionForecaster:
 
     def get_consumption_with_forecast(self) -> ConsumptionWithConsumptionForecast:
         self.__check_forecast_is_available_for_parameters()
-        return (
+        return [
             ConsumptionRecordWithForecastForIt(
                 time=record.formatted_consumption_record.time,
                 value=record.formatted_consumption_record.value,
@@ -43,7 +43,7 @@ class ConsumptionForecaster:
                 ),
             )
             for record in self.__raw_and_formatted_consumption
-        )
+        ]
 
     def get_raw_and_formatted_consumption_with_raw_and_formatted_forecast(self) -> \
             ConsumptionRawAndFormattedWithForecastRawAndFormatted:
