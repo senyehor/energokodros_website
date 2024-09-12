@@ -24,6 +24,10 @@ function download_report() {
         data: __compose_aggregation_query_parameters(),
         headers: get_headers_for_ajax_object(),
         success: (data) => {
+            if (data === null) {
+                add_warning_alert(NO_DATA_FOR_PARAMETERS_MESSAGE);
+                return;
+            }
             let a = document.createElement('a');
             let url = window.URL.createObjectURL(data);
             a.href = url;
