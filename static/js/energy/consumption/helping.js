@@ -88,16 +88,6 @@ function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
 
 
 function add_hour_filtering_filter_day_or_interval_buttons() {
-    let filter_every_day_button = `
-        <a class="btn ${CHOSEN_BUTTON_CLASS}" id="filter_every_day_button_id">
-            Кожен день
-        </a>`;
-    let filter_whole_interval_button = `
-        <a class="btn ${AVAILABLE_BUTTON_CLASS}" id="filter_whole_interval_button_id">
-            Увесь інтервал
-        </a>`;
-    __get_hour_filtering_options_buttons_container().append(filter_every_day_button);
-    __get_hour_filtering_options_buttons_container().append(filter_whole_interval_button);
     FILTER_EVERY_DAY_BUTTON = $('#filter_every_day_button_id');
     FILTER_WHOLE_INTERVAL_BUTTON = $('#filter_whole_interval_button_id');
     FILTER_EVERY_DAY_BUTTON.click(() => {
