@@ -1,7 +1,7 @@
 const START = 'start', END = 'end';
 
 
-function make_hour_filter() {
+function make_hour_filters() {
     return `
         <div id="id_hours_filtering">
             ${_make_interval_filter_options()}
