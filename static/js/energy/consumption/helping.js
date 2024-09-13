@@ -200,5 +200,5 @@ function __get_forecast_checkbox_value() {
 }
 
 function __get_hour_filtering_options_buttons_container() {
-    return $('#hour_filtering_option_buttons_container_id');
+    return $('#filter_whole_interval_or_each_day_id');
 }
