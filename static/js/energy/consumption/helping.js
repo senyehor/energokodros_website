@@ -62,12 +62,6 @@ function add_hour_filtering_filter_day_or_interval_buttons() {
     })
 }
 
-function set_date_inputs_now() {
-    let now = _get_current_date_for_date_input();
-    __get_period_start_input().val(now);
-    __get_period_end_input().val(now);
-}
-
 
 function __remove_error_from_hours_select() {
     $(this).removeClass('is-invalid');

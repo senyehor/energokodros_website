@@ -48,6 +48,12 @@ function update_interval_filters(interval) {
     }
 }
 
+function set_date_inputs_now() {
+    let now = _get_current_date_for_date_input();
+    get_hour_or_day_period_input(START).val(now);
+    get_hour_or_day_period_input(END).val(now);
+}
+
 function set_default_hour_filtering_choices() {
     __get_hour_filtering_start_select()
         .val(DEFAULT_START_HOUR_FILTER_OPTION)
