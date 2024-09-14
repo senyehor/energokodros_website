@@ -1,10 +1,5 @@
 $(document).ready(function () {
     let get_data_button = $('#get_data_button');
-    // order of handlers is important here
-    get_data_button.on(
-        'click',
-        check_control_form_required_fields_are_filled
-    )
     get_data_button.on(
         'click', validate_hours_filters_if_one_hour_aggregation_interval_is_chosen
     )

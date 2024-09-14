@@ -34,18 +34,6 @@ function update_facilities_list_for_role() {
     });
 }
 
-function check_control_form_required_fields_are_filled(event) {
-    let form = __get_control_form();
-    let fields = form.find('input:required, select:required').serializeArray();
-    $.each(fields, function (i, field) {
-        if (!field.value) {
-            add_error_alert('Не усі поля були заповнені');
-            event.stopImmediatePropagation();
-            return false
-        }
-    })
-}
-
 function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
     INCLUDE_HOURS_FILTER = false;
     let start_value = get_selected_option_for_select(__get_hour_filtering_start_select());
