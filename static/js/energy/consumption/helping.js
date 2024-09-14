@@ -122,14 +122,6 @@ function __get_set_view_mode_to_chart_button() {
     return $('#set_chart_button')
 }
 
-function __get_period_start_input() {
-    return $('#period_start')
-}
-
-function __get_period_end_input() {
-    return $('#period_end')
-}
-
 function __get_include_forecast_checkbox() {
     return $('#id_include_forecast');
 }
