@@ -138,15 +138,3 @@ function setup_interval_to_html_mapping() {
     );
 
 }
-
-function __get_year_select(start_or_end) {
-    return $(`#year_select_${start_or_end}_id`);
-}
-
-function __get_month_select(start_or_end) {
-    return $(`#month_select_${start_or_end}_id`);
-}
-
-function __get_week_select(start_or_end) {
-    return $(`#week_select_${start_or_end}_id`);
-}
