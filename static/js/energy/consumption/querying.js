@@ -1,19 +1,16 @@
 $(document).ready(function () {
     let get_data_button = $('#get_data_button');
-    get_data_button.on(
-        'click', validate_hours_filters_if_one_hour_aggregation_interval_is_chosen
-    )
-    get_data_button.on(
-        'click',
-        get_consumption_data_and_update
-    );
-    get_data_button.on(
-        'click',
-        clear_alerts
-    )
+    get_data_button.on('click', on_get_data_button_click);
 })
 
 const NO_DATA_FOR_PARAMETERS_MESSAGE = 'За заданими фільтрами дані відсутні';
+
+function on_get_data_button_click() {
+    clear_alerts();
+    validate_hours_filters_if_one_hour_aggregation_interval_is_chosen();
+    get_consumption_data_and_update();
+}
+
 
 function get_consumption_data_and_update() {
     $.ajax({
