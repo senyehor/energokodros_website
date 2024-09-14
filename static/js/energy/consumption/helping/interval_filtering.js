@@ -39,13 +39,10 @@ function update_interval_filters(interval) {
             make_date_filtration_for_one_hour_or_one_day_intervals
         );
         set_date_inputs_now();
-    }
-    if (
-        interval === ONE_WEEK_IN_SECONDS
-        || interval === ONE_MONTH_IN_SECONDS
-        || interval === ONE_YEAR_IN_SECONDS
-    ) {
-        // todo
+    } else if (check_interval_is_week_month_or_year(interval)) {
+        __get_interval_filtering_div().append(create_filters_for_week_month_or_year(interval));
+    } else {
+        throw 'unrecognized interval';
     }
 }
 
