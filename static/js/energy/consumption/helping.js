@@ -36,8 +36,8 @@ function update_facilities_list_for_role() {
 
 function validate_hours_filters_if_one_hour_aggregation_interval_is_chosen() {
     INCLUDE_HOURS_FILTER = false;
-    let start_value = get_selected_option_for_select(__get_hour_filtering_start_select());
-    let end_value = get_selected_option_for_select(__get_hour_filtering_end_select());
+    let start_value = get_selected_option_for_select(get_hour_filters_select(START));
+    let end_value = get_selected_option_for_select(get_hour_filters_select(END));
     // default values cover everything, so there is no point to pass them
     if (
         start_value === DEFAULT_START_HOUR_FILTER_OPTION
