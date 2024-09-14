@@ -2,10 +2,6 @@ function __get_interval_filtering_div() {
     return $('#interval_filtering_div_id');
 }
 
-function __get_period_start_input() {
-    return $('#period_start')
-}
-
-function __get_period_end_input() {
-    return $('#period_end')
+function get_hour_or_day_period_input(start_or_end) {
+    return $(`#hour_or_day_period_${start_or_end}`)
 }
