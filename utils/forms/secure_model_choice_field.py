@@ -4,7 +4,7 @@ from django.db.models import Model
 from django.forms import models
 
 from utils.crypto import IntHasher
-from utils.forms.widgets import SelectWithFormControlClass
+from utils.forms.widgets import SelectWithFormSelectClass
 
 INT_HIDER = IntHasher.hide_int
 INT_REVEALER = IntHasher.reveal_int
@@ -13,7 +13,7 @@ INT_REVEALER = IntHasher.reveal_int
 class SecureModelChoiceField(models.ModelChoiceField):
     __int_hider = staticmethod(INT_HIDER)
     __int_revealer = staticmethod(INT_REVEALER)
-    widget = SelectWithFormControlClass()
+    widget = SelectWithFormSelectClass()
 
     def prepare_value(self, value: Model | None | Literal['']) -> str:
         if isinstance(value, Model):

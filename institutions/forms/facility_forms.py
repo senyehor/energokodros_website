@@ -10,7 +10,7 @@ from institutions.models import Facility
 from users.models import UserRole
 from utils.forms import (
     create_primary_button, CrispyModelForm, SecureModelChoiceField,
-    SelectWithFormControlClass, UPDATE_DELETE_BUTTONS_SET,
+    SelectWithFormSelectClass, UPDATE_DELETE_BUTTONS_SET,
 )
 from utils.views import AdditionalSetupRequiredFormMixin
 
@@ -29,7 +29,7 @@ class NewFacilityForm(CrispyModelForm):
         queryset=Facility.objects.all(),
         required=True,
         label=_("Оберіть батьківський об'єкт"),
-        widget=SelectWithFormControlClass(attrs={'size': 7}),
+        widget=SelectWithFormSelectClass(attrs={'size': 7}),
         empty_label=None
     )
 
@@ -55,7 +55,7 @@ class FacilityEditForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
         empty_label=None,
         required=False,
         disabled=True,
-        widget=SelectWithFormControlClass(attrs={'size': 7}),
+        widget=SelectWithFormSelectClass(attrs={'size': 7}),
         label_from_instance_function=get_facility_name_space_padded_according_to_nesting
     )
     # info only field, qs is filled in custom method
@@ -65,7 +65,7 @@ class FacilityEditForm(CrispyModelForm, AdditionalSetupRequiredFormMixin):
         empty_label=None,
         required=False,
         disabled=True,
-        widget=SelectWithFormControlClass(attrs={'size': 5}),
+        widget=SelectWithFormSelectClass(attrs={'size': 5}),
         label_from_instance_function=label_from_user_role_for_facility_roles
     )
 

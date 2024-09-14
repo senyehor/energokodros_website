@@ -5,4 +5,4 @@ from .crispy_buttons import (
 from .crispy_forms_mixin import CrispyFormMixin, CrispyModelForm
 from .secure_model_choice_field import INT_HIDER, INT_REVEALER, SecureModelChoiceField
 from .set_form_buttons_to_update_delete import set_form_buttons_to_update_delete
-from .widgets import SelectWithFormControlClass
+from .widgets import SelectWithFormSelectClass

@@ -10,7 +10,7 @@ from users.models import UserRole, UserRoleApplication
 from utils.forms import (
     create_danger_button, create_primary_button, CrispyModelForm,
     SecureModelChoiceField,
-    SelectWithFormControlClass,
+    SelectWithFormSelectClass,
 )
 
 
@@ -24,7 +24,7 @@ class UserRoleApplicationRequestsDecisionForm(CrispyModelForm):
         required=True,
         empty_label=None,
         label_from_instance_function=get_facility_name_space_padded_according_to_nesting,
-        widget=SelectWithFormControlClass({'size': 6})
+        widget=SelectWithFormSelectClass({'size': 6})
     )
     position_name = forms.CharField(
         label=_('Уведіть назву позиції'),

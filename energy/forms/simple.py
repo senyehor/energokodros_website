@@ -12,7 +12,7 @@ from institutions.logic import (
 from institutions.models import Facility
 from utils.common.object_to_queryset import object_to_queryset
 from utils.forms import (
-    SecureModelChoiceField, SelectWithFormControlClass,
+    SecureModelChoiceField, SelectWithFormSelectClass,
     UPDATE_DELETE_BUTTONS_SET,
 )
 from utils.views import AdditionalSetupRequiredFormMixin
@@ -49,7 +49,7 @@ class BoxForm(BoxFormNoRelationFields, AdditionalSetupRequiredFormMixin):
         disabled=True,
         label=_('Набори'),
         label_from_instance_function=lambda _set: _(f'Набір {_set.sensor_number_in_set}'),
-        widget=SelectWithFormControlClass(attrs={'size': 10}),
+        widget=SelectWithFormSelectClass(attrs={'size': 10}),
         empty_label=None
     )
 
