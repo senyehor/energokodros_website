@@ -32,17 +32,17 @@ function on_interval_select_change() {
 
 function update_interval_filters(interval) {
     __get_interval_filtering_div().empty();
-    if (interval === ONE_HOUR_IN_SECONDS || interval === ONE_DAY_IN_SECONDS) {
+    if (check_interval_is_hour_or_day_or_week(interval)) {
         if (interval === ONE_HOUR_IN_SECONDS) {
             __get_interval_filtering_div().append(make_hour_filters());
             set_default_hour_filtering_choices();
         }
         __get_interval_filtering_div().append(
-            make_date_filtration_for_one_hour_or_one_day_intervals
+            make_date_filtration_for_hour_or_day_or_week_intervals
         );
         set_date_inputs_now();
-    } else if (check_interval_is_week_month_or_year(interval)) {
-        __get_interval_filtering_div().append(create_filters_for_week_month_or_year(interval));
+    } else if (check_interval_is_month_or_year(interval)) {
+        __get_interval_filtering_div().append(create_filters_for_month_or_year(interval));
     } else {
         throw UNRECOGNIZED_INTERVAL;
     }
