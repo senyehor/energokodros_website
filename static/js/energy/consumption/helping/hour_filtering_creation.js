@@ -91,7 +91,7 @@ function __make_hour_filter_select_div(text, start_or_end) {
 function _make_date_filtration(start_or_end, label) {
     let date_input = `
         <input class="d-block form-control w-auto" type="date"
-        name="period_${start_or_end}" id="hour_or_day_period_${start_or_end}_id" required>`;
+        name="period_${start_or_end}" id="hour_or_day_period_${start_or_end}_id">`;
     return `
         <div id="div_id_period_${start_or_end}" class="form-group">
             ${label}
