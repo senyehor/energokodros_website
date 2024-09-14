@@ -19,8 +19,10 @@ let CURRENT_INTERVAL_CHOSEN = null;
 function on_interval_select_change() {
     let previous_interval = CURRENT_INTERVAL_CHOSEN;
     CURRENT_INTERVAL_CHOSEN = __get_current_interval();
-    if (previous_interval === null) {
-        set_interval_filters(CURRENT_INTERVAL_CHOSEN);
+    if (check_interval_filtering_does_not_need_to_be_changed(
+        previous_interval,
+        CURRENT_INTERVAL_CHOSEN
+    )) {
         return;
     }
     update_interval_filters(CURRENT_INTERVAL_CHOSEN);
@@ -56,8 +58,15 @@ function set_default_hour_filtering_choices() {
         .attr('selected', true);
 }
 
-function _check_interval_is_one_hour() {
-    return __check_interval_in_seconds_is_selected(ONE_HOUR_IN_SECONDS);
+function check_interval_filtering_does_not_need_to_be_changed(previous_interval, current_interval) {
+    return check_interval_is_week_month_or_year(previous_interval)
+        && check_interval_is_week_month_or_year(current_interval);
+}
+
+function check_interval_is_week_month_or_year(interval) {
+    return (interval === ONE_WEEK_IN_SECONDS)
+        || (interval === ONE_MONTH_IN_SECONDS)
+        || (interval === ONE_YEAR_IN_SECONDS)
 }
 
 function __get_current_interval() {
