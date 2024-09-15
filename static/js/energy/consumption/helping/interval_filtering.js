@@ -25,7 +25,7 @@ function on_interval_select_change() {
 
 function get_period_start_time_epoch_seconds() {
     if (check_interval_is_hour_or_day_or_week(CURRENT_INTERVAL_CHOSEN)) {
-        return get_period_start_or_end_for_hour_or_day_or_week(START)
+        return get_period_start_or_end_for_hour_or_day_or_week(START);
     }
     if (CURRENT_INTERVAL_CHOSEN === ONE_MONTH_IN_SECONDS) {
         return get_period_start_for_month();
