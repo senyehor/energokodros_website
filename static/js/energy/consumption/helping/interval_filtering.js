@@ -19,14 +19,7 @@ const UNRECOGNIZED_INTERVAL = new Error('Unrecognized interval');
 let CURRENT_INTERVAL_CHOSEN = null;
 
 function on_interval_select_change() {
-    let previous_interval = CURRENT_INTERVAL_CHOSEN;
     CURRENT_INTERVAL_CHOSEN = __get_current_interval();
-    if (check_interval_filtering_does_not_need_to_be_changed(
-        previous_interval,
-        CURRENT_INTERVAL_CHOSEN
-    )) {
-        return;
-    }
     update_interval_filters(CURRENT_INTERVAL_CHOSEN);
 }
 
