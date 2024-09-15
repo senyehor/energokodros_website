@@ -77,8 +77,10 @@ function generate_year_choices() {
 
 function generate_month_choices() {
     return Array.from({length: 12}, (e, i) => {
-        let month = new Date(null, i + 1, null);
-        return [i + 1, month.toLocaleDateString(navigator.language, {month: "short"})];
+        // date is 1, because Date() return previous day if date is 0 or null,
+        // which would result in months starting from December
+        let month = new Date(null, i, 1);
+        return [i, month.toLocaleDateString(navigator.language, {month: "short"})];
     })
 }
 
