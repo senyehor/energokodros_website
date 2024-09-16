@@ -57,7 +57,7 @@ function get_period_start_or_end_for_hour_or_day_or_week(start_or_end) {
 
 function get_period_start_for_year() {
     let year = get_int_selected_option_for_select(__get_year_select(START));
-    let date = new Date(year, 1, 1);
+    let date = create_utc_date(year, 1, 1);
     return convert_date_to_epoch_seconds(date);
 }
 
@@ -65,14 +65,14 @@ function get_period_end_for_year() {
     let year = get_int_selected_option_for_select(__get_year_select(END));
     // Date returns previous day of previous month if month = 0 and date = 0,
     // so previous day of the next year is the last day of given year
-    let date = new Date(year + 1, 0, 0);
+    let date = create_utc_date(year + 1, 0, 0);
     return convert_date_to_epoch_seconds(date);
 }
 
 function get_period_start_for_month() {
     let year = get_int_selected_option_for_select(__get_year_select(START));
     let month_from_zero = get_int_selected_option_for_select(__get_month_select(START));
-    let date = new Date(year, month_from_zero, 1);
+    let date = create_utc_date(year, month_from_zero, 1);
     return convert_date_to_epoch_seconds(date);
 }
 
@@ -81,7 +81,7 @@ function get_period_end_for_month() {
     let month_from_zero = get_int_selected_option_for_select(__get_month_select(END));
     // Date returns previous day if and date = 0, so previous day
     // of the next moth is the last day of given month
-    let date = new Date(year, month_from_zero + 1, 0);
+    let date = create_utc_date(year, month_from_zero + 1, 0);
     return convert_date_to_epoch_seconds(date);
 }
 
@@ -129,6 +129,10 @@ function check_interval_is_hour_or_day_or_week(interval) {
 function check_interval_is_month_or_year(interval) {
     return (interval === ONE_MONTH_IN_SECONDS)
         || (interval === ONE_YEAR_IN_SECONDS)
+}
+
+function create_utc_date(year, month, day) {
+    return new Date(Date.UTC(year, month, day));
 }
 
 function convert_date_to_epoch_seconds(date) {
