@@ -243,8 +243,16 @@ class _OneHourQuerier(_AggregatedConsumptionQuerierBase):
 
     formatter = OneHourFormatter()
 
-    def _compose_where(self) -> str:
-        base_where = super()._compose_where()
+    def _compose_where(self, period_start: datetime, period_end: datetime) -> str:
+        if self.parameters.filter_whole_interval:
+            return super()._compose_where(
+                period_start=self.__create_period_start_for_filtering_whole_interval(),
+                period_end=self.__create_period_end_for_filtering_whole_interval()
+            )
+        base_where = super()._compose_where(
+            period_start=self._make_period_start_00_00(),
+            period_end=self._make_period_end_shifted_one_day_forward_00_00()
+        )
         if self.parameters.filter_every_day:
             return self.__add_hours_filter_to_base_where(base_where)
         return base_where
@@ -255,6 +263,18 @@ class _OneHourQuerier(_AggregatedConsumptionQuerierBase):
                 base_where,
                 self.__compose_additional_hours_where_filters()
             )
+        )
+
+    def __create_period_start_for_filtering_whole_interval(self) -> datetime:
+        return datetime.combine(
+            self.parameters.period_start,
+            time(hour=self.parameters.hour_filtering_start_hour)
+        )
+
+    def __create_period_end_for_filtering_whole_interval(self) -> datetime:
+        return datetime.combine(
+            self.parameters.period_end,
+            time(hour=self.parameters.hour_filtering_end_hour)
         )
 
     def __compose_additional_hours_where_filters(self) -> str:
