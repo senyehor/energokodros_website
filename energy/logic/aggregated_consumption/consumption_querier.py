@@ -168,12 +168,12 @@ class _AggregatedConsumptionQuerierBase(ABC):
     def _compose_where(self) -> str:
         return ' '.join(
             (
-                self._compose_where_interval(),
+                self._compose_interval_where(),
                 self.__compose_where_boxes_sets()
             )
         )
 
-    def _compose_where_interval(self) -> str:
+    def _compose_interval_where(self) -> str:
         # in order to filter aggregation_interval_end correctly, period end must be shifted,
         # as we want to include all the intervals behind period end,
         # having aggregation_interval_end <= period_end_one_day_forward_shifted soft
