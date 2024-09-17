@@ -42,7 +42,7 @@ function _make_hour_filters() {
     let start_hour_filter_select = __make_hour_filter_select_div('Від', START);
     let end_hour_filter_select = __make_hour_filter_select_div('До', END);
     let reset_button = __make_reset_hour_filters_button(
-        'reset_hours_filters_btn', 'Скинути'
+        'reset_hour_filters_btn_id', 'Скинути'
     );
     return `
         <div class="d-flex align-items-center">
