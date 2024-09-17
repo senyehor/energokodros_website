@@ -174,17 +174,16 @@ class _AggregatedConsumptionQuerierBase(ABC):
         )
 
     def _compose_interval_where(self) -> str:
-        # in order to filter aggregation interval end correctly, period end must be shifted,
-        # as we want to include all the intervals behind period end,
-        # having aggregation_interval_end <= period_end_one_day_forward_shifted soft
-        # to include 23 - 00 interval
+        # in order to filter aggregation interval end correctly, period end must be shifted
+        # one day forward, as we want to include 23 - 00 interval, where 00 is already a part
+        # of the following day
         time_00_00 = datetime.time(hour=00)
         period_start_datetime_00_00 = datetime.datetime.combine(
             self.parameters.period_start,
             time_00_00
         )
         period_end_one_day_forward_shifted_00_00 = datetime.datetime.combine(
-            self.parameters.period_end + datetime.timedelta(hours=1),
+            self.parameters.period_end + datetime.timedelta(days=1),
             time_00_00
         )
         return self.__QUERY_WHERE_INTERVAL.format(
