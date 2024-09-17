@@ -1,5 +1,5 @@
+import datetime
 from abc import ABC
-from datetime import timedelta
 from enum import IntEnum
 from typing import Iterable, Type, TypeAlias, TypedDict
 
@@ -174,14 +174,22 @@ class _AggregatedConsumptionQuerierBase(ABC):
         )
 
     def _compose_interval_where(self) -> str:
-        # in order to filter aggregation_interval_end correctly, period end must be shifted,
+        # in order to filter aggregation interval end correctly, period end must be shifted,
         # as we want to include all the intervals behind period end,
         # having aggregation_interval_end <= period_end_one_day_forward_shifted soft
         # to include 23 - 00 interval
-        period_end_one_day_forward_shifted = self.parameters.period_end + timedelta(days=1)
+        time_00_00 = datetime.time(hour=00)
+        period_start_datetime_00_00 = datetime.datetime.combine(
+            self.parameters.period_start,
+            time_00_00
+        )
+        period_end_one_day_forward_shifted_00_00 = datetime.datetime.combine(
+            self.parameters.period_end + datetime.timedelta(hours=1),
+            time_00_00
+        )
         return self.__QUERY_WHERE_INTERVAL.format(
-            aggregation_interval_start=self.parameters.period_start,
-            aggregation_interval_end=period_end_one_day_forward_shifted,
+            aggregation_interval_start=period_start_datetime_00_00,
+            aggregation_interval_end=period_end_one_day_forward_shifted_00_00,
         )
 
     def __compose_boxes_sets_where_(self) -> str:
