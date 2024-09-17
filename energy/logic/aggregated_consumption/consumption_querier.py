@@ -1,5 +1,5 @@
-import datetime
 from abc import ABC
+from datetime import datetime, time, timedelta
 from enum import IntEnum
 from typing import Iterable, Type, TypeAlias, TypedDict
 
@@ -168,7 +168,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
             select=self.SELECT_PART
         )
 
-    def _compose_where(self, period_start: datetime.datetime, period_end: datetime.datetime) -> str:
+    def _compose_where(self, period_start: datetime, period_end: datetime) -> str:
         return ' '.join(
             (
                 self.__compose_interval_where(period_start=period_start, period_end=period_end),
@@ -176,23 +176,23 @@ class _AggregatedConsumptionQuerierBase(ABC):
             )
         )
 
-    def _make_period_start_00_00(self) -> datetime.datetime:
-        return datetime.datetime.combine(
+    def _make_period_start_00_00(self) -> datetime:
+        return datetime.combine(
             self.parameters.period_start,
-            datetime.time(hour=00)
+            time(hour=00)
         )
 
-    def _make_period_end_shifted_one_day_forward_00_00(self) -> datetime.datetime:
+    def _make_period_end_shifted_one_day_forward_00_00(self) -> datetime:
         # in order to filter aggregation interval end correctly, period end must be shifted
         # one day forward, as we want to include 23 - 00 interval, where 00 is already a part
         # of the following day
-        return datetime.datetime.combine(
-            self.parameters.period_end + datetime.timedelta(days=1),
-            datetime.time(hour=00)
+        return datetime.combine(
+            self.parameters.period_end + timedelta(days=1),
+            time(hour=00)
         )
 
     def __compose_interval_where(
-            self, period_start: datetime.datetime, period_end: datetime.datetime
+            self, period_start: datetime, period_end: datetime
     ) -> str:
         return self.__QUERY_WHERE_INTERVAL.format(
             aggregation_interval_start=period_start,
