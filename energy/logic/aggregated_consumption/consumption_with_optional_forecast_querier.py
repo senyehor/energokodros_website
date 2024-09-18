@@ -1,4 +1,4 @@
-from energy.logic.aggregated_consumption.consumption_querier import AggregatedConsumptionQuerier
+from energy.logic.aggregated_consumption.consumption_queriers import AggregatedConsumptionQuerier
 from energy.logic.aggregated_consumption.forecast import ConsumptionForecaster
 from energy.logic.aggregated_consumption.parameters import CommonQueryParameters
 from energy.logic.aggregated_consumption.parameters_parsers import ParameterParser
