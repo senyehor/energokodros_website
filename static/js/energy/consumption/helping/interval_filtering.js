@@ -58,7 +58,7 @@ function get_period_start_or_end_for_hour_or_day_or_week(start_or_end) {
 
 function get_period_start_for_year() {
     let year = get_int_selected_option_for_select(__get_year_select(START));
-    let date = create_utc_date(year, 1, 1);
+    let date = create_utc_date(year, 0, 1);
     return convert_date_to_epoch_seconds(date);
 }
 
