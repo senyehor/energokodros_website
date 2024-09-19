@@ -147,7 +147,6 @@ class _OneHourAggregationIntervalQueryParametersParser(__AllowQueryingForCurrent
             hour_filtering_method=hour_filtering_method
         )
         super().__init__(**kwargs)
-        self._validate()
 
     def __set_hour_filtering_options(
             self, *, hour_filtering_start_hour: str,
