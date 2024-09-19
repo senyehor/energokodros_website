@@ -1,4 +1,3 @@
-import time
 from calendar import monthrange
 from dataclasses import fields
 from datetime import date, datetime, timezone
@@ -97,8 +96,18 @@ class _CommonQueryParametersParser:
         self._period_end = self.__convert_epoch_seconds_to_date(period_end_epoch_seconds_utc)
 
     def __check_period_is_valid(self):
+        self._validate_period_start()
+        self._validate_period_end()
         if self._period_start > self._period_end:
             raise PeriodStartGreaterThanEnd
+
+    def _validate_period_start(self):
+        if self._period_start > datetime.now():
+            raise FutureFilteringDate
+
+    def _validate_period_end(self):
+        if self._period_end > datetime.now():
+            raise FutureFilteringDate
 
     def _check_period_contains_at_least_one_aggregation_interval(self):
         period_length_seconds = int((self._period_end - self._period_start).total_seconds())
@@ -108,9 +117,6 @@ class _CommonQueryParametersParser:
     def __convert_epoch_seconds_to_date(self, epoch_seconds_utc: int) -> date:
         if epoch_seconds_utc < 0:
             raise QueryParametersInvalid
-        if int(time.time()) < epoch_seconds_utc:
-            # future timestamp (senseless filtering for future dates)
-            raise FutureFilteringDate
         return datetime.fromtimestamp(epoch_seconds_utc, timezone.utc).date()
 
     def __parse_facility(self, facility_pk: str) -> Facility:
