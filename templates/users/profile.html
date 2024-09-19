@@ -1,10 +1,16 @@
-{% extends 'common/form_in_center_with_default_padding_and_width.html' %}
+{% extends 'common/form_in_center_needs_padding_and_width.html' %}
 {% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block title %}Мій профіль{% endblock %}
 {% block form_header %}
     Мій профіль
+{% endblock %}
+{% block padding_top_class %}
+    pt-2
+{% endblock %}
+{% block width_class %}
+    w-75
 {% endblock %}
 {% block form %}
     <form method="post">
