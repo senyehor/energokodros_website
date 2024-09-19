@@ -115,8 +115,6 @@ class _CommonQueryParametersParser:
             raise AggregationIntervalDoesNotFitPeriod
 
     def __convert_epoch_seconds_to_date(self, epoch_seconds_utc: int) -> date:
-        if epoch_seconds_utc < 0:
-            raise QueryParametersInvalid
         return datetime.fromtimestamp(epoch_seconds_utc, timezone.utc).date()
 
     def __parse_facility(self, facility_pk: str) -> Facility:
