@@ -1,4 +1,5 @@
 import time
+from calendar import monthrange
 from dataclasses import fields
 from datetime import date, datetime, timezone
 from typing import Any, Callable, Iterable, Type, TypeAlias
@@ -6,6 +7,7 @@ from typing import Any, Callable, Iterable, Type, TypeAlias
 from energy.logic.aggregated_consumption.exceptions import (
     IncompleteHourFiltersSet,
     InvalidHourFilteringValue, InvalidIncludeForecastValue,
+    MonthPeriodStartDoesNotBeginWithFirstMonthDay,
 )
 from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
 from energy.logic.aggregated_consumption.parameters import (
@@ -232,6 +234,26 @@ class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
     pass
 
 
+class _OneMonthAggregationIntervalQueryParametersParser(_CommonQueryParametersParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._validate()
+
+    def _validate(self):
+        super()._validate()
+        self.__check_period_begins_with_first_month_day()
+        self.__check_period_ends_with_last_month_day()
+
+    def __check_period_begins_with_first_month_day(self):
+        if self._period_start.day != 1:
+            raise MonthPeriodStartDoesNotBeginWithFirstMonthDay
+
+    def __check_period_ends_with_last_month_day(self):
+        _, last_day = monthrange(self._period_end.year, self._period_end.month)
+        if self._period_end.day != last_day:
+            raise MonthPeriodStartDoesNotBeginWithFirstMonthDay
+
+
 _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING: \
     dict[
         AggregationIntervalSeconds,
@@ -240,6 +262,6 @@ _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING: \
         AggregationIntervalSeconds.ONE_HOUR:  _OneHourAggregationIntervalQueryParametersParser,
         AggregationIntervalSeconds.ONE_DAY:   _OneDayAggregationIntervalQueryParametersParser,
         AggregationIntervalSeconds.ONE_WEEK:  _CommonQueryParametersParser,
-        AggregationIntervalSeconds.ONE_MONTH: _CommonQueryParametersParser,
+        AggregationIntervalSeconds.ONE_MONTH: _OneMonthAggregationIntervalQueryParametersParser,
         AggregationIntervalSeconds.ONE_YEAR:  _CommonQueryParametersParser
     }
