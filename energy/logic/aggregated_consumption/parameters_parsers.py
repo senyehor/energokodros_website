@@ -234,6 +234,25 @@ class _OneDayAggregationIntervalQueryParametersParser(__AllowQueryingForCurrentD
     pass
 
 
+class __PeriodStartBeginsWithFirstDayAndPeriodEndEndsWithLastDay(_CommonQueryParametersParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _validate(self):
+        super()._validate()
+        self.__check_period_begins_with_first_month_day()
+        self.__check_period_end_ends_with_last_month_day()
+
+    def __check_period_begins_with_first_month_day(self):
+        if self._period_start.day != 1:
+            raise MonthPeriodStartDoesNotBeginWithFirstMonthDay
+
+    def __check_period_end_ends_with_last_month_day(self):
+        _, last_day = monthrange(self._period_end.year, self._period_end.month)
+        if self._period_end.day != last_day:
+            raise MonthPeriodStartDoesNotBeginWithFirstMonthDay
+
+
 class _OneMonthAggregationIntervalQueryParametersParser(_CommonQueryParametersParser):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
