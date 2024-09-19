@@ -276,7 +276,11 @@ class _OneYearAggregationIntervalQueryParametersParser(
             raise PeriodStartDoesNotBeginWithFirstMonth
 
     def _validate_period_end(self):
-        super()._validate_period_end()
+        try:
+            super()._validate_period_end()
+        except FutureFilteringDate:
+            if self._period_end.year == datetime.now(UTC).year:
+                pass
         if self._period_end.month != 12:
             raise PeriodEndDoesNotEndWithLastMonth
 
