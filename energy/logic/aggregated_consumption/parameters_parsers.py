@@ -254,6 +254,14 @@ class _OneMonthAggregationIntervalQueryParametersParser(_CommonQueryParametersPa
             raise MonthPeriodStartDoesNotBeginWithFirstMonthDay
 
 
+class _OneYearAggregationIntervalQueryParametersParser(_CommonQueryParametersParser):
+
+    def _check_period_contains_at_least_one_aggregation_interval(self):
+        if self._period_start.year == self._period_end.year:
+            return
+        super()._check_period_contains_at_least_one_aggregation_interval()
+
+
 _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING: \
     dict[
         AggregationIntervalSeconds,
@@ -263,5 +271,5 @@ _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING: \
         AggregationIntervalSeconds.ONE_DAY:   _OneDayAggregationIntervalQueryParametersParser,
         AggregationIntervalSeconds.ONE_WEEK:  _CommonQueryParametersParser,
         AggregationIntervalSeconds.ONE_MONTH: _OneMonthAggregationIntervalQueryParametersParser,
-        AggregationIntervalSeconds.ONE_YEAR:  _CommonQueryParametersParser
+        AggregationIntervalSeconds.ONE_YEAR:  _OneYearAggregationIntervalQueryParametersParser
     }
