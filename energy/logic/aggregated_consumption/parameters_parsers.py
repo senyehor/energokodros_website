@@ -255,11 +255,7 @@ class _OneMonthAggregationIntervalQueryParametersParser(_CommonQueryParametersPa
 
 
 class _OneYearAggregationIntervalQueryParametersParser(_CommonQueryParametersParser):
-
-    def _check_period_contains_at_least_one_aggregation_interval(self):
-        if self._period_start.year == self._period_end.year:
-            return
-        super()._check_period_contains_at_least_one_aggregation_interval()
+    pass
 
 
 _AGGREGATION_INTERVAL_TO_PARAMETERS_PARSER_MAPPING: \
