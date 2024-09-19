@@ -11,7 +11,7 @@ from energy.logic.aggregated_consumption.types import (
     ConsumptionRawAndFormatted, ConsumptionRawAndFormattedWithForecastRawAndFormatted,
     TotalConsumption,
 )
-from energy.logic.consumption_report.aggregation_interval_verbose import \
+from energy.logic.consumption_report.verbose_constants import \
     get_aggregation_interval_verbose
 
 
