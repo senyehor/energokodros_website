@@ -248,8 +248,8 @@ class __PeriodStartBeginsWithFirstDayAndPeriodEndEndsWithLastDay(_CommonQueryPar
 
     def _validate_period_end(self):
         super()._validate_period_end()
-        _, last_day = monthrange(self._period_end.year, self._period_end.month)
-        if self._period_end.day != last_day:
+        _, last_day_number = monthrange(self._period_end.year, self._period_end.month)
+        if self._period_end.day != last_day_number:
             raise PeriodEndDoesNotEndWithLastMonthDay
 
 
