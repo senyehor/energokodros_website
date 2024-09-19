@@ -6,13 +6,19 @@ import matplotlib.pyplot as plt
 from django.utils.translation import gettext as _
 from docx import Document
 
-from energy.logic.aggregated_consumption.parameters import CommonQueryParameters
+from energy.logic.aggregated_consumption.models import AggregationIntervalSeconds
+from energy.logic.aggregated_consumption.parameters import (
+    CommonQueryParameters,
+    OneHourAggregationIntervalQueryParameters,
+)
 from energy.logic.aggregated_consumption.types import (
     ConsumptionRawAndFormatted, ConsumptionRawAndFormattedWithForecastRawAndFormatted,
     TotalConsumption,
 )
 from energy.logic.consumption_report.verbose_constants import \
-    get_aggregation_interval_verbose
+    (
+    get_aggregation_interval_verbose, get_hour_filtering_method_verbose,
+)
 
 
 class ReportCreator:
@@ -70,10 +76,30 @@ class ReportCreator:
         else:
             self.__report.add_paragraph(_(str(facility.get_institution())))
             self.__report.add_paragraph(_(str(facility)))
+        self.__add_aggregation_interval_info()
+
+    def __add_aggregation_interval_info(self):
+        # noinspection PyTypeChecker
+        query_parameters = self.__query_parameters
         aggregation_interval_verbose = get_aggregation_interval_verbose(
             query_parameters.aggregation_interval
         )
         self.__report.add_paragraph(_(f'Інтервал агрегації: {aggregation_interval_verbose}'))
+        if query_parameters.aggregation_interval == AggregationIntervalSeconds.ONE_HOUR:
+            query_parameters: OneHourAggregationIntervalQueryParameters = query_parameters
+            if hour_filtering_method := query_parameters.hour_filtering_method:
+                hour_filtering_method_verbose = get_hour_filtering_method_verbose(
+                    hour_filtering_method
+                )
+                self.__report.add_paragraph(
+                    _(f'Фільтрація інтервалу агрегації: {hour_filtering_method_verbose}')
+                )
+                self.__report.add_paragraph(
+                    _(
+                        f'Від: {str(query_parameters.hour_filtering_start_hour).zfill(2)} ' \
+                        + f'до: {str(query_parameters.hour_filtering_end_hour).zfill(2)}'
+                    )
+                )
 
     def __add_consumption_table(self):
         table_name = self.__report.add_paragraph()
