@@ -270,16 +270,13 @@ class _OneYearAggregationIntervalQueryParametersParser(
     __PeriodStartBeginsWithFirstDayAndPeriodEndEndsWithLastDay
 ):
 
-    def _validate(self):
-        super()._validate()
-        self.__check_period_start_begins_with_first_month()
-        self.__check_period_end_ends_with_last_month()
-
-    def __check_period_start_begins_with_first_month(self):
+    def _validate_period_start(self):
+        super()._validate_period_start()
         if self._period_start.month != 1:
             raise PeriodStartDoesNotBeginWithFirstMonth
 
-    def __check_period_end_ends_with_last_month(self):
+    def _validate_period_end(self):
+        super()._validate_period_end()
         if self._period_end.month != 12:
             raise PeriodEndDoesNotEndWithLastMonth
 
