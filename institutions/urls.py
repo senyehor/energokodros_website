@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from institutions.models import Facility
 from institutions.views import (

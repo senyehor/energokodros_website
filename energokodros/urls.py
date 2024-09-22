@@ -14,5 +14,6 @@ urlpatterns = [
     ),
     path('users/', include('users.urls')),
     path('energy/', include('energy.urls')),
-    path('facilities/', include('institutions.urls'))
+    path('facilities/', include('institutions.urls')),
+    path('api/', include('institutions.api.urls'))
 ]
