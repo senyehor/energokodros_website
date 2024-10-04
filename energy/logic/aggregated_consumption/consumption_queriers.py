@@ -20,7 +20,7 @@ from energy.logic.aggregated_consumption.types import (
     TotalConsumption,
 )
 from energy.logic.aggregated_consumption.verbose_exceptions_for_user import \
-    FacilityAndDescendantsHaveNoSensors
+    FacilityAndDescendantsHaveNoBoxSensorSets
 from energy.models import BoxSensorSet
 from institutions.logic import get_all_descendants_of_facility_with_self
 
@@ -225,7 +225,7 @@ class _AggregatedConsumptionQuerierBase(ABC):
             values_list('pk', flat=True)
         if ids:
             return ids
-        raise FacilityAndDescendantsHaveNoSensors
+        raise FacilityAndDescendantsHaveNoBoxSensorSets
 
     @property
     def parameters(self) -> CommonQueryParameters:
