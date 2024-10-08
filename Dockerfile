@@ -39,9 +39,9 @@ RUN /bin/bash -c "export $(grep -v '^#' env_template | xargs) && \
 # removing redundant folders
 RUN rm pyproject.toml && rm env_template && rm -rf static
 RUN adduser --system --group --no-create-home app_user
+USER app_user
 RUN chown -R app_user:app_user $APP_DIR
 RUN chmod -R 500 $APP_DIR
-
-USER app_user
+RUN chmod -R 505 $APP_STATICFILES_DIR
 
 CMD ["./docker-entrypoint.sh"]
