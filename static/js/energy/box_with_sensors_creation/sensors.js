@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    style_card();
     set_form_to_be_submitted_on_sensors_count_change();
 })
 
@@ -13,13 +12,6 @@ function set_form_to_be_submitted_on_sensors_count_change() {
 
 function add_input_to_indicate_that_sensor_count_was_changed() {
     __get_sensors_form().append($('<input type="hidden" name="sensor_count_changed" value="true">'));
-}
-
-
-function style_card() {
-    let body = $('#form-card .card-body');
-    body.addClass('overflow-auto');
-    body.css('max-height', '70vh');
 }
 
 function __get_sensor_count_select() {
