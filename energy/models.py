@@ -12,7 +12,8 @@ class Box(models.Model):
         max_length=256,
         blank=False,
         null=False,
-        db_column='box_identifier'
+        db_column='box_identifier',
+        unique=True
     )
     description = models.TextField(
         blank=False,
