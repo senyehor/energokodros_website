@@ -8,7 +8,7 @@ from energy.forms import (
     BoxFormNoRelationFields, BoxSensorSetForBoxWithSensorsCreationForm,
     BoxSensorSetFormset, SensorFormNoRelationFields, SensorsFormset,
 )
-from energy.logic.box_with_sensors.config_and_models import FORMS_ORDER_FROM_ZERO, STEPS
+from energy.logic.box_with_sensors_creation.config_and_models import FORMS_ORDER_FROM_ZERO, STEPS
 from energy.models import Box, BoxSensorSet, Sensor
 from institutions.models import Facility
 

@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from formtools.wizard.views import SessionWizardView
 
 from energy.forms import ChooseInstitutionForm
-from energy.logic.box_with_sensors import (
+from energy.logic.box_with_sensors_creation import (
     BOX_WITH_SENSORS_CREATION_TEMPLATES, create_box_sensor_sets_along_with_box_and_sensors,
     create_initial_sensor_numbers_for_sensors_formset,
     create_initial_sensor_numbers_in_set_for_box_sensor_set_formset, FORMS, FormsetData,
