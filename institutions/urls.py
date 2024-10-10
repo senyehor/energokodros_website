@@ -2,8 +2,8 @@ from django.urls import path
 
 from institutions.models import Facility
 from institutions.views import (
-    CreateFacilityView, CreateInstitutionView, FacilitiesListView,
-    get_institution_facilities_choices, EditFacilityView,
+    CreateFacilityView, CreateInstitutionView, EditFacilityView, FacilitiesListView,
+    get_facilities_choices_for_role, get_institution_facilities_choices,
 )
 from utils.common import redirect_to_object_pk_in_post
 
@@ -32,7 +32,12 @@ urlpatterns = [
         'edit-facility/<hashed_int:pk>',
         EditFacilityView.as_view(),
         name='edit-facility'
-    )
+    ),
+    path(
+        'get-facilities-list-for-role/',
+        get_facilities_choices_for_role,
+        name='get-facilities-list-for-role'
+    ),
 ]
 
 helper_urls = [
