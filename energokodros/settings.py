@@ -2,6 +2,7 @@ import os.path
 from pathlib import Path
 
 import environ
+from django.contrib.messages import constants as messages
 from django.urls import reverse_lazy
 
 env = environ.Env(
@@ -159,4 +160,8 @@ LOGGING = {
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
+}
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
 }
