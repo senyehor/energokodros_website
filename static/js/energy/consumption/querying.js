@@ -42,7 +42,8 @@ function process_consumption_data_response(response) {
     let metadata = response.metadata;
     LABEL_INDEX_IN_RAW_DATA = metadata.indexes.label_index;
     CONSUMPTION_INDEX_IN_RAW_DATA = metadata.indexes.value_index;
-    if (metadata.forecast_included === 'true') {
+    FORECAST_INCLUDED = metadata.forecast_included === 'true';
+    if (FORECAST_INCLUDED) {
         CONSUMPTION_FORECAST_INDEX_IN_RAW_DATA = metadata.indexes.forecast_index;
     }
     draw_content();
