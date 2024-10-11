@@ -18,7 +18,7 @@ class ConsumptionWithOptionalForecastQuerierFromRawParameter:
     class __DataIndexes(IntEnum):
         LABEL = 0
         VALUE = 1
-        FORECAST = 3
+        FORECAST = 2
 
     def __init__(self, user: User, parameters: StrStrDict):
         role = self.__extract_role(parameters)
